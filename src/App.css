@@ -10,8 +10,6 @@ body {
   height: 100vh; /* Set the height of the app to 100% of the viewport height */
 }
 
-
-
 .toolbar-items {
   margin-bottom: 10px; /* Add some spacing between toolbar items and the search bar */
 }
