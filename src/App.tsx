@@ -1,26 +1,75 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App: React.FC = () => {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={
+                    <div className="app">
+                        <div className="header">
+                            <Header />
+                        </div>
+                        <div className="content">
+                            {/* Your page content goes here */}
+                        </div>
+                        <div className="footer">
+                        </div>
+                    </div>
+                } />
+                <Route path="/advanced-search" element={
+                    <div className="app">
+                        <div className="header">
+                            <Header />
+                        </div>
+                        <div className="content">
+                            {/* Your page content goes here */}
+                        </div>
+                        <div className="footer">
+                        </div>
+                    </div>
+                } />
+                <Route path="/word-of-the-day" element={
+                    <div className="app">
+                        <div className="header">
+                            <Header />
+                        </div>
+                        <div className="content">
+                            {/* Your page content goes here */}
+                        </div>
+                        <div className="footer">
+                        </div>
+                    </div>
+                } />
+                <Route path="/advertise" element={
+                    <div className="app">
+                        <div className="header">
+                            <Header />
+                        </div>
+                        <div className="content">
+                            {/* Your page content goes here */}
+                        </div>
+                        <div className="footer">
+                        </div>
+                    </div>
+                } />
+                <Route path="/add-definition" element={
+                    <div className="app">
+                        <div className="header">
+                            <Header />
+                        </div>
+                        <div className="content">
+                            {/* Your page content goes here */}
+                        </div>
+                        <div className="footer">
+                        </div>
+                    </div>
+                } />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
