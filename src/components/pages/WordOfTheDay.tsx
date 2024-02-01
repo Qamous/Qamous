@@ -4,11 +4,11 @@ import './WordOfTheDay.scss';
 const WordOfTheDay: React.FC = () => {
     return (
         <div className={"word-of-day"}>
-            <p className={"word-of-day-word"}>
+            <p className={"word-of-day-word"} dir="rtl">
                 النهاردة
             </p>
             <p className={"word-of-day-definition"}>
-                <span className={"word-of-day-definition-ar"}>
+                <span className={"word-of-day-definition-ar"} dir="rtl">
                     هي كلمة في اللهجة المصرية تعبر عن اليوم الحالي أو الفترة الزمنية التي نعيشها حاليًا.
                     يُستخدم مصطلح «النهاردة» للإشارة إلى الزمن الحالي بشكل عام.
                 </span>
