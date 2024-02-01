@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import './SearchBar.css';
+import './SearchBar.scss';
 
-const SearchBar: React.FC = () => {
+interface SearchBarProps {
+    handleStateChange: (isExpanded: boolean) => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ handleStateChange }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const expand = () => {
+    const handleClick = () => {
         setIsExpanded(!isExpanded);
+        handleStateChange(isExpanded);
     };
 
     return (
@@ -21,7 +26,7 @@ const SearchBar: React.FC = () => {
                     type="reset"
                     className={`search ${isExpanded ? 'close' : ''}`}
                     id="search-btn"
-                    onClick={expand}
+                    onClick={handleClick}
                 />
             </form>
         </div>

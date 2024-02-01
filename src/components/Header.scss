@@ -1,0 +1,95 @@
+@use '../assets/Styles.scss' as styles;
+
+.header {
+    /*background-color: #D5D5D5; /* Light gray background color */
+    background-color: styles.$quaternary-color; /* Dark gray background color */
+    height: 110px;
+    width: 100%;
+    flex-shrink: 0; /* Prevent the header from shrinking when content grows */
+    display: flex;
+    flex-direction: row; /* Stack toolbar items and search bar vertically */
+    align-items: center; /* Center the content horizontally */
+    justify-content: space-between;
+
+    &-left-side {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0 0 0 15px;
+
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+
+        img {
+            height: 50px;
+            margin: 0 35px 0 0;
+
+            pointer-events: none;
+        }
+    }
+
+    &-right-side {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0;
+
+        a {
+            color: styles.$secondary-color;
+            font-size: 17px;
+            opacity: 1;
+
+            &:hover {
+                opacity: 0.5;
+            }
+
+            &.active {
+                color: styles.$primary-color;
+                opacity: 0.5;
+            }
+        }
+
+        .SearchBar {
+            padding: 15px 0 0 35px;
+        }
+
+        &-add {
+            padding: 0 10px 5px 0;
+            -webkit-transition: padding-right 0.4s ease-in-out;
+            transition: padding-right 0.4s ease-in-out;
+            -webkit-transition-delay: 0.4s;
+            transition-delay: 0.4s;
+        }
+
+        &-mode {
+            width: 25px;
+            height: 25px;
+            //display: flex;
+            padding: 0;
+            margin: 0 5px 0 5px;
+        }
+
+        &-language {
+            width: 65px;
+            height: 25px;
+            padding: 0;
+            margin: 0 10px 0 5px;
+            position: relative;
+            z-index: 1000;
+
+            display: flex;
+            flex-direction: row;
+
+            p {
+                color: styles.$primary-color;
+                font: 100% styles.$font-stack;
+                padding: 0 0 0 5px;
+                align-self: center;
+                user-select: none;
+            }
+        }
+    }
+}

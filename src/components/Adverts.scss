@@ -1,0 +1,29 @@
+@use '../assets/Styles.scss'as styles;
+
+.adverts {
+  /* the outer div */
+  margin: 0;
+  padding: 0;
+  font: 100% styles.$font-stack;
+  font-size: 16pt;
+
+  position: relative;
+  background: styles.$secondary-color;
+  width: 100%;
+  height: 30px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 75%;
+}
+
+ul.adverts-list {
+  list-style: none;
+  padding: 0 5px 0 5px;
+  margin: 0;
+  width: 150%
+}
+
+ul.adverts-list li {
+  float: left;
+  padding-left: 20px;
+}

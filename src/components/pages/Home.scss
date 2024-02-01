@@ -1,0 +1,36 @@
+@use '../../assets/Styles.scss' as styles;
+
+.home {
+  padding: 25px;
+  margin: 0;
+  height: 100%;
+  overflow: auto;
+  text-align: justify;
+
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+
+  font: 100% styles.$font-stack;
+  color: styles.$primary-color;
+
+  &-content {
+    background-color: styles.$quaternary-color;
+    width: 50%;
+
+    &-title {
+      padding: 5px 25px 0 25px;
+
+      h1 {
+        font-size: 34px;
+      }
+    }
+
+    &-description {
+      padding: 0 25px 15px 25px;
+
+      font-size: 16px;
+    }
+  }
+}

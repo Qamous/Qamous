@@ -1,3 +1,10 @@
+@use './assets/Styles.scss' as styles;
+
+::selection {
+  background: styles.$primary-color;
+  color: styles.$tertiary-color;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -8,6 +15,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh; /* Set the height of the app to 100% of the viewport height */
+  background-color: styles.$tertiary-color;
 }
 
 .toolbar-items {
@@ -16,4 +24,8 @@ body {
 
 .search-bar {
   /* Add styles for the SearchBar component if necessary */
+}
+
+.content {
+  height: 100%;
 }

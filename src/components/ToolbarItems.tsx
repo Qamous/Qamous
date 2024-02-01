@@ -1,5 +1,5 @@
 import React from 'react';
-import './ToolbarItems.css';
+import './ToolbarItems.scss';
 import { NavLink } from 'react-router-dom';
 
 const ToolbarItems: React.FC = () => {

@@ -1,0 +1,49 @@
+@use '../assets/Styles.scss' as styles;
+
+.toolbar-items {
+    nav {
+        position: relative;
+        padding: 12px;
+
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            display: flex;
+
+            li {
+                margin: 0 40px 0 0;
+                transition: all 0.4s ease;
+
+                a {
+                    font: 100% styles.$font-stack;
+                    color: styles.$primary-color;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    display: block;
+                    font-weight: 600;
+                    letter-spacing: 0.2em;
+                    font-size: 16px;
+                    opacity: 0.7;
+                    text-shadow: 1px 1px 1px rgba(0,0,0,0.25);
+                    transition: color 1s ease;  /* color transition */
+                    text-align: center;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+
+                    &.active {
+                        color: #dd8500;
+                        text-shadow: none;
+                        opacity: 1;
+                    }
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}

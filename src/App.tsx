@@ -1,7 +1,10 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import Header from './components/Header';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import WordOfTheDay from "./components/pages/WordOfTheDay";
+import Adverts from "./components/Adverts";
+import Home from "./components/pages/Home";
 
 const App: React.FC = () => {
     return (
@@ -13,7 +16,7 @@ const App: React.FC = () => {
                             <Header />
                         </div>
                         <div className="content">
-                            {/* Your page content goes here */}
+                            <Home />
                         </div>
                         <div className="footer">
                         </div>
@@ -34,18 +37,21 @@ const App: React.FC = () => {
                 <Route path="/word-of-the-day" element={
                     <div className="app">
                         <div className="header">
-                            <Header />
+                            <Header/>
+                        </div>
+                        <div className="ads">
+                            <Adverts/>
                         </div>
                         <div className="content">
-                            {/* Your page content goes here */}
+                            <WordOfTheDay/>
                         </div>
                         <div className="footer">
                         </div>
                     </div>
-                } />
+                }/>
                 <Route path="/advertise" element={
                     <div className="app">
-                        <div className="header">
+                    <div className="header">
                             <Header />
                         </div>
                         <div className="content">
