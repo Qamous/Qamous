@@ -4,7 +4,7 @@ import './Home.scss';
 const Home: React.FC = () => {
     return (
         <div className={"home"}>
-            <div className={"home-content"}>
+            <div className={"home-content home-content-first"}>
                 <div className={"home-content-title"}>
                     <h1>Qamous</h1>
                 </div>

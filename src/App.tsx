@@ -28,7 +28,7 @@ const App: React.FC = () => {
                             <Header />
                         </div>
                         <div className="content">
-                            {/* Your page content goes here */}
+                            <AdvancedSearch />
                         </div>
                         <div className="footer">
                         </div>

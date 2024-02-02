@@ -32,5 +32,15 @@
 
       font-size: 16px;
     }
+
+    &-first {
+      background-color: rgba(styles.$primary-color, 0.90);
+      color: styles.$quaternary-color;
+
+      ::selection {
+        background: styles.$quaternary-color;
+        color: styles.$primary-color;
+      }
+    }
   }
 }
