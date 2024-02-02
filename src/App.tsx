@@ -29,7 +29,7 @@ const App: React.FC = () => {
                             <Header />
                         </div>
                         <div className="content">
-                            <AdvancedSearch />
+                            {/* <AdvancedSearch /> */}
                         </div>
                         <div className="footer">
                         </div>

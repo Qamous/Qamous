@@ -1,12 +1,16 @@
-import React from "react";
+import React from 'react';
+import './AdvancedSearch.scss';
 
 const AdvancedSearch: React.FC = () => {
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        // Add your search logic here
+    };
+
     return (
-        <div>
-            <h1>Advanced Search</h1>
-            <p>Advanced search page content goes here</p>
+        <div className="advanced-search">
         </div>
-    )
-}
+    );
+};
 
 export default AdvancedSearch;
