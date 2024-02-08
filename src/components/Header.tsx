@@ -66,7 +66,12 @@ const Header: React.FC = () => {
                     moonColor="#bfbfbf"
                     sunColor="#dd8500"
                 />
-                {/*TODO: link the DarkModeSwitch to a light mode theme*/}
+                {/*
+                TODO: link the DarkModeSwitch to a light mode theme
+                Maybe switch out all the components?
+                Or use CSS variables?:
+                https://blog.logrocket.com/dark-mode-react-in-depth-guide/#managing-themes-using-css-variables
+                */}
 
                 <div className="header-right-side-language"
                      onClick={handleCountrySwitch}
@@ -84,7 +89,11 @@ const Header: React.FC = () => {
                         </>
                     }
                 </div>
-                {/*TODO: link the language button to a language switch*/}
+                {/*
+                TODO: link the language button to a language switch
+                Maybe use i18n?:
+                https://www.honeybadger.io/blog/creating-multi-language-user-interface-with-react/
+                */}
             </div>
         </div>
     );
