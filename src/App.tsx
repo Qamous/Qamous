@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import WordOfTheDay from "./components/pages/WordOfTheDay";
 import Adverts from "./components/Adverts";
 import Home from "./components/pages/Home";
-import AdvancedSearch from "./components/pages/AdvancedSearch";
 
 const App: React.FC = () => {
     return (
