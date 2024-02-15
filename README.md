@@ -32,3 +32,6 @@ The UrbanDictionaryAR Frontend is the client-side component of the UrbanDictiona
 
 ## License
 This project is licensed under the Mozilla Public License Version 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## Images
+![Homepage 2/15/2024](readme-files/homepage-02-15-2024.png)
