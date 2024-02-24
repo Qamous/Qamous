@@ -3,6 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/backend" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/backend/data-scraping" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/backend/data" vcs="Git" />
   </component>
 </project>
