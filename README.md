@@ -1,7 +1,7 @@
-# UrbanDictionaryAR Frontend
+# Qamous Frontend
 
 ## Description
-The UrbanDictionaryAR Frontend is the client-side component of the UrbanDictionaryAR application, a platform for users to contribute and explore definitions of Arabic and Franco-Arabic words. The frontend is responsible for providing a user-friendly interface for user authentication, word and definition management, as well as user interactions such as liking, disliking, and reporting definitions.
+The Qamous Frontend is the client-side component of the Qamous application, a platform for users to contribute and explore definitions of Arabic and Franco-Arabic words. The frontend is responsible for providing a user-friendly interface for user authentication, word and definition management, as well as user interactions such as liking, disliking, and reporting definitions.
 
 ## Technologies Used
 - **React.js**: A JavaScript library for building user interfaces.
