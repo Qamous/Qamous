@@ -1,4 +1,9 @@
-@use '../assets/Styles.scss'as styles;
+@use '../assets/Styles.scss' as styles;
+// if light theme, user LightStyles.scss
+@if(var(--theme) == 'light') {
+  @use '../assets/LightStyles.scss' as styles;
+}
+// TODO: Does this work?
 
 .adverts {
   /* the outer div */
