@@ -39,7 +39,25 @@ const Header: React.FC = () => {
     };
     const toggleDarkMode = (checked: boolean) => {
         setDarkMode(checked);
+        if (!checked) {
+            // add a style to the body of '--theme: light'
+            document.documentElement.style.setProperty("--theme", 'light')
+        }
+        else {
+            // add a style to the body of '--theme: dark'
+            document.documentElement.style.setProperty("--theme", 'dark')
+        }
     };
+    if (isDarkMode) {
+        // add a style to the body of '--theme: dark'
+        document.documentElement.style.setProperty("--theme", 'dark')
+        console.log('dark mode');
+    }
+    else {
+        // add a style to the body of '--theme: light'
+        document.documentElement.style.setProperty("--theme", 'light')
+        console.log('light mode');
+    }
     return (
         <div className="header">
             <div className="header-left-side">

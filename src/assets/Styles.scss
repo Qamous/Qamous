@@ -10,7 +10,11 @@ $tertiary-color: #000000;
 $quaternary-color: #292929;
 
 // Light Mode
-//$primary-color: #000000;
-//$secondary-color: #dd8500;
-//$tertiary-color: #d0d0d0;
-//$quaternary-color: #f8f8f8;
+// if light theme, change the variables
+@if($light-theme == true) {
+  $primary-color: #000000;
+  $secondary-color: #dd8500;
+  $tertiary-color: #d0d0d0;
+  $quaternary-color: #f8f8f8;
+}
+// TODO: Does this work?
