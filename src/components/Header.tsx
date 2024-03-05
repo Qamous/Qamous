@@ -83,12 +83,6 @@ const Header: React.FC = () => {
                     moonColor="#bfbfbf"
                     sunColor="#dd8500"
                 />
-                {/*
-                TODO: link the DarkModeSwitch to a light mode theme
-                Maybe switch out all the components?
-                Or use CSS variables?:
-                https://blog.logrocket.com/dark-mode-react-in-depth-guide/#managing-themes-using-css-variables
-                */}
 
                 <div className="header-right-side-language"
                      onClick={handleCountrySwitch}
