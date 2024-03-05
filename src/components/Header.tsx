@@ -8,6 +8,7 @@ import './Header.scss';
 import { US, EG } from 'country-flag-icons/react/3x2'
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import styles from '../assets/Styles.scss';
+import { setCookie, getCookie } from '../assets/utils';
 
 const Header: React.FC = () => {
     const [parentWidth, setHeaderPadding] =
@@ -39,7 +40,10 @@ const Header: React.FC = () => {
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
     };
     const toggleDarkMode = (checked: boolean) => {
+        // change isDarkMode state and save it to a cookie
         setDarkMode(checked);
+        setCookie('darkMode', checked.toString());
+        // change the CSS variables
         const root = document.documentElement;
         root.style.setProperty('--primary-color', checked ? styles.primaryColorDark : styles.primaryColorLight);
         root.style.setProperty('--secondary-color', checked ? styles.secondaryColorDark : styles.secondaryColorLight);
@@ -47,6 +51,12 @@ const Header: React.FC = () => {
         root.style.setProperty('--quaternary-color', checked ? styles.quaternaryColorDark : styles.quaternaryColorLight);
         root.style.setProperty('--primary-color-90', checked ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
     };
+    React.useEffect(() => {
+        const darkModeCookie = getCookie('darkMode');
+        if (darkModeCookie !== undefined) {
+            setDarkMode(darkModeCookie === 'true');
+        }
+    }, []);
     return (
         <div className="header">
             <div className="header-left-side">
