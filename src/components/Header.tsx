@@ -50,14 +50,14 @@ const Header: React.FC = () => {
     };
 
     React.useEffect(() => {
+        // Load the dark mode and language settings from cookies
         const darkModeCookie = getCookie('darkMode');
         if (darkModeCookie !== null) {
             const isDarkMode = darkModeCookie === 'true';
             setDarkMode(isDarkMode);
             setTheme(isDarkMode);
         }
-     }, []);
-    React.useEffect(() => {
+        // Load the language from cookies
         const languageCookie = getCookie('language');
         if (languageCookie !== null) {
             setCurrentCountry(languageCookie);
