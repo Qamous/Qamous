@@ -12,17 +12,23 @@ const ToolbarItems: React.FC = () => {
                 <ul>
                     <li>
                         <NavLink to="/">
-                            {t('home')}
+                            {t('toolbar_items.home')}
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/advanced-search">Advanced Search</NavLink>
+                        <NavLink to="/advanced-search">
+                            {t('toolbar_items.advanced_search')}
+                        </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/word-of-the-day">Word of the Day</NavLink>
+                        <NavLink to="/word-of-the-day">
+                            {t('toolbar_items.word_of_the_day')}
+                        </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/advertise">Advertise</NavLink>
+                        <NavLink to="/advertise">
+                            {t('toolbar_items.advertise')}
+                        </NavLink>
                     </li>
                 </ul>
             </nav>
