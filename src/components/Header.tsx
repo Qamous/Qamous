@@ -27,7 +27,11 @@ const Header: React.FC = () => {
     };
     const handleCountrySwitch = () => {
         // Toggle between US and EG on click
-        setCurrentCountry((prevCountry) => (prevCountry === 'US' ? 'EG' : 'US'));
+        setCurrentCountry((prevCountry) => {
+            const newCountry = prevCountry === 'US' ? 'EG' : 'US';
+            setCookie('language', newCountry); // Save the language as a cookie
+            return newCountry;
+        });
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
     };
     const handleHover = () => {
@@ -53,6 +57,12 @@ const Header: React.FC = () => {
             setTheme(isDarkMode);
         }
      }, []);
+    React.useEffect(() => {
+        const languageCookie = getCookie('language');
+        if (languageCookie !== null) {
+            setCurrentCountry(languageCookie);
+        }
+    }, []);
     const setTheme = (isDarkMode: boolean): void => {
         const root = document.documentElement;
         root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
