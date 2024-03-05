@@ -40,32 +40,27 @@ const Header: React.FC = () => {
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
     };
     const toggleDarkMode = (checked: boolean) => {
-        // change isDarkMode state and save it to a cookie
         setDarkMode(checked);
         setCookie('darkMode', checked.toString());
-        // change the CSS variables
-        const root = document.documentElement;
-        root.style.setProperty('--primary-color', checked ? styles.primaryColorDark : styles.primaryColorLight);
-        root.style.setProperty('--secondary-color', checked ? styles.secondaryColorDark : styles.secondaryColorLight);
-        root.style.setProperty('--tertiary-color', checked ? styles.tertiaryColorDark : styles.tertiaryColorLight);
-        root.style.setProperty('--quaternary-color', checked ? styles.quaternaryColorDark : styles.quaternaryColorLight);
-        root.style.setProperty('--primary-color-90', checked ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
+        setTheme(checked);
     };
+
     React.useEffect(() => {
         const darkModeCookie = getCookie('darkMode');
         if (darkModeCookie !== null) {
             const isDarkMode = darkModeCookie === 'true';
             setDarkMode(isDarkMode);
-
-            // change the CSS variables
-            const root = document.documentElement;
-            root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
-            root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
-            root.style.setProperty('--tertiary-color', isDarkMode ? styles.tertiaryColorDark : styles.tertiaryColorLight);
-            root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
-            root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
+            setTheme(isDarkMode);
         }
-    }, []);
+     }, []);
+    const setTheme = (isDarkMode: boolean): void => {
+        const root = document.documentElement;
+        root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
+        root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
+        root.style.setProperty('--tertiary-color', isDarkMode ? styles.tertiaryColorDark : styles.tertiaryColorLight);
+        root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
+        root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
+    };
     return (
         <div className="header">
             <div className="header-left-side">
