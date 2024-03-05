@@ -53,8 +53,17 @@ const Header: React.FC = () => {
     };
     React.useEffect(() => {
         const darkModeCookie = getCookie('darkMode');
-        if (darkModeCookie !== undefined) {
-            setDarkMode(darkModeCookie === 'true');
+        if (darkModeCookie !== null) {
+            const isDarkMode = darkModeCookie === 'true';
+            setDarkMode(isDarkMode);
+
+            // change the CSS variables
+            const root = document.documentElement;
+            root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
+            root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
+            root.style.setProperty('--tertiary-color', isDarkMode ? styles.tertiaryColorDark : styles.tertiaryColorLight);
+            root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
+            root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
         }
     }, []);
     return (
