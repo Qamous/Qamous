@@ -3,11 +3,52 @@
 $font-stack: "Segoe UI", Sans-Serif, serif;
 $font-stack-arabic: "Amiri Quran", Noto Naskh Arabic;
 
-// Dark Mode
-$primary-color: #ffffff;
-$secondary-color: #dd8500;
-$tertiary-color: #000000;
-$quaternary-color: #292929;
+:root {
+  --primary-color: #ffffff;
+  --secondary-color: #dd8500;
+  --tertiary-color: #000000;
+  --quaternary-color: #292929;
+  --primary-color-90: rgba(255, 255, 255, 0.9);
+}
+$primary-color: var(--primary-color);
+$secondary-color: var(--secondary-color);
+$tertiary-color: var(--tertiary-color);
+$quaternary-color: var(--quaternary-color);
+$primary-color-90: var(--primary-color-90);
+
+// Dark Mode (default)
+$primary-color-dark: #ffffff;
+$secondary-color-dark: #dd8500;
+$tertiary-color-dark: #000000;
+$quaternary-color-dark: #292929;
+$primary-color-90-dark: rgba(255, 255, 255, 0.9);
+
+// Light Mode
+$primary-color-light: #000000;
+$secondary-color-light: #dd8500;
+$tertiary-color-light: #d0d0d0;
+$quaternary-color-light: #f8f8f8;
+$primary-color-90-light: rgba(0, 0, 0, 0.9);
+
+:export {
+  primaryColor: $primary-color;
+  secondaryColor: $secondary-color;
+  tertiaryColor: $tertiary-color;
+  quaternaryColor: $quaternary-color;
+  primaryColorNinety: $primary-color-90;
+
+  primaryColorLight: $primary-color-light;
+  secondaryColorLight: $secondary-color-light;
+  tertiaryColorLight: $tertiary-color-light;
+  quaternaryColorLight: $quaternary-color-light;
+  primaryColorNinetyLight: $primary-color-90-light;
+
+  primaryColorDark: $primary-color-dark;
+  secondaryColorDark: $secondary-color-dark;
+  tertiaryColorDark: $tertiary-color-dark;
+  quaternaryColorDark: $quaternary-color-dark;
+  primaryColorNinetyDark: $primary-color-90-dark;
+}
 
 // Light Mode
 // if light theme, change the variables

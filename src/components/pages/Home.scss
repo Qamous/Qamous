@@ -34,7 +34,7 @@
     }
 
     &-first {
-      background-color: rgba(styles.$primary-color, 0.90);
+      background-color: styles.$primary-color-90;
       color: styles.$quaternary-color;
 
       ::selection {

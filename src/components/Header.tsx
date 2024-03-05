@@ -6,7 +6,8 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import './Header.scss';
 import { US, EG } from 'country-flag-icons/react/3x2'
-import {DarkModeSwitch} from "react-toggle-dark-mode";
+import { DarkModeSwitch } from "react-toggle-dark-mode";
+import styles from '../assets/Styles.scss';
 
 const Header: React.FC = () => {
     const [parentWidth, setHeaderPadding] =
@@ -39,6 +40,12 @@ const Header: React.FC = () => {
     };
     const toggleDarkMode = (checked: boolean) => {
         setDarkMode(checked);
+        const root = document.documentElement;
+        root.style.setProperty('--primary-color', checked ? styles.primaryColorDark : styles.primaryColorLight);
+        root.style.setProperty('--secondary-color', checked ? styles.secondaryColorDark : styles.secondaryColorLight);
+        root.style.setProperty('--tertiary-color', checked ? styles.tertiaryColorDark : styles.tertiaryColorLight);
+        root.style.setProperty('--quaternary-color', checked ? styles.quaternaryColorDark : styles.quaternaryColorLight);
+        root.style.setProperty('--primary-color-90', checked ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
     };
     return (
         <div className="header">
