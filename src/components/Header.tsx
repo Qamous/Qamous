@@ -9,8 +9,11 @@ import { US, EG } from 'country-flag-icons/react/3x2'
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import styles from '../assets/Styles.scss';
 import { setCookie, getCookie } from '../assets/utils';
+import { useTranslation } from 'react-i18next';
 
 const Header: React.FC = () => {
+    const { i18n } = useTranslation();
+
     const [parentWidth, setHeaderPadding] =
         useState('0');
     const [currentCountry, setCurrentCountry] =
@@ -29,7 +32,10 @@ const Header: React.FC = () => {
         // Toggle between US and EG on click
         setCurrentCountry((prevCountry) => {
             const newCountry = prevCountry === 'US' ? 'EG' : 'US';
-            setCookie('language', newCountry); // Save the language as a cookie
+            // Save the language as a cookie
+            setCookie('language', newCountry);
+            // Actually change the language
+            i18n.changeLanguage(newCountry === 'US' ? 'en' : 'ar');
             return newCountry;
         });
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));

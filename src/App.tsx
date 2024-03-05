@@ -5,6 +5,29 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import WordOfTheDay from "./components/pages/WordOfTheDay";
 import Adverts from "./components/Adverts";
 import Home from "./components/pages/Home";
+import translationEN from './assets/en/translation.json';
+import translationAR from './assets/ar/translation.json';
+import i18n from "i18next";
+import { initReactI18next, useTranslation } from 'react-i18next';
+
+
+const resources = {
+    en: {
+        translation: translationEN,
+    },
+    ar: {
+        translation: translationAR,
+    },
+};
+
+i18n.use(initReactI18next).init({
+    resources,
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: {
+        escapeValue: false,
+    },
+});
 
 const App: React.FC = () => {
     return (
