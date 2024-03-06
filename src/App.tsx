@@ -14,9 +14,11 @@ import { initReactI18next } from 'react-i18next';
 const resources = {
     en: {
         translation: translationEN,
+        direction: "ltr"
     },
     ar: {
         translation: translationAR,
+        direction: "rtl"
     },
 };
 

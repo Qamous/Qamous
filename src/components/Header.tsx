@@ -35,7 +35,13 @@ const Header: React.FC = () => {
             // Save the language as a cookie
             setCookie('language', newCountry);
             // Actually change the language
-            i18n.changeLanguage(newCountry === 'US' ? 'en' : 'ar');
+            const lang: string = (newCountry === 'US' ? 'en' : 'ar');
+            i18n.changeLanguage(lang);
+            // document.documentElement.style.direction = i18n.getResourceBundle(
+            //   lang,
+            //   'direction'
+            // );
+            // Return the new country
             return newCountry;
         });
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
