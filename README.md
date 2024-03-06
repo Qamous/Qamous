@@ -37,3 +37,4 @@ This project is licensed under the Mozilla Public License Version 2.0 - see the 
 
 ## Images
 ![Homepage 2/15/2024](readme-files/homepage-02-15-2024.png)
+![Word Page 2/15/2024](readme-files/word-of-the-day-2024-03-06.png)
