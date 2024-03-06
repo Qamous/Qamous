@@ -41,7 +41,6 @@ const Header: React.FC = () => {
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
     };
     const handleHover = () => {
-        console.log('hello');
         // Update opacity
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 0.5 }));
     };
