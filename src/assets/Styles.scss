@@ -9,12 +9,16 @@ $font-stack-arabic: "Amiri Quran", Noto Naskh Arabic;
   --tertiary-color: #000000;
   --quaternary-color: #292929;
   --primary-color-90: rgba(255, 255, 255, 0.9);
+
+  --is-arabic: false;
 }
 $primary-color: var(--primary-color);
 $secondary-color: var(--secondary-color);
 $tertiary-color: var(--tertiary-color);
 $quaternary-color: var(--quaternary-color);
 $primary-color-90: var(--primary-color-90);
+
+$isArabic: var(--is-arabic);
 
 // Dark Mode (default)
 $primary-color-dark: #ffffff;
@@ -48,6 +52,8 @@ $primary-color-90-light: rgba(0, 0, 0, 0.9);
   tertiaryColorDark: $tertiary-color-dark;
   quaternaryColorDark: $quaternary-color-dark;
   primaryColorNinetyDark: $primary-color-90-dark;
+
+  isArabic: $isArabic;
 }
 
 // Light Mode
