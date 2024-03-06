@@ -8,7 +8,7 @@ import Home from "./components/pages/Home";
 import translationEN from './assets/en/translation.json';
 import translationAR from './assets/ar/translation.json';
 import i18n from "i18next";
-import { initReactI18next, useTranslation } from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 
 
 const resources = {
