@@ -32,15 +32,17 @@ const Header: React.FC = () => {
         // Toggle between US and EG on click
         setCurrentCountry((prevCountry) => {
             const newCountry = prevCountry === 'US' ? 'EG' : 'US';
-            // Save the language as a cookie
-            setCookie('language', newCountry);
-            // Actually change the language
+            // Find the language for the selected country
             const lang: string = (newCountry === 'US' ? 'en' : 'ar');
+            // Save the language as a cookie
+            setCookie('language', lang);
+            // Actually change the language
             i18n.changeLanguage(lang);
             // document.documentElement.style.direction = i18n.getResourceBundle(
             //   lang,
             //   'direction'
             // );
+            // Save the language as a cookie
             // Return the new country
             return newCountry;
         });
