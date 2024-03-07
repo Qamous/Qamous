@@ -18,7 +18,6 @@ const Header: React.FC = () => {
         useState('0');
     const [currentLang, setCurrentLang] =
         useState(getCookie('language') || "en");
-    console.log(currentLang);
     const [languageButtonStyle, setLanguageButtonStyle] =
         useState({ opacity: 1 });
     const [isDarkMode, setDarkMode] = React.useState(true);
