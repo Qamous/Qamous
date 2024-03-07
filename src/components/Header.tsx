@@ -16,7 +16,7 @@ const Header: React.FC = () => {
 
     const [parentWidth, setHeaderPadding] =
         useState('0');
-    const [currentCountry, setCurrentCountry] =
+    const [currentLang, setCurrentLang] =
         useState('US');
     const [languageButtonStyle, setLanguageButtonStyle] =
         useState({ opacity: 1 });
@@ -30,10 +30,8 @@ const Header: React.FC = () => {
     };
     const handleCountrySwitch = () => {
         // Toggle between US and EG on click
-        setCurrentCountry((prevCountry) => {
-            const newCountry = prevCountry === 'US' ? 'EG' : 'US';
-            // Find the language for the selected country
-            const lang: string = (newCountry === 'US' ? 'en' : 'ar');
+        setCurrentLang((prevLang) => {
+            const lang = prevLang === 'en' ? 'ar' : 'en';
             // Save the language as a cookie
             setCookie('language', lang);
             // Actually change the language
@@ -44,7 +42,7 @@ const Header: React.FC = () => {
             // );
             // Save the language as a cookie
             // Return the new country
-            return newCountry;
+            return lang;
         });
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
     };
@@ -73,7 +71,7 @@ const Header: React.FC = () => {
         // Load the language from cookies
         const languageCookie = getCookie('language');
         if (languageCookie !== null) {
-            setCurrentCountry(languageCookie);
+            setCurrentLang(languageCookie);
         }
     }, []);
     const setTheme = (isDarkMode: boolean): void => {
@@ -116,7 +114,7 @@ const Header: React.FC = () => {
                      onMouseEnter={handleHover}
                      onMouseLeave={handleNoHover}
                      style={languageButtonStyle}>
-                    {currentCountry === 'US' ?
+                    {currentLang === 'en' ?
                         <>
                             <US title="United States"/>
                             <p>EN</p>
