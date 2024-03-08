@@ -31,9 +31,7 @@
             user-drag: none;
             -webkit-user-drag: none;
 
-            &:hover {
-                cursor: help;
-            }
+            cursor: help;
         }
     }
 
@@ -114,9 +112,7 @@
                 //-webkit-text-stroke-color: white;
             }
 
-            &:hover {
-                cursor: pointer;
-            }
+            cursor: pointer;
         }
 
         &-user {
@@ -129,8 +125,8 @@
                 width: 100%;
                 height: 100%;
 
+                cursor: pointer;
                 &:hover {
-                    cursor: pointer;
                     opacity: 50%;
                 }
             }

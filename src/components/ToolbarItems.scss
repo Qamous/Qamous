@@ -45,4 +45,8 @@
             }
         }
     }
+
+    &-not-built-yet {
+        cursor: not-allowed;
+    }
 }

@@ -27,6 +27,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                         <StyledNavLink to="/advanced-search"
                                        language={language}
                                        isDarkMode={isDarkMode}
+                                       className={'toolbar-items-not-built-yet'}
                         >
                             {t('toolbar_items.advanced_search')}
                         </StyledNavLink>
@@ -43,6 +44,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                         <StyledNavLink to="/advertise"
                                        language={language}
                                        isDarkMode={isDarkMode}
+                                       className={'toolbar-items-not-built-yet'}
                         >
                             {t('toolbar_items.advertise')}
                         </StyledNavLink>
