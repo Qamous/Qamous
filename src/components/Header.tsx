@@ -1,4 +1,4 @@
-  import React, {useState} from 'react';
+  import React, { useEffect, useState } from 'react';
 import ToolbarItems from "./ToolbarItems";
 import SearchBar from "./SearchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,7 +21,8 @@ const Header: React.FC = () => {
         useState(getCookie('language') || "en");
     const [languageButtonStyle, setLanguageButtonStyle] =
         useState({ opacity: 1 });
-    const [isDarkMode, setDarkMode] = React.useState(true);
+    const [isDarkMode, setDarkMode] =
+      React.useState<boolean>(getCookie('darkMode') === 'true' ?? true);
 
     const handleSearchClick = (isExpanded: boolean) => {
         if (isExpanded)
@@ -63,11 +64,6 @@ const Header: React.FC = () => {
         // Update opacity
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
     };
-    const toggleDarkMode = (checked: boolean) => {
-        setDarkMode(checked);
-        setCookie('darkMode', checked.toString());
-        setTheme(checked);
-    };
     const setTheme = (isDarkMode: boolean): void => {
         root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
         root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
@@ -75,6 +71,11 @@ const Header: React.FC = () => {
         root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
         root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
     };
+    const toggleDarkMode = (checked: boolean) => {
+        setDarkMode(checked);
+        setCookie('darkMode', checked.toString());
+    };
+    setTheme(isDarkMode);
 
     return (
         <div className="header">
