@@ -28,7 +28,6 @@
             margin: 0 35px 0 0;
 
             // undraggable
-            user-drag: none;
             -webkit-user-drag: none;
 
             cursor: help;
@@ -126,6 +125,12 @@
                 height: 100%;
 
                 cursor: pointer;
+                -webkit-user-drag: none;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+
                 &:hover {
                     opacity: 50%;
                 }

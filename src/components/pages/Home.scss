@@ -43,5 +43,13 @@
         color: styles.$primary-color;
       }
     }
+
+    &-ar {
+      direction: rtl;
+    }
+
+    &-latin {
+      direction: ltr;
+    }
   }
 }
