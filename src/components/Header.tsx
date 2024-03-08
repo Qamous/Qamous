@@ -80,7 +80,9 @@ const Header: React.FC = () => {
         <div className="header">
             <div className="header-left-side">
                 <img src={require("../assets/qamous-logo-transparent.png")}  alt="Qamous" />
-                <ToolbarItems /> {/* Insert the ToolbarItems component above the SearchBar */}
+                <ToolbarItems
+                  language={currentLang}
+                /> {/* Insert the ToolbarItems component above the SearchBar */}
             </div>
 
             <div className="header-right-side">

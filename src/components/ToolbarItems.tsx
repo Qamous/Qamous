@@ -1,9 +1,13 @@
 import React from 'react';
 import './ToolbarItems.scss';
-import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import StyledNavLink from './StyledNavLink';
 
-const ToolbarItems: React.FC = () => {
+interface ToolbarItemsProps {
+    language: string
+}
+
+const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language }: ToolbarItemsProps) => {
     const { t } = useTranslation();
 
     return (
@@ -11,24 +15,32 @@ const ToolbarItems: React.FC = () => {
             <nav>
                 <ul>
                     <li>
-                        <NavLink to="/">
+                        <StyledNavLink to="/"
+                                       language={language}
+                        >
                             {t('toolbar_items.home')}
-                        </NavLink>
+                        </StyledNavLink>
                     </li>
                     <li>
-                        <NavLink to="/advanced-search">
+                        <StyledNavLink to="/advanced-search"
+                                       language={language}
+                        >
                             {t('toolbar_items.advanced_search')}
-                        </NavLink>
+                        </StyledNavLink>
                     </li>
                     <li>
-                        <NavLink to="/word-of-the-day">
+                        <StyledNavLink to="/word-of-the-day"
+                                       language={language}
+                        >
                             {t('toolbar_items.word_of_the_day')}
-                        </NavLink>
+                        </StyledNavLink>
                     </li>
                     <li>
-                        <NavLink to="/advertise">
+                        <StyledNavLink to="/advertise"
+                                       language={language}
+                        >
                             {t('toolbar_items.advertise')}
-                        </NavLink>
+                        </StyledNavLink>
                     </li>
                 </ul>
             </nav>
