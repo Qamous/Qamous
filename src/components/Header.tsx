@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+  import React, {useState} from 'react';
 import ToolbarItems from "./ToolbarItems";
 import SearchBar from "./SearchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const Header: React.FC = () => {
     const { i18n } = useTranslation();
+    const root = document.documentElement;
 
     const [parentWidth, setHeaderPadding] =
         useState('0');
@@ -40,7 +41,15 @@ const Header: React.FC = () => {
             //   lang,
             //   'direction'
             // );
-            // Save the language as a cookie
+
+            // Select the toolbar items and apply the desired letter spacing
+            const toolbarItems = document.querySelectorAll('.toolbar-items a');
+            const letterSpacing = lang === 'ar' ? '0' : '0.2em';
+            toolbarItems.forEach(item => {
+                (item as HTMLElement).style.letterSpacing = letterSpacing;
+                (item as HTMLElement).style.fontFamily = lang === 'ar' ? '$fontStackArabic' : '$fontStack';
+            });
+
             // Return the new country
             return lang;
         });
@@ -59,29 +68,14 @@ const Header: React.FC = () => {
         setCookie('darkMode', checked.toString());
         setTheme(checked);
     };
-
-    React.useEffect(() => {
-        // Load the dark mode and language settings from cookies
-        const darkModeCookie = getCookie('darkMode');
-        if (darkModeCookie !== null) {
-            const isDarkMode = darkModeCookie === 'true';
-            setDarkMode(isDarkMode);
-            setTheme(isDarkMode);
-        }
-        // Load the language from cookies
-        const languageCookie = getCookie('language');
-        if (languageCookie !== null) {
-            setCurrentLang(languageCookie);
-        }
-    }, []);
     const setTheme = (isDarkMode: boolean): void => {
-        const root = document.documentElement;
         root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
         root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
         root.style.setProperty('--tertiary-color', isDarkMode ? styles.tertiaryColorDark : styles.tertiaryColorLight);
         root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
         root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
     };
+
     return (
         <div className="header">
             <div className="header-left-side">
@@ -125,11 +119,6 @@ const Header: React.FC = () => {
                         </>
                     }
                 </div>
-                {/*
-                TODO: link the language button to a language switch
-                Maybe use i18n?:
-                https://www.honeybadger.io/blog/creating-multi-language-user-interface-with-react/
-                */}
             </div>
         </div>
     );

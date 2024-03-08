@@ -89,6 +89,23 @@
                 padding: 0 0 0 5px;
                 align-self: center;
                 user-select: none;
+
+                // This is a cool effect, it makes the text's background an image
+                // but it doesn't look good with the current background
+                //display: inline-block;
+                //margin: 0;
+                //font-size: 30px;
+                //background-image: url(
+                //'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/English_language.svg/800px-English_language.svg.png?20141018184419');
+                //font-weight: bold;
+                //background-repeat: no-repeat;
+                //background-size: cover;
+                //background-position: center;
+                //color: transparent;
+                //background-clip: text;
+                //-webkit-background-clip: text;
+                //-webkit-text-stroke-width: 0.1px;
+                //-webkit-text-stroke-color: white;
             }
         }
     }

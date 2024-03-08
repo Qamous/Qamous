@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&display=swap');
-
-$font-stack: "Segoe UI", Sans-Serif, serif;
-$font-stack-arabic: "Amiri Quran", Noto Naskh Arabic;
+@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 :root {
   --primary-color: #ffffff;
@@ -10,15 +8,20 @@ $font-stack-arabic: "Amiri Quran", Noto Naskh Arabic;
   --quaternary-color: #292929;
   --primary-color-90: rgba(255, 255, 255, 0.9);
 
-  --is-arabic: false;
+  --font-stack: "Segoe UI", Sans-Serif, serif;
+  --font-stack-arabic: "Amiri Quran", serif;
+  --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
 }
+
 $primary-color: var(--primary-color);
 $secondary-color: var(--secondary-color);
 $tertiary-color: var(--tertiary-color);
 $quaternary-color: var(--quaternary-color);
 $primary-color-90: var(--primary-color-90);
 
-$isArabic: var(--is-arabic);
+$font-stack: var(--font-stack);
+$font-stack-arabic: var(--font-stack-arabic);
+$font-stack-arabic-wod: var(--font-stack-arabic-wod);
 
 // Dark Mode (default)
 $primary-color-dark: #ffffff;
@@ -53,7 +56,9 @@ $primary-color-90-light: rgba(0, 0, 0, 0.9);
   quaternaryColorDark: $quaternary-color-dark;
   primaryColorNinetyDark: $primary-color-90-dark;
 
-  isArabic: $isArabic;
+  fontStack: $font-stack;
+  fontStackArabic: $font-stack-arabic;
+  fontStackArabicWod: $font-stack-arabic-wod;
 }
 
 // Light Mode
