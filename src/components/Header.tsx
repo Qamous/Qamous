@@ -1,4 +1,4 @@
-  import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ToolbarItems from "./ToolbarItems";
 import SearchBar from "./SearchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,7 @@ import { DarkModeSwitch } from "react-toggle-dark-mode";
 import styles from '../assets/Styles.scss';
 import { setCookie, getCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
+import userImage from '../assets/user.png';
 
 const Header: React.FC = () => {
     const { i18n } = useTranslation();
@@ -122,6 +123,10 @@ const Header: React.FC = () => {
                             <p>AR</p>
                         </>
                     }
+                </div>
+
+                <div className="header-right-side-user">
+                    <img src={userImage} alt={"User"}/>
                 </div>
             </div>
         </div>
