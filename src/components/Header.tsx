@@ -82,6 +82,7 @@ const Header: React.FC = () => {
                 <img src={require("../assets/qamous-logo-transparent.png")}  alt="Qamous" />
                 <ToolbarItems
                   language={currentLang}
+                  isDarkMode={isDarkMode}
                 /> {/* Insert the ToolbarItems component above the SearchBar */}
             </div>
 

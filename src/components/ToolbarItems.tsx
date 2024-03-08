@@ -5,9 +5,10 @@ import StyledNavLink from './StyledNavLink';
 
 interface ToolbarItemsProps {
     language: string
+    isDarkMode: boolean
 }
 
-const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language }: ToolbarItemsProps) => {
+const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: ToolbarItemsProps) => {
     const { t } = useTranslation();
 
     return (
@@ -17,6 +18,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language }: ToolbarItemsPro
                     <li>
                         <StyledNavLink to="/"
                                        language={language}
+                                       isDarkMode={isDarkMode}
                         >
                             {t('toolbar_items.home')}
                         </StyledNavLink>
@@ -24,6 +26,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language }: ToolbarItemsPro
                     <li>
                         <StyledNavLink to="/advanced-search"
                                        language={language}
+                                       isDarkMode={isDarkMode}
                         >
                             {t('toolbar_items.advanced_search')}
                         </StyledNavLink>
@@ -31,6 +34,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language }: ToolbarItemsPro
                     <li>
                         <StyledNavLink to="/word-of-the-day"
                                        language={language}
+                                       isDarkMode={isDarkMode}
                         >
                             {t('toolbar_items.word_of_the_day')}
                         </StyledNavLink>
@@ -38,6 +42,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language }: ToolbarItemsPro
                     <li>
                         <StyledNavLink to="/advertise"
                                        language={language}
+                                       isDarkMode={isDarkMode}
                         >
                             {t('toolbar_items.advertise')}
                         </StyledNavLink>
