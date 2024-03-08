@@ -36,5 +36,5 @@ The Qamous Frontend is the client-side component of the Qamous application, a pl
 This project is licensed under the Mozilla Public License Version 2.0 - see the [LICENSE](LICENSE) file for details.
 
 ## Images
-![Homepage 2/15/2024](readme-files/homepage-02-15-2024.png)
-![Word Page 2/15/2024](readme-files/word-of-the-day-2024-03-06.png)
+![Home 03/08/2024](readme-files/home-2024-03-08.png)
+![Word Page 03/08/2024](readme-files/word-of-the-day-2024-03-08.png)
