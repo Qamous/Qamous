@@ -20,7 +20,7 @@ const Home: React.FC = () => {
                 <div key={index}
                      className={"home-content" +
                        (index === 0 ? " home-content-first" : "") +
-                       (lang === 'ar' ? " home-content-ar" : "")}>
+                       (lang === 'ar' ? " home-content-ar" : " home-content-latin")}>
                     <div className={"home-content-title"}>
                         <h1>{item.word}</h1>
                     </div>

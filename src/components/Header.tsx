@@ -44,14 +44,6 @@ const Header: React.FC = () => {
             //   'direction'
             // );
 
-            // Select the toolbar items and apply the desired letter spacing
-            const toolbarItems = document.querySelectorAll('.toolbar-items a');
-            const letterSpacing = lang === 'ar' ? '0' : '0.2em';
-            toolbarItems.forEach(item => {
-                (item as HTMLElement).style.letterSpacing = letterSpacing;
-                (item as HTMLElement).style.fontFamily = lang === 'ar' ? '$fontStackArabic' : '$fontStack';
-            });
-
             // Return the new country
             return lang;
         });
