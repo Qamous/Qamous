@@ -1,10 +1,11 @@
 @use '../../assets/Styles.scss' as styles;
 
 .word-of-day {
-  padding: 25px;
+  padding: 25px 25px 0 25px;
   margin: 0;
   height: 100%;
   overflow: auto;
+  scrollbar-width: none;
   text-align: justify;
 
   &-word {
