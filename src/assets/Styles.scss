@@ -7,6 +7,7 @@
   --tertiary-color: #000000;
   --quaternary-color: #292929;
   --primary-color-90: rgba(255, 255, 255, 0.9);
+  --secondary-color-90: rgba(221, 133, 0, 0.9);
 
   --font-stack: "Segoe UI", Sans-Serif, serif;
   --font-stack-arabic: "Rubik", serif;
@@ -18,6 +19,7 @@ $secondary-color: var(--secondary-color);
 $tertiary-color: var(--tertiary-color);
 $quaternary-color: var(--quaternary-color);
 $primary-color-90: var(--primary-color-90);
+$secondary-color-90: var(--secondary-color-90);
 
 $font-stack: var(--font-stack);
 $font-stack-arabic: var(--font-stack-arabic);
@@ -43,6 +45,7 @@ $primary-color-90-light: rgba(0, 0, 0, 0.9);
   tertiaryColor: $tertiary-color;
   quaternaryColor: $quaternary-color;
   primaryColorNinety: $primary-color-90;
+  secondaryColorNinety: $secondary-color-90;
 
   primaryColorLight: $primary-color-light;
   secondaryColorLight: $secondary-color-light;
