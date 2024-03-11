@@ -73,7 +73,11 @@ const Header: React.FC = () => {
     return (
         <div className="header">
             <div className="header-left-side">
-                <img src={require("../assets/qamous-logo-transparent.png")}  alt="Qamous" />
+                <img
+                  src={require("../assets/qamous-logo-transparent.png")}
+                  alt="Qamous"
+                  loading="lazy"
+                  title="This is Qamous for Arabic" /> {/* TODO: do more research on lazy loading for a faster experience */}
                 <ToolbarItems
                   language={currentLang}
                   isDarkMode={isDarkMode}
