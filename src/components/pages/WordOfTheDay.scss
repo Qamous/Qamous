@@ -1,7 +1,8 @@
 @use '../../assets/Styles.scss' as styles;
 
+// TODO: figure out what is wrong with the scrolling on this page
 .word-of-day {
-  padding: 25px 25px 0 25px;
+  padding: 25px;
   margin: 0;
   height: 100%;
   overflow: auto;
