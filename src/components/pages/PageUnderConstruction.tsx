@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './PageUnderConstruction.scss';
 
-// Define an interface for the time left object
+// This is an interface for the time left object
+// It has four properties: days, hours, minutes, and seconds
 interface TimeLeft {
     days: number;
     hours: number;
@@ -9,10 +10,21 @@ interface TimeLeft {
     seconds: number;
 }
 
+// This is the PageUnderConstruction component
+// It displays a message indicating that the page is under construction
+// It also displays a countdown to the completion date of the page which is set to June 1st, 2024,
+// or the first day of the upcoming month if the current date is past June 1st, 2024
 const PageUnderConstruction: React.FC = () => {
-    // Get the current date and the completion date (June 1st of the current year)
+    // Get the current date
     const currentDate = new Date();
-    const completionDate = new Date(currentDate.getFullYear(), 5, 1).getTime();
+
+    // Set the completion date to June 1st, 2024
+    let completionDate = new Date(2024, 5, 1).getTime();
+
+    // If the current date is past June 1st, 2024, set the completion date to the first day of the upcoming month
+    if (currentDate.getTime() > completionDate) {
+        completionDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1).getTime();
+    }
 
     // Function to calculate the time left until the completion date
     const calculateTimeLeft = (): TimeLeft => {
