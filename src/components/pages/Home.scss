@@ -3,7 +3,7 @@
 .home {
   padding: 25px;
   margin: 0;
-  height: 100%;
+  min-height: 0;
   overflow: auto;
   scrollbar-width: none;
   text-align: justify;
