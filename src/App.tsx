@@ -10,6 +10,7 @@ import translationAR from './assets/ar/translation.json';
 import i18n from "i18next";
 import { initReactI18next } from 'react-i18next';
 import { getCookie } from './assets/utils';
+import PageUnderConstruction from './components/pages/PageUnderConstruction';
 
 
 const resources = {
@@ -54,7 +55,7 @@ const App: React.FC = () => {
                             <Header />
                         </div>
                         <div className="content">
-                            {/* <AdvancedSearch /> */}
+                            <PageUnderConstruction />
                         </div>
                         <div className="footer">
                         </div>
@@ -81,7 +82,7 @@ const App: React.FC = () => {
                             <Header />
                         </div>
                         <div className="content">
-                            {/* Your page content goes here */}
+                            <PageUnderConstruction />
                         </div>
                         <div className="footer">
                         </div>
