@@ -1,18 +1,27 @@
+@use "../../assets/Styles.scss" as styles;
+
 .page-under-construction {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100%;
     text-align: center;
-    color: #333;
+    color: styles.$primary-color;
 
     h1 {
-        font-size: 2.5em;
-        margin-bottom: 1em;
+        font-size: 43px;
+        margin-bottom: 10px;
     }
 
     p {
-        font-size: 1.5em;
+        font-size: 24px;
+
+        mark {
+            background-color: styles.$secondary-color;
+            // rounded corners
+            border-radius: 5px;
+            font-weight: bold;
+        }
     }
 }
