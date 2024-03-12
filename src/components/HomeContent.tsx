@@ -13,6 +13,8 @@ interface HomeContentProps {
 const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
     const [likeClicked, setLikeClicked] = useState(false);
     const [dislikeClicked, setDislikeClicked] = useState(false);
+    const [reportClicked, setReportClicked] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const handleLikeClick = () => {
         setLikeClicked(!likeClicked);
@@ -23,6 +25,15 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
         setDislikeClicked(!dislikeClicked);
         if (likeClicked) setLikeClicked(false);
     };
+
+    const handleReportClick = () => {
+        if (reportClicked) {
+            setSnackbarOpen(true);
+            setTimeout(() => setSnackbarOpen(false), 3000);
+        } else {
+            setReportClicked(true);
+        }
+    }
 
     return (
         <div className={"h-content" +
@@ -37,22 +48,30 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
                 </p>
             </div>
             {index !== 0 && (
-                <div className="h-content-buttons">
-                    <button
-                        className={`h-content-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
-                        onClick={handleLikeClick}
-                    >
-                        Like
-                    </button>
-                    <button
-                        className={`h-content-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
-                        onClick={handleDislikeClick}
-                    >
-                        Dislike
-                    </button>
-                    <button className="h-content-buttons-report-button">Report</button>
-                </div>
+              <div className="h-content-buttons">
+                  <button
+                    className={`h-content-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
+                    onClick={handleLikeClick}
+                  >
+                      Like
+                  </button>
+                  <button
+                    className={`h-content-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
+                    onClick={handleDislikeClick}
+                  >
+                      Dislike
+                  </button>
+                  <button
+                    className={`h-content-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
+                    onClick={handleReportClick}
+                  >
+                      Report
+                  </button>
+              </div>
             )}
+            <div id="snackbar" className={snackbarOpen ? 'show' : ''}>
+                You are unable to report the same word more than once
+            </div>
         </div>
     );
 }
