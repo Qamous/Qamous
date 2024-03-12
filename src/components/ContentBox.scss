@@ -61,12 +61,6 @@
         transition: background-color 0.5s, color 0.5s, border-color 0.5s;
         color: white;
       }
-
-      &.clicked {
-        border-color: black;
-        background-color: black;
-        color: white;
-      }
     }
 
     &-like-button {
@@ -77,6 +71,12 @@
         background-color: #4CAF50;
         border-color: #4CAF50;
       }
+
+      &.clicked {
+        border-color: #4CAF50;
+        background-color: #4CAF50;
+        color: white;
+      }
     }
 
     &-dislike-button {
@@ -86,6 +86,12 @@
       &:hover {
         background-color: #f44336;
         border-color: #f44336;
+      }
+
+      &.clicked {
+        border-color: #f44336;
+        background-color: #f44336;
+        color: white;
       }
     }
 
@@ -111,6 +117,10 @@
       }
 
       &.clicked {
+        border-color: black;
+        background-color: black;
+        color: white;
+
         cursor: not-allowed;
 
         &:active {
