@@ -2,6 +2,7 @@ import React from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
+import HomeContent from '../HomeContent';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -17,19 +18,12 @@ const Home: React.FC = () => {
     return (
         <div className={"home"}>
             {sampleHome.map((item, index) => (
-                <div key={index}
-                     className={"home-content" +
-                       (index === 0 ? " home-content-first" : "") +
-                       (lang === 'ar' ? " home-content-ar" : " home-content-latin")}>
-                    <div className={"home-content-title"}>
-                        <h1>{item.word}</h1>
-                    </div>
-                    <div className={"home-content-description"}>
-                        <p>
-                            {item.definition}
-                        </p>
-                    </div>
-                </div>
+                <HomeContent
+                  key={index}
+                  item={item}
+                  index={index}
+                  lang={lang}
+                />
             ))}
         </div>
     );
