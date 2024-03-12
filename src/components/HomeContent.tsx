@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomeContent.scss';
 import Snackbar from './Snackbar';
 
@@ -15,26 +15,50 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
     const [likeClicked, setLikeClicked] = useState(false);
     const [dislikeClicked, setDislikeClicked] = useState(false);
     const [reportClicked, setReportClicked] = useState(false);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
+    const [clickCount, setClickCount] = useState(0);
+    const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
 
     const handleLikeClick = () => {
-        setLikeClicked(!likeClicked);
-        if (dislikeClicked) setDislikeClicked(false);
+        if (clickCount < 5) {
+            setClickCount(prevCount => prevCount + 1);
+            setLikeClicked(!likeClicked);
+            if (dislikeClicked) setDislikeClicked(false);
+        }
+        if (clickCount >= 5) {
+            setExcessiveClickSnackbarOpen(true);
+            setTimeout(() => setExcessiveClickSnackbarOpen(false), 3000);
+        }
     };
 
     const handleDislikeClick = () => {
-        setDislikeClicked(!dislikeClicked);
-        if (likeClicked) setLikeClicked(false);
+        if (clickCount < 5) {
+            setClickCount(prevCount => prevCount + 1);
+            setDislikeClicked(!dislikeClicked);
+            if (likeClicked) setLikeClicked(false);
+        }
+        if (clickCount >= 5) {
+            setExcessiveClickSnackbarOpen(true);
+            setTimeout(() => setExcessiveClickSnackbarOpen(false), 3000);
+        }
     };
 
     const handleReportClick = () => {
         if (reportClicked) {
-            setSnackbarOpen(true);
-            setTimeout(() => setSnackbarOpen(false), 3000);
+            setReportSnackbarOpen(true);
+            setTimeout(() => setReportSnackbarOpen(false), 3000);
         } else {
             setReportClicked(true);
         }
-    }
+    };
+
+    useEffect(() => {
+        if (clickCount >= 5) {
+            setTimeout(() => {
+                setClickCount(0);
+            }, 60000); // Reset after 1 minute
+        }
+    }, [clickCount]);
 
     return (
         <div className={"h-content" +
@@ -71,8 +95,12 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
               </div>
             )}
             <Snackbar
-              open={snackbarOpen}
+              open={reportSnackbarOpen}
               message="You are unable to report the same word more than once"
+            />
+            <Snackbar
+              open={excessiveClickSnackbarOpen}
+              message="You have reacted too many times. Please wait before clicking again."
             />
         </div>
     );
