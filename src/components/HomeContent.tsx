@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './HomeContent.scss';
+import Snackbar from './Snackbar';
 
 interface HomeContentProps {
     item: {
@@ -69,9 +70,10 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
                   </button>
               </div>
             )}
-            <div id="snackbar" className={snackbarOpen ? 'show' : ''}>
-                You are unable to report the same word more than once
-            </div>
+            <Snackbar
+              open={snackbarOpen}
+              message="You are unable to report the same word more than once"
+            />
         </div>
     );
 }
