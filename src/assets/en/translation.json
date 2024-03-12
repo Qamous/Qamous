@@ -37,5 +37,10 @@
       "word": "NewWord3",
       "definition": "This is the definition for NewWord3."
     }
-  ]
+  ],
+  "content_box_buttons": {
+    "like": "Like",
+    "dislike": "Dislike",
+    "report": "Report"
+  }
 }

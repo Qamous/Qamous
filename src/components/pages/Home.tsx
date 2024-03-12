@@ -2,7 +2,7 @@ import React from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
-import HomeContent from '../HomeContent';
+import ContentBox from '../ContentBox';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -18,7 +18,7 @@ const Home: React.FC = () => {
     return (
         <div className={"home"}>
             {sampleHome.map((item, index) => (
-                <HomeContent
+                <ContentBox
                   key={index}
                   item={item}
                   index={index}

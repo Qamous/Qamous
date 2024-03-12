@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import './HomeContent.scss';
+import './ContentBox.scss';
 import Snackbar from './Snackbar';
+import { useTranslation } from 'react-i18next';
 
 interface HomeContentProps {
     item: {
@@ -11,7 +12,16 @@ interface HomeContentProps {
     lang: string
 }
 
-const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang }) => {
+    const { t } = useTranslation();
+    const buttonText = t('content_box_buttons', {
+        returnObjects: true
+    }) as {
+        like: string,
+        dislike: string,
+        report: string
+    };
+
     const [likeClicked, setLikeClicked] = useState(false);
     const [dislikeClicked, setDislikeClicked] = useState(false);
     const [reportClicked, setReportClicked] = useState(false);
@@ -75,36 +85,36 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
     }, [clickCount]);
 
     return (
-        <div className={"h-content" +
-            (index === 0 ? " h-content-first" : "") +
-            (lang === 'ar' ? " h-content-ar" : " home-content-latin")}>
-            <div className={"h-content-title"}>
+        <div className={"content-box" +
+            (index === 0 ? " content-box-first" : "") +
+            (lang === 'ar' ? " content-box-ar" : " content-box-latin")}>
+            <div className={"content-box-title"}>
                 <h1>{item.word}</h1>
             </div>
-            <div className={"h-content-description"}>
+            <div className={"content-box-description"}>
                 <p>
                     {item.definition}
                 </p>
             </div>
             {index !== 0 && (
-              <div className="h-content-buttons">
+              <div className="content-box-buttons">
                   <button
-                    className={`h-content-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
+                    className={`content-box-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
                     onClick={handleLikeClick}
                   >
-                      Like
+                      {buttonText.like}
                   </button>
                   <button
-                    className={`h-content-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
+                    className={`content-box-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
                     onClick={handleDislikeClick}
                   >
-                      Dislike
+                      {buttonText.dislike}
                   </button>
                   <button
-                    className={`h-content-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
+                    className={`content-box-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
                     onClick={handleReportClick}
                   >
-                      Report
+                      {buttonText.report}
                   </button>
               </div>
             )}
@@ -120,4 +130,4 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
     );
 }
 
-export default HomeContent;
+export default ContentBox;
