@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './HomeContent.scss';
 
 interface HomeContentProps {
     item: {
@@ -9,27 +10,45 @@ interface HomeContentProps {
     lang: string
 }
 
-/**
- * This component represents each of the boxes in the center of the home page that contain the word and its definition.
- *
- * @param {{word: string, definition: string}} item - The word (title) and its definition (subtitle)
- * @param {number} index - The index of the item in the array / the position of the box in the home page
- * @param {string} lang - The language of the page
- * @returns {React.JSX.Element} - The JSX code for the component
- */
 const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
+    const [likeClicked, setLikeClicked] = useState(false);
+    const [dislikeClicked, setDislikeClicked] = useState(false);
+
     return (
-        <div className={"home-content" +
-            (index === 0 ? " home-content-first" : "") +
-            (lang === 'ar' ? " home-content-ar" : " home-content-latin")}>
-            <div className={"home-content-title"}>
+        <div className={"h-content" +
+            (index === 0 ? " h-content-first" : "") +
+            (lang === 'ar' ? " h-content-ar" : " home-content-latin")}>
+            <div className={"h-content-title"}>
                 <h1>{item.word}</h1>
             </div>
-            <div className={"home-content-description"}>
+            <div className={"h-content-description"}>
                 <p>
                     {item.definition}
                 </p>
             </div>
+            {index !== 0 && (
+                <div className="h-content-buttons">
+                    <button
+                        className={`h-content-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
+                        onClick={() => {
+                            setLikeClicked(!likeClicked);
+                            if (dislikeClicked) setDislikeClicked(false);
+                        }}
+                    >
+                        Like
+                    </button>
+                    <button
+                        className={`h-content-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
+                        onClick={() => {
+                            setDislikeClicked(!dislikeClicked);
+                            if (likeClicked) setLikeClicked(false);
+                        }}
+                    >
+                        Dislike
+                    </button>
+                    <button className="h-content-buttons-report-button">Report</button>
+                </div>
+            )}
         </div>
     );
 }

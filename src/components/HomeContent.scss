@@ -1,0 +1,87 @@
+@use '../assets/Styles.scss' as styles;
+
+.h-content {
+  background-color: styles.$quaternary-color;
+  width: 50%;
+
+  &-title {
+    padding: 5px 25px 0 25px;
+
+    h1 {
+      font-size: 34px;
+    }
+  }
+
+  &-description {
+    padding: 0 25px 15px 25px;
+
+    font-size: 16px;
+  }
+
+  &-first {
+    background-color: styles.$primary-color-90;
+    color: styles.$quaternary-color;
+
+    ::selection {
+      background: styles.$quaternary-color;
+      color: styles.$primary-color;
+    }
+  }
+
+  &-ar {
+    direction: rtl;
+    font: 100% styles.$font-stack-arabic;
+
+  }
+
+  &-latin {
+    direction: ltr;
+    font: 100% styles.$font-stack;
+  }
+
+  &-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+
+    button {
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &.clicked {
+        background-color: black;
+      }
+    }
+
+    &-like-button {
+      background-color: #4CAF50; /* Green */
+      color: white;
+    }
+
+    &-dislike-button {
+      background-color: #f44336; /* Red */
+      color: white;
+    }
+
+    &-report-button {
+       padding: 5px 10px;
+       font-size: 16px;
+       cursor: pointer;
+       border: none;
+       border-radius: 5px;
+       background-color: styles.$secondary-color;
+       color: white;
+
+       &:active {
+         transform: scale(0.95);
+       }
+     }
+  }
+}

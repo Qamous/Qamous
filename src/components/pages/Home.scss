@@ -14,44 +14,4 @@
   align-items: center;
 
   color: styles.$primary-color;
-
-  &-content {
-    background-color: styles.$quaternary-color;
-    width: 50%;
-
-    &-title {
-      padding: 5px 25px 0 25px;
-
-      h1 {
-        font-size: 34px;
-      }
-    }
-
-    &-description {
-      padding: 0 25px 15px 25px;
-
-      font-size: 16px;
-    }
-
-    &-first {
-      background-color: styles.$primary-color-90;
-      color: styles.$quaternary-color;
-
-      ::selection {
-        background: styles.$quaternary-color;
-        color: styles.$primary-color;
-      }
-    }
-
-    &-ar {
-      direction: rtl;
-      font: 100% styles.$font-stack-arabic;
-
-    }
-
-    &-latin {
-      direction: ltr;
-      font: 100% styles.$font-stack;
-    }
-  }
 }
