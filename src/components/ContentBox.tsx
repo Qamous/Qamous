@@ -12,15 +12,17 @@ interface HomeContentProps {
     lang: string
 }
 
+interface ButtonText {
+    like: string,
+    dislike: string,
+    report: string
+}
+
 const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang }) => {
     const { t } = useTranslation();
     const buttonText = t('content_box_buttons', {
         returnObjects: true
-    }) as {
-        like: string,
-        dislike: string,
-        report: string
-    };
+    }) as ButtonText;
 
     const [likeClicked, setLikeClicked] = useState(false);
     const [dislikeClicked, setDislikeClicked] = useState(false);
