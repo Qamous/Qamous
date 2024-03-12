@@ -14,6 +14,16 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
     const [likeClicked, setLikeClicked] = useState(false);
     const [dislikeClicked, setDislikeClicked] = useState(false);
 
+    const handleLikeClick = () => {
+        setLikeClicked(!likeClicked);
+        if (dislikeClicked) setDislikeClicked(false);
+    };
+
+    const handleDislikeClick = () => {
+        setDislikeClicked(!dislikeClicked);
+        if (likeClicked) setLikeClicked(false);
+    };
+
     return (
         <div className={"h-content" +
             (index === 0 ? " h-content-first" : "") +
@@ -30,19 +40,13 @@ const HomeContent: React.FC<HomeContentProps> = ({ item, index, lang }) => {
                 <div className="h-content-buttons">
                     <button
                         className={`h-content-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
-                        onClick={() => {
-                            setLikeClicked(!likeClicked);
-                            if (dislikeClicked) setDislikeClicked(false);
-                        }}
+                        onClick={handleLikeClick}
                     >
                         Like
                     </button>
                     <button
                         className={`h-content-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
-                        onClick={() => {
-                            setDislikeClicked(!dislikeClicked);
-                            if (likeClicked) setLikeClicked(false);
-                        }}
+                        onClick={handleDislikeClick}
                     >
                         Dislike
                     </button>
