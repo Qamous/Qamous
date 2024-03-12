@@ -48,45 +48,72 @@
       padding: 5px 10px;
       font-size: 16px;
       cursor: pointer;
-      border: none;
       border-radius: 5px;
+      border-style: solid;
+      border-width: 2px;
 
       &:active {
         transform: scale(0.95);
       }
 
+      &:hover {
+        transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+        color: white;
+      }
+
       &.clicked {
+        border-color: black;
         background-color: black;
+        color: white;
       }
     }
 
     &-like-button {
-      background-color: #4CAF50; /* Green */
-      color: white;
+      border-color: #4CAF50; /* Green */
+      background-color: styles.$quaternary-color;
+      color: black;
+
+      &:hover {
+        background-color: #4CAF50;
+        border-color: #4CAF50;
+      }
     }
 
     &-dislike-button {
-      background-color: #f44336; /* Red */
-      color: white;
+      border-color: #f44336; /* Red */
+      background-color: styles.$quaternary-color;
+      color: black;
+
+      &:hover {
+        background-color: #f44336;
+        border-color: #f44336;
+      }
     }
 
     &-report-button {
       padding: 5px 10px;
       font-size: 16px;
       cursor: pointer;
-      border: none;
+      //border: none;
       border-radius: 5px;
-      background-color: styles.$secondary-color;
-      color: white;
+      //background-color: styles.$secondary-color;
+      //color: white;
+
+      border-color: styles.$secondary-color;
+      background-color: styles.$quaternary-color;
+      color: black;
 
       &:active {
         transform: scale(0.95);
       }
 
-      &.clicked {
-        background-color: gray;
-        cursor: not-allowed;
+      &:hover {
+        background-color: styles.$secondary-color;
+        border-color: styles.$secondary-color;
+      }
 
+      &.clicked {
+        cursor: not-allowed;
 
         &:active {
           transform: none;
