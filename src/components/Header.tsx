@@ -63,6 +63,7 @@ const Header: React.FC = () => {
         root.style.setProperty('--tertiary-color', isDarkMode ? styles.tertiaryColorDark : styles.tertiaryColorLight);
         root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
         root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
+        root.style.setProperty('--header-border-color', isDarkMode ? styles.headerBorderColorDark : styles.headerBorderColorLight);
     };
     const toggleDarkMode = (checked: boolean) => {
         setDarkMode(checked);

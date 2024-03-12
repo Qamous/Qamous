@@ -32,6 +32,10 @@
     {
       "word": "NewWord2",
       "definition": "This is the definition for NewWord2."
+    },
+    {
+      "word": "NewWord3",
+      "definition": "This is the definition for NewWord3."
     }
   ]
 }

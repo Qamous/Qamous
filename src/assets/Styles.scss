@@ -12,6 +12,8 @@
   --font-stack: "Segoe UI", Sans-Serif, serif;
   --font-stack-arabic: "Rubik", serif;
   --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
+
+  --header-border-color: #1e1e1e;
 }
 
 $primary-color: var(--primary-color);
@@ -25,12 +27,16 @@ $font-stack: var(--font-stack);
 $font-stack-arabic: var(--font-stack-arabic);
 $font-stack-arabic-wod: var(--font-stack-arabic-wod);
 
+$header-border-color: var(--header-border-color);
+
 // Dark Mode (default)
 $primary-color-dark: #ffffff;
 $secondary-color-dark: #dd8500;
 $tertiary-color-dark: #000000;
 $quaternary-color-dark: #292929;
 $primary-color-90-dark: rgba(255, 255, 255, 0.9);
+
+$header-border-color-dark: #1e1e1e;
 
 // Light Mode
 $primary-color-light: #000000;
@@ -39,6 +45,8 @@ $tertiary-color-light: #d0d0d0;
 $quaternary-color-light: #f8f8f8;
 $primary-color-90-light: rgba(0, 0, 0, 0.9);
 
+$header-border-color-light: #eae7e7;
+
 :export {
   primaryColor: $primary-color;
   secondaryColor: $secondary-color;
@@ -46,18 +54,21 @@ $primary-color-90-light: rgba(0, 0, 0, 0.9);
   quaternaryColor: $quaternary-color;
   primaryColorNinety: $primary-color-90;
   secondaryColorNinety: $secondary-color-90;
+  headerBorderColor: $header-border-color;
 
   primaryColorLight: $primary-color-light;
   secondaryColorLight: $secondary-color-light;
   tertiaryColorLight: $tertiary-color-light;
   quaternaryColorLight: $quaternary-color-light;
   primaryColorNinetyLight: $primary-color-90-light;
+  headerBorderColorLight: $header-border-color-light;
 
   primaryColorDark: $primary-color-dark;
   secondaryColorDark: $secondary-color-dark;
   tertiaryColorDark: $tertiary-color-dark;
   quaternaryColorDark: $quaternary-color-dark;
   primaryColorNinetyDark: $primary-color-90-dark;
+  headerBorderColorDark: $header-border-color-dark;
 
   fontStack: $font-stack;
   fontStackArabic: $font-stack-arabic;
