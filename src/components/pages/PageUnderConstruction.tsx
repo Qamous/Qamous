@@ -68,7 +68,7 @@ const PageUnderConstruction: React.FC = () => {
     return (
         <div className="page-under-construction">
             <h1>This page is under construction</h1>
-            <p>It will be completed in <mark className="highlight">{timeLeft.days} days, {timeLeft.hours} hours, {timeLeft.minutes} minutes, and {timeLeft.seconds} seconds</mark>.</p>
+            <p>It will be completed in <mark>{timeLeft.days} days, {timeLeft.hours} hours, {timeLeft.minutes} minutes, and {timeLeft.seconds} seconds</mark>.</p>
         </div>
     );
 };

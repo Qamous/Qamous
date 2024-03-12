@@ -1,6 +1,8 @@
 import './Adverts.scss';
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 
 interface LoopConfig {
@@ -138,6 +140,8 @@ function horizontalLoop(items: HTMLElement[], config: LoopConfig): LoopTimeline 
 
 
 const Adverts: React.FC = () => {
+    const { i18n } = useTranslation();
+
     const advertsListRef = useRef<HTMLUListElement | null>(null);
 
     useEffect(() => {
@@ -167,42 +171,11 @@ const Adverts: React.FC = () => {
     return (
         <div className="adverts">
             <ul className='adverts-list' ref={advertsListRef}>
-                <li className='listitem'>
-                    <span>This is list item 1</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 2</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 3</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 4</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 5</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 6</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 7</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 8</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 9</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 10</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 11</span>
-                </li>
-                <li className='listitem'>
-                    <span>This is list item 12</span>
-                </li>
+                {((t('sample_advertisements', { returnObjects: true }) as unknown) as string[]).map((item: string, i: number) => (
+                    <li className='listitem' key={i}>
+                        <span>{item}</span>
+                    </li>
+                ))}
             </ul>
         </div>
     );
