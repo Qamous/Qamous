@@ -133,4 +133,14 @@ input {
     -webkit-transform: translate(-100%, -50%);
     -ms-transform: translate(-100%, -50%);
     transform: translate(-100%, -50%);
+
+    // if screen is less than 1600px
+    @media (max-width: 1600px) {
+        width: 500px;
+    }
+
+    // if screen is less than 1450px
+    @media (max-width: 1450px) {
+        width: 300px;
+    }
 }

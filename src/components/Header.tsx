@@ -28,8 +28,15 @@ const Header: React.FC = () => {
     const handleSearchClick = (isExpanded: boolean) => {
         if (isExpanded)
             setHeaderPadding('0');
-        else
-            setHeaderPadding('540px');
+        else {
+            // TODO: Make this responsive... This is a temporary solution
+            if (window.innerWidth > 1600)
+                setHeaderPadding('540px');
+            else if (window.innerWidth > 1450)
+                setHeaderPadding('450px');
+            else
+                setHeaderPadding('250px');
+        }
     };
     const handleCountrySwitch = () => {
         // Toggle between US and EG on click
