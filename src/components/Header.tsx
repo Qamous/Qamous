@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ToolbarItems from "./ToolbarItems";
 import SearchBar from "./SearchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from "react-router-dom";
 import './Header.scss';
 import { US, EG } from 'country-flag-icons/react/3x2'
@@ -10,7 +10,7 @@ import { DarkModeSwitch } from "react-toggle-dark-mode";
 import styles from '../assets/Styles.scss';
 import { setCookie, getCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
-import userImage from '../assets/user.png';
+import userImage from '../assets/user.svg';
 
 const Header: React.FC = () => {
     const { i18n, t } = useTranslation();
@@ -114,7 +114,9 @@ const Header: React.FC = () => {
 
                 <div className="header-right-side-user">
                     <NavLink to="/login">
-                        <img src={userImage} alt={t("common_terms.user")}/>
+                        <i className="fa-solid fa-user"></i>
+                        <FontAwesomeIcon icon={faUser} size="xl"/>
+                        {/*<img src={userImage} alt={t('common_terms.user')} />*/}
                     </NavLink>
                 </div>
             </div>

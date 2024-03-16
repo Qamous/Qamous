@@ -68,9 +68,9 @@ const Login: React.FC = () => {
         <label className="login-container-input-error">{passwordError}</label>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'login-container-buttons'}>
         <button
-          className={'login-container-input-button'}
+          className={'login-container-buttons-button'}
           type="button"
           onClick={onLoginClick}
           value={'Log in'}
@@ -78,7 +78,7 @@ const Login: React.FC = () => {
           Log in
         </button>
         <button
-          className="login-container-input-button login-container-input-button-signup"
+          className="login-container-buttons-button login-container-buttons-button-signup"
           onClick={onSignUpClick}
           value={'Sign Up'}
         >

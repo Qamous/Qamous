@@ -20,7 +20,7 @@
 
   &-input {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     margin-bottom: 20px;
     min-width: 50%;
@@ -49,6 +49,12 @@
       color: #a90000;
       margin-top: 5px;
     }
+  }
+
+  &-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 
     &-button {
       cursor: pointer;
@@ -58,7 +64,7 @@
       width: 200px;
       padding: 12px 24px;
       box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
-      transition: 0.4s ease-in-out;
+      transition: 0.3s ease-in-out;
       font-size: 20px;
       align-self: center;
 

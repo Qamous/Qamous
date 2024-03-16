@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './SignUp.scss';
+import { useNavigate } from 'react-router-dom';
 
 var options = {
   enableHighAccuracy: true,
@@ -46,6 +47,8 @@ if (navigator.geolocation) {
 }
 
 const SignUp: React.FC = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -59,7 +62,7 @@ const SignUp: React.FC = () => {
   const [lastNameError, setLastNameError] = useState('');
   const [dobError, setDobError] = useState('');
 
-  const onButtonClick = () => {
+  const onSignUpClick = () => {
     // Clear previous errors
     setUsernameError('');
     setFirstNameError('');
@@ -107,6 +110,11 @@ const SignUp: React.FC = () => {
     // TODO: Implement sign up logic here
     // If sign up is successful, navigate to another page
     // navigate('/dashboard');
+  };
+
+  const onLogInClick = () => {
+    // Redirect to the log in page
+    navigate('/login');
   };
 
   return (
@@ -181,8 +189,21 @@ const SignUp: React.FC = () => {
         <label className="login-container-input-error">{passwordError}</label>
       </div>
       <br />
-      <div className={'login-container-input'}>
-        <input className={'login-container-input-button'} type="button" onClick={onButtonClick} value={'Sign Up'} />
+      <div className={'login-container-buttons'}>
+        <button
+          className="login-container-buttons-button"
+          onClick={onSignUpClick}
+          value={'Sign Up'}
+        >
+          Sign up
+        </button>
+        <button
+          className="login-container-buttons-button login-container-buttons-button-signup"
+          onClick={onLogInClick}
+          value={'Sign Up'}
+        >
+          Log in
+        </button>
       </div>
     </div>
   );

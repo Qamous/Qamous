@@ -13,6 +13,8 @@ $close-trans-time: 150ms;
 @import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
 
 .search-box {
+    padding: 0;
+    margin: 0 6px 0 0;
     font-size: $font-size;
     border: solid $frame-thickness styles.$secondary-color;
     display: inline-block;
