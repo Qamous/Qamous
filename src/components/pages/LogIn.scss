@@ -50,16 +50,21 @@
     }
 
     &-button {
-      border: none;
-      background: cornflowerblue;
-      color: white;
-      padding: 12px 24px;
-      margin: 5px;
-      font-size: 20px;
       cursor: pointer;
-      align-self: center;
+      border: 0;
       border-radius: 4px;
-      transition: border-radius 0.3s ease-in-out;
+      font-weight: 600;
+      margin: 5px;
+      width: 200px;
+      padding: 12px 24px;
+      box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+      transition: 0.4s ease-in-out;
+      font-size: 20px;
+      align-self: center;
+
+      color: rgb(104, 85, 224);
+      background-color: rgba(255, 255, 255, 1);
+      border: 1px solid rgba(104, 85, 224, 1);
 
       &:hover {
         background-color: #4CAF50;
@@ -68,6 +73,18 @@
         cursor: pointer;
         border-radius: 8px;
       }
+    }
+
+    &-signup {
+      cursor: pointer;
+      border: 0;
+      border-radius: 4px;
+      font-weight: 600;
+      margin: 0 10px;
+      width: 200px;
+      padding: 10px 0;
+      box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+      transition: 0.4s;
     }
   }
 }

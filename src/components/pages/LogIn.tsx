@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LogIn.scss';
-import { isPasswordSecure } from '../../../backend/src/users/utils/validation';
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const navigate = useNavigate();
-
-  const onButtonClick = () => {
+  const onLoginClick = () => {
     // Clear previous errors
     setEmailError('');
     setPasswordError('');
@@ -36,10 +34,15 @@ const Login: React.FC = () => {
     // navigate('/dashboard');
   };
 
+  const onSignUpClick = () => {
+    // Redirect to the sign up page
+    navigate('/signup');
+  };
+
   return (
     <div className={'login-container'}>
       <div className={'login-container-title'}>
-        <div>Login</div>
+        <div>Log in</div>
       </div>
       <br />
       <div className={'login-container-input'}>
@@ -63,7 +66,21 @@ const Login: React.FC = () => {
       </div>
       <br />
       <div className={'login-container-input'}>
-        <input className={'login-container-input-button'} type="button" onClick={onButtonClick} value={'Log in'} />
+        <button
+          className={'login-container-input-button'}
+          type="button"
+          onClick={onLoginClick}
+          value={'Log in'}
+        >
+          Log in
+        </button>
+        <button
+          className="login-container-input-signup"
+          onClick={onSignUpClick}
+          value={'Sign Up'}
+        >
+          Sign up
+        </button>
       </div>
     </div>
   );

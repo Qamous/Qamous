@@ -12,6 +12,7 @@ import { initReactI18next } from 'react-i18next';
 import { getCookie } from './assets/utils';
 import PageUnderConstruction from './components/pages/PageUnderConstruction';
 import LogIn from './components/pages/LogIn';
+import SignUp from './components/pages/SignUp';
 
 var options = {
   enableHighAccuracy: true,
@@ -168,6 +169,18 @@ const App: React.FC = () => {
             </div>
             <div className="content">
               <LogIn />
+            </div>
+            <div className="footer">
+            </div>
+          </div>
+        } />
+        <Route path="/signup" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <SignUp />
             </div>
             <div className="footer">
             </div>
