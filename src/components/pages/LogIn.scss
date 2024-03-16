@@ -51,7 +51,6 @@
 
     &-button {
       cursor: pointer;
-      border: 0;
       border-radius: 4px;
       font-weight: 600;
       margin: 5px;
@@ -62,14 +61,14 @@
       font-size: 20px;
       align-self: center;
 
-      color: rgb(104, 85, 224);
+      color: styles.$secondary-color;
       background-color: rgba(255, 255, 255, 1);
-      border: 1px solid rgba(104, 85, 224, 1);
+      border: 1px solid styles.$secondary-color;
 
       &:hover {
-        background-color: #4CAF50;
+        //background-color: #4CAF50;
+        background-color: styles.$secondary-color;
         color: white;
-        border: none;
         cursor: pointer;
         border-radius: 8px;
       }
