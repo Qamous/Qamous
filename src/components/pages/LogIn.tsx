@@ -14,18 +14,19 @@ const Login: React.FC = () => {
     setEmailError('');
     setPasswordError('');
 
-    // Basic validation
+    // Basic Email validation
     if (!email || '' === email) {
       setEmailError('Email is required');
       return;
     }
-    if (!password || '' === password) {
-      setPasswordError('Password is required');
-      return;
-    }
-    // Email validation
+    // Advanced Email validation
     if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
       setEmailError('Invalid email');
+      return;
+    }
+    // Basic password validation
+    if (!password || '' === password) {
+      setPasswordError('Password is required');
       return;
     }
 
@@ -47,6 +48,7 @@ const Login: React.FC = () => {
       <br />
       <div className={'login-container-input'}>
         <input
+          type={'email'}
           value={email}
           placeholder="Enter your email here"
           onChange={(ev) => setEmail(ev.target.value)}
@@ -57,6 +59,7 @@ const Login: React.FC = () => {
       <br />
       <div className={'login-container-input'}>
         <input
+          type={'password'}
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}

@@ -61,41 +61,46 @@ const SignUp: React.FC = () => {
 
   const onButtonClick = () => {
     // Clear previous errors
-    setEmailError('');
-    setPasswordError('');
     setUsernameError('');
     setFirstNameError('');
     setLastNameError('');
     setDobError('');
+    setEmailError('');
+    setPasswordError('');
 
-    // Basic validation
-    if (!email || '' === email) {
-      setEmailError('Email is required');
-      return;
-    }
-    if (!password || '' === password) {
-      setPasswordError('Password is required');
-      return;
-    }
+    // Basic Username validation
     if (!username || '' === username) {
       setUsernameError('Username is required');
       return;
     }
+    // Basic First name validation
     if (!firstName || '' === firstName) {
       setFirstNameError('First name is required');
       return;
     }
+    // Basic Last name validation
     if (!lastName || '' === lastName) {
       setLastNameError('Last name is required');
       return;
     }
+    // Basic Date of birth validation
     if (!dob || '' === dob) {
       setDobError('Date of birth is required');
       return;
     }
-    // Email validation
+    // Basic Email validation
+    if (!email || '' === email) {
+      setEmailError('Email is required');
+      return;
+    }
+    // Advanced Email validation
     if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
       setEmailError('Invalid email');
+      return;
+    }
+    // Basic password validation
+    if (!password || '' === password) {
+      setPasswordError('Password is required');
       return;
     }
 
@@ -112,6 +117,7 @@ const SignUp: React.FC = () => {
       <br />
       <div className={'login-container-input'}>
         <input
+          type={'text'}
           value={username}
           placeholder="Enter your username here"
           onChange={(ev) => setUsername(ev.target.value)}
@@ -122,6 +128,7 @@ const SignUp: React.FC = () => {
       <br />
       <div className={'login-container-input'}>
         <input
+          type={'text'}
           value={firstName}
           placeholder="Enter your first name here"
           onChange={(ev) => setFirstName(ev.target.value)}
@@ -132,6 +139,7 @@ const SignUp: React.FC = () => {
       <br />
       <div className={'login-container-input'}>
         <input
+          type={'text'}
           value={lastName}
           placeholder="Enter your last name here"
           onChange={(ev) => setLastName(ev.target.value)}
@@ -142,7 +150,7 @@ const SignUp: React.FC = () => {
       <br />
       <div className={'login-container-input'}>
         <input
-          type="date"
+          type={'date'}
           value={dob}
           placeholder="Enter your date of birth here"
           onChange={(ev) => setDob(ev.target.value)}
@@ -153,6 +161,7 @@ const SignUp: React.FC = () => {
       <br />
       <div className={'login-container-input'}>
         <input
+          type={'email'}
           value={email}
           placeholder="Enter your email here"
           onChange={(ev) => setEmail(ev.target.value)}
@@ -163,6 +172,7 @@ const SignUp: React.FC = () => {
       <br />
       <div className={'login-container-input'}>
         <input
+          type={'password'}
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
