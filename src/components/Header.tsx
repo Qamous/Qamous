@@ -10,7 +10,6 @@ import { DarkModeSwitch } from "react-toggle-dark-mode";
 import styles from '../assets/Styles.scss';
 import { setCookie, getCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
-import userImage from '../assets/user.svg';
 
 const Header: React.FC = () => {
     const { i18n, t } = useTranslation();

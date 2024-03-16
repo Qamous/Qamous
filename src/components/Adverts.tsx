@@ -1,7 +1,6 @@
 import './Adverts.scss';
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
 
 
@@ -140,8 +139,6 @@ function horizontalLoop(items: HTMLElement[], config: LoopConfig): LoopTimeline 
 
 
 const Adverts: React.FC = () => {
-    const { i18n } = useTranslation();
-
     const advertsListRef = useRef<HTMLUListElement | null>(null);
 
     useEffect(() => {
