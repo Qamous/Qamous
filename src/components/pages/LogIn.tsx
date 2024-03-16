@@ -75,7 +75,7 @@ const Login: React.FC = () => {
           Log in
         </button>
         <button
-          className="login-container-input-signup"
+          className="login-container-input-button login-container-input-button-signup"
           onClick={onSignUpClick}
           value={'Sign Up'}
         >
