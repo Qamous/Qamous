@@ -42,5 +42,16 @@
     "like": "أعجبني",
     "dislike": "لم يعجبني",
     "report": "الإبلاغ"
+  },
+  "common_terms": {
+    "qamous": "قَامُوس",
+    "user": "المُسْتَخْدِم",
+    "language": "اللُغَة",
+    "search": "البحث",
+    "all_rights_reserved": "كَافَّة اَلْحُقُوق مَحْفُوظَة.",
+    "privacy_policy": "سِياسة الخُصوصيّةِ",
+    "terms_of_service": "شُروط الاسْتِخْدامِ",
+    "under_construction": "هذه الصفحة تحت الإنشاء",
+    "under_construction_message": "سيتم الانتهاء من بناء الصفحة في {{days}} أيام، {{hours}} ساعات، {{minutes}} دقائق، و {{seconds}} ثواني."
   }
 }

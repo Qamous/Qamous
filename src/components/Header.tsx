@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import userImage from '../assets/user.png';
 
 const Header: React.FC = () => {
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const root = document.documentElement;
 
     const [parentWidth, setHeaderPadding] =
@@ -83,7 +83,7 @@ const Header: React.FC = () => {
             <div className="header-left-side">
                 <img
                   src={require("../assets/qamous-logo-transparent.png")}
-                  alt="Qamous"
+                  alt={t("common_terms.qamous")}
                   loading="lazy"
                   title="This is Qamous for Arabic" /> {/* TODO: do more research on lazy loading for a faster experience */}
                 <ToolbarItems
@@ -130,7 +130,7 @@ const Header: React.FC = () => {
                 </div>
 
                 <div className="header-right-side-user">
-                    <img src={userImage} alt={"User"}/>
+                    <img src={userImage} alt={t("common_terms.user")}/>
                 </div>
             </div>
         </div>

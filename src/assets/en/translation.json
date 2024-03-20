@@ -42,5 +42,16 @@
     "like": "Like",
     "dislike": "Dislike",
     "report": "Report"
+  },
+  "common_terms": {
+    "qamous": "Qamous",
+    "user": "User",
+    "language": "Language",
+    "search": "Search",
+    "all_rights_reserved": "All rights reserved.",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "under_construction": "This page is under construction",
+    "under_construction_message": "It will be completed in {{days}} days, {{hours}} hours, {{minutes}} minutes, and {{seconds}} seconds."
   }
 }

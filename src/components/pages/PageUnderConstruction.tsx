@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './PageUnderConstruction.scss';
+import { useTranslation } from 'react-i18next';
+import styles from '../../assets/Styles.scss';
+import { convertToArabicNumerals } from '../../assets/utils';
 
 // This is an interface for the time left object
 // It has four properties: days, hours, minutes, and seconds
@@ -15,6 +18,7 @@ interface TimeLeft {
 // It also displays a countdown to the completion date of the page which is set to June 1st, 2024,
 // or the first day of the upcoming month if the current date is past June 1st, 2024
 const PageUnderConstruction: React.FC = () => {
+    const { i18n, t } = useTranslation();
     // Get the current date
     const currentDate = new Date();
 
@@ -64,12 +68,19 @@ const PageUnderConstruction: React.FC = () => {
         return () => clearTimeout(timer);
     });
 
-    // Render the component
+    const fontFamily = i18n.language === 'ar' ? styles.fontStackArabic : styles.fontStack;
+    const direction = i18n.language === 'ar' ? 'rtl' : 'ltr';
+
     return (
-        <div className="page-under-construction">
-            <h1>This page is under construction</h1>
-            <p>It will be completed in <mark>{timeLeft.days} days, {timeLeft.hours} hours, {timeLeft.minutes} minutes, and {timeLeft.seconds} seconds</mark>.</p>
-        </div>
+      <div className="page-under-construction" style={{fontFamily: fontFamily, direction: direction}}>
+          <h1>{t("common_terms.under_construction")}</h1>
+          <p>{t("common_terms.under_construction_message", {
+              days: convertToArabicNumerals(timeLeft.days, i18n.language),
+              hours: convertToArabicNumerals(timeLeft.hours, i18n.language),
+              minutes: convertToArabicNumerals(timeLeft.minutes, i18n.language),
+              seconds: convertToArabicNumerals(timeLeft.seconds, i18n.language)
+          })}</p>
+      </div>
     );
 };
 
