@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PageUnderConstruction.scss';
 import { useTranslation } from 'react-i18next';
 import styles from '../../assets/Styles.scss';
-import { convertToArabicNumerals } from '../../assets/utils';
+import { convertNumerals } from '../../assets/utils';
 
 // This is an interface for the time left object
 // It has four properties: days, hours, minutes, and seconds
@@ -75,10 +75,10 @@ const PageUnderConstruction: React.FC = () => {
       <div className="page-under-construction" style={{fontFamily: fontFamily, direction: direction}}>
           <h1>{t("common_terms.under_construction")}</h1>
           <p>{t("common_terms.under_construction_message", {
-              days: convertToArabicNumerals(timeLeft.days, i18n.language),
-              hours: convertToArabicNumerals(timeLeft.hours, i18n.language),
-              minutes: convertToArabicNumerals(timeLeft.minutes, i18n.language),
-              seconds: convertToArabicNumerals(timeLeft.seconds, i18n.language)
+              days: convertNumerals(timeLeft.days.toString(), i18n.language),
+              hours: convertNumerals(timeLeft.hours.toString(), i18n.language),
+              minutes: convertNumerals(timeLeft.minutes.toString(), i18n.language),
+              seconds: convertNumerals(timeLeft.seconds.toString(), i18n.language)
           })}</p>
       </div>
     );

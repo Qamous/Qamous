@@ -56,11 +56,14 @@ export function deleteCookie(name: string) {
 }
 
 // Utils for converting units to Arabic or to Latin
-export function convertToArabicNumerals(number: number, language: string): string {
-  if (language !== 'ar') {
-    return number.toString();
-  }
-
+/**
+ * This function converts Latin numerals to Arabic numerals if the language is Arabic.
+ *
+ * @param {number} number - The number to convert.
+ * @param {string} language - The language of the page.
+ * @returns {string} - The number in Arabic numerals if the language is Arabic, otherwise the number in Latin numerals.
+ */
+export function convertNumerals(number: string, language: string): string {
   const arabicNumeralsMap: Record<string, string> = {
     '0': '٠',
     '1': '١',
@@ -76,8 +79,28 @@ export function convertToArabicNumerals(number: number, language: string): strin
     ',': '،'
   };
 
-  return number
-    .toString()
-    .split('')
-    .map(char => arabicNumeralsMap[char] || char).join('');
+  const latinNumeralsMap: Record<string, string> = {
+    '٠': '0',
+    '١': '1',
+    '٢': '2',
+    '٣': '3',
+    '٤': '4',
+    '٥': '5',
+    '٦': '6',
+    '٧': '7',
+    '٨': '8',
+    '٩': '9',
+    ',': '.',
+    '،': ','
+  };
+
+  const isArabicNumerals = /[٠١٢٣٤٥٦٧٨٩،.]/.test(number);
+
+  if (language === 'ar' && !isArabicNumerals) {
+    return number.split('').map(char => arabicNumeralsMap[char] || char).join('');
+  } else if ((language === 'en' || language === 'fr') && isArabicNumerals) {
+    return number.split('').map(char => latinNumeralsMap[char] || char).join('');
+  } else {
+    return number;
+  }
 }
