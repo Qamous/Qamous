@@ -37,17 +37,20 @@
     display: inline;
 
     &-ar {
+      padding: 0;
+      margin: 0;
       font: 100% Tareef;
       color: styles.$primary-color;
       font-size: 49px;
       line-height: 1.4;
       font-weight: 400;
       font-style: normal;
-      // TODO: fix the alignment
       direction: rtl;
     }
 
     &-en {
+      padding: 0;
+      margin: 0;
       font: 100% styles.$font-stack;
       color: styles.$primary-color;
       font-size: 45px;
