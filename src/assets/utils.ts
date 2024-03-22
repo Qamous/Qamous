@@ -57,11 +57,11 @@ export function deleteCookie(name: string) {
 
 // Utils for converting units to Arabic or to Latin
 /**
- * This function converts Latin numerals to Arabic numerals if the language is Arabic.
+ * This function converts numerals in a given string to Arabic or Latin numerals based on the language requested.
  *
- * @param {number} number - The number to convert.
- * @param {string} language - The language of the page.
- * @returns {string} - The number in Arabic numerals if the language is Arabic, otherwise the number in Latin numerals.
+ * @param {string} number - The string containing the numerals to be converted (can contain Arabic or Latin numerals).
+ * @param {string} language - The language to convert the numerals to ('ar' for Arabic, 'en' for English, 'fr' for French).
+ * @returns {string} - The string with the numerals converted to the requested language.
  */
 export function convertNumerals(number: string, language: string): string {
   const arabicNumeralsMap: Record<string, string> = {
@@ -95,6 +95,9 @@ export function convertNumerals(number: string, language: string): string {
   };
 
   const isArabicNumerals = /[٠١٢٣٤٥٦٧٨٩،.]/.test(number);
+
+  // make language lowercase
+  language = language.toLowerCase();
 
   if (language === 'ar' && !isArabicNumerals) {
     return number.split('').map(char => arabicNumeralsMap[char] || char).join('');
