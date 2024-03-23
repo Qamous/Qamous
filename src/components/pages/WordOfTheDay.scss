@@ -16,6 +16,10 @@
     overflow: hidden;
     font: 100% styles.$font-stack-arabic-wod;
     font-size: 250px;
+    @media (max-width: 1100px) {
+      margin: 10px 0 0 90px;
+      font-size: 22.5vw;
+    }
     font-weight: 400;
     font-style: normal;
     color: styles.$secondary-color;
@@ -37,11 +41,17 @@
     display: inline;
 
     &-ar {
-      padding: 0;
+      padding: 0 0 15px 0;
       margin: 0;
-      font: 100% Tareef;
+      font: 100% styles.$font-stack-arabic;
       color: styles.$primary-color;
-      font-size: 49px;
+      font-size: 40px;
+      @media (max-width: 1100px) {
+        font-size: 3.62vw;
+      }
+      @media (max-width: 900px) {
+        font-size: 25px;
+      }
       line-height: 1.4;
       font-weight: 400;
       font-style: normal;
