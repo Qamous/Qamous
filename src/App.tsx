@@ -11,6 +11,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { getCookie } from './assets/utils';
 import PageUnderConstruction from './components/pages/PageUnderConstruction';
+import LogIn from './components/pages/LogIn';
 
 var options = {
   enableHighAccuracy: true,
@@ -21,26 +22,30 @@ var options = {
 let defaultLanguage = 'en';
 
 async function success(pos: any) {
-  var crd = pos.coords;
-
-  // Get the user's country based on their latitude and longitude
-  const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${crd.latitude}&lon=${crd.longitude}`);
-  const data = await response.json();
-  //const country = data.address.country;
-  const countryCode = data.address.country_code;
-
-  switch (countryCode) {
-    case 'eg':
-      defaultLanguage = 'ar';
-      break;
-    case 'us':
-      defaultLanguage = 'en';
-      break;
-    case 'gb':
-      defaultLanguage = 'en';
-      break;
+  const navigatorLang = navigator.language.split('-')[0];
+  if (navigator.language && (navigatorLang === "ar" || navigatorLang === "en")) {
+    defaultLanguage = navigatorLang;
   }
 
+  //var crd = pos.coords;
+  // Get the user's country based on their latitude and longitude
+  //const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${crd.latitude}&lon=${crd.longitude}`);
+  //const data = await response.json();
+  //const country = data.address.country;
+  // const countryCode = data.address.country_code;
+  //
+  // switch (countryCode) {
+  //   case 'eg':
+  //     defaultLanguage = 'ar';
+  //     break;
+  //   case 'us':
+  //     defaultLanguage = 'en';
+  //     break;
+  //   case 'gb':
+  //     defaultLanguage = 'en';
+  //     break;
+  //}
+  //
   // console.log('Your current position is:');
   // console.log(`Latitude : ${crd.latitude}`);
   // console.log(`Longitude: ${crd.longitude}`);
@@ -151,6 +156,18 @@ const App: React.FC = () => {
             </div>
             <div className="content">
               {/* Your page content goes here */}
+            </div>
+            <div className="footer">
+            </div>
+          </div>
+        } />
+        <Route path="/login" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <LogIn />
             </div>
             <div className="footer">
             </div>
