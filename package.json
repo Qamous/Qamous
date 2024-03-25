@@ -25,6 +25,7 @@
     "font-awesome": "^4.7.0",
     "gsap": "^3.12.5",
     "i18next": "^23.10.0",
+    "papaparse": "^5.4.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "react": "^18.2.0",
@@ -67,6 +68,7 @@
     "@types/connect-redis": "^0.0.23",
     "@types/express-session": "^1.18.0",
     "@types/mysql": "^2.15.25",
+    "@types/papaparse": "^5.3.14",
     "@types/passport-local": "^1.0.38",
     "@types/react-router-dom": "^5.3.3",
     "@types/redis": "^4.0.11"
