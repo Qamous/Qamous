@@ -10,7 +10,7 @@
 }
 
 .titleContainer {
-  font-size: 24px;
+  font-size: 44px;
   font-weight: bold;
   margin-bottom: 20px;
   width: 100%;
@@ -50,4 +50,15 @@
   &:hover {
     background-color: #45a049;
   }
+}
+
+input[type='button'] {
+  border: none;
+  background: cornflowerblue;
+  color: white;
+  padding: 12px 24px;
+  margin: 8px;
+  font-size: 24px;
+  border-radius: 8px;
+  cursor: pointer;
 }

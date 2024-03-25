@@ -16,8 +16,6 @@ const Header: React.FC = () => {
     const { i18n, t } = useTranslation();
     const root = document.documentElement;
 
-    const [parentWidth, setHeaderPadding] =
-        useState('0');
     const [currentLang, setCurrentLang] =
         useState(getCookie('language') || "en");
     const [languageButtonStyle, setLanguageButtonStyle] =
@@ -25,19 +23,6 @@ const Header: React.FC = () => {
     const [isDarkMode, setDarkMode] =
       React.useState<boolean>(getCookie('darkMode') === 'true' ?? true);
 
-    const handleSearchClick = (isExpanded: boolean) => {
-        if (isExpanded)
-            setHeaderPadding('0');
-        else {
-            // TODO: Make this responsive... This is a temporary solution
-            if (window.innerWidth > 1600)
-                setHeaderPadding('540px');
-            else if (window.innerWidth > 1450)
-                setHeaderPadding('450px');
-            else
-                setHeaderPadding('250px');
-        }
-    };
     const handleCountrySwitch = () => {
         // Toggle between US and EG on click
         setCurrentLang((prevLang) => {
@@ -94,15 +79,13 @@ const Header: React.FC = () => {
 
             <div className="header-right-side">
                 <div
-                    className="header-right-side-add"
-                    style={{paddingRight: parentWidth}}>
+                    className="header-right-side-add">
                     <NavLink to="/add-definition">
                         <FontAwesomeIcon icon={faPlus} size="2x"/>
                     </NavLink>
                 </div>
 
-                <SearchBar
-                    handleStateChange={handleSearchClick}/>
+                <SearchBar />
 
                 <DarkModeSwitch
                     className="header-right-side-mode"
@@ -130,7 +113,9 @@ const Header: React.FC = () => {
                 </div>
 
                 <div className="header-right-side-user">
-                    <img src={userImage} alt={t("common_terms.user")}/>
+                    <NavLink to="/login">
+                        <img src={userImage} alt={t("common_terms.user")}/>
+                    </NavLink>
                 </div>
             </div>
         </div>

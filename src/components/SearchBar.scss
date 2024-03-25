@@ -1,146 +1,85 @@
 @use '../assets/Styles.scss' as styles;
 
-.SearchBar {
-    width: 44px;
-    height: 70px;
-}
+$font-size: 20px;
+$frame-color: #000000;
+$size: 2.5em;
+$open-width: 18em;
+$open-padding: 0.3em 2.1em 0.3em 0.4em;
+$frame-thickness: 0.2em;
+$handle-height: 1.4em;
+$open-trans-time: 800ms;
+$close-trans-time: 150ms;
 
-#content {
-    position: absolute;
-    margin: 25px;
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
 
-    &.on {
-        -webkit-animation-name: in-out;
-        animation-name: in-out;
-        -webkit-animation-duration: 0.7s;
-        animation-duration: 0.7s;
-        -webkit-animation-timing-function: linear;
-        animation-timing-function: linear;
-        -webkit-animation-iteration-count: 1;
-        animation-iteration-count: 1;
+.search-box {
+    font-size: $font-size;
+    border: solid $frame-thickness styles.$secondary-color;
+    display: inline-block;
+    position: relative;
+    border-radius: $size;
+    input[type="text"] {
+        background-color: styles.$quaternary-color;
+        color: styles.$primary-color;
+        font-family: inherit;
+        font-weight: bold;
+        width: $size;
+        height: $size;
+        padding: $open-padding;
+        border: none;
+        box-sizing: border-box;
+        border-radius: $size;
+        transition:
+                width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55) $close-trans-time;
+        &:focus {
+            outline: none;
+        }
+        &:focus, &:not(:placeholder-shown) {
+            width: $open-width;
+            transition: width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            + button[type="reset"] {
+                transform: rotate(-45deg) translateY(0);
+                transition:
+                        transform $close-trans-time ease-out $open-trans-time;
+            }
+            + button[type="reset"]:after {
+                opacity: 1;
+                transition:
+                        top $close-trans-time ease-out ($open-trans-time + $close-trans-time),
+                        right $close-trans-time ease-out ($open-trans-time + $close-trans-time),
+                        opacity $close-trans-time ease ($open-trans-time + $close-trans-time);
+            }
+        }
     }
-}
-
-input {
-    box-sizing: border-box;
-    width: 50px;
-    height: 50px;
-    border: 4px solid styles.$secondary-color;
-    border-radius: 50%;
-    background: none;
-    outline: 0;
-    -webkit-transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
-    padding 0.2s;
-    transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
-    padding 0.2s;
-    -webkit-transition-delay: 0.4s;
-    transition-delay: 0.4s;
-    -webkit-transform: translate(-100%, -50%);
-    -ms-transform: translate(-100%, -50%);
-    transform: translate(-100%, -50%);
-}
-
-.search {
-    background: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 50px;
-    width: 50px;
-    padding: 0;
-    border-radius: 100%;
-    outline: 0;
-    border: 0;
-    color: inherit;
-    cursor: pointer;
-    -webkit-transition: 0.2s ease-in-out;
-    transition: 0.2s ease-in-out;
-    -webkit-transform: translate(-100%, -50%);
-    -ms-transform: translate(-100%, -50%);
-    transform: translate(-100%, -50%);
-
-    &:before {
-        content: "";
+    button[type="reset"] {
+        background-color: transparent;
+        width: $handle-height;
+        height: $handle-height;
+        border: 0;
+        padding: 0;
+        outline: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         position: absolute;
-        width: 20px;
-        height: 4px;
-        background-color: styles.$secondary-color;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        transform: rotate(45deg);
-        margin-top: 26px;
-        margin-left: 17px;
-        -webkit-transition: 0.2s ease-in-out;
-        transition: 0.2s ease-in-out;
-    }
-}
-
-.close {
-    -webkit-transition: 0.4s ease-in-out;
-    transition: 0.4s ease-in-out;
-    -webkit-transition-delay: 0.4s;
-    transition-delay: 0.4s;
-
-    &:before {
-        content: "";
-        position: absolute;
-        width: 27px;
-        height: 4px;
-        margin-top: -1px;
-        margin-left: -13px;
-        background-color: styles.$secondary-color;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        transform: rotate(45deg);
-        -webkit-transition: 0.2s ease-in-out;
-        transition: 0.2s ease-in-out;
-    }
-
-    &:after {
-        content: "";
-        position: absolute;
-        width: 27px;
-        height: 4px;
-        background-color: styles.$secondary-color;
-        margin-top: -1px;
-        margin-left: -13px;
-        cursor: pointer;
-        -webkit-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        transform: rotate(-45deg);
-    }
-}
-
-.square {
-    box-sizing: border-box;
-    padding: 0 40px 0 10px;
-    width: 590px; /*try changing to max and min*/
-    height: 50px;
-    border: 4px solid styles.$secondary-color;
-    border-radius: 5px;
-    background: none;
-    color: styles.$secondary-color;
-    font: 100% styles.$font-stack;
-    font-size: 16px;
-    font-weight: 400;
-    outline: 0;
-    -webkit-transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
-    padding 0.2s;
-    transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
-    padding 0.2s;
-    -webkit-transition-delay: 0.4s, 0s, 0.4s;
-    transition-delay: 0.4s, 0s, 0.4s;
-    -webkit-transform: translate(-100%, -50%);
-    -ms-transform: translate(-100%, -50%);
-    transform: translate(-100%, -50%);
-
-    // if screen is less than 1600px
-    @media (max-width: 1600px) {
-        width: 500px;
-    }
-
-    // if screen is less than 1450px
-    @media (max-width: 1450px) {
-        width: 300px;
+        top: ($size / 2) - ($handle-height / 2);
+        right: ($size / 2) - ($handle-height / 2);
+        transform: rotate(-45deg) translateY($size - $frame-thickness);
+        transition:
+                transform $close-trans-time ease-out $close-trans-time;
+        &:before, &:after {
+            content: "";
+            background-color: styles.$secondary-color;
+            width: $frame-thickness;
+            height: $handle-height;
+            position: absolute;
+        }
+        &:after {
+            transform: rotate(90deg);
+            opacity: 0;
+            transition:
+                    transform $close-trans-time ease-out,
+                    opacity $close-trans-time ease-out;
+        }
     }
 }
