@@ -41,36 +41,36 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className={'login-container'}>
-      <div className={'login-container-title'}>
+    <div className={'container'}>
+      <div className={'container-title'}>
         <div>Log in</div>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'container-input'}>
         <input
           type={'email'}
           value={email}
           placeholder="Enter your email here"
           onChange={(ev) => setEmail(ev.target.value)}
-          className={'login-container-input-box'}
+          className={'container-input-box'}
         />
-        <label className="login-container-input-error">{emailError}</label>
+        <label className="container-input-error">{emailError}</label>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'container-input'}>
         <input
           type={'password'}
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
-          className={'login-container-input-box'}
+          className={'container-input-box'}
         />
-        <label className="login-container-input-error">{passwordError}</label>
+        <label className="container-input-error">{passwordError}</label>
       </div>
       <br />
-      <div className={'login-container-buttons'}>
+      <div className={'container-buttons'}>
         <button
-          className={'login-container-buttons-button'}
+          className={'container-buttons-button'}
           type="button"
           onClick={onLoginClick}
           value={'Log in'}
@@ -78,7 +78,7 @@ const Login: React.FC = () => {
           Log in
         </button>
         <button
-          className="login-container-buttons-button login-container-buttons-button-signup"
+          className="container-buttons-button container-buttons-button-secondary"
           onClick={onSignUpClick}
           value={'Sign Up'}
         >

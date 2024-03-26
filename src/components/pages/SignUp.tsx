@@ -118,87 +118,87 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className={'login-container'}>
-      <div className={'login-container-title'}>
+    <div className={'container'}>
+      <div className={'container-title'}>
         <div>Sign Up</div>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'container-input'}>
         <input
           type={'text'}
           value={username}
           placeholder="Enter your username here"
           onChange={(ev) => setUsername(ev.target.value)}
-          className={'login-container-input-box'}
+          className={'container-input-box'}
         />
-        <label className="login-container-input-error">{usernameError}</label>
+        <label className="container-input-error">{usernameError}</label>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'container-input'}>
         <input
           type={'text'}
           value={firstName}
           placeholder="Enter your first name here"
           onChange={(ev) => setFirstName(ev.target.value)}
-          className={'login-container-input-box'}
+          className={'container-input-box'}
         />
-        <label className="login-container-input-error">{firstNameError}</label>
+        <label className="container-input-error">{firstNameError}</label>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'container-input'}>
         <input
           type={'text'}
           value={lastName}
           placeholder="Enter your last name here"
           onChange={(ev) => setLastName(ev.target.value)}
-          className={'login-container-input-box'}
+          className={'container-input-box'}
         />
-        <label className="login-container-input-error">{lastNameError}</label>
+        <label className="container-input-error">{lastNameError}</label>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'container-input'}>
         <input
           type={'date'}
           value={dob}
           placeholder="Enter your date of birth here"
           onChange={(ev) => setDob(ev.target.value)}
-          className={'login-container-input-box'}
+          className={'container-input-box'}
         />
-        <label className="login-container-input-error">{dobError}</label>
+        <label className="container-input-error">{dobError}</label>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'container-input'}>
         <input
           type={'email'}
           value={email}
           placeholder="Enter your email here"
           onChange={(ev) => setEmail(ev.target.value)}
-          className={'login-container-input-box'}
+          className={'container-input-box'}
         />
-        <label className="login-container-input-error">{emailError}</label>
+        <label className="container-input-error">{emailError}</label>
       </div>
       <br />
-      <div className={'login-container-input'}>
+      <div className={'container-input'}>
         <input
           type={'password'}
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
-          className={'login-container-input-box'}
+          className={'container-input-box'}
         />
-        <label className="login-container-input-error">{passwordError}</label>
+        <label className="container-input-error">{passwordError}</label>
       </div>
       <br />
-      <div className={'login-container-buttons'}>
+      <div className={'container-buttons'}>
         <button
-          className="login-container-buttons-button"
+          className="container-buttons-button"
           onClick={onSignUpClick}
           value={'Sign Up'}
         >
           Sign up
         </button>
         <button
-          className="login-container-buttons-button login-container-buttons-button-signup"
+          className="container-buttons-button container-buttons-button-secondary"
           onClick={onLogInClick}
           value={'Sign Up'}
         >
