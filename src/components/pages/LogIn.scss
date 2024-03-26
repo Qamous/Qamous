@@ -1,64 +1,74 @@
 @use '../../assets/Styles.scss' as styles;
 
-.mainContainer {
+.login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
   font-family: styles.$font-stack;
-}
-
-.titleContainer {
-  font-size: 44px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  width: 100%;
-  text-align: center;
-  color: styles.$primary-color;
-}
-
-.inputContainer {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
-
-.inputBox {
-  padding: 10px;
-  border: 1px solid styles.$primary-color;
-  border-radius: 4px;
-  font-size: 16px;
-  width: 100%;
-}
-
-.errorLabel {
-  color: #a90000;
-  margin-top: 5px;
-}
-
-.inputButton {
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
   width: 100%;
 
-  &:hover {
-    background-color: #45a049;
+  &-title {
+    font-size: 44px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: styles.$primary-color;
+  }
+
+  &-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    min-width: 50%;
+
+    &-box {
+      padding: 10px;
+      border: 1px solid styles.$primary-color;
+      background-color: styles.$primary-color;
+      color: styles.$tertiary-color;
+      border-radius: 4px;
+      font-size: 16px;
+      width: 100%;
+
+      &::selection {
+        background-color: styles.$primary-color;
+        color: styles.$tertiary-color;
+      }
+
+      &:focus {
+        background-color: styles.$tertiary-color;
+        color: styles.$primary-color;
+      }
+    }
+
+    &-error {
+      color: #a90000;
+      margin-top: 5px;
+    }
+
+    &-button {
+      border: none;
+      background: cornflowerblue;
+      color: white;
+      padding: 12px 24px;
+      margin: 5px;
+      font-size: 20px;
+      cursor: pointer;
+      align-self: center;
+      border-radius: 4px;
+      transition: border-radius 0.3s ease-in-out;
+
+      &:hover {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+      }
+    }
   }
 }
 
-input[type='button'] {
-  border: none;
-  background: cornflowerblue;
-  color: white;
-  padding: 12px 24px;
-  margin: 8px;
-  font-size: 24px;
-  border-radius: 8px;
-  cursor: pointer;
-}

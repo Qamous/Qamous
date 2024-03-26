@@ -16,13 +16,17 @@ const Login: React.FC = () => {
     setPasswordError('');
 
     // Basic validation
-    if (!email) {
+    if (!email || '' === email) {
       setEmailError('Email is required');
       return;
     }
-
-    if (!password) {
+    if (!password || '' === password) {
       setPasswordError('Password is required');
+      return;
+    }
+    // Email validation
+    if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+      setEmailError('Invalid email');
       return;
     }
 
@@ -32,33 +36,33 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className={'mainContainer'}>
-      <div className={'titleContainer'}>
+    <div className={'login-container'}>
+      <div className={'login-container-title'}>
         <div>Login</div>
       </div>
       <br />
-      <div className={'inputContainer'}>
+      <div className={'login-container-input'}>
         <input
           value={email}
           placeholder="Enter your email here"
           onChange={(ev) => setEmail(ev.target.value)}
-          className={'inputBox'}
+          className={'login-container-input-box'}
         />
-        <label className="errorLabel">{emailError}</label>
+        <label className="login-container-input-error">{emailError}</label>
       </div>
       <br />
-      <div className={'inputContainer'}>
+      <div className={'login-container-input'}>
         <input
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
-          className={'inputBox'}
+          className={'login-container-input-box'}
         />
-        <label className="errorLabel">{passwordError}</label>
+        <label className="login-container-input-error">{passwordError}</label>
       </div>
       <br />
-      <div className={'inputContainer'}>
-        <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Log in'} />
+      <div className={'login-container-input'}>
+        <input className={'login-container-input-button'} type="button" onClick={onButtonClick} value={'Log in'} />
       </div>
     </div>
   );
