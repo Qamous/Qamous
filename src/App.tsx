@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './App.scss';
 import Header from './components/Header';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { getCookie } from './assets/utils';
 import PageUnderConstruction from './components/pages/PageUnderConstruction';
 import LogIn from './components/pages/LogIn';
 import SignUp from './components/pages/SignUp';
+import AddWord from './components/pages/AddWord';
 
 var options = {
   enableHighAccuracy: true,
@@ -156,7 +157,7 @@ const App: React.FC = () => {
               <Header />
             </div>
             <div className="content">
-              {/* Your page content goes here */}
+              <AddWord />
             </div>
             <div className="footer">
             </div>
