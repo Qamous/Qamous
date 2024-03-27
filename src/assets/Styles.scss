@@ -109,9 +109,9 @@ $dark-grey: #292929;
     font-size: 44px;
     font-weight: bold;
     margin-bottom: 20px;
-    width: 100%;
     text-align: center;
     color: $primary-color;
+    width: 100%;
   }
 
   &-input {
@@ -119,7 +119,8 @@ $dark-grey: #292929;
     flex-direction: column;
     justify-content: center;
     margin-bottom: 20px;
-    min-width: 50%;
+    max-width: 1000px;
+    width: 80%;
 
     &-box {
       padding: 10px;
@@ -127,9 +128,9 @@ $dark-grey: #292929;
       background-color: $primary-color;
       color: $tertiary-color;
       border-radius: 4px;
-      width: 100%;
       font-family: $font-stack;
       font-size: 16px;
+      width: 100%;
 
       &::selection {
         background-color: $primary-color;
