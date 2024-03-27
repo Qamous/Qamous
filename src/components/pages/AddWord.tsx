@@ -25,16 +25,14 @@ const AddWord = () => {
         <label className="container-input-error"></label>
       </div>
       <div className={'container-input'}>
-        <input
-          type={'text'}
+        <textarea
           placeholder="Enter the definition in Arabic here"
           className={'container-input-box'}
         />
         <label className="container-input-error"></label>
       </div>
       <div className={'container-input'}>
-        <input
-          type={'text'}
+        <textarea
           placeholder="Enter the definition in English here"
           className={'container-input-box'}
         />
