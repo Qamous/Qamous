@@ -82,6 +82,13 @@ $header-border-color-light: #eae7e7;
   fontStackArabicWod: $font-stack-arabic-wod;
 }
 
+// Common colors
+$white: #ffffff;
+$black: #000000;
+$green: #4CAF50;
+$alert-red: #a90000;
+$dark-grey: #292929;
+
 /**
  * Form Styling Section
  * --------------------
@@ -140,7 +147,7 @@ $header-border-color-light: #eae7e7;
     }
 
     &-error {
-      color: #a90000;
+      color: $alert-red;
       margin-top: 5px;
     }
   }
@@ -163,13 +170,13 @@ $header-border-color-light: #eae7e7;
       align-self: center;
 
       color: $secondary-color;
-      background-color: rgba(255, 255, 255, 1);
+      background-color: $quaternary-color;
       border: 1px solid $secondary-color;
 
       &:hover {
         //background-color: #4CAF50;
         background-color: $secondary-color;
-        color: white;
+        color: $quaternary-color;
         cursor: pointer;
         border-radius: 8px;
         box-shadow: 0 0 10px $secondary-color;
@@ -177,7 +184,7 @@ $header-border-color-light: #eae7e7;
 
       &-secondary {
         background-color: $secondary-color;
-        color: white;
+        color: $primary-color;
       }
     }
   }
