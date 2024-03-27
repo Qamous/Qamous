@@ -41,8 +41,8 @@ const AddWord = () => {
         <label className="container-input-error"></label>
       </div>
       <div className={'container-input'}>
-        <input
-          type={'text'}
+        <textarea
+          rows={2}
           placeholder="Enter the example here"
           className={'container-input-box'}
         />
