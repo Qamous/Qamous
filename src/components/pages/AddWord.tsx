@@ -26,6 +26,7 @@ const AddWord = () => {
       </div>
       <div className={'container-input'}>
         <textarea
+          rows={2}
           placeholder="Enter the definition in Arabic here"
           className={'container-input-box'}
         />
@@ -33,6 +34,7 @@ const AddWord = () => {
       </div>
       <div className={'container-input'}>
         <textarea
+          rows={2}
           placeholder="Enter the definition in English here"
           className={'container-input-box'}
         />
