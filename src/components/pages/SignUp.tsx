@@ -1,129 +1,7 @@
 import React, { useState } from 'react';
 import './SignUp.scss';
 import { useNavigate } from 'react-router-dom';
-
-/**
- * Nominatim address interface.
- * @interface NominatimAddress
- *
- *
- */
-interface NominatimAddress {
-  continent?: string;
-  country?: string;
-  country_code?: string;
-  region?: string;
-  state?: string;
-  state_district?: string;
-  county?: string;
-  municipality?: string;
-  city?: string;
-  town?: string;
-  village?: string;
-  city_district?: string;
-  district?: string;
-  borough?: string;
-  suburb?: string;
-  subdivision?: string;
-  hamlet?: string;
-  croft?: string;
-  isolated_dwelling?: string;
-  neighbourhood?: string;
-  allotments?: string;
-  quarter?: string;
-  city_block?: string;
-  residental?: string;
-  farm?: string;
-  farmyard?: string;
-  industrial?: string;
-  commercial?: string;
-  retail?: string;
-  road?: string;
-  house_number?: string;
-  house_name?: string;
-  emergency?: string;
-  historic?: string;
-  military?: string;
-  natural?: string;
-  landuse?: string;
-  place?: string;
-  railway?: string;
-  man_made?: string;
-  aerialway?: string;
-  boundary?: string;
-  amenity?: string;
-  aeroway?: string;
-  club?: string;
-  craft?: string;
-  leisure?: string;
-  office?: string;
-  mountain_pass?: string;
-  shop?: string;
-  tourism?: string;
-  bridge?: string;
-  tunnel?: string;
-  waterway?: string;
-  postcode?: string;
-  [key: string]: string | undefined; // ISO3166-2-lvl_
-}
-
-var options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0,
-};
-
-async function success(pos: any) {
-  var crd = pos.coords;
-  // Get the user's country based on their latitude and longitude
-  const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${crd.latitude}&lon=${crd.longitude}`);
-  const data = await response.json();
-  const address: NominatimAddress = data.address;
-  // const town: string | undefined = address.town;
-  // const city: string | undefined = address.city;
-  // const state: string | undefined = address.state;
-  // const country: string | undefined = address.country;
-  // const continent: string | undefined = address.continent;
-  // const countryCode: string | undefined = address.country_code;
-  // const postcode: string | undefined = address.postcode;
-
-  console.log('Your current position is:');
-  //console.log(`Latitude : ${crd.latitude}`);
-  //console.log(`Longitude: ${crd.longitude}`);
-  //console.log(`Location: ${town}, ${city}, ${state}, ${country}, ${continent}, ${countryCode}, ${postcode}`)
-
-  // Log the ISO3166-2-lvl keys and values
-  // for (const key in address) {
-  //   if (key.startsWith('ISO3166-2-lvl')) {
-  //     console.log(`Key: ${key}, Value: ${address[key]}`);
-  //   }
-  // }
-
-  // Log the accuracy of the user's location
-  //console.log(`More or less ${crd.accuracy} meters.`);
-}
-
-function errors(err: any) {
-  console.warn(`ERROR(${err.code}): ${err.message}`);
-}
-
-if (navigator.geolocation) {
-  navigator.permissions
-    .query({ name: 'geolocation' })
-    .then(function(result) {
-      // console.log(result);
-      if (result.state === 'granted') {
-        navigator.geolocation.getCurrentPosition(success, errors, options);
-      } else if (result.state === 'prompt') {
-        //If prompt then the user will be asked to give permission
-        navigator.geolocation.getCurrentPosition(success, errors, options);
-      } else if (result.state === "denied") {
-
-      }
-    });
-} else {
-  console.log('Geolocation is not supported by this browser.');
-}
+import { findLocationByLatLong } from '../../assets/utils';
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -187,6 +65,7 @@ const SignUp: React.FC = () => {
     }
 
     // TODO: Implement sign up logic here and send the data to the server (including the user's location)
+    // findLocationByLatLong();
     // If sign up is successful, navigate to another page
     // navigate('/dashboard');
   };
