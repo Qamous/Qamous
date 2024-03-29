@@ -15,65 +15,11 @@ import LogIn from './components/pages/LogIn';
 import SignUp from './components/pages/SignUp';
 import AddWord from './components/pages/AddWord';
 
-var options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0,
-};
-
+// Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
-
-async function success(pos: any) {
-  const navigatorLang = navigator.language.split('-')[0];
-  if (navigator.language && (navigatorLang === "ar" || navigatorLang === "en")) {
-    defaultLanguage = navigatorLang;
-  }
-
-  //var crd = pos.coords;
-  // Get the user's country based on their latitude and longitude
-  //const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${crd.latitude}&lon=${crd.longitude}`);
-  //const data = await response.json();
-  //const country = data.address.country;
-  // const countryCode = data.address.country_code;
-  //
-  // switch (countryCode) {
-  //   case 'eg':
-  //     defaultLanguage = 'ar';
-  //     break;
-  //   case 'us':
-  //     defaultLanguage = 'en';
-  //     break;
-  //   case 'gb':
-  //     defaultLanguage = 'en';
-  //     break;
-  //}
-  //
-  // console.log('Your current position is:');
-  // console.log(`Latitude : ${crd.latitude}`);
-  // console.log(`Longitude: ${crd.longitude}`);
-  // console.log(`Country: ${country}`);
-  // console.log(`Country Code: ${countryCode}`); // Log the country code
-  // console.log(`More or less ${crd.accuracy} meters.`);
-}
-
-function errors(err: any) {
-  console.warn(`ERROR(${err.code}): ${err.message}`);
-}
-
-if (navigator.geolocation) {
-  navigator.permissions
-    .query({ name: 'geolocation' })
-    .then(function(result) {
-      // console.log(result);
-      if (result.state === 'granted') {
-        navigator.geolocation.getCurrentPosition(success, errors, options);
-      } else if (result.state === 'prompt') {
-        //If prompt then the user will be asked to give permission
-        navigator.geolocation.getCurrentPosition(success, errors, options);
-      } // else if (result.state === "denied")
-    });
-} else {
-  console.log('Geolocation is not supported by this browser.');
+const navigatorLang = navigator.language.split('-')[0];
+if (navigator.language && navigatorLang === "ar") {
+  defaultLanguage = navigatorLang;
 }
 
 const resources = {
