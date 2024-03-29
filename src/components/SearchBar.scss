@@ -25,7 +25,7 @@ $close-trans-time: 150ms;
         cursor: pointer;
         background-color: styles.$quaternary-color;
         color: styles.$primary-color;
-        font-family: inherit;
+        font-family: styles.$font-stack;
         font-weight: bold;
         width: $size;
         height: $size;
