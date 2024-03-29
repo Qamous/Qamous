@@ -107,3 +107,5 @@ export function convertNumerals(number: string, language: string): string {
     return number;
   }
 }
+
+// Utils for finding the user's location

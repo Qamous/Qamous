@@ -2,6 +2,71 @@ import React, { useState } from 'react';
 import './SignUp.scss';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Nominatim address interface.
+ * @interface NominatimAddress
+ *
+ *
+ */
+interface NominatimAddress {
+  continent?: string;
+  country?: string;
+  country_code?: string;
+  region?: string;
+  state?: string;
+  state_district?: string;
+  county?: string;
+  municipality?: string;
+  city?: string;
+  town?: string;
+  village?: string;
+  city_district?: string;
+  district?: string;
+  borough?: string;
+  suburb?: string;
+  subdivision?: string;
+  hamlet?: string;
+  croft?: string;
+  isolated_dwelling?: string;
+  neighbourhood?: string;
+  allotments?: string;
+  quarter?: string;
+  city_block?: string;
+  residental?: string;
+  farm?: string;
+  farmyard?: string;
+  industrial?: string;
+  commercial?: string;
+  retail?: string;
+  road?: string;
+  house_number?: string;
+  house_name?: string;
+  emergency?: string;
+  historic?: string;
+  military?: string;
+  natural?: string;
+  landuse?: string;
+  place?: string;
+  railway?: string;
+  man_made?: string;
+  aerialway?: string;
+  boundary?: string;
+  amenity?: string;
+  aeroway?: string;
+  club?: string;
+  craft?: string;
+  leisure?: string;
+  office?: string;
+  mountain_pass?: string;
+  shop?: string;
+  tourism?: string;
+  bridge?: string;
+  tunnel?: string;
+  waterway?: string;
+  postcode?: string;
+  [key: string]: string | undefined; // ISO3166-2-lvl_
+}
+
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -13,15 +78,29 @@ async function success(pos: any) {
   // Get the user's country based on their latitude and longitude
   const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${crd.latitude}&lon=${crd.longitude}`);
   const data = await response.json();
-  const country = data.address.country;
-  const countryCode = data.address.country_code;
+  const address: NominatimAddress = data.address;
+  // const town: string | undefined = address.town;
+  // const city: string | undefined = address.city;
+  // const state: string | undefined = address.state;
+  // const country: string | undefined = address.country;
+  // const continent: string | undefined = address.continent;
+  // const countryCode: string | undefined = address.country_code;
+  // const postcode: string | undefined = address.postcode;
 
   console.log('Your current position is:');
-  console.log(`Latitude : ${crd.latitude}`);
-  console.log(`Longitude: ${crd.longitude}`);
-  console.log(`Country: ${country}`);
-  console.log(`Country Code: ${countryCode}`); // Log the country code
-  console.log(`More or less ${crd.accuracy} meters.`);
+  //console.log(`Latitude : ${crd.latitude}`);
+  //console.log(`Longitude: ${crd.longitude}`);
+  //console.log(`Location: ${town}, ${city}, ${state}, ${country}, ${continent}, ${countryCode}, ${postcode}`)
+
+  // Log the ISO3166-2-lvl keys and values
+  // for (const key in address) {
+  //   if (key.startsWith('ISO3166-2-lvl')) {
+  //     console.log(`Key: ${key}, Value: ${address[key]}`);
+  //   }
+  // }
+
+  // Log the accuracy of the user's location
+  //console.log(`More or less ${crd.accuracy} meters.`);
 }
 
 function errors(err: any) {
@@ -107,7 +186,7 @@ const SignUp: React.FC = () => {
       return;
     }
 
-    // TODO: Implement sign up logic here
+    // TODO: Implement sign up logic here and send the data to the server (including the user's location)
     // If sign up is successful, navigate to another page
     // navigate('/dashboard');
   };
