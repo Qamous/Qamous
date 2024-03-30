@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './SignUp.scss';
 import { useNavigate } from 'react-router-dom';
-import { findLocationByLatLong } from '../../assets/utils';
+import { findLocationByIP, findLocationByLatLong } from '../../assets/utils';
 
+findLocationByIP();
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
@@ -66,6 +67,7 @@ const SignUp: React.FC = () => {
 
     // TODO: Implement sign up logic here and send the data to the server (including the user's location)
     // findLocationByLatLong();
+    findLocationByIP();
     // If sign up is successful, navigate to another page
     // navigate('/dashboard');
   };

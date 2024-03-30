@@ -267,3 +267,71 @@ export async function findLocationByLatLong(): Promise<NominatimAddress> {
     }
   });
 }
+
+/**
+ * IPAPI response interface.
+ * @interface IPAPIResponse
+ *
+ * @property {string} ip - Public (external) IP address (same as URL ip).
+ * @property {string} city - City name.
+ * @property {string} region - Region name (administrative division).
+ * @property {string} region_code - Region code.
+ * @property {string} country - Country code (2 letter, ISO 3166-1 alpha-2).
+ * @property {string} country_code - Country code (2 letter, ISO 3166-1 alpha-2).
+ * @property {string} country_code_iso3 - Country code (3 letter, ISO 3166-1 alpha-3).
+ * @property {string} country_name - Short country name.
+ * @property {string} country_capital - Capital of the country.
+ * @property {string} country_tld - Country specific TLD (top-level domain).
+ * @property {number} country_area - Area of the country (in sq km).
+ * @property {number} country_population - Population of the country.
+ * @property {string} continent_code - Continent code.
+ * @property {boolean} in_eu - Whether IP address belongs to a country that is a member of the European Union (EU).
+ * @property {string} postal - Postal code / zip code.
+ * @property {number} latitude - Latitude.
+ * @property {number} longitude - Longitude.
+ * @property {string} latlong - Comma separated latitude and longitude.
+ * @property {string} timezone - Timezone (IANA format i.e. “Area/Location”).
+ * @property {string} utc_offset - UTC offset (with daylight saving time) as +HHMM or -HHMM (HH is hours, MM is minutes).
+ * @property {string} country_calling_code - Country calling code (dial in code, comma separated).
+ * @property {string} currency - Currency code (ISO 4217).
+ * @property {string} currency_name - Currency name.
+ * @property {string} languages - Languages spoken (comma separated 2 or 3 letter ISO 639 code with optional hyphen separated country suffix).
+ * @property {string} asn - Autonomous system number.
+ * @property {string} org - Organization name.
+ * @property {string} hostname - Host or domain name associated with the IP (*optional beta add-on, please contact us for details).
+ */
+export interface IPAPIResponse {
+  ip?: string;
+  city?: string;
+  region?: string;
+  region_code?: string;
+  country?: string;
+  country_code?: string;
+  country_code_iso3?: string;
+  country_name?: string;
+  country_capital?: string;
+  country_tld?: string;
+  country_area?: number;
+  country_population?: number;
+  continent_code?: string;
+  in_eu?: boolean;
+  postal?: string;
+  latitude?: number;
+  longitude?: number;
+  latlong?: string;
+  timezone?: string;
+  utc_offset?: string;
+  country_calling_code?: string;
+  currency?: string;
+  currency_name?: string;
+  languages?: string;
+  asn?: string;
+  org?: string;
+  hostname?: string;
+}
+
+export async function findLocationByIP(): Promise<IPAPIResponse> {
+  const response = await fetch('https://ipapi.co/json/');
+  const data: IPAPIResponse = await response.json();
+  return data;
+}
