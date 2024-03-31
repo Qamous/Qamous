@@ -9,11 +9,16 @@ const AddWord = () => {
   const [arabicDefinition, setArabicDefinition] = useState('');
   const [englishDefinition, setEnglishDefinition] = useState('');
   const [example, setExample] = useState('');
-  const [countriesOfOrigin, setCountriesOfOrigin] = useState('');
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [arabicWordError, setArabicWordError] = useState('');
   const [francoArabicWordError, setFrancoArabicWordError] = useState('');
   const [arabicDefinitionError, setArabicDefinitionError] = useState('');
   const [englishDefinitionError, setEnglishDefinitionError] = useState('');
+
+  function onCountrySelect(ev: React.ChangeEvent<HTMLSelectElement>) {
+    const selectedOptions = Array.from(ev.target.selectedOptions).map(option => option.value);
+    setSelectedCountries(selectedOptions);
+  }
 
   function onAddWordClick() {
     // Clear previous errors
@@ -42,6 +47,8 @@ const AddWord = () => {
       setArabicDefinitionError('The Arabic definition must be in Arabic');
       return;
     }
+
+    console.log('You selected the following countries:', selectedCountries);
   }
 
   useEffect(() => {
@@ -49,7 +56,7 @@ const AddWord = () => {
       download: true,
       header: true,
       complete: function(results: { data: { ' CountryName': string }[] }) {
-        console.log("Papa Parse results:", results);
+        //console.log("Papa Parse results:", results);
         const countries = results.data.map(row => row[' CountryName']);
         setOptions(countries);
       },
@@ -122,11 +129,10 @@ const AddWord = () => {
       </div>
       <div className={'container-input'}>
         <select
-          value={countriesOfOrigin}
-          onChange={(ev) => setCountriesOfOrigin(ev.target.value)}
           className={'container-input-box'}
           multiple={true}
           required={false}
+          onChange={onCountrySelect}
         >
           <option value="">Select the country / countries of origin here (if applicable)</option>
           {options.map((option, index) => (
