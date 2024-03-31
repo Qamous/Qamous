@@ -32,6 +32,16 @@ const AddWord = () => {
       setArabicWordError('The Arabic word must be in Arabic');
       return;
     }
+    // Basic Arabic definition validation
+    if (!arabicDefinition || '' === arabicDefinition) {
+      setArabicDefinitionError('Arabic definition is required');
+      return;
+    }
+    // Validate Arabic definition is in Arabic
+    if (!/^[\u060C-\u061B\u061E-\u06D6ء-ي\s٠-٩]+$/u.test(arabicDefinition)) {
+      setArabicDefinitionError('The Arabic definition must be in Arabic');
+      return;
+    }
   }
 
   useEffect(() => {
