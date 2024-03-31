@@ -335,3 +335,22 @@ export async function findLocationByIP(): Promise<IPAPIResponse> {
   const data: IPAPIResponse = await response.json();
   return data;
 }
+
+// find user's location by Latitute and Longitude and then by IP if the former fails
+/**
+ * This function finds the user's location by latitude and longitude. If that fails, it finds the user's location by IP.
+ * It returns the user's location details.
+ *
+ * @returns {Promise<NominatimAddress & IPAPIResponse>} - The user's location details.
+ */
+// export async function findUserLocation(): Promise<NominatimAddress & IPAPIResponse> {
+//   let location: Partial<NominatimAddress & IPAPIResponse> = {};
+//   try {
+//     const locationByLatLong: NominatimAddress = await findLocationByLatLong();
+//     location = { ...location, ...locationByLatLong };
+//   } catch (error) {
+//     const locationByIP: IPAPIResponse = await findLocationByIP();
+//     location = { ...location, ...locationByIP };
+//   }
+//   return location as NominatimAddress & IPAPIResponse;
+// }
