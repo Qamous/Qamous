@@ -56,27 +56,27 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang }) => {
     };
 
     const handleReportClick = () => {
-    if (reportClicked) {
-        setReportSnackbarOpen(true);
-        setTimeout(() => setReportSnackbarOpen(false), 3000);
-    } else {
-        const reportType = window.prompt("Are you reporting the word or the definition? Please enter 'word' or 'definition':");
-        if (reportType === null) {
-            window.alert("Report canceled.");
-        } else if (reportType === 'word' || reportType === 'definition') {
-            const reason = window.prompt(`Please enter the reason for reporting this ${reportType}:`);
-            if (reason || reason === '') {
-                // TODO: use the 'reason' and 'reportType' variables here to send them to the server
-                console.log(`Report Type: ${reportType}, Reason: ${reason}`);
-                setReportClicked(true);
-            } else if (reason === null) {
-                window.alert("Report canceled.");
-            }
+        if (reportClicked) {
+            setReportSnackbarOpen(true);
+            setTimeout(() => setReportSnackbarOpen(false), 3000);
         } else {
-            window.alert("Invalid input. Please enter 'word' or 'definition'.");
+            const reportType = window.prompt("Are you reporting the word or the definition? Please enter 'word' or 'definition':");
+            if (reportType === null) {
+                window.alert("Report canceled.");
+            } else if (reportType === 'word' || reportType === 'definition') {
+                const reason = window.prompt(`Please enter the reason for reporting this ${reportType}:`);
+                if (reason || reason === '') {
+                    // TODO: use the 'reason' and 'reportType' variables here to send them to the server
+                    console.log(`Report Type: ${reportType}, Reason: ${reason}`);
+                    setReportClicked(true);
+                } else if (reason === null) {
+                    window.alert("Report canceled.");
+                }
+            } else {
+                window.alert("Invalid input. Please enter 'word' or 'definition'.");
+            }
         }
-    }
-};
+    };
 
     useEffect(() => {
         if (clickCount >= 5) {
