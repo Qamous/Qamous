@@ -118,6 +118,23 @@ const Header: React.FC = () => {
                         {/*<img src={userImage} alt={t('common_terms.user')} />*/}
                     </NavLink>
                 </div>
+
+                {/* Burger menu */}
+                <nav role="navigation">
+                    <div id="menuToggle">
+                        <input type="checkbox" />
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <ul id="menu">
+                            <a href="#"><li>Home</li></a>
+                            <a href="#"><li>About</li></a>
+                            <a href="#"><li>Info</li></a>
+                            <a href="#"><li>Contact</li></a>
+                            <a href="https://erikterwan.com/" target="_blank" rel="noreferrer"><li>Show me more</li></a>
+                        </ul>
+                    </div>
+                </nav>
             </div>
         </div>
     );

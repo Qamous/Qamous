@@ -147,3 +147,36 @@ $header-shadow: rgba(0, 0, 0, 0.1);
         }
     }
 }
+
+/* Burger menu CSS code */
+@media (max-width: 1200px) {
+  /* Paste the CSS code for the burger menu here */
+}
+
+/* Hide the burger menu on screens wider than 1200px */
+@media (min-width: 1201px) {
+  #menuToggle {
+    display: none;
+  }
+}
+
+/* Hide existing menu on screens narrower than 1201px */
+@media (max-width: 1200px) {
+    .toolbar-items {
+        display: none;
+    }
+
+    .header-right-side{
+        &-mode {
+            display: none;
+        }
+
+        &-language {
+            display: none;
+        }
+    }
+
+    .search-box {
+        margin: 0 15px 0 0;
+    }
+}
