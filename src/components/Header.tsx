@@ -127,11 +127,10 @@ const Header: React.FC = () => {
                         <span></span>
                         <span></span>
                         <ul id="menu">
-                            <a href="#"><li>Home</li></a>
-                            <a href="#"><li>About</li></a>
-                            <a href="#"><li>Info</li></a>
-                            <a href="#"><li>Contact</li></a>
-                            <a href="https://erikterwan.com/" target="_blank" rel="noreferrer"><li>Show me more</li></a>
+                            <a href="/"><li>Home</li></a>
+                            <a href="/advanced-search"><li>Advanced Search</li></a>
+                            <a href="/word-of-the-day"><li>Word of the Day</li></a>
+                            <a href="/advertise"><li>Advertise</li></a>
                         </ul>
                     </div>
                 </nav>
