@@ -3,6 +3,7 @@
 .content-box {
   background-color: styles.$quaternary-color;
   width: 50%;
+  transition: width 0.5s;
 
   &-title {
     padding: 5px 25px 0 25px;
@@ -129,5 +130,11 @@
         }
       }
     }
+  }
+}
+
+@media (max-width: 1200px) {
+  .content-box {
+    width: 100%;
   }
 }
