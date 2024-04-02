@@ -126,7 +126,7 @@ const Header: React.FC = () => {
 
                 {/* Burger menu */}
                 <div
-                  className={`burger-container ${change ? 'change' : ''}`}
+                  className={`header-right-side-burger ${change ? 'change' : ''}`}
                   onClick={handleBurgerClick}
                 >
                     <div className="bar1"></div>
