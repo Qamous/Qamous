@@ -90,12 +90,32 @@ const Header: React.FC = () => {
 
     return (
       <>
-          <div ref={overlayNav} id="myNav" className="overlay">
-              <div className="overlay-content">
-                  <a href="/">Home</a>
-                  <a href="/advanced-search">Advanced Search</a>
-                  <a href="/word-of-the-day">Word of The Day</a>
-                  <a href="/advertise">Advertise</a>
+          <div ref={overlayNav} className="nav-overlay">
+              <div className="nav-overlay-content">
+                  <NavLink
+                    to="/"
+                    onClick={handleBurgerClick}
+                  >
+                      Home
+                  </NavLink>
+                  <NavLink
+                    to="/advanced-search"
+                    onClick={handleBurgerClick}
+                  >
+                      Advanced Search
+                  </NavLink>
+                  <NavLink
+                    to="/word-of-the-day"
+                    onClick={handleBurgerClick}
+                  >
+                      Word of The Day
+                  </NavLink>
+                  <NavLink
+                    to="/advertise"
+                    onClick={handleBurgerClick}
+                  >
+                      Advertise
+                  </NavLink>
               </div>
           </div>
           <div className="header">

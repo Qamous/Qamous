@@ -2,7 +2,7 @@
 $header-shadow: rgba(0, 0, 0, 0.1);
 
 /* The Overlay (background) */
-.overlay {
+.nav-overlay {
     height: 100%;
     width: 0;
     position: fixed;
@@ -11,7 +11,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
     top: 0;
     background-color: rgba(0,0,0, 0.9);
     overflow-x: hidden;
-    transition: 0.5s;
+    transition: 0.5s ease;
 
     &-content {
         position: relative;
@@ -28,15 +28,21 @@ $header-shadow: rgba(0, 0, 0, 0.1);
         color: #818181;
         display: block;
         transition: 0.3s;
+        opacity: 1;
 
         &:hover, &:focus {
             color: #f1f1f1;
+        }
+
+        &.active {
+            color: styles.$secondary-color;
+            opacity: 0.85;
         }
     }
 }
 
 @media screen and (max-height: 450px) {
-  .overlay {
+  .nav-overlay {
       font-size: 40px;
       top: 15px;
       right: 35px;
