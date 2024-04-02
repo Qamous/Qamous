@@ -40,6 +40,8 @@ const Header: React.FC = () => {
             return lang;
         });
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
+        if (change)
+            handleBurgerClick();
     };
     const handleHover = () => {
         // Update opacity
@@ -60,6 +62,8 @@ const Header: React.FC = () => {
     const toggleDarkMode = (checked: boolean) => {
         setDarkMode(checked);
         setCookie('darkMode', checked.toString());
+        if (change)
+            setTimeout(handleBurgerClick, 150);
     };
     setTheme(isDarkMode);
 
@@ -116,13 +120,53 @@ const Header: React.FC = () => {
                   >
                       Advertise
                   </NavLink>
+                  <div
+                    className="nav-overlay-content-bottom"
+                  >
+                      <DarkModeSwitch
+                        className="nav-overlay-content-bottom-mode"
+                        checked={isDarkMode}
+                        onChange={toggleDarkMode}
+                        moonColor="#bfbfbf"
+                        sunColor="#dd8500"
+                        size={30}
+                      />
+
+                      <div
+                        className="nav-overlay-content-bottom-language"
+                        onClick={handleCountrySwitch}
+                        style={languageButtonStyle}
+                      >
+                          {currentLang === 'en' ?
+                            <>
+                                <US title="United States" />
+                                <p>EN</p>
+                            </>
+                            : <>
+                                <EG title="Egypt" />
+                                <p>AR</p>
+                            </>
+                          }
+                      </div>
+
+                      <div className="nav-overlay-content-bottom-user">
+                          <NavLink
+                            to="/login"
+                            onClick={handleBurgerClick}
+                          >
+                              <i className="fa-solid fa-user"></i>
+                              <FontAwesomeIcon icon={faUser} size="sm"/>
+                              {/*<img src={userImage} alt={t('common_terms.user')} />*/}
+                          </NavLink>
+                      </div>
+                  </div>
               </div>
           </div>
           <div className="header">
               <div className="header-left-side">
                   <img
-                    src={require("../assets/qamous-logo-transparent.png")}
-                    alt={t("common_terms.qamous")}
+                    src={require('../assets/qamous-logo-transparent.png')}
+                    alt={t('common_terms.qamous')}
                     loading="lazy"
                     title="This is Qamous for Arabic" /> {/* TODO: do more research on lazy loading for a faster experience */}
                   <ToolbarItems
