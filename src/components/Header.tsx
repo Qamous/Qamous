@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ToolbarItems from "./ToolbarItems";
 import SearchBar from "./SearchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -63,80 +63,109 @@ const Header: React.FC = () => {
     };
     setTheme(isDarkMode);
 
+    const overlayNav = useRef<HTMLDivElement>(null);
+
+    const openNav = () => {
+        if (overlayNav.current) {
+            overlayNav.current.style.width = "100%";
+        }
+    };
+
+    const closeNav = () => {
+        if (overlayNav.current) {
+            overlayNav.current.style.width = "0%";
+        }
+    };
+
     const handleBurgerClick = () => {
         setChange(!change);
+        if (!change) {
+            openNav();
+        } else {
+            closeNav();
+        }
     };
 
     return (
-        <div className="header">
-            <div className="header-left-side">
-                <img
-                  src={require("../assets/qamous-logo-transparent.png")}
-                  alt={t("common_terms.qamous")}
-                  loading="lazy"
-                  title="This is Qamous for Arabic" /> {/* TODO: do more research on lazy loading for a faster experience */}
-                <ToolbarItems
-                  language={currentLang}
-                  isDarkMode={isDarkMode}
-                /> {/* Insert the ToolbarItems component above the SearchBar */}
-            </div>
+      <>
+          <div ref={overlayNav} id="myNav" className="overlay">
+              <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>&times;</a>
+              <div className="overlay-content">
+                  <a href="/">Home</a>
+                  <a href="/advanced-search">Advanced Search</a>
+                  <a href="/word-of-the-day">Word of The Day</a>
+                  <a href="/advertise">Advertise</a>
+              </div>
+          </div>
+          <div className="header">
+              <div className="header-left-side">
+                  <img
+                    src={require("../assets/qamous-logo-transparent.png")}
+                    alt={t("common_terms.qamous")}
+                    loading="lazy"
+                    title="This is Qamous for Arabic" /> {/* TODO: do more research on lazy loading for a faster experience */}
+                  <ToolbarItems
+                    language={currentLang}
+                    isDarkMode={isDarkMode}
+                  /> {/* Insert the ToolbarItems component above the SearchBar */}
+              </div>
 
-            <div className="header-right-side">
-                <div
-                  className="header-right-side-add">
-                    <NavLink to="/add-definition">
-                        <FontAwesomeIcon icon={faPlus} size="2x" />
-                    </NavLink>
-                </div>
+              <div className="header-right-side">
+                  <div
+                    className="header-right-side-add">
+                      <NavLink to="/add-definition">
+                          <FontAwesomeIcon icon={faPlus} size="2x" />
+                      </NavLink>
+                  </div>
 
-                <SearchBar />
+                  <SearchBar />
 
-                <DarkModeSwitch
-                  className="header-right-side-mode"
-                  checked={isDarkMode}
-                  onChange={toggleDarkMode}
-                  moonColor="#bfbfbf"
-                  sunColor="#dd8500"
-                />
+                  <DarkModeSwitch
+                    className="header-right-side-mode"
+                    checked={isDarkMode}
+                    onChange={toggleDarkMode}
+                    moonColor="#bfbfbf"
+                    sunColor="#dd8500"
+                  />
 
-                <div className="header-right-side-language"
-                     onClick={handleCountrySwitch}
-                     onMouseEnter={handleHover}
-                     onMouseLeave={handleNoHover}
-                     style={languageButtonStyle}>
-                    {currentLang === 'en' ?
-                      <>
-                          <US title="United States" />
-                          <p>EN</p>
-                      </>
-                      : <>
-                          <EG title="Egypt" />
-                          <p>AR</p>
-                      </>
-                    }
-                </div>
+                  <div className="header-right-side-language"
+                       onClick={handleCountrySwitch}
+                       onMouseEnter={handleHover}
+                       onMouseLeave={handleNoHover}
+                       style={languageButtonStyle}>
+                      {currentLang === 'en' ?
+                        <>
+                            <US title="United States" />
+                            <p>EN</p>
+                        </>
+                        : <>
+                            <EG title="Egypt" />
+                            <p>AR</p>
+                        </>
+                      }
+                  </div>
 
-                <div className="header-right-side-user">
-                    <NavLink to="/login">
-                        <i className="fa-solid fa-user"></i>
-                        <FontAwesomeIcon icon={faUser} size="xl" />
-                        {/*<img src={userImage} alt={t('common_terms.user')} />*/}
-                    </NavLink>
-                </div>
+                  <div className="header-right-side-user">
+                      <NavLink to="/login">
+                          <i className="fa-solid fa-user"></i>
+                          <FontAwesomeIcon icon={faUser} size="xl" />
+                          {/*<img src={userImage} alt={t('common_terms.user')} />*/}
+                      </NavLink>
+                  </div>
 
-                {/* Burger menu */}
-                <div
-                  className={`header-right-side-burger ${change ? 'change' : ''}`}
-                  onClick={handleBurgerClick}
-                >
-                    <div className="bar1"></div>
-                    <div className="bar2"></div>
-                    <div className="bar3"></div>
-                </div>
-                {/*<nav role="navigation">*/}
-                {/*</nav>*/}
-            </div>
-        </div>
+                  {/* Burger menu */}
+                  <nav
+                    className={`header-right-side-burger ${change ? 'change' : ''}`}
+                    role="navigation"
+                    onClick={handleBurgerClick}
+                  >
+                      <div className="bar1"></div>
+                      <div className="bar2"></div>
+                      <div className="bar3"></div>
+                  </nav>
+              </div>
+          </div>
+      </>
     );
 };
 
