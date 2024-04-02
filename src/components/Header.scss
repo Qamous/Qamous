@@ -148,145 +148,37 @@ $header-shadow: rgba(0, 0, 0, 0.1);
     }
 }
 
-.menuToggle {
-    display: block;
-    margin: 0 5px 0 0;
-    position: relative;
-    z-index: 10000;
+.burger-container {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0 10px 0 0;
 
-    -webkit-user-select: none;
-    user-select: none;
-
-    a {
-        text-decoration: none;
-        color: styles.$primary-color;
-        font-family: styles.$font-stack;
-
-        transition: color 0.3s ease;
-
-        &:hover {
-            color: styles.$secondary-color;
-        }
+    .bar1, .bar2, .bar3 {
+        width: 35px;
+        height: 5px;
+        background-color: styles.$secondary-color;
+        margin: 6px 0;
+        transition: 0.4s;
     }
 
-    input {
-        display: block;
-        width: 40px;
-        height: 32px;
-        position: absolute;
-
-        cursor: pointer;
-
-        opacity: 0; /* hide this */
-        z-index: 10002; /* and place it over the hamburger */
-
-        -webkit-touch-callout: none;
-
-        /*
-         * Transform all the slices of hamburger into a crossmark.
-         */
-        &:checked ~ span {
-            opacity: 1;
-            transform: rotate(45deg) translate(-2px, -1px);
-            background: styles.$primary-color;
-
-            /*
-             * Hide the middle one.
-             */
-
-            &:nth-last-child(3)
-            {
-                opacity: 0;
-                transform: rotate(0deg) scale(0.2, 0.2);
-            }
+    &.change {
+        .bar1 {
+            transform: translateY(11px) rotate(-45deg);
         }
 
-        /*
-         * The last one should go the other direction
-         */
-        &:checked ~ span:nth-last-child(2) {
-            transform: rotate(-45deg) translate(0, -1px);
+        .bar2 {
+          opacity: 0;
         }
 
-        /*
-         * Slide it in from the left
-         */
-        &:checked ~ ul
-        {
-            transform: none;
+        .bar3 {
+          transform: translateY(-11px) rotate(45deg);
         }
     }
-
-    /*
-     * Just a quick hamburger
-     */
-    span {
-        display: block;
-        width: 33px;
-        height: 4px;
-        margin-bottom: 5px;
-        position: relative;
-
-        background: styles.$secondary-color;
-        border-radius: 3px;
-
-        z-index: 1;
-
-        transform-origin: 4px 0;
-
-        transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-        background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-        opacity 0.55s ease;
-
-        &:first-child
-        {
-            transform-origin: 0 0;
-        }
-
-        &:nth-last-child(2)
-        {
-            transform-origin: 0 100%;
-        }
-    }
-}
-
-/* Burger menu CSS code */
-@media (max-width: 1200px) {
-    /*
-     * Make this absolute positioned
-     * at the top left of the screen
-     */
-    #menu
-    {
-        position: absolute;
-        min-width: 300px;
-        margin: -100px 0 0 50px;
-        padding: 135px 50px 50px;
-        top: 0;
-        right: 0;
-
-        background: styles.$tertiary-color;
-        list-style-type: none;
-        -webkit-font-smoothing: antialiased;
-        /* to stop flickering of text in safari */
-
-        transform-origin: 0 0;
-        transform: translate(100%, 0);
-
-        transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
-    }
-
-    #menu li
-    {
-        padding: 10px 0;
-        font-size: 22px;
-    }
-
 }
 
 /* Hide the burger menu on screens wider than 1200px */
 @media (min-width: 1201px) {
-  .menuToggle {
+  .burger-container {
     display: none;
   }
 }

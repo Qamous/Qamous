@@ -21,6 +21,7 @@ const Header: React.FC = () => {
         useState({ opacity: 1 });
     const [isDarkMode, setDarkMode] =
       React.useState<boolean>(getCookie('darkMode') === 'true' ?? true);
+    const [change, setChange] = useState(false);
 
     const handleCountrySwitch = () => {
         // Toggle between US and EG on click
@@ -62,6 +63,10 @@ const Header: React.FC = () => {
     };
     setTheme(isDarkMode);
 
+    const handleBurgerClick = () => {
+        setChange(!change);
+    };
+
     return (
         <div className="header">
             <div className="header-left-side">
@@ -78,20 +83,20 @@ const Header: React.FC = () => {
 
             <div className="header-right-side">
                 <div
-                    className="header-right-side-add">
+                  className="header-right-side-add">
                     <NavLink to="/add-definition">
-                        <FontAwesomeIcon icon={faPlus} size="2x"/>
+                        <FontAwesomeIcon icon={faPlus} size="2x" />
                     </NavLink>
                 </div>
 
                 <SearchBar />
 
                 <DarkModeSwitch
-                    className="header-right-side-mode"
-                    checked={isDarkMode}
-                    onChange={toggleDarkMode}
-                    moonColor="#bfbfbf"
-                    sunColor="#dd8500"
+                  className="header-right-side-mode"
+                  checked={isDarkMode}
+                  onChange={toggleDarkMode}
+                  moonColor="#bfbfbf"
+                  sunColor="#dd8500"
                 />
 
                 <div className="header-right-side-language"
@@ -100,40 +105,36 @@ const Header: React.FC = () => {
                      onMouseLeave={handleNoHover}
                      style={languageButtonStyle}>
                     {currentLang === 'en' ?
-                        <>
-                            <US title="United States"/>
-                            <p>EN</p>
-                        </>
-                        : <>
-                            <EG title="Egypt"/>
-                            <p>AR</p>
-                        </>
+                      <>
+                          <US title="United States" />
+                          <p>EN</p>
+                      </>
+                      : <>
+                          <EG title="Egypt" />
+                          <p>AR</p>
+                      </>
                     }
                 </div>
 
                 <div className="header-right-side-user">
                     <NavLink to="/login">
                         <i className="fa-solid fa-user"></i>
-                        <FontAwesomeIcon icon={faUser} size="xl"/>
+                        <FontAwesomeIcon icon={faUser} size="xl" />
                         {/*<img src={userImage} alt={t('common_terms.user')} />*/}
                     </NavLink>
                 </div>
 
                 {/* Burger menu */}
-                <nav role="navigation">
-                    <div className="menuToggle">
-                        <input type="checkbox" />
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <ul id="menu">
-                            <a href="/"><li>Home</li></a>
-                            <a href="/advanced-search"><li>Advanced Search</li></a>
-                            <a href="/word-of-the-day"><li>Word of the Day</li></a>
-                            <a href="/advertise"><li>Advertise</li></a>
-                        </ul>
-                    </div>
-                </nav>
+                <div
+                  className={`burger-container ${change ? 'change' : ''}`}
+                  onClick={handleBurgerClick}
+                >
+                    <div className="bar1"></div>
+                    <div className="bar2"></div>
+                    <div className="bar3"></div>
+                </div>
+                {/*<nav role="navigation">*/}
+                {/*</nav>*/}
             </div>
         </div>
     );
