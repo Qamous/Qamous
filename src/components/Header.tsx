@@ -68,12 +68,14 @@ const Header: React.FC = () => {
     const openNav = () => {
         if (overlayNav.current) {
             overlayNav.current.style.width = "100%";
+            overlayNav.current.style.opacity = "100%";
         }
     };
 
     const closeNav = () => {
         if (overlayNav.current) {
             overlayNav.current.style.width = "0%";
+            overlayNav.current.style.opacity = "0.3";
         }
     };
 
@@ -89,7 +91,6 @@ const Header: React.FC = () => {
     return (
       <>
           <div ref={overlayNav} id="myNav" className="overlay">
-              <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>&times;</a>
               <div className="overlay-content">
                   <a href="/">Home</a>
                   <a href="/advanced-search">Advanced Search</a>
