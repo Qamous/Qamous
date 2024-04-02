@@ -121,7 +121,7 @@ const Header: React.FC = () => {
 
                 {/* Burger menu */}
                 <nav role="navigation">
-                    <div id="menuToggle">
+                    <div className="menuToggle">
                         <input type="checkbox" />
                         <span></span>
                         <span></span>
