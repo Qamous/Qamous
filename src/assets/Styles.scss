@@ -173,6 +173,7 @@ $dark-grey: #292929;
     justify-content: center;
     //overflow: hidden;
     //white-space: nowrap;
+    flex-wrap: wrap;
 
     &-button {
       cursor: pointer;
