@@ -9,9 +9,11 @@ $header-shadow: rgba(0, 0, 0, 0.1);
     z-index: 1;
     right: 0;
     top: 0;
-    background-color: rgba(0,0,0, 0.9);
+    background-color: styles.$tertiary-color-90;
     overflow-x: hidden;
     transition: 0.5s ease;
+    font-family: styles.$font-stack;
+    font-weight: 500;
 
     &-content {
         position: relative;
@@ -24,10 +26,10 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             padding: 8px;
             text-decoration: none;
             font-size: 36px;
-            color: #818181;
+            color: styles.$primary-color;
             display: block;
             transition: 0.3s;
-            opacity: 1;
+            opacity: 0.6;
 
             &:hover, &:focus {
                 color: #f1f1f1;
@@ -42,7 +44,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
         &-bottom {
             width: 100%;
             position: fixed;
-            bottom: 0;
+            bottom: 55px;
             opacity: 0.85;
             display: flex;
             flex-direction: row;
@@ -50,13 +52,13 @@ $header-shadow: rgba(0, 0, 0, 0.1);
 
             &-mode {
                 margin: 0;
-                padding: 0;
+                padding: 15px 0 0 0;
             }
 
             &-language {
                 width: 50px;
                 margin: 0;
-                padding: 0;
+                padding: 8px 0 0 0;
             }
 
             &-user {
