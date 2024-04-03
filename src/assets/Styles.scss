@@ -115,6 +115,7 @@ $dark-grey: #292929;
   padding: 20px;
   font-family: $font-stack;
   width: 100%;
+  transition: 0.3s;
 
   &-title {
     font-size: 44px;
@@ -200,6 +201,14 @@ $dark-grey: #292929;
         color: $primary-color;
       }
     }
+  }
+}
+
+// for less than 1200px, remove padding from container
+@media (max-width: 1200px) {
+  .container {
+    padding: 0;
+    // TODO: figure out what is wrong with the padding
   }
 }
 
