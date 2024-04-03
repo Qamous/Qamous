@@ -40,6 +40,10 @@ $close-trans-time: 150ms;
     }
 }
 
+.search-box {
+    font-family: styles.$font-stack;
+}
+
 @media (min-width: 1201px) {
     .search-overlay-closebtn {
         display: none;
@@ -167,9 +171,9 @@ $close-trans-time: 150ms;
         /* Close button */
         &-closebtn {
             position: absolute;
-            top: 20px;
-            right: 45px;
-            font-size: 60px;
+            top: 25px;
+            right: 25px;
+            font-size: 30px;
             cursor: pointer;
             color: white;
 
@@ -192,20 +196,23 @@ $close-trans-time: 150ms;
             font-size: 17px;
             border: none;
             float: left;
-            width: 80%;
+            width: 95%;
             background: white;
         }
+
         input[type=text]:hover {
             background: #f1f1f1;
         }
+
         button {
             float: left;
-            width: 20%;
+            min-width: 20%;
             padding: 15px;
             background: #ddd;
             font-size: 17px;
             border: none;
             cursor: pointer;
+
             &:hover {
                 background: #bbb;
             }

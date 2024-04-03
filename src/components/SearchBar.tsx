@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import './SearchBar.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const SearchBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const closeSearch = () => {
     const overlay = document.getElementById("myOverlay");
+    console.log("overlay", overlay, "closeSearch")
     if (overlay) {
       overlay.style.display = "none";
     }
@@ -55,7 +58,7 @@ const SearchBar: React.FC = () => {
           onClick={closeSearch}
           title="Close Overlay"
         >
-          x
+          <FontAwesomeIcon icon={faXmark} />
         </span>
         <div className="search-overlay-content">
           <form className="search-box" onSubmit={handleSearch}>
@@ -66,8 +69,12 @@ const SearchBar: React.FC = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <button type="reset" className="search-box-reset"></button>
-            <button type="submit" className="search-box-submit">
-              <i className="fa fa-search"></i>
+            <button
+              type="submit"
+              className="search-box-submit"
+              onClick={closeSearch}
+            >
+              Search
             </button>
           </form>
         </div>
