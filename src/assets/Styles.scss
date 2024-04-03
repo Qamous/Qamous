@@ -206,12 +206,3 @@ $dark-grey: #292929;
     }
   }
 }
-
-// for less than 1200px, remove padding from container
-@media (max-width: 1200px) {
-  .container {
-    padding: 0;
-    // TODO: figure out what is wrong with the padding
-  }
-}
-
