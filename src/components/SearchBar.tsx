@@ -8,7 +8,6 @@ const SearchBar: React.FC = () => {
 
   const closeSearch = () => {
     const overlay = document.getElementById("myOverlay");
-    console.log("overlay", overlay, "closeSearch")
     if (overlay) {
       overlay.style.display = "none";
     }
