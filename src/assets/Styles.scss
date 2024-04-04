@@ -14,6 +14,7 @@
   --tertiary-color: #000000;
   --quaternary-color: #292929;
   --primary-color-90: rgba(255, 255, 255, 0.9);
+  --primary-color-75: rgba(255, 255, 255, 0.75);
   --secondary-color-90: rgba(221, 133, 0, 0.9);
   --tertiary-color-90: rgba(0, 0, 0, 0.9);
 
@@ -29,6 +30,7 @@ $secondary-color: var(--secondary-color);
 $tertiary-color: var(--tertiary-color);
 $quaternary-color: var(--quaternary-color);
 $primary-color-90: var(--primary-color-90);
+$primary-color-75: var(--primary-color-75);
 $secondary-color-90: var(--secondary-color-90);
 $tertiary-color-90: var(--tertiary-color-90);
 
@@ -44,6 +46,7 @@ $secondary-color-dark: #dd8500;
 $tertiary-color-dark: #000000;
 $quaternary-color-dark: #292929;
 $primary-color-90-dark: rgba(255, 255, 255, 0.9);
+$primary-color-75-dark: rgba(255, 255, 255, 0.75);
 $secondary-color-90-dark: rgba(221, 133, 0, 0.9);
 $tertiary-color-90-dark: rgba(0, 0, 0, 0.9);
 
@@ -55,6 +58,7 @@ $secondary-color-light: #dd8500;
 $tertiary-color-light: #d0d0d0;
 $quaternary-color-light: #f8f8f8;
 $primary-color-90-light: rgba(0, 0, 0, 0.9);
+$primary-color-75-light: rgba(0, 0, 0, 0.75);
 $secondary-color-90-light: rgba(221, 133, 0, 0.9);
 $tertiary-color-90-light: rgba(208, 208, 208, 0.9);
 
@@ -66,6 +70,7 @@ $header-border-color-light: #eae7e7;
   tertiaryColor: $tertiary-color;
   quaternaryColor: $quaternary-color;
   primaryColorNinety: $primary-color-90;
+  primaryColorSeventyFive: $primary-color-75;
   secondaryColorNinety: $secondary-color-90;
   tertiaryColorNinety: $tertiary-color-90;
   headerBorderColor: $header-border-color;
@@ -75,6 +80,7 @@ $header-border-color-light: #eae7e7;
   tertiaryColorLight: $tertiary-color-light;
   quaternaryColorLight: $quaternary-color-light;
   primaryColorNinetyLight: $primary-color-90-light;
+  primaryColorSeventyFiveLight: $primary-color-75-light;
   secondaryColorNinetyLight: $secondary-color-90-light;
   tertiaryColorNinetyLight: $tertiary-color-90-light;
   headerBorderColorLight: $header-border-color-light;
@@ -84,6 +90,7 @@ $header-border-color-light: #eae7e7;
   tertiaryColorDark: $tertiary-color-dark;
   quaternaryColorDark: $quaternary-color-dark;
   primaryColorNinetyDark: $primary-color-90-dark;
+  primaryColorSeventyFiveDark: $primary-color-75-dark;
   secondaryColorNinetyDark: $secondary-color-90-dark;
   tertiaryColorNinetyDark: $tertiary-color-90-dark;
   headerBorderColorDark: $header-border-color-dark;
