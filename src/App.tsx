@@ -14,6 +14,8 @@ import PageUnderConstruction from './components/pages/PageUnderConstruction';
 import LogIn from './components/pages/LogIn';
 import SignUp from './components/pages/SignUp';
 import AddWord from './components/pages/AddWord';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBug } from '@fortawesome/free-solid-svg-icons';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -43,6 +45,16 @@ i18n.use(initReactI18next).init({
 });
 
 const App: React.FC = () => {
+  const handleReportClick = () => {
+    const report = window.prompt("Please describe the issue you encountered:");
+    if (report) {
+      // TODO: send report to the server
+      alert("Thank you for your report!");
+    } else {
+      alert("Report canceled.");
+    }
+  };
+
   return (
     <BrowserRouter>
       <Routes>
@@ -134,6 +146,16 @@ const App: React.FC = () => {
           </div>
         } />
       </Routes>
+      <div
+        className={"report"}
+        onClick={handleReportClick}
+      >
+        <FontAwesomeIcon
+          icon={faBug}
+          size="1x"
+          className={"home-report-icon"}
+        />
+      </div>
     </BrowserRouter>
   );
 };
