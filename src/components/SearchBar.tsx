@@ -41,9 +41,8 @@ const SearchBar: React.FC = () => {
   });
   return (
     <>
-      <button
+      <div
         className="search-button"
-        placeholder=" "
         onClick={openSearch}
       >
         <button
@@ -51,7 +50,7 @@ const SearchBar: React.FC = () => {
           onClick={openSearch}
         >
         </button>
-      </button>
+      </div>
       <div id="myOverlay" className="search-overlay">
         <span
           className="search-overlay-closebtn"
