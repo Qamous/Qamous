@@ -25,7 +25,7 @@ const Home: React.FC = () => {
     const sampleHome = t('sample_home', {
         returnObjects: true
     }) as JsonContent[];
-    const [homeContent, setHomeContent] = useState<JsonContent[]>(sampleHome);
+    const [homeContent, setHomeContent] = useState<HomeContent[]>();
     const lang = i18n.language;
 
     useEffect(() => {
@@ -34,17 +34,22 @@ const Home: React.FC = () => {
             credentials: 'include'
         })
         .then(response => response.json())
-        .then(data => setHomeContent([sampleHome[0], ...data]))
+        .then(data => setHomeContent(data))
         .catch(error => console.error('Error:', error));
     }, []);
     console.log(homeContent);
     return (
         <div className={"home"}>
-            {homeContent.map((item, index) => (
+            <ContentBox
+              item={sampleHome[0]}
+              index={0}
+              lang={lang}
+            />
+            {homeContent && homeContent.map((item, index) => (
                 <ContentBox
-                  key={index}
+                  key={index + 1}
                   item={item}
-                  index={index}
+                  index={index + 1}
                   lang={lang}
                 />
             ))}
