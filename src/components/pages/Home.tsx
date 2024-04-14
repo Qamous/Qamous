@@ -10,7 +10,7 @@ interface HomeContent {
     likeCount: number,
     dislikeCount: number,
     likeDislikeDifference: number,
-    isArabic: boolean,
+    isArabic: number,
     arabicWord: string,
     reportCount: number
 }
@@ -45,7 +45,9 @@ const Home: React.FC = () => {
               index={0}
               lang={lang}
             />
-            {homeContent && homeContent.map((item, index) => (
+            {homeContent && homeContent
+              .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
+              .map((item, index) => (
                 <ContentBox
                   key={index + 1}
                   item={item}
