@@ -11,7 +11,7 @@ interface HomeContent {
     dislikeCount: number,
     likeDislikeDifference: number,
     isArabic: number,
-    arabicWord: string,
+    francoArabicWord: string,
     reportCount: number
 }
 
