@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './WordOfTheDay.scss';
+import { useQuery } from 'react-query';
+import ContentBox from '../ContentBox';
 
 interface WordOfTheDayContent {
     wordId: number,
@@ -13,44 +15,54 @@ interface WordOfTheDayContent {
     reportCount: number
 }
 
-const WordOfTheDay: React.FC = () => {
-    const [arabicWordOfTheDay, setArabicWordOfTheDay] = useState<WordOfTheDayContent | null>(null);
-    const [englishWordOfTheDay, setEnglishWordOfTheDay] = useState<WordOfTheDayContent | null>(null);
-
-    useEffect(() => {
+const fetchWordOfTheDayContent = () =>
     fetch('http://localhost:3000/definitions/most-liked', {
         mode: 'cors',
-        credentials: 'include',
+        credentials: 'include'
     })
-        .then(response => response.json())
-        .then(data => {
-            //randomize data order
-            data.sort(() => Math.random() - 0.5);
-            // Find the first Arabic word
-            const arabicWord = data.find((word: WordOfTheDayContent) => word.isArabic === 1);
+    .then(response => response.json());
 
-            // Find the English word that has the same definition as the Arabic word
-            const englishWord = data.find((word: WordOfTheDayContent) => word.isArabic === 0 && word.wordId === arabicWord.wordId);
+const WordOfTheDay: React.FC = () => {
+    const { data, isLoading, isError } = useQuery<WordOfTheDayContent[]>('wordOfTheDayContent', fetchWordOfTheDayContent);
 
-            setArabicWordOfTheDay(arabicWord);
-            setEnglishWordOfTheDay(englishWord);
-        })
-        .catch(error => console.error('Error:', error));
-}, []);
+    if (isLoading) {
+        return (
+            <div className={'word-of-day'}>
+                <div className={'loading-ring'}>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        );
+    }
+
+    if (isError) {
+        return <div>Error occurred while fetching data</div>;
+    }
+
+    //randomize data order
+    data?.sort(() => Math.random() - 0.5);
+    // Find the first Arabic word
+    const arabicWord = data?.find((word: WordOfTheDayContent) => word.isArabic === 1);
+
+    // Find the English word that has the same definition as the Arabic word
+    const englishWord = data?.find((word: WordOfTheDayContent) => word.isArabic === 0 && word.wordId === arabicWord?.wordId);
 
     return (
         <div className={'word-of-day'}>
-            {arabicWordOfTheDay && englishWordOfTheDay && (
+            {arabicWord && englishWord && (
                 <>
                     <p className={'word-of-day-word'} dir={'rtl'} lang={'ar'}>
-                        {arabicWordOfTheDay.word}
+                        {arabicWord.word}
                     </p>
                     <div className={'word-of-day-definition'}>
                         <p className={'word-of-day-definition-ar'} dir={'rtl'} lang={'ar'}>
-                            {arabicWordOfTheDay.definition}
+                            {arabicWord.definition}
                         </p>
                         <p className={'word-of-day-definition-en'} lang={'en'}>
-                            {englishWordOfTheDay.definition}
+                            {englishWord.definition}
                         </p>
                     </div>
                 </>
