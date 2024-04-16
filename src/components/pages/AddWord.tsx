@@ -37,29 +37,11 @@ const AddWord = () => {
       setArabicWordError('The Arabic word must be in Arabic');
       return;
     }
-    // Basic Arabic definition validation
-    if (!arabicDefinition || '' === arabicDefinition) {
-      setArabicDefinitionError('Arabic definition is required');
-      return;
-    }
-    // Validate Arabic definition is in Arabic
-    if (!/^[\u060C-\u061B\u061E-\u06D6ء-ي\s٠-٩".,]+$/u.test(arabicDefinition)) {
-      setArabicDefinitionError('The Arabic definition must be in Arabic');
-      return;
-    }
 
     const wordDetails = {
       arabicWord,
       francoArabicWord,
       selectedCountries,
-    };
-
-    const definitionDetails = {
-      wordId: "0", // This should be the ID of the word that was just created
-      userId: "1", // This should be the ID of the current user
-      definition: arabicDefinition,
-      example,
-      isArabic: true, // This should be based on the current language
     };
 
     try {
@@ -76,18 +58,49 @@ const AddWord = () => {
       }
 
       const word = await wordResponse.json();
-      definitionDetails.wordId = word.id;
 
-      const definitionResponse = await fetch('http://localhost:3000/definitions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(definitionDetails),
-      });
+      if (arabicDefinition) {
+        const arabicDefinitionDetails = {
+          wordId: word.id,
+          userId: "1",
+          definition: arabicDefinition,
+          example,
+          isArabic: true,
+        };
 
-      if (!definitionResponse.ok) {
-        throw new Error('Error creating definition');
+        const arabicDefinitionResponse = await fetch('http://localhost:3000/definitions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(arabicDefinitionDetails),
+        });
+
+        if (!arabicDefinitionResponse.ok) {
+          throw new Error('Error creating Arabic definition');
+        }
+      }
+
+      if (englishDefinition) {
+        const englishDefinitionDetails = {
+          wordId: word.id,
+          userId: "1",
+          definition: englishDefinition,
+          example,
+          isArabic: false,
+        };
+
+        const englishDefinitionResponse = await fetch('http://localhost:3000/definitions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(englishDefinitionDetails),
+        });
+
+        if (!englishDefinitionResponse.ok) {
+          throw new Error('Error creating English definition');
+        }
       }
 
       // Clear the form
@@ -187,7 +200,7 @@ const AddWord = () => {
         >
           <option value="">Select the country / countries of origin here (if applicable)</option>
           {options.map((option, index) => (
-            <option key={index} value={option}>{option}</option>
+            <option key={index} value={option} selected={selectedCountries.includes(option)}>{option}</option>
           ))}
         </select>
         <label className="container-input-error"></label>
