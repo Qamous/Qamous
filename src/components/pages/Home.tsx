@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import ContentBox from '../ContentBox';
+import { useQuery } from 'react-query';
 
 interface HomeContent {
-    word: string, // Add this line
+    word: string,
     definition: string,
     likeCount: number,
     dislikeCount: number,
@@ -20,43 +21,63 @@ interface JsonContent {
     definition: string
 }
 
+const fetchHomeContent = () =>
+    fetch('http://localhost:3000/definitions/most-liked', {
+        mode: 'cors',
+        credentials: 'include',
+    })
+        .then(response => response.json());
+
 const Home: React.FC = () => {
     const { t } = useTranslation();
     const sampleHome = t('sample_home', {
-        returnObjects: true
+        returnObjects: true,
     }) as JsonContent[];
-    const [homeContent, setHomeContent] = useState<HomeContent[]>();
     const lang = i18n.language;
 
-    useEffect(() => {
-        fetch('http://localhost:3000/definitions/most-liked', {
-            mode: 'cors',
-            credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(data => setHomeContent(data))
-        .catch(error => console.error('Error:', error));
-    }, []);
-    console.log(homeContent);
+    const { data: homeContent, isLoading, isError } = useQuery<HomeContent[]>('homeContent', fetchHomeContent);
+
+    if (isLoading) {
+        return (
+            <div className={'home'}>
+                <ContentBox
+                    item={sampleHome[0]}
+                    index={0}
+                    lang={lang}
+                />
+                <div className={'home lds-ring'}>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        );
+    }
+
+    if (isError) {
+        return <div className={'home'}>Error occurred while fetching data</div>;
+    }
+
     return (
-        <div className={"home"}>
+        <div className={'home'}>
             <ContentBox
-              item={sampleHome[0]}
-              index={0}
-              lang={lang}
+                item={sampleHome[0]}
+                index={0}
+                lang={lang}
             />
             {homeContent && homeContent
-              .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
-              .map((item, index) => (
-                <ContentBox
-                  key={index + 1}
-                  item={item}
-                  index={index + 1}
-                  lang={lang}
-                />
-            ))}
+                .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
+                .map((item, index) => (
+                    <ContentBox
+                        key={index + 1}
+                        item={item}
+                        index={index + 1}
+                        lang={lang}
+                    />
+                ))}
         </div>
     );
-}
+};
 
 export default Home;
