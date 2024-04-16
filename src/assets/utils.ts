@@ -8,12 +8,29 @@
  * @params {string} val - The value of the cookie.
  * @returns {void} - No return value.
  */
-export function setCookie(name: string, val: string) {
+export function setCookie(name: string, value: string) {
   const date = new Date();
-  const value = val;
 
   // Set it expire in 30 days
   date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+
+  // Set it
+  document.cookie = name+"="+value+"; expires="+date.toUTCString()+"; path=/";
+}
+
+/**
+ * This function sets a cookie with a given name, value, and expiration time.
+ *
+ * @params {string} name - The name of the cookie.
+ * @params {string} value - The value of the cookie.
+ * @params {number} expirationTime - The expiration time of the cookie in days.
+ * @returns {void} - No return value.
+ */
+export function setCookieWithExpiration(name: string, value: string, expirationTime: number) {
+  const date = new Date();
+
+  // Set it to expire in expirationTime days
+  date.setTime(date.getTime() + (expirationTime * 24 * 60 * 60 * 1000));
 
   // Set it
   document.cookie = name+"="+value+"; expires="+date.toUTCString()+"; path=/";
