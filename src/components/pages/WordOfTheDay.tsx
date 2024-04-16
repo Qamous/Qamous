@@ -1,7 +1,6 @@
 import React from 'react';
 import './WordOfTheDay.scss';
 import { useQuery } from 'react-query';
-import ContentBox from '../ContentBox';
 
 interface WordOfTheDayContent {
     wordId: number,
@@ -18,12 +17,18 @@ interface WordOfTheDayContent {
 const fetchWordOfTheDayContent = () =>
     fetch('http://localhost:3000/definitions/most-liked', {
         mode: 'cors',
-        credentials: 'include'
+        credentials: 'include',
     })
-    .then(response => response.json());
+        .then(response => response.json());
 
 const WordOfTheDay: React.FC = () => {
-    const { data, isLoading, isError } = useQuery<WordOfTheDayContent[]>('wordOfTheDayContent', fetchWordOfTheDayContent);
+    const {
+        data,
+        isLoading,
+        isError,
+    } = useQuery<WordOfTheDayContent[]>('wordOfTheDayContent', fetchWordOfTheDayContent, {
+        staleTime: 86400000, // 24 hours in milliseconds
+    });
 
     if (isLoading) {
         return (
