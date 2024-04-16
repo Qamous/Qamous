@@ -9,7 +9,8 @@ The Qamous Frontend is the client-side component of the Qamous application, a pl
 - **React.js**: A JavaScript library for building user interfaces.
 - **TypeScript**: A statically typed superset of JavaScript that adds optional types.
 - **SCSS (SASS)**: A preprocessor scripting language that is interpreted or compiled into Cascading Style Sheets (CSS).
-- **React Query**: A library for managing, caching, and syncing server state in React applications.
+- **React Query**: A library for managing, caching, and syncing server state; used for http request.
+- **i18next**: An internationalization-framework for managing the English and Arabic translations.
 
 ## Setup Instructions
 1. Clone the repository: `git clone <repository-url>`
