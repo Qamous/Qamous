@@ -20,7 +20,7 @@ const AddWord = () => {
     setSelectedCountries(selectedOptions);
   }
 
-  function onAddWordClick() {
+  async function onAddWordClick() {
     // Clear previous errors
     setArabicWordError('');
     setFrancoArabicWordError('');
@@ -43,12 +43,63 @@ const AddWord = () => {
       return;
     }
     // Validate Arabic definition is in Arabic
-    if (!/^[\u060C-\u061B\u061E-\u06D6ء-ي\s٠-٩]+$/u.test(arabicDefinition)) {
+    if (!/^[\u060C-\u061B\u061E-\u06D6ء-ي\s٠-٩".,]+$/u.test(arabicDefinition)) {
       setArabicDefinitionError('The Arabic definition must be in Arabic');
       return;
     }
 
-    console.log('You selected the following countries:', selectedCountries);
+    const wordDetails = {
+      arabicWord,
+      francoArabicWord,
+      selectedCountries,
+    };
+
+    const definitionDetails = {
+      wordId: "0", // This should be the ID of the word that was just created
+      userId: "1", // This should be the ID of the current user
+      definition: arabicDefinition,
+      example,
+      isArabic: true, // This should be based on the current language
+    };
+
+    try {
+      const wordResponse = await fetch('http://localhost:3000/word', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(wordDetails),
+      });
+
+      if (!wordResponse.ok) {
+        throw new Error(`Error creating word: ${wordResponse.status} ${wordResponse.statusText}`);
+      }
+
+      const word = await wordResponse.json();
+      definitionDetails.wordId = word.id;
+
+      const definitionResponse = await fetch('http://localhost:3000/definitions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(definitionDetails),
+      });
+
+      if (!definitionResponse.ok) {
+        throw new Error('Error creating definition');
+      }
+
+      // Clear the form
+      setArabicWord('');
+      setFrancoArabicWord('');
+      setArabicDefinition('');
+      setEnglishDefinition('');
+      setExample('');
+      setSelectedCountries([]);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
