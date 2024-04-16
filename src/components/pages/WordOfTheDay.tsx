@@ -28,6 +28,7 @@ const WordOfTheDay: React.FC = () => {
         isError,
     } = useQuery<WordOfTheDayContent[]>('wordOfTheDayContent', fetchWordOfTheDayContent, {
         staleTime: 86400000, // 24 hours in milliseconds
+        cacheTime: 100000000,
     });
 
     if (isLoading) {
