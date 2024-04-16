@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './WordOfTheDay.scss';
 import { useQuery } from 'react-query';
+import Snackbar from '../Snackbar';
 
 interface WordOfTheDayContent {
     wordId: number,
@@ -30,6 +31,14 @@ const WordOfTheDay: React.FC = () => {
         staleTime: 86400000, // 24 hours in milliseconds
         cacheTime: 100000000,
     });
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+    useEffect(() => {
+        if (isError) {
+            setErrorSnackbarOpen(true);
+            setTimeout(() => setErrorSnackbarOpen(false), 3000);
+        }
+    }, [isError]);
+
 
     if (isLoading) {
         return (
@@ -45,7 +54,11 @@ const WordOfTheDay: React.FC = () => {
     }
 
     if (isError) {
-        return <div>Error occurred while fetching data</div>;
+        return (
+            <div className={'word-of-day'}>
+                <Snackbar open={errorSnackbarOpen} message={'An error occurred. Please try again later.'} />
+            </div>
+        );
     }
 
     //randomize data order
@@ -55,7 +68,6 @@ const WordOfTheDay: React.FC = () => {
 
     // Find the English word that has the same definition as the Arabic word
     const englishWord = data?.find((word: WordOfTheDayContent) => word.isArabic === 0 && word.wordId === arabicWord?.wordId);
-
     return (
         <div className={'word-of-day'}>
             {arabicWord && englishWord && (

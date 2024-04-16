@@ -236,10 +236,11 @@ $dark-grey: #292929;
     width: 64px;
     height: 64px;
     margin: 8px;
-    border: 8px solid currentColor;
+    // The use of currentColor here is pretty cool! border: 8px solid currentColor;
+    border: 8px solid $primary-color-90;
     border-radius: 50%;
     animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: currentColor transparent transparent transparent;
+    border-color: $primary-color-90 transparent transparent transparent;
 
     &:nth-child(1) {
       animation-delay: -0.45s;
