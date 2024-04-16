@@ -67,6 +67,11 @@ const Home: React.FC = () => {
     if (isError) {
         return (
             <div className={'home'}>
+                <ContentBox
+                    item={sampleHome[0]}
+                    index={0}
+                    lang={lang}
+                />
                 <Snackbar
                     open={errorSnackbarOpen}
                     message={'Data fetching error occurred. Please try again later.'}
