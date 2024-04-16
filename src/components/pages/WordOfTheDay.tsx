@@ -56,7 +56,7 @@ const WordOfTheDay: React.FC = () => {
     if (isError) {
         return (
             <div className={'word-of-day'}>
-                <Snackbar open={errorSnackbarOpen} message={'An error occurred. Please try again later.'} />
+                <Snackbar open={errorSnackbarOpen} message={'Data fetching error occurred. Please try again later.'} />
             </div>
         );
     }

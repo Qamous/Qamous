@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import ContentBox from '../ContentBox';
 import { useQuery } from 'react-query';
+import Snackbar from '../Snackbar';
 
 interface HomeContent {
     word: string,
@@ -36,6 +37,14 @@ const Home: React.FC = () => {
     const lang = i18n.language;
 
     const { data: homeContent, isLoading, isError } = useQuery<HomeContent[]>('homeContent', fetchHomeContent);
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+
+    useEffect(() => {
+        if (isError) {
+            setErrorSnackbarOpen(true);
+            setTimeout(() => setErrorSnackbarOpen(false), 3000);
+        }
+    }, [isError]);
 
     if (isLoading) {
         return (
@@ -56,7 +65,14 @@ const Home: React.FC = () => {
     }
 
     if (isError) {
-        return <div className={'home'}>Error occurred while fetching data</div>;
+        return (
+            <div className={'home'}>
+                <Snackbar
+                    open={errorSnackbarOpen}
+                    message={'Data fetching error occurred. Please try again later.'}
+                />
+            </div>
+        );
     }
 
     return (
