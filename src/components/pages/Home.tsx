@@ -45,7 +45,7 @@ const Home: React.FC = () => {
                     index={0}
                     lang={lang}
                 />
-                <div className={'home lds-ring'}>
+                <div className={'home loading-ring'}>
                     <div></div>
                     <div></div>
                     <div></div>
