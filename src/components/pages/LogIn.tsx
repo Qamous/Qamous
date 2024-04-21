@@ -19,9 +19,27 @@ const Login: React.FC = () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }));
+  }).then(response => {
+    if (!response.ok) {
+      return response.json().then(json => {
+        const error: any = new Error(json.message || 'Unknown error');
+        error.info = json;
+        throw error;
+      });
+    }
+    return response.json();
+  }), {
+    onSuccess: () => {
+      alert('Login successful');
+      navigate('/');
+    },
+    onError: (error: any) => {
+      alert(`Login failed: ${error.message}`);
+    },
+  });
   
-  const onLoginClick = () => {
+  const onLoginClick = (event: React.FormEvent) => {
+    event.preventDefault(); // Prevent the form from refreshing the page and redirecting to .../login?
     // Clear previous errors
     setUsernameError('');
     setPasswordError('');
@@ -44,14 +62,6 @@ const Login: React.FC = () => {
     
     // Call the mutation
     mutation.mutate({ username, password });
-    
-    // If login is successful, navigate to another page
-    if (mutation.isSuccess) {
-      alert('Login successful');
-      navigate('/');
-    } else {
-      alert('Login failed. Please try again.');
-    }
   };
   
   const onSignUpClick = () => {
@@ -60,7 +70,7 @@ const Login: React.FC = () => {
   };
   
   return (
-    <div className={'container'}>
+    <form onSubmit={onLoginClick} className={'container'}>
       <div className={'container-title'}>
         <div>Log in</div>
       </div>
@@ -90,7 +100,7 @@ const Login: React.FC = () => {
       <div className={'container-buttons'}>
         <button
           className={'container-buttons-button'}
-          type="button"
+          type="submit"
           onClick={onLoginClick}
           value={'Log in'}
         >
@@ -104,7 +114,7 @@ const Login: React.FC = () => {
           Sign up
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
