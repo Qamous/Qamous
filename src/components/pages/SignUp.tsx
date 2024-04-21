@@ -2,6 +2,16 @@ import React, { useState } from 'react';
 import './SignUp.scss';
 import { useNavigate } from 'react-router-dom';
 import { findLocationByIP, findLocationByLatLong } from '../../assets/utils';
+import { useMutation } from 'react-query';
+
+type User = {
+  username: string;
+  firstName: string;
+  lastName: string;
+  dob: string;
+  email: string;
+  password: string;
+};
 
 findLocationByIP();
 const SignUp: React.FC = () => {
@@ -19,7 +29,17 @@ const SignUp: React.FC = () => {
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
   const [dobError, setDobError] = useState('');
-
+  
+  const mutation = useMutation((newUser: User) =>
+    fetch('http://localhost:3000/users/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newUser),
+    })
+  );
+  
   const onSignUpClick = () => {
     // Clear previous errors
     setUsernameError('');
@@ -70,10 +90,25 @@ const SignUp: React.FC = () => {
     findLocationByIP();
     // If sign up is successful, navigate to another page
     // navigate('/dashboard');
+    
+    // If all validations pass, call the mutation
+    mutation.mutate({
+      username,
+      firstName,
+      lastName,
+      dob,
+      email,
+      password,
+    });
+    
+    // If sign up is successful, navigate to another page
+    if (mutation.isSuccess) {
+      navigate('/login');
+    }
   };
 
   const onLogInClick = () => {
-    // Redirect to the log in page
+    alert('You have successfully registered! Please use your credentials to log in.');
     navigate('/login');
   };
 

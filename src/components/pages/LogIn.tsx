@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LogIn.scss';
+import { useMutation } from 'react-query';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -8,12 +9,23 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-
+  
+  const mutation = useMutation((data: {
+    email: string;
+    password: string;
+  }) => fetch('http://localhost:3000/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }));
+  
   const onLoginClick = () => {
     // Clear previous errors
     setEmailError('');
     setPasswordError('');
-
+    
     // Basic Email validation
     if (!email || '' === email) {
       setEmailError('Email is required');
@@ -29,17 +41,24 @@ const Login: React.FC = () => {
       setPasswordError('Password is required');
       return;
     }
-
-    // TODO: Implement login logic here
+    
+    // Call the mutation
+    mutation.mutate({ email, password });
+    
     // If login is successful, navigate to another page
-    // navigate('/dashboard');
+    if (mutation.isSuccess) {
+      alert('Login successful');
+      navigate('/');
+    } else {
+      alert('Login failed. Please try again.');
+    }
   };
-
+  
   const onSignUpClick = () => {
     // Redirect to the sign up page
     navigate('/signup');
   };
-
+  
   return (
     <div className={'container'}>
       <div className={'container-title'}>
