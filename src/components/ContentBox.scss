@@ -8,8 +8,17 @@
   &-title {
     padding: 5px 25px 0 25px;
 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
     h1 {
       font-size: 34px;
+    }
+
+    img {
+      margin: 5px 0 0 0;
     }
   }
 
