@@ -54,6 +54,11 @@ const SignUp: React.FC = () => {
       setUsernameError('Username is required');
       return;
     }
+    // Advanced Username validation
+    if (username.includes('\'') || username.includes('"') || username.includes(';')) {
+      setUsernameError('Username cannot contain \', ", or ;');
+      return;
+    }
     // Basic First name validation
     if (!firstName || '' === firstName) {
       setFirstNameError('First name is required');

@@ -5,13 +5,13 @@ import { useMutation } from 'react-query';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   
   const mutation = useMutation((data: {
-    email: string;
+    username: string;
     password: string;
   }) => fetch('http://localhost:3000/auth/login', {
     method: 'POST',
@@ -23,17 +23,17 @@ const Login: React.FC = () => {
   
   const onLoginClick = () => {
     // Clear previous errors
-    setEmailError('');
+    setUsernameError('');
     setPasswordError('');
     
-    // Basic Email validation
-    if (!email || '' === email) {
-      setEmailError('Email is required');
+    // Basic Username validation
+    if (!username || '' === username) {
+      setUsernameError('Username is required');
       return;
     }
-    // Advanced Email validation
-    if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
-      setEmailError('Invalid email');
+    // SQL injection prevention
+    if (username.includes('\'') || username.includes('"') || username.includes(';')) {
+      setUsernameError('Invalid username');
       return;
     }
     // Basic password validation
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
     }
     
     // Call the mutation
-    mutation.mutate({ email, password });
+    mutation.mutate({ username, password });
     
     // If login is successful, navigate to another page
     if (mutation.isSuccess) {
@@ -67,13 +67,13 @@ const Login: React.FC = () => {
       <br />
       <div className={'container-input'}>
         <input
-          type={'email'}
-          value={email}
-          placeholder="Enter your email here"
-          onChange={(ev) => setEmail(ev.target.value)}
+          type={'username'}
+          value={username}
+          placeholder="Enter your username here"
+          onChange={(ev) => setUsername(ev.target.value)}
           className={'container-input-box'}
         />
-        <label className="container-input-error">{emailError}</label>
+        <label className="container-input-error">{usernameError}</label>
       </div>
       <br />
       <div className={'container-input'}>
