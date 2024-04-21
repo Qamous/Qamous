@@ -23,11 +23,6 @@ interface ButtonText {
   report: string
 }
 
-interface Country {
-  countryCode: string,
-  countryName: string
-}
-
 const fetchCountry = async (definitionId: number): Promise<Country> => {
   const response = await fetch(`http://localhost:3000/definitions/${definitionId}/country`);
   if (!response.ok) {
