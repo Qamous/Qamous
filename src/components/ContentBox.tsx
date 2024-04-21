@@ -3,7 +3,6 @@ import './ContentBox.scss';
 import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
-import { Country } from '../../backend/src/typeorm/entities/country';
 import ReactCountryFlag from 'react-country-flag';
 
 interface HomeContentProps {
@@ -22,6 +21,11 @@ interface ButtonText {
   like: string,
   dislike: string,
   report: string
+}
+
+interface Country {
+  countryCode: string,
+  countryName: string
 }
 
 const fetchCountry = async (definitionId: number): Promise<Country> => {
