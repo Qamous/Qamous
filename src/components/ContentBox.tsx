@@ -90,7 +90,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
           window.alert('Report canceled.');
         }
       } else {
-        window.alert('Invalid input. Please enter \'word\' or \'definition\'.');
+        window.alert('Invalid input. Report Cancelled.');
       }
     }
   };
