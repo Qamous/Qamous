@@ -71,7 +71,9 @@ export function convertToArabicNumerals(number: number, language: string): strin
     '6': '٦',
     '7': '٧',
     '8': '٨',
-    '9': '٩'
+    '9': '٩',
+    '.': ',',
+    ',': '،'
   };
 
   return number
