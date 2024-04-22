@@ -108,6 +108,24 @@ $alert-red: #a90000;
 $dark-grey: #292929;
 
 /**
+ * Global Styling Section
+ * ----------------------
+ * This section contains the global styles for the application.
+ * It includes the body, headings, paragraphs, links, and form elements.
+ */
+
+* {
+  h1, h2, h3, h4, h5, h6, p, a, span, div, input, textarea, button {
+    font-family: $font-stack;
+    color: $primary-color;
+  }
+}
+
+.not-found {
+  text-align: center;
+}
+
+/**
  * Form Styling Section
  * --------------------
  * This section contains the styles for the form elements used in the application.

@@ -149,15 +149,29 @@ const App: React.FC = () => {
                             </div>
                         </div>
                     } />
+                    <Route path="*" element={
+                        <div className="app">
+                            <div className="header">
+                                <Header />
+                            </div>
+                            <div className="not-found">
+                                <h1>
+                                    404 - Page not found
+                                </h1>
+                            </div>
+                            <div className="footer">
+                            </div>
+                        </div>
+                    } /> {/* Catch-all route */}
                 </Routes>
                 <div
-                    className={'report'}
-                    onClick={handleReportClick}
+                  className={'report'}
+                  onClick={handleReportClick}
                 >
                     <FontAwesomeIcon
-                        icon={faBug}
-                        size="1x"
-                        className={'home-report-icon'}
+                      icon={faBug}
+                      size="1x"
+                      className={'home-report-icon'}
                     />
                 </div>
             </BrowserRouter>
