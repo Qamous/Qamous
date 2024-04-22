@@ -213,6 +213,36 @@ $dark-grey: #292929;
       }
     }
   }
+
+  &-forgot {
+    color: $primary-color-75;
+    margin: 5px 0;
+    cursor: pointer;
+
+    font-size: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, font-size 1s ease-out;
+
+    &.show {
+      opacity: 1;
+      font-size: 16px;
+      height: 23px;
+    }
+  }
+
+  &-oauth {
+    margin: 20px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      font-size: 16px;
+      font-family: $font-stack;
+      color: $primary-color-75;
+    }
+  }
 }
 
 /**

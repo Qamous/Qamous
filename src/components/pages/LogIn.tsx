@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './LogIn.scss';
 import { useMutation } from 'react-query';
+import OAuthStrategies from '../OAuthStrategies';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -9,6 +10,13 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  
+  const forgotPasswordHuh = (): void => {
+    const forgotPasswordElement = document.querySelector('.container-forgot');
+    if (forgotPasswordElement && !forgotPasswordElement.classList.contains('show')) {
+      forgotPasswordElement.classList.add('show');
+    }
+  };
   
   const mutation = useMutation((data: {
     username: string;
@@ -35,6 +43,7 @@ const Login: React.FC = () => {
     },
     onError: (error: any) => {
       alert(`Login failed: ${error.message}`);
+      forgotPasswordHuh();
     },
   });
   
@@ -57,7 +66,8 @@ const Login: React.FC = () => {
     // Basic password validation
     if (!password || '' === password) {
       setPasswordError('Password is required');
-      return;
+      // make container-forgot visible
+      forgotPasswordHuh();
     }
     
     // Call the mutation
@@ -96,6 +106,7 @@ const Login: React.FC = () => {
         />
         <label className="container-input-error">{passwordError}</label>
       </div>
+      <NavLink to={'/forgot-password'} className={'container-forgot'}>Forgot password?</NavLink>
       <br />
       <div className={'container-buttons'}>
         <button
@@ -113,6 +124,12 @@ const Login: React.FC = () => {
         >
           Sign up
         </button>
+      </div>
+      <div className={'container-oauth'}>
+        <p>
+          — Or continue with —
+        </p>
+        <OAuthStrategies />
       </div>
     </form>
   );
