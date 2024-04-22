@@ -3,6 +3,7 @@ import './SignUp.scss';
 import { useNavigate } from 'react-router-dom';
 import { findLocationByIP, findLocationByLatLong } from '../../assets/utils';
 import { useMutation } from 'react-query';
+import OAuthStrategies from '../OAuthStrategies';
 
 type User = {
   username: string;
@@ -204,6 +205,12 @@ const SignUp: React.FC = () => {
         >
           Log in
         </button>
+      </div>
+      <div className={'container-oauth'}>
+        <p>
+          — Or continue with —
+        </p>
+        <OAuthStrategies />
       </div>
     </div>
   );
