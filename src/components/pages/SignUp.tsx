@@ -57,7 +57,7 @@ const SignUp: React.FC = () => {
       mutation.reset();
     },
     onSuccess: () => {
-      alert('Sign up successful');
+      alert('You have successfully registered! Please use your credentials to log in.');
       navigate('/login');
     },
     onError: (error: any) => {
@@ -139,7 +139,6 @@ const SignUp: React.FC = () => {
   };
   
   const onLogInClick = () => {
-    alert('You have successfully registered! Please use your credentials to log in.');
     navigate('/login');
   };
   
