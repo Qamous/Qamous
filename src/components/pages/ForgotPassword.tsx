@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ForgotPassword = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+  
   return (
     <div>
       <form className={'container'}>
         <div className={'container-left'}>
           <img
             src="./confused-dog.jpg"
+            onLoad={handleImageLoad}
+            style={{backgroundColor: imageLoaded ? 'transparent' : '#dcdcdc'}}
+            loading="lazy"
             alt={'Confused Dog'}
             className={'container-left-image'}
           />
