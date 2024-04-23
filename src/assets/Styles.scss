@@ -264,6 +264,30 @@ $dark-grey: #292929;
       color: $primary-color-75;
     }
   }
+
+  &-left {
+    margin: 10px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    img {
+      width: 80%;
+      max-width: 300px;
+      margin: 10px 0;
+      align-self: center;
+    }
+
+    h1, h2, h3, h4, h5, h6, p {
+      margin: 0 0 5px 0;
+      line-height: 1.4;
+      width: 95%;
+    }
+
+    &-input {
+      width: 100%;
+    }
+  }
 }
 
 /**
