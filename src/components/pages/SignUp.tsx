@@ -17,15 +17,17 @@ type User = {
 findLocationByIP();
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
-
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dob, setDob] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [passwordConfirmationError, setPasswordConfirmationError] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
@@ -38,8 +40,28 @@ const SignUp: React.FC = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newUser),
-    })
-  );
+    }).then(response => {
+      if (!response.ok) {
+        return response.json().then(json => {
+          const error: any = new Error(json.message || 'Unknown error');
+          error.info = json;
+          throw error;
+        });
+      }
+      return response.json();
+    }), {
+    onMutate: () => {
+      // Clear mutation error before the mutation function is called
+      mutation.reset();
+    },
+    onSuccess: () => {
+      alert('Sign up successful');
+      navigate('/login');
+    },
+    onError: (error: any) => {
+      alert(`Sign up failed: ${error.message}`);
+    },
+  });
   
   const onSignUpClick = () => {
     // Clear previous errors
@@ -49,7 +71,7 @@ const SignUp: React.FC = () => {
     setDobError('');
     setEmailError('');
     setPasswordError('');
-
+    
     // Basic Username validation
     if (!username || '' === username) {
       setUsernameError('Username is required');
@@ -90,14 +112,19 @@ const SignUp: React.FC = () => {
       setPasswordError('Password is required');
       return;
     }
-
+    // password confirmation validation
+    if (!passwordConfirmation || passwordConfirmation !== password) {
+      setPasswordConfirmationError('Password confirmation must match password');
+      return;
+    }
+    
     // TODO: Implement sign up logic here and send the data to the server (including the user's location)
     // findLocationByLatLong();
     findLocationByIP();
     // If sign up is successful, navigate to another page
     // navigate('/dashboard');
     
-    // If all validations pass, call the mutation
+    // Call the mutation
     mutation.mutate({
       username,
       firstName,
@@ -105,19 +132,15 @@ const SignUp: React.FC = () => {
       dob,
       email,
       password,
+      passwordConfirmation: password,
     });
-    
-    // If sign up is successful, navigate to another page
-    if (mutation.isSuccess) {
-      navigate('/login');
-    }
   };
-
+  
   const onLogInClick = () => {
     alert('You have successfully registered! Please use your credentials to log in.');
     navigate('/login');
   };
-
+  
   return (
     <div className={'container'}>
       <div className={'container-title'}>
@@ -185,6 +208,17 @@ const SignUp: React.FC = () => {
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
+          className={'container-input-box'}
+        />
+        <label className="container-input-error">{passwordError}</label>
+      </div>
+      <br />
+      <div className={'container-input'}>
+        <input
+          type={'password'}
+          value={passwordConfirmation}
+          placeholder="Confirm your password here"
+          onChange={(ev) => setPasswordConfirmation(ev.target.value)}
           className={'container-input-box'}
         />
         <label className="container-input-error">{passwordError}</label>

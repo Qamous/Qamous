@@ -30,7 +30,10 @@
 
   &-first {
     background-color: styles.$primary-color-90;
-    color: styles.$quaternary-color;
+
+    * {
+      color: styles.$quaternary-color;
+    }
 
     ::selection {
       background: styles.$quaternary-color;
