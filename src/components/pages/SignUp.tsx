@@ -9,13 +9,15 @@ type User = {
   username: string;
   firstName: string;
   lastName: string;
-  dob: string;
+  dateOfBirth: Date;
   email: string;
   password: string;
+  passwordConfirmation: string;
 };
 
 findLocationByIP();
 const SignUp: React.FC = () => {
+  // TODO: check if the user is already logged in and redirect to the user page
   const navigate = useNavigate();
   
   const [email, setEmail] = useState('');
@@ -129,7 +131,7 @@ const SignUp: React.FC = () => {
       username,
       firstName,
       lastName,
-      dob,
+      dateOfBirth: new Date(dob),
       email,
       password,
       passwordConfirmation: password,

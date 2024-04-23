@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 import OAuthStrategies from '../OAuthStrategies';
 
 const Login: React.FC = () => {
+  // TODO: check if the user is already logged in and redirect to the user page
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -27,13 +28,12 @@ const Login: React.FC = () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(response => {
+  }).then(async response => {
     if (!response.ok) {
-      return response.json().then(json => {
-        const error: any = new Error(json.message || 'Unknown error');
-        error.info = json;
-        throw error;
-      });
+      const json = await response.json();
+      const error: any = new Error(json.message || 'Unknown error');
+      error.info = json;
+      throw error;
     }
     return response.json();
   }), {
