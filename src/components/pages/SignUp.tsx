@@ -221,7 +221,7 @@ const SignUp: React.FC = () => {
           onChange={(ev) => setPasswordConfirmation(ev.target.value)}
           className={'container-input-box'}
         />
-        <label className="container-input-error">{passwordError}</label>
+        <label className="container-input-error">{passwordConfirmationError}</label>
       </div>
       <br />
       <div className={'container-buttons'}>
