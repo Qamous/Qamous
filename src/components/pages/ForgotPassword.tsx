@@ -33,7 +33,9 @@ const ForgotPassword = () => {
       navigate('/login');
     },
     onError: (error: any) => {
-      alert(`Failed to reset password: ${error.message}`);
+      alert('Password reset email sent');
+      navigate('/login');
+      //alert(`Failed to reset password: ${error.message}`);
     },
   });
   
