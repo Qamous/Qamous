@@ -21,11 +21,12 @@ const ForgotPassword = () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email }),
-  }).then(response => {
+  }).then(async response => {
     if (!response.ok) {
       throw new Error('Failed to reset password');
     }
-    return response.json();
+    const text = await response.text();
+    return text ? JSON.parse(text) : {};
   }), {
     onSuccess: () => {
       alert('Password reset email sent');
