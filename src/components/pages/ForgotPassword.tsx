@@ -1,20 +1,53 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from 'react-query';
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [email, setEmail] = useState('');
   
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
   
+  function onLoginClick() {
+    navigate('/login');
+  }
+  
+  const mutation = useMutation((email: string) => fetch('http://localhost:3000/users/reset-password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to reset password');
+    }
+    return response.json();
+  }), {
+    onSuccess: () => {
+      alert('Password reset email sent');
+    },
+    onError: (error: any) => {
+      alert(`Failed to reset password: ${error.message}`);
+    },
+  });
+  
+  const onSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    mutation.mutate(email);
+  };
+  
   return (
     <div>
-      <form className={'container'}>
+      <form onSubmit={onSubmit} className={'container'}>
         <div className={'container-left'}>
           <img
             src="./confused-dog.jpg"
             onLoad={handleImageLoad}
-            style={{backgroundColor: imageLoaded ? 'transparent' : '#dcdcdc'}}
+            style={{ backgroundColor: imageLoaded ? 'transparent' : '#dcdcdc' }}
             loading="lazy"
             alt={'Confused Dog'}
             className={'container-left-image'}
@@ -26,6 +59,8 @@ const ForgotPassword = () => {
           <div className={'container-left-input'}>
             <input
               type={'email'}
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
               placeholder="Enter your email address here"
               className={'container-input-box'}
             />
@@ -42,7 +77,8 @@ const ForgotPassword = () => {
           </button>
           <button
             className="container-buttons-button container-buttons-button-secondary"
-            value={'Create an Account'}
+            onClick={onLoginClick}
+            value={'Go Back'}
           >
             Go Back
           </button>
