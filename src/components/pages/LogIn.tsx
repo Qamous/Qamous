@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './LogIn.scss';
 import { useMutation } from 'react-query';
 import OAuthStrategies from '../OAuthStrategies';
 
 const Login: React.FC = () => {
-  // TODO: check if the user is already logged in and redirect to the user page
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -28,6 +27,7 @@ const Login: React.FC = () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
+    credentials: 'include',
   }).then(async response => {
     if (!response.ok) {
       const json = await response.json();
@@ -78,6 +78,26 @@ const Login: React.FC = () => {
     // Redirect to the sign up page
     navigate('/signup');
   };
+  
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      const response = await fetch('http://localhost:3000/auth/session', {
+        credentials: 'include', // Include credentials in the request
+      });
+      if (response.ok) {
+        const { session, sessionId } = await response.json();
+        console.log(session, sessionId); // Log the session data and sessionId
+        if (session && sessionId) {
+          const { user } = session.passport;
+          if (user) {
+            navigate('/profile', { state: { user } });
+          }
+        }
+      }
+    };
+    
+    checkUserStatus();
+  }, [navigate]);
   
   return (
     <form onSubmit={onLoginClick} className={'container'}>
