@@ -26,198 +26,215 @@ import UserProfile from './components/pages/UserProfile';
 let defaultLanguage = 'en';
 const navigatorLang = navigator.language.split('-')[0];
 if (navigator.language && navigatorLang === 'ar') {
-    defaultLanguage = navigatorLang;
+  defaultLanguage = navigatorLang;
 }
 
 const resources = {
-    en: {
-        translation: translationEN,
-        direction: 'ltr',
-    },
-    ar: {
-        translation: translationAR,
-        direction: 'rtl',
-    },
+  en: {
+    translation: translationEN,
+    direction: 'ltr',
+  },
+  ar: {
+    translation: translationAR,
+    direction: 'rtl',
+  },
 };
 
 i18n.use(initReactI18next).init({
-    resources,
-    lng: getCookie('language') || defaultLanguage,
-    fallbackLng: 'en',
-    interpolation: {
-        escapeValue: false,
-    },
+  resources,
+  lng: getCookie('language') || defaultLanguage,
+  fallbackLng: 'en',
+  interpolation: {
+    escapeValue: false,
+  },
 });
 
 const App: React.FC = () => {
-    const handleReportClick = () => {
-        const report = window.prompt('Please describe the issue you encountered:');
-        if (report) {
-            // TODO: send report to the server
-            alert('Thank you for your report!');
-        } else {
-            alert('Report canceled.');
+  const handleReportClick = () => {
+    const report = window.prompt('Please describe the issue you encountered:');
+    if (report) {
+      // TODO: send report to the server
+      alert('Thank you for your report!');
+    } else {
+      alert('Report canceled.');
+    }
+  };
+  
+  const checkUserStatus = async () => {
+    const response = await fetch('http://localhost:3000/auth/session', {
+      credentials: 'include', // Include credentials in the request
+    });
+    if (response.ok) {
+      const { session, sessionId } = await response.json();
+      if (session && sessionId) {
+        const { user } = session.passport;
+        if (user) {
+          //console.log("user", user);
+          return user;
         }
-    };
-
-    const queryClient = new QueryClient();
-    return (
-        <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <Home />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/advanced-search" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <PageUnderConstruction />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/word-of-the-day" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="ads">
-                                <Adverts />
-                            </div>
-                            <div className="content">
-                                <WordOfTheDay />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/advertise" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <PageUnderConstruction />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/add-definition" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <AddWord />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/login" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <LogIn />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/signup" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <SignUp />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/forgot-password" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <ForgotPassword />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/reset-password/:token" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <ResetPassword />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="/profile" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="content">
-                                <UserProfile />
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } />
-                    <Route path="*" element={
-                        <div className="app">
-                            <div className="header">
-                                <Header />
-                            </div>
-                            <div className="not-found">
-                                <h1>
-                                    404 - Page not found
-                                </h1>
-                            </div>
-                            <div className="footer">
-                            </div>
-                        </div>
-                    } /> {/* Catch-all route */}
-                </Routes>
-                <div
-                  className={'report'}
-                  onClick={handleReportClick}
-                >
-                    <FontAwesomeIcon
-                      icon={faBug}
-                      size="1x"
-                      className={'home-report-icon'}
-                    />
-                </div>
-            </BrowserRouter>
-            {/* TODO: Only in the dev branch */}
-            <ReactQueryDevtools />
-        </QueryClientProvider>
-    );
+      }
+    }
+    return null;
+  };
+  
+  const queryClient = new QueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <Home />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/advanced-search" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <PageUnderConstruction />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/word-of-the-day" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="ads">
+                <Adverts />
+              </div>
+              <div className="content">
+                <WordOfTheDay />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/advertise" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <PageUnderConstruction />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/add-definition" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <AddWord />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/login" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                {checkUserStatus() === null ? <LogIn /> : <UserProfile />}
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/signup" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                {checkUserStatus() === null ? <SignUp /> : <UserProfile />}
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/forgot-password" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <ForgotPassword />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/reset-password/:token" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <ResetPassword />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/profile" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <UserProfile />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="*" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="not-found">
+                <h1>
+                  404 - Page not found
+                </h1>
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } /> {/* Catch-all route */}
+        </Routes>
+        <div
+          className={'report'}
+          onClick={handleReportClick}
+        >
+          <FontAwesomeIcon
+            icon={faBug}
+            size="1x"
+            className={'home-report-icon'}
+          />
+        </div>
+      </BrowserRouter>
+      {/* TODO: Only in the dev branch */}
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  );
 };
 
 export default App;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './LogIn.scss';
 import { useMutation } from 'react-query';
@@ -78,26 +78,6 @@ const Login: React.FC = () => {
     // Redirect to the sign up page
     navigate('/signup');
   };
-  
-  useEffect(() => {
-    const checkUserStatus = async () => {
-      const response = await fetch('http://localhost:3000/auth/session', {
-        credentials: 'include', // Include credentials in the request
-      });
-      if (response.ok) {
-        const { session, sessionId } = await response.json();
-        console.log(session, sessionId); // Log the session data and sessionId
-        if (session && sessionId) {
-          const { user } = session.passport;
-          if (user) {
-            navigate('/profile', { state: { user } });
-          }
-        }
-      }
-    };
-    
-    checkUserStatus();
-  }, [navigate]);
   
   return (
     <form onSubmit={onLoginClick} className={'container'}>
