@@ -49,7 +49,7 @@ const ForgotPassword = () => {
       <form onSubmit={onSubmit} className={'container'}>
         <div className={'container-left'}>
           <img
-            src="./confused-dog.jpg"
+            src="/confused-dog.jpg"
             onLoad={handleImageLoad}
             style={{ backgroundColor: imageLoaded ? 'transparent' : '#dcdcdc' }}
             loading="lazy"
