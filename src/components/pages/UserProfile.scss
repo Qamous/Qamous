@@ -1,0 +1,41 @@
+@use '../../assets/Styles.scss' as styles;
+
+.profile {
+  min-width: 350px;
+  width: 50%;
+
+  // center within .content
+  margin-left: auto; margin-right: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    width: 75%;
+    max-width: 100%;
+    font-size: 55px;
+    font-weight: 100;
+    text-transform: uppercase;  // capitalize
+  }
+
+  &-primary {
+    margin: 15px 0 0 0;
+    color: styles.$primary-color;
+
+    &-secondary {
+      color: styles.$secondary-color;
+    }
+  }
+
+  &-secondary {
+    margin: 0;
+    color: styles.$secondary-color;
+
+  }
+}
+
+@media (max-width: 1200px) {
+  .content-box {
+    width: 100%;
+  }
+}
