@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import './App.scss';
 import Header from './components/Header';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import WordOfTheDay from './components/pages/WordOfTheDay';
 import Adverts from './components/Adverts';
 import Home from './components/pages/Home';
@@ -49,16 +49,14 @@ i18n.use(initReactI18next).init({
   },
 });
 
-const App: React.FC = () => {
-  const handleReportClick = () => {
-    const report = window.prompt('Please describe the issue you encountered:');
-    if (report) {
-      // TODO: send report to the server
-      alert('Thank you for your report!');
-    } else {
-      alert('Report canceled.');
-    }
-  };
+interface CheckUserStatusProps {
+  children: ReactNode;
+}
+
+const CheckUserStatus: React.FC<CheckUserStatusProps> = ({ children }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [userStatus, setUserStatus] = useState(null);
   
   const checkUserStatus = async () => {
     const response = await fetch('http://localhost:3000/auth/session', {
@@ -66,7 +64,7 @@ const App: React.FC = () => {
     });
     if (response.ok) {
       const { session, sessionId } = await response.json();
-      if (session && sessionId) {
+      if (session && sessionId && session.passport) {
         const { user } = session.passport;
         if (user) {
           //console.log("user", user);
@@ -77,7 +75,33 @@ const App: React.FC = () => {
     return null;
   };
   
+  useEffect(() => {
+    if (location.pathname === '/login' || location.pathname === '/signup') {
+      checkUserStatus().then(status => {
+        setUserStatus(status);
+        if (status) {
+          navigate('/profile');
+        }
+      });
+    }
+  }, [location, navigate]);
+  
+  return userStatus == null ? <>{children}</> : null;
+};
+
+const App: React.FC = () => {
   const queryClient = new QueryClient();
+  
+  const handleReportClick = () => {
+    const report = window.prompt('Please describe the issue you encountered:');
+    if (report) {
+      // TODO: send report to the server
+      alert('Thank you for your report!');
+    } else {
+      alert('Report canceled.');
+    }
+  };
+  
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -146,28 +170,32 @@ const App: React.FC = () => {
             </div>
           } />
           <Route path="/login" element={
-            <div className="app">
-              <div className="header">
-                <Header />
+            <CheckUserStatus>
+              <div className="app">
+                <div className="header">
+                  <Header />
+                </div>
+                <div className="content">
+                  <LogIn />
+                </div>
+                <div className="footer">
+                </div>
               </div>
-              <div className="content">
-                {checkUserStatus() === null ? <LogIn /> : <UserProfile />}
-              </div>
-              <div className="footer">
-              </div>
-            </div>
+            </CheckUserStatus>
           } />
           <Route path="/signup" element={
-            <div className="app">
-              <div className="header">
-                <Header />
+            <CheckUserStatus>
+              <div className="app">
+                <div className="header">
+                  <Header />
+                </div>
+                <div className="content">
+                  <SignUp />
+                </div>
+                <div className="footer">
+                </div>
               </div>
-              <div className="content">
-                {checkUserStatus() === null ? <SignUp /> : <UserProfile />}
-              </div>
-              <div className="footer">
-              </div>
-            </div>
+            </CheckUserStatus>
           } />
           <Route path="/forgot-password" element={
             <div className="app">

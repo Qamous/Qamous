@@ -1,25 +1,27 @@
 @use '../../assets/Styles.scss' as styles;
 
 .profile {
-  min-width: 350px;
-  width: 50%;
+  width: 55%;
 
   // center within .content
-  margin-left: auto; margin-right: auto;
+  margin: 25px auto 25px auto;
+  background-color: styles.$quaternary-color;
+  padding: 5px 15px 15px 15px;
 
   display: flex;
   flex-direction: column;
 
   h1 {
-    width: 75%;
-    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    width: 95%;
     font-size: 55px;
     font-weight: 100;
     text-transform: uppercase;  // capitalize
+    transition: 0.4s;
   }
 
   &-primary {
-    margin: 15px 0 0 0;
     color: styles.$primary-color;
 
     &-secondary {
@@ -28,14 +30,120 @@
   }
 
   &-secondary {
-    margin: 0;
     color: styles.$secondary-color;
 
+  }
+
+
+  &-card {
+    margin: 20px 0 0 0;
+    padding: 1px;
+    border-radius: 10px;
+    background: styles.$tertiary-color;
+    overflow: hidden;
+    width: 100%;
+
+    &-inner {
+      padding: 14px 15px;
+      background-color: styles.$tertiary-color;
+      border-radius: 10px;
+
+      label {
+        display: block;
+        color: styles.$primary-color;
+        margin: 0 0 15px 0;
+        background: linear-gradient(45deg, styles.$primary-color, styles.$secondary-color-90);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        user-select: none;
+      }
+
+      &-search {
+        display: flex;
+
+        &-icon {
+          min-width: 46px;
+          min-height: 46px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 10px;
+          margin-right: 12px;
+          box-shadow:
+                  -2px -2px 8px styles.$tertiary-color,
+                  2px 2px 8px styles.$primary-color-50;
+
+          &:hover {
+            box-shadow:
+                    -2px -2px 10px styles.$tertiary-color,
+                    2px 2px 6px styles.$primary-color-50;
+            cursor: pointer;
+          }
+        }
+
+        &-input {
+          width: 100%;
+          --top-shadow: inset 1px 1px 3px #c5d4e3, inset 2px 2px 6px #c5d4e3;
+          --bottom-shadow: inset -2px -2px 4px rgba(255,255,255, .7);
+
+          position: relative;
+          border-radius: 10px;
+          overflow: hidden;
+
+          &:before,
+          &:after {
+            left: 0;
+            top: 0;
+            display: block;
+            content: "";
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+          }
+
+          &:before {
+            box-shadow: var(--bottom-shadow);
+          }
+
+          &:after {
+            box-shadow: var(--top-shadow);
+          }
+
+          input {
+            background-color: #e3edf7;
+            padding: 16px 25px;
+            border: none;
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            color: #a9b8c9;
+            -webkit-appearance: none;
+            transition: all 240ms ease-out;
+            width: 100%;
+
+            &::placeholder {
+              color: #6d7f8f;
+            }
+
+            &:focus {
+              outline: none;
+              color: #6d7f8f;
+              background-color: lighten(#e3edf7, 3%);
+            }
+          }
+        }
+      }
+    }
   }
 }
 
 @media (max-width: 1200px) {
-  .content-box {
+  .profile {
     width: 100%;
+
+    h1 {
+      font-size: 40px;
+    }
   }
 }
