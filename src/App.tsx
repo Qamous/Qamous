@@ -135,9 +135,9 @@ const App: React.FC = () => {
               <div className="header">
                 <Header />
               </div>
-              <div className="ads">
-                <Adverts />
-              </div>
+              {/*<div className="ads">*/}
+              {/*  <Adverts />*/}
+              {/*</div>*/}
               <div className="content">
                 <WordOfTheDay />
               </div>
