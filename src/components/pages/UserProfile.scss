@@ -34,7 +34,96 @@
 
   }
 
+  // Main styles
+  .search {
+    width: 70%;
+    height: 40px;
+    margin: 15px auto;
+    background: transparent;
+    border-radius: 3px;
+    border: 1px solid styles.$primary-color;
 
+    button {
+      position: relative;
+      float: right;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      height: 40px;
+      width: 120px;
+      color: styles.$primary-color-90;
+      background: transparent;
+      border-left: 1px solid styles.$primary-color-90;
+      border-radius: 0 3px 3px 0;
+      &:hover {
+        background: styles.$primary-color-90;
+        color: styles.$tertiary-color;
+      }
+      &:active {
+        box-shadow: 0 0 12px 0 rgba(225, 225, 225, 1);
+      }
+      &:focus {
+        outline: 0;
+      }
+    }
+
+    input {
+      width: 370px;
+      padding: 10px 5px;
+      float: left;
+      color: styles.$primary-color-90;
+      border: 0;
+      background: transparent;
+      border-radius: 3px 0 0 3px;
+      &:focus {
+        outline: 0;
+        background:transparent;
+      }
+    }
+  }
+
+  &-post {
+    margin: 20px 0 0 0;
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: styles.$primary-color-50;
+      margin: 0 auto;
+    }
+
+    &-language {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+
+      p {
+        color: styles.$secondary-color;
+        margin: 0;
+      }
+
+      &-left {
+      }
+
+      &-right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      &-header {
+
+      }
+    }
+
+    &-date {
+      color: styles.$primary-color-50;
+      margin: 0;
+      padding: 0 0 20px 0;
+    }
+  }
+
+  /*
   &-card {
     margin: 20px 0 0 0;
     padding: 1px;
@@ -136,6 +225,7 @@
       }
     }
   }
+  */
 }
 
 @media (max-width: 1200px) {
