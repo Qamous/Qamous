@@ -129,6 +129,43 @@
       margin: 0;
       padding: 0 0 20px 0;
     }
+
+    &-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      &-button {
+        padding: 5px 10px;
+        margin: 0 0 20px 0;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: 1px solid styles.$primary-color-90;
+        color: styles.$primary-color-90;
+        background: transparent;
+        transition: 0.4s;
+        display: flex;
+
+        * {
+          margin: 0;
+          padding: 0;
+        }
+
+        &:hover {
+          background: styles.$primary-color-90;
+          color: styles.$tertiary-color;
+        }
+
+        &:active {
+          box-shadow: 0 0 12px 0 rgba(225, 225, 225, 1);
+        }
+
+        &:focus {
+          outline: 0;
+        }
+      }
+    }
   }
 
   /*

@@ -3,7 +3,7 @@ import './UserProfile.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faFlag, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -77,6 +77,21 @@ const UserProfile = () => {
           and participation.
         </p>
         <p className="profile-post-date">October 9th, 2024</p>
+        <div className="profile-post-buttons">
+          <button className="profile-post-buttons-button">Edit</button>
+          <div className="profile-post-buttons-button">
+            <FontAwesomeIcon icon={faThumbsUp} />
+            <p>2</p>
+          </div>
+          <div className="profile-post-buttons-button">
+            <FontAwesomeIcon icon={faThumbsDown} />
+            <p>1</p>
+          </div>
+          <div className="profile-post-buttons-button">
+            <FontAwesomeIcon icon={faFlag} />
+            <p>3</p>
+          </div>
+        </div>
         <hr />
       </div>
       
