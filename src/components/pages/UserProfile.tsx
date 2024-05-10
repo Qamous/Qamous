@@ -67,13 +67,14 @@ const UserProfile = () => {
           </div>
         
         </div>
-        <h2>Word</h2>
+        <h2>Yalla</h2>
         <p>
-          Lorum ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est
-          laborum
+          The Arabic word "يلا" (pronounced: yalla) is a popular term used across different Arabic dialects, including
+          Levantine, Egyptian, and Gulf dialects. Yalla is a versatile expression that conveys encouragement,
+          motivation, or a sense of urgency. Its primary translation is "let's go" or "come on" in English. Yalla is
+          commonly used to spur action, rally enthusiasm, or prompt others to join in an activity. Whether used casually
+          among friends or in more formal settings, yalla embodies a dynamic and spirited tone, encouraging engagement
+          and participation.
         </p>
         <p className="profile-post-date">October 9th, 2024</p>
         <hr />
