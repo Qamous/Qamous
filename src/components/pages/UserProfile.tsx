@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import './UserProfile.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -59,8 +61,9 @@ const UserProfile = () => {
             className="profile-post-language-right"
             onClick={handlePostLanguageClick}
           >
-            <p>View translations&nbsp;</p>
-            <ArrowForwardIcon />
+            <p>View translations</p>
+            &nbsp;
+            <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
           </div>
         
         </div>
@@ -83,8 +86,9 @@ const UserProfile = () => {
             className="profile-post-language-right"
             onClick={handlePostLanguageClick}
           >
-            <p>View translations&nbsp;</p>
-            <ArrowForwardIcon />
+            <p>View translations</p>
+            &nbsp;
+            <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
           </div>
         
         </div>

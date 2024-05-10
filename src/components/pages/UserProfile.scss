@@ -110,6 +110,13 @@
         flex-direction: row;
         align-items: center;
         cursor: pointer;
+
+        &-arrow {
+          padding: 0;
+          color: styles.$secondary-color;
+          margin: 3px 0 0 0;
+          font-size: 12px;
+        }
       }
 
       &-header {
