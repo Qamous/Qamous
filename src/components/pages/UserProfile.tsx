@@ -78,7 +78,7 @@ const UserProfile = () => {
       
       <div className="profile-post">
         <div className="profile-post-language">
-          <p className="profile-post-language-left">FRANCO-ARABIC</p>
+          <p className="profile-post-language-left">ARABIC</p>
           <div
             className="profile-post-language-right"
             onClick={handlePostLanguageClick}
@@ -88,13 +88,11 @@ const UserProfile = () => {
           </div>
         
         </div>
-        <h2>Word</h2>
+        <h2>معلش</h2>
         <p>
-          Lorum ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est
-          laborum
+          تعبير عامي مصري يُستخدم للتعبير عن الموافقة أو الاستسماح،
+          ويعني "ما فيش مشكلة" أو "ما عليك". يُستخدم كبديل عن التعبير عن الشكر
+          أو الاعتذار.
         </p>
         <p className="profile-post-date">October 9th, 2024</p>
         <hr />
