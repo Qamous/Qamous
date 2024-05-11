@@ -79,18 +79,18 @@ const UserProfile = () => {
         <p className="profile-post-date">October 9th, 2024</p>
         <div className="profile-post-buttons">
           <button className="profile-post-buttons-button">Edit</button>
-          <div className="profile-post-buttons-button">
+          <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsUp} />
             <p>2</p>
-          </div>
-          <div className="profile-post-buttons-button">
+          </button>
+          <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsDown} />
             <p>1</p>
-          </div>
-          <div className="profile-post-buttons-button">
+          </button>
+          <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faFlag} />
             <p>3</p>
-          </div>
+          </button>
         </div>
         <hr />
       </div>
@@ -117,18 +117,18 @@ const UserProfile = () => {
         <p className="profile-post-date">October 9th, 2024</p>
         <div className="profile-post-buttons">
           <button className="profile-post-buttons-button">Edit</button>
-          <div className="profile-post-buttons-button">
+          <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsUp} />
-            <p>100</p>
-          </div>
-          <div className="profile-post-buttons-button">
+            <p>2</p>
+          </button>
+          <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsDown} />
-            <p>14</p>
-          </div>
-          <div className="profile-post-buttons-button">
+            <p>1</p>
+          </button>
+          <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faFlag} />
-            <p>0</p>
-          </div>
+            <p>3</p>
+          </button>
         </div>
         <hr />
       </div>
