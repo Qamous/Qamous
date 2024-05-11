@@ -6,7 +6,7 @@
   // center within .content
   margin: 25px auto 25px auto;
   background-color: styles.$quaternary-color;
-  padding: 5px 15px 15px 15px;
+  //padding: 5px 15px 15px 15px;
   transition: 0.5s;
 
   display: flex;
@@ -84,13 +84,13 @@
   }
 
   &-post {
-    margin: 20px 0 0 0;
+    margin: 20px 10px 10px;
 
     hr {
       border: 0;
       height: 1px;
       background: styles.$primary-color-50;
-      margin: 0 auto;
+      margin: 0 auto 5px;
     }
 
     &-language {
