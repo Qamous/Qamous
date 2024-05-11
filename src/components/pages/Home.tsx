@@ -15,7 +15,8 @@ interface HomeContent {
   likeDislikeDifference: number,
   isArabic: number,
   francoArabicWord: string,
-  reportCount: number
+  reportCount: number,
+  countryCode: string
 }
 
 interface JsonContent {
