@@ -119,15 +119,15 @@ const UserProfile = () => {
           <button className="profile-post-buttons-button">Edit</button>
           <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsUp} />
-            <p>2</p>
+            <p>100</p>
           </button>
           <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsDown} />
-            <p>1</p>
+            <p>16</p>
           </button>
           <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faFlag} />
-            <p>3</p>
+            <p>11</p>
           </button>
         </div>
         <hr />
