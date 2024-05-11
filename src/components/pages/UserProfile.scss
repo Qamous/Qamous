@@ -142,19 +142,24 @@
         cursor: pointer;
         border-radius: 5px;
         border: 1px solid styles.$primary-color-90;
-        color: styles.$primary-color-90;
         background: transparent;
         transition: 0.4s;
         display: flex;
+        align-items: center;
+        gap: 5px;
 
         * {
           margin: 0;
           padding: 0;
+          color: styles.$primary-color-90;
         }
 
         &:hover {
           background: styles.$primary-color-90;
           color: styles.$tertiary-color;
+          * {
+            color: styles.$tertiary-color;
+          }
         }
 
         &:active {
