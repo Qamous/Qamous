@@ -115,6 +115,21 @@ const UserProfile = () => {
           أو الاعتذار.
         </p>
         <p className="profile-post-date">October 9th, 2024</p>
+        <div className="profile-post-buttons">
+          <button className="profile-post-buttons-button">Edit</button>
+          <div className="profile-post-buttons-button">
+            <FontAwesomeIcon icon={faThumbsUp} />
+            <p>100</p>
+          </div>
+          <div className="profile-post-buttons-button">
+            <FontAwesomeIcon icon={faThumbsDown} />
+            <p>14</p>
+          </div>
+          <div className="profile-post-buttons-button">
+            <FontAwesomeIcon icon={faFlag} />
+            <p>0</p>
+          </div>
+        </div>
         <hr />
       </div>
     </div>
