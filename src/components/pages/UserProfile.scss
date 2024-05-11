@@ -171,6 +171,25 @@
         &:focus {
           outline: 0;
         }
+
+        &:disabled {
+          background-color: styles.$primary-color-50;
+          cursor: not-allowed;
+          &:hover {
+            background-color: styles.$primary-color-50;
+            color: styles.$primary-color-90;
+            * {
+              color: styles.$primary-color-90;
+            }
+          }
+          &:focus {
+            background-color: styles.$primary-color-50;
+            color: styles.$primary-color-90;
+            * {
+              color: styles.$primary-color-90;
+            }
+          }
+        }
       }
     }
   }
