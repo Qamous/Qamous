@@ -100,6 +100,7 @@ const Home: React.FC = () => {
             index={index + 1}
             lang={lang}
             definitionId={item.definitionId}
+            countryCode={item.countryCode}
           />
         ))}
     </div>

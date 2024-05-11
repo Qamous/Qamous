@@ -13,6 +13,7 @@ interface HomeContentProps {
   index: number,
   lang: string,
   definitionId: number,
+  countryCode?: string,
   //likeCount: number,
   //dislikeCount: number,
 }
@@ -23,15 +24,7 @@ interface ButtonText {
   report: string
 }
 
-const fetchCountry = async (definitionId: number): Promise<Country> => {
-  const response = await fetch(`http://localhost:3000/definitions/${definitionId}/country`);
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
-
-const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionId }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionId, countryCode }) => {
   const { t } = useTranslation();
   const buttonText = t('content_box_buttons', {
     returnObjects: true,
@@ -43,10 +36,6 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
-  const { data: country, isError, isLoading } =
-    useQuery(['country', definitionId], () => fetchCountry(definitionId), {
-      enabled: definitionId !== 0,
-    });
   
   const handleLikeClick = () => {
     if (clickCount < 5) {
@@ -109,15 +98,15 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
       (lang === 'ar' ? ' content-box-ar' : ' content-box-latin')}>
       <div className={'content-box-title'}>
         <h1>{item.word}</h1>
-        {!isLoading && !isError && country &&
+        {countryCode &&
           <ReactCountryFlag
-            countryCode={country.countryCode}
+            countryCode={countryCode}
             svg
             style={{
               width: '2em',
               height: '2em',
             }}
-            title={country.countryName}
+            title={countryCode}
           />
         }
       </div>
