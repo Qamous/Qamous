@@ -42,8 +42,20 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
       setClickCount(prevCount => prevCount + 1);
       setLikeClicked(!likeClicked);
       if (dislikeClicked) setDislikeClicked(false);
+      
+      // Make a request to the like API
+      fetch(`http://localhost:3000/reactions/${definitionId}/like`, {
+        method: 'POST',
+        credentials: 'include',
+      }).then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+      }).catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
     }
-    if (clickCount >= 5) {
+    else if (clickCount >= 5) {
       setExcessiveClickSnackbarOpen(true);
       setTimeout(() => setExcessiveClickSnackbarOpen(false), 3000);
     }
@@ -54,8 +66,20 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
       setClickCount(prevCount => prevCount + 1);
       setDislikeClicked(!dislikeClicked);
       if (likeClicked) setLikeClicked(false);
+      
+      // Make a request to the dislike API
+      fetch(`http://localhost:3000/reactions/${definitionId}/dislike`, {
+        method: 'POST',
+        credentials: 'include',
+      }).then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+      }).catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
     }
-    if (clickCount >= 5) {
+    else if (clickCount >= 5) {
       setExcessiveClickSnackbarOpen(true);
       setTimeout(() => setExcessiveClickSnackbarOpen(false), 3000);
     }
