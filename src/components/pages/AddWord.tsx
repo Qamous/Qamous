@@ -51,6 +51,7 @@ const AddWord = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(wordDetails),
+                credentials: 'include',
             });
 
             if (!wordResponse.ok) {
@@ -74,6 +75,7 @@ const AddWord = () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(arabicDefinitionDetails),
+                    credentials: 'include',
                 });
 
                 if (!arabicDefinitionResponse.ok) {
@@ -96,6 +98,7 @@ const AddWord = () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(englishDefinitionDetails),
+                    credentials: 'include',
                 });
 
                 if (!englishDefinitionResponse.ok) {
