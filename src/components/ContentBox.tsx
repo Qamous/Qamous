@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ContentBox.scss';
 import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import ReactCountryFlag from 'react-country-flag';
 
 interface HomeContentProps {
@@ -37,23 +37,36 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
   const [clickCount, setClickCount] = useState(0);
   const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
   
+  const likeMutation = useMutation(() =>
+      fetch(`http://localhost:3000/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
+        method: 'POST',
+        credentials: 'include',
+      }), {
+      onError: (error) => {
+        console.error('There has been a problem with your fetch operation:', error);
+      },
+    }
+  );
+  
+  const dislikeMutation = useMutation(() =>
+      fetch(`http://localhost:3000/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
+        method: 'POST',
+        credentials: 'include',
+      }), {
+      onError: (error) => {
+        console.error('There has been a problem with your fetch operation:', error);
+      },
+    }
+  );
+  
   const handleLikeClick = () => {
     if (clickCount < 5) {
       setClickCount(prevCount => prevCount + 1);
       setLikeClicked(!likeClicked);
       if (dislikeClicked) setDislikeClicked(false);
       
-      // Make a request to the like API
-      fetch(`http://localhost:3000/reactions/${definitionId}/like`, {
-        method: 'POST',
-        credentials: 'include',
-      }).then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-      }).catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-      });
+      // Use the mutation
+      likeMutation.mutate();
     }
     else if (clickCount >= 5) {
       setExcessiveClickSnackbarOpen(true);
@@ -67,17 +80,8 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
       setDislikeClicked(!dislikeClicked);
       if (likeClicked) setLikeClicked(false);
       
-      // Make a request to the dislike API
-      fetch(`http://localhost:3000/reactions/${definitionId}/dislike`, {
-        method: 'POST',
-        credentials: 'include',
-      }).then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-      }).catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-      });
+      // Use the mutation
+      dislikeMutation.mutate();
     }
     else if (clickCount >= 5) {
       setExcessiveClickSnackbarOpen(true);
