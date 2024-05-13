@@ -67,6 +67,7 @@ const AddWord = () => {
                     definition: arabicDefinition,
                     example,
                     isArabic: true,
+                    countryName: selectedCountries[0],
                 };
 
                 const arabicDefinitionResponse = await fetch('http://localhost:3000/definitions', {
@@ -90,6 +91,7 @@ const AddWord = () => {
                     definition: englishDefinition,
                     example,
                     isArabic: false,
+                    countryName: selectedCountries[0],
                 };
 
                 const englishDefinitionResponse = await fetch('http://localhost:3000/definitions', {
