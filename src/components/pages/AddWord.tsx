@@ -63,7 +63,6 @@ const AddWord = () => {
             if (arabicDefinition) {
                 const arabicDefinitionDetails = {
                     wordId: word.id,
-                    userId: '1',
                     definition: arabicDefinition,
                     example,
                     isArabic: true,
@@ -87,7 +86,6 @@ const AddWord = () => {
             if (englishDefinition) {
                 const englishDefinitionDetails = {
                     wordId: word.id,
-                    userId: '1',
                     definition: englishDefinition,
                     example,
                     isArabic: false,
