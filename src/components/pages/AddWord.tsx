@@ -204,7 +204,7 @@ const AddWord = () => {
             <div className={'container-input'}>
                 <select
                     className={'container-input-box'}
-                    multiple={true}
+                    multiple={false}
                     required={false}
                     onChange={onCountrySelect}
                 >
