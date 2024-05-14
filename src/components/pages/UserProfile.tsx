@@ -93,7 +93,7 @@ const UserProfile = () => {
           and participation.
         </p>
         <p className="profile-post-date">October 9th, 2024</p>
-        <div className="profile-post-buttons">
+        <div className="buttons">
           <button className="profile-post-buttons-button">Edit</button>
           <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsUp} />
@@ -131,7 +131,7 @@ const UserProfile = () => {
           أو الاعتذار.
         </p>
         <p className="profile-post-date">October 9th, 2024</p>
-        <div className="profile-post-buttons">
+        <div className="buttons">
           <button className="profile-post-buttons-button">Edit</button>
           <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsUp} />
