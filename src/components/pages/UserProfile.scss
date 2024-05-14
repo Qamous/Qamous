@@ -12,6 +12,11 @@
   display: flex;
   flex-direction: column;
 
+  &-logout {
+    justify-content: center;
+    margin: 10px 5px 0;
+  }
+
   h1 {
     margin: 0;
     padding: 0;

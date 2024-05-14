@@ -1,15 +1,25 @@
 import React, { useEffect } from 'react';
 import './UserProfile.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
+//import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faFlag, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRight,
+  faArrowRightFromBracket,
+  faFlag,
+  faThumbsDown,
+  faThumbsUp,
+} from '@fortawesome/free-solid-svg-icons';
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
   const handlePostLanguageClick = () => {
+  };
+  
+  const handleLogout = () => {
+    // Add your logout logic here
   };
   
   // Redirect to /profile if the user is on /signup or /login
@@ -48,6 +58,12 @@ const UserProfile = () => {
       {/*  <h2>Hello,</h2>*/}
       {/*  <h1>User!</h1>*/}
       {/*</div>*/}
+      <div className="buttons profile-logout">
+        <button onClick={handleLogout} className="buttons-button">
+          <FontAwesomeIcon icon={faArrowRightFromBracket} />
+          <p>Logout</p>
+        </button>
+      </div>
       
       <form className="search" action="">
         <button type="submit">Search</button>

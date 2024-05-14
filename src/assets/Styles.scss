@@ -356,3 +356,72 @@ $dark-grey: #292929;
     transform: rotate(360deg);
   }
 }
+
+/**
+ * Button Styling Section
+ * ----------------------
+ * This section contains the styles for the buttons used in the application.
+ * It includes a disabled state.
+ */
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  user-select: none;
+
+  &-button {
+    padding: 5px 10px;
+    margin: 0;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid $primary-color-90;
+    background: transparent;
+    transition: 0.4s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    * {
+      margin: 0;
+      padding: 0;
+      color: $primary-color-90;
+    }
+
+    &:hover {
+      background: $primary-color-90;
+      color: $tertiary-color;
+      * {
+        color: $tertiary-color;
+      }
+    }
+
+    &:active {
+      box-shadow: 0 0 12px 0 rgba(225, 225, 225, 1);
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:disabled {
+      background-color: $primary-color-50;
+      cursor: not-allowed;
+      &:hover {
+        background-color: $primary-color-50;
+        color: $primary-color-90;
+        * {
+          color: $primary-color-90;
+        }
+      }
+      &:focus {
+        background-color: $primary-color-50;
+        color: $primary-color-90;
+        * {
+          color: $primary-color-90;
+        }
+      }
+    }
+  }
+}
