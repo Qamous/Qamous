@@ -190,6 +190,11 @@ $dark-grey: #292929;
         background-color: $tertiary-color;
         color: $primary-color;
       }
+
+      &:hover {
+        background-color: $primary-color-90;
+        color: $tertiary-color;
+      }
     }
 
     textarea {
