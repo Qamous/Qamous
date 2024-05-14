@@ -10,6 +10,7 @@ import {
   faThumbsDown,
   faThumbsUp,
 } from '@fortawesome/free-solid-svg-icons';
+import { useMutation } from 'react-query';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -18,8 +19,24 @@ const UserProfile = () => {
   const handlePostLanguageClick = () => {
   };
   
+  const logoutMutation = useMutation(() =>
+      fetch('http://localhost:3000/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      }),
+    {
+      onSuccess: () => {
+        // Redirect to login page after successful logout
+        navigate('/login');
+      },
+    }
+  );
+  
   const handleLogout = () => {
-    // Add your logout logic here
+    logoutMutation.mutate();
   };
   
   // Redirect to /profile if the user is on /signup or /login
