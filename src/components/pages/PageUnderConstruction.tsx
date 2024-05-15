@@ -20,20 +20,20 @@ interface TimeLeft {
 const PageUnderConstruction: React.FC = () => {
     const { i18n, t } = useTranslation();
     // Get the current date
-    const currentDate = new Date();
+    const currentDate: Date = new Date();
 
-    // Set the completion date to June 1st, 2024
-    let completionDate = new Date(2024, 5, 1).getTime();
+    // Set the completion date (v1.1) to July 1st, 2024
+    let completionDate: Date = new Date(2024, 6, 1);
 
     // If the current date is past June 1st, 2024, set the completion date to the first day of the upcoming month
-    if (currentDate.getTime() > completionDate) {
-        completionDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1).getTime();
+    if (currentDate.getTime() > completionDate.getTime()) {
+        completionDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
     }
 
     // Function to calculate the time left until the completion date
     const calculateTimeLeft = (): TimeLeft => {
         // Calculate the difference between the completion date and the current time
-        const difference = completionDate - new Date().getTime();
+        const difference = completionDate.getTime() - new Date().getTime();
         // Initialize the time left object
         let timeLeft: TimeLeft = {
             days: 0,
