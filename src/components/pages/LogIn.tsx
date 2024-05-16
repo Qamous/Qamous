@@ -125,12 +125,12 @@ const Login: React.FC = () => {
           Sign up
         </button>
       </div>
-      <div className={'container-oauth'}>
-        <p>
-          — Or continue with —
-        </p>
-        <OAuthStrategies />
-      </div>
+      {/*<div className={'container-oauth'}>*/}
+      {/*  <p>*/}
+      {/*    — Or continue with —*/}
+      {/*  </p>*/}
+      {/*  <OAuthStrategies />*/}
+      {/*</div>*/}
     </form>
   );
 };
