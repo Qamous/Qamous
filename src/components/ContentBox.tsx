@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ContentBox.scss';
 import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import ReactCountryFlag from 'react-country-flag';
 
 interface HomeContentProps {
@@ -89,6 +89,31 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
     }
   };
   
+  const reportWord = async ({ reportText }: { reportText: string }) => {
+    const response = await fetch('http://localhost:3000/word-reports', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        reportText,
+      }),
+      credentials: 'include',
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to post word report');
+    }
+  
+    return await response.json();
+  };
+  
+  const reportMutation = useMutation(reportWord, {
+    onError: (error) => {
+      console.error('There has been a problem with your fetch operation:', error);
+    },
+  });
+  
   const handleReportClick = () => {
     if (reportClicked) {
       setReportSnackbarOpen(true);
@@ -100,8 +125,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
       } else if (reportType === 'word' || reportType === 'definition') {
         const reason = window.prompt(`Please enter the reason for reporting this ${reportType}:`);
         if (reason || reason === '') {
-          // TODO: use the 'reason' and 'reportType' variables here to send them to the server
-          console.log(`Report Type: ${reportType}, Reason: ${reason}`);
+          reportMutation.mutate({ reportText: reason });
           setReportClicked(true);
         } else if (reason === null) {
           window.alert('Report canceled.');
