@@ -93,13 +93,10 @@ const App: React.FC = () => {
   const queryClient = new QueryClient();
   
   const handleReportClick = () => {
-    const report = window.prompt('Please describe the issue you encountered:');
-    if (report) {
-      // TODO: send report to the server
-      alert('Thank you for your report!');
-    } else {
-      alert('Report canceled.');
-    }
+    // If a 'Bug Report Form' window is already open, the form submission will open in that existing window instead of
+    // creating a new one.
+    // If no window is open, a new window will be created.
+    window.open('https://forms.gle/E91Ydr4aw68W5RWr7', 'Bug Report Form');
   };
   
   return (
