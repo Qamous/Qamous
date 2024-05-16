@@ -8,7 +8,7 @@ import './Header.scss';
 import { US, EG } from 'country-flag-icons/react/3x2'
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import styles from '../assets/Styles.scss';
-import { setCookie, getCookie } from '../assets/utils';
+import { setFunctionalCookie, getFunctionalCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
 
 const Header: React.FC = () => {
@@ -16,11 +16,11 @@ const Header: React.FC = () => {
     const root = document.documentElement;
 
     const [currentLang, setCurrentLang] =
-        useState(getCookie('language') || "en");
+        useState(getFunctionalCookie('language') || "en");
     const [languageButtonStyle, setLanguageButtonStyle] =
         useState({ opacity: 1 });
     const [isDarkMode, setDarkMode] =
-      React.useState<boolean>(getCookie('darkMode') === 'true' ?? true);
+      React.useState<boolean>(getFunctionalCookie('darkMode') === 'true' ?? true);
     const [change, setChange] = useState(false);
 
     const handleCountrySwitch = () => {
@@ -28,7 +28,7 @@ const Header: React.FC = () => {
         setCurrentLang((prevLang) => {
             const lang = prevLang === 'en' ? 'ar' : 'en';
             // Save the language as a cookie
-            setCookie('language', lang);
+            setFunctionalCookie('language', lang);
             // Actually change the language
             i18n.changeLanguage(lang);
             // document.documentElement.style.direction = i18n.getResourceBundle(
@@ -65,7 +65,7 @@ const Header: React.FC = () => {
     };
     const toggleDarkMode = (checked: boolean) => {
         setDarkMode(checked);
-        setCookie('darkMode', checked.toString());
+        setFunctionalCookie('darkMode', checked.toString());
         if (change)
             setTimeout(handleBurgerClick, 150);
     };

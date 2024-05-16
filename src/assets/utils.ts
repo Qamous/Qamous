@@ -1,21 +1,30 @@
 // General utils for managing cookies in Typescript.
 
 /**
- * This function sets a cookie with a given name and value. It also sets the expiration date to 30 days
- * from the current date.
+ * This function sets a cookie with a given name and value. This cookie is considered functional and is, then,
+ * not subject to the user's consent.
+ * So, it is set with a 400-day expiration date. This is [the current maximum expiration date for cookies](
+ * https://developer.chrome.com/blog/cookie-max-age-expires/)
+ *
+ * @param {string} name - The name of the cookie.
+ * @param {string} value - The value of the cookie.
+ */
+export function setFunctionalCookie(name: string, value: string) {
+  const date: Date = new Date();
+  date.setTime(date.getTime() + (400 * 24 * 60 * 60 * 1000));
+  document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+}
+
+/**
+ * This function sets a cookie with a given name, value, and expiration date.
  *
  * @params {string} name - The name of the cookie.
  * @params {string} val - The value of the cookie.
+ * @params {Date} date - The expiration date of the cookie.
  * @returns {void} - No return value.
  */
-export function setCookie(name: string, value: string) {
-  const date = new Date();
-
-  // Set it expire in 30 days
-  date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
-
-  // Set it
-  document.cookie = name+"="+value+"; expires="+date.toUTCString()+"; path=/";
+export function setCookie(name: string, value: string, date: Date) {
+  document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
 }
 
 /**
@@ -33,7 +42,33 @@ export function setCookieWithExpiration(name: string, value: string, expirationT
   date.setTime(date.getTime() + (expirationTime * 24 * 60 * 60 * 1000));
 
   // Set it
-  document.cookie = name+"="+value+"; expires="+date.toUTCString()+"; path=/";
+  document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+}
+
+/**
+ * This function returns the value of a cookie with a given name. If the cookie exists, it updates the cookie's
+ * expiration date to 400 days from the current date (the maximum expiration date for cookies).
+ *
+ * @param {string} name - The name of the cookie.
+ * @returns {string} - The value of the cookie.
+ * @returns {null} - If the cookie does not exist.
+ */
+export function getFunctionalCookie(name: string): string | null {
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i];
+    const [cookieName, cookieValue] = cookie.split('=');
+    if(cookieName.trim() === name) {
+      // update the cookie expiration date
+      const date = new Date();
+      date.setTime(date.getTime() + (400 * 24 * 60 * 60 * 1000));
+      document.cookie = name + "=" + cookieValue + "; expires=" + date.toUTCString() + "; path=/";
+      // return the cookie value
+      return cookieValue;
+    }
+  }
+  // return null if the cookie does not exist
+  return null;
 }
 
 /**
@@ -49,6 +84,7 @@ export function getCookie(name: string): string | null {
     const cookie = cookies[i];
     const [cookieName, cookieValue] = cookie.split('=');
     if(cookieName.trim() === name) {
+      // return the cookie value
       return cookieValue;
     }
   }

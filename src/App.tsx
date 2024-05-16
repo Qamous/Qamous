@@ -9,7 +9,7 @@ import translationEN from './assets/en/translation.json';
 import translationAR from './assets/ar/translation.json';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { getCookie } from './assets/utils';
+import { getFunctionalCookie } from './assets/utils';
 import PageUnderConstruction from './components/pages/PageUnderConstruction';
 import LogIn from './components/pages/LogIn';
 import SignUp from './components/pages/SignUp';
@@ -42,7 +42,7 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: getCookie('language') || defaultLanguage,
+  lng: getFunctionalCookie('language') || defaultLanguage,
   fallbackLng: 'en',
   interpolation: {
     escapeValue: false,
