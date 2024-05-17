@@ -126,6 +126,8 @@ const UserProfile = () => {
             value={editedText}
             className="profile-post-inputtext"
             onChange={(e) => setEditedText(e.target.value)}
+            autoSave="true"
+            rows={4}
           />
         ) : (
           <p>
