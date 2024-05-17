@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './CustomDialog.scss';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,7 +26,21 @@ const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonTe
     onSubmit(inputValue);
     setInputValue('');
   };
-
+  
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    
+    // Remove event listener on cleanup
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
   return (
     <div className="custom-dialog">
       <div className="custom-dialog-content">
