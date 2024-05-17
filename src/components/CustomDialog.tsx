@@ -34,7 +34,12 @@ const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonTe
         <p>{text}</p>
         {showTextInput && (
           <div>
-            <input type="text" value={inputValue} onChange={handleInputChange} />
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              className="custom-dialog-content-input"
+            />
             <button onClick={handleSubmit}>Submit</button>
             <button onClick={onCancel}>Cancel</button>
           </div>
