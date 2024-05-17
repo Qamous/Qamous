@@ -21,9 +21,13 @@
     text-align: center;
 
     &-input {
-      background-color: styles.$quaternary-color;
-      border: 1px solid #ced4da;
-      border-radius: 5px;
+      textarea {
+        background-color: styles.$quaternary-color;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        resize: none;
+        width: 100%;
+      }
     }
 
     button {

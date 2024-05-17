@@ -18,7 +18,7 @@ interface CustomDialogProps {
 const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonText2, onButton1Click, onButton2Click, onClose, showTextInput, onSubmit, onCancel }) => {
   const [inputValue, setInputValue] = useState('');
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
 
@@ -34,19 +34,19 @@ const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonTe
         <p>{text}</p>
         {showTextInput && (
           <div>
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              className="custom-dialog-content-input"
-            />
+            <div className="custom-dialog-content-input">
+              <textarea
+                value={inputValue}
+                onChange={handleInputChange}
+              />
+            </div>
             <button onClick={handleSubmit}>Submit</button>
             <button onClick={onCancel}>Cancel</button>
           </div>
         )}
         {!showTextInput && (
           <div>
-            <button onClick={onButton1Click}>{buttonText1}</button>
+          <button onClick={onButton1Click}>{buttonText1}</button>
             <button onClick={onButton2Click}>{buttonText2}</button>
           </div>
         )}
