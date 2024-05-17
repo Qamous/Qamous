@@ -161,7 +161,10 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
             setReportType('definition');
             handleReport('definition');
           }}
-          onClose={() => setShowDialog(false)}
+          onClose={() => {
+            setShowDialog(false);
+            setReportType(null);
+          }}
           showTextInput={reportType !== null}
           onSubmit={(input) => {
             // Handle the input submission here
