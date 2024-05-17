@@ -82,10 +82,11 @@ const UserProfile = () => {
         </button>
       </div>
       
-      <form className="search" action="">
-        <button type="submit">Search</button>
-        <input type="search" placeholder="Search your posts..." required />
-      </form>
+      {/*The Search bar needs a lil fixing*/}
+      {/*<form className="search" action="">*/}
+      {/*  <button type="submit">Search</button>*/}
+      {/*  <input type="search" placeholder="Search your posts..." required />*/}
+      {/*</form>*/}
       
       <div className="profile-post">
         <div className="profile-post-language">
