@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './UserProfile.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 //import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
@@ -15,6 +15,13 @@ import { useMutation } from 'react-query';
 const UserProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState('The Arabic word "يلا" ' +
+    '(pronounced: yalla) is a popular term used across different Arabic dialects, including Levantine, Egyptian, and ' +
+    'Gulf dialects. Yalla is a versatile expression that conveys encouragement, motivation, or a sense of urgency. ' +
+    'Its primary translation is "let\'s go" or "come on" in English. Yalla is commonly used to spur action, rally ' +
+    'enthusiasm, or prompt others to join in an activity. Whether used casually among friends or in more formal ' +
+    'settings, yalla embodies a dynamic and spirited tone, encouraging engagement and participation.');
   
   const handlePostLanguageClick = () => {
   };
@@ -37,6 +44,17 @@ const UserProfile = () => {
   
   const handleLogout = () => {
     logoutMutation.mutate();
+  };
+  
+  const handleEditClick = () => {
+    if (!isEditing) {
+      setEditedText(editedText);
+      setIsEditing(true);
+    } else {
+      // Handle the submission of the edited text here
+      console.log(editedText);
+      setIsEditing(false);
+    }
   };
   
   // Redirect to /profile if the user is on /signup or /login
@@ -102,17 +120,23 @@ const UserProfile = () => {
         
         </div>
         <h2>Yalla</h2>
-        <p>
-          The Arabic word "يلا" (pronounced: yalla) is a popular term used across different Arabic dialects, including
-          Levantine, Egyptian, and Gulf dialects. Yalla is a versatile expression that conveys encouragement,
-          motivation, or a sense of urgency. Its primary translation is "let's go" or "come on" in English. Yalla is
-          commonly used to spur action, rally enthusiasm, or prompt others to join in an activity. Whether used casually
-          among friends or in more formal settings, yalla embodies a dynamic and spirited tone, encouraging engagement
-          and participation.
-        </p>
+        {isEditing ? (
+          <textarea
+            typeof="text"
+            value={editedText}
+            className="profile-post-inputtext"
+            onChange={(e) => setEditedText(e.target.value)}
+          />
+        ) : (
+          <p>
+            {editedText}
+          </p>
+        )}
         <p className="profile-post-date">October 9th, 2024</p>
         <div className="buttons">
-          <button className="profile-post-buttons-button">Edit</button>
+          <button onClick={handleEditClick} className="profile-post-buttons-button">
+            {isEditing ? 'Submit' : 'Edit'}
+          </button>
           <button className="profile-post-buttons-button" disabled>
             <FontAwesomeIcon icon={faThumbsUp} />
             <p>2</p>
