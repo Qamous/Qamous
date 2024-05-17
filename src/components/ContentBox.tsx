@@ -4,6 +4,7 @@ import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
 import ReactCountryFlag from 'react-country-flag';
+import CustomDialog from './CustomDialog';
 
 interface HomeContentProps {
   item: {
@@ -36,6 +37,8 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [reportType, setReportType] = useState<string | null>(null);
   
   const likeMutation = useMutation(() =>
       fetch(`http://localhost:3000/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
@@ -119,20 +122,17 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
       setReportSnackbarOpen(true);
       setTimeout(() => setReportSnackbarOpen(false), 3000);
     } else {
-      const reportType = window.prompt('Are you reporting the word or the definition? Please enter \'word\' or \'definition\':');
-      if (reportType === null) {
-        window.alert('Report canceled.');
-      } else if (reportType === 'word' || reportType === 'definition') {
-        const reason = window.prompt(`Please enter the reason for reporting this ${reportType}:`);
-        if (reason || reason === '') {
-          reportMutation.mutate({ reportText: reason });
-          setReportClicked(true);
-        } else if (reason === null) {
-          window.alert('Report canceled.');
-        }
-      } else {
-        window.alert('Invalid input. Report Cancelled.');
-      }
+      setShowDialog(true);
+    }
+  };
+  
+  const handleReport = (reportType: string) => {
+    if (reportType === 'word' || reportType === 'definition') {
+      // Remove the window.prompt and directly set the reportType and showDialog state
+      setReportType(reportType);
+      setShowDialog(true);
+    } else {
+      window.alert('Invalid input. Report Cancelled.');
     }
   };
   
@@ -148,6 +148,34 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
     <div className={'content-box' +
       (index === 0 ? ' content-box-first' : '') +
       (lang === 'ar' ? ' content-box-ar' : ' content-box-latin')}>
+      {showDialog && (
+        <CustomDialog
+          text={reportType ? `Why are you reporting this ${reportType}?` : "Are you reporting the word or the definition?"}
+          buttonText1="Word"
+          buttonText2="Definition"
+          onButton1Click={() => {
+            setReportType('word');
+            handleReport('word');
+          }}
+          onButton2Click={() => {
+            setReportType('definition');
+            handleReport('definition');
+          }}
+          onClose={() => setShowDialog(false)}
+          showTextInput={reportType !== null}
+          onSubmit={(input) => {
+            // Handle the input submission here
+            console.log(`Reported ${reportType} with reason: ${input}`);
+            setReportClicked(true);
+            setShowDialog(false);
+          }}
+          onCancel={() => {
+            // Handle the cancel action here
+            setShowDialog(false);
+            setReportType(null);
+          }}
+        />
+      )}
       <div className={'content-box-title'}>
         <h1>{item.word}</h1>
         {countryCode &&
