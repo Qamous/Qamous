@@ -40,6 +40,11 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
   const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [reportType, setReportType] = useState<string | null>(null);
+  const [showInvalidInputDialog, setShowInvalidInputDialog] = useState(false);
+  
+  const handleInvalidInputOkClick = () => {
+    setShowInvalidInputDialog(false);
+  };
   
   const likeMutation = useMutation(() =>
       fetch(`http://localhost:3000/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
@@ -161,18 +166,24 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
     } else if (reportType === 'word') {
       // handle word report
     } else {
-      window.alert('Invalid input. Report Cancelled.');
+      setShowInvalidInputDialog(true);
     }
   };
   
   const onSubmit = (input: string) => {
-    if (reportType === 'definition') {
-      reportDefinitionMutation.mutate({ reportText: input });
-    } else if (reportType === 'word') {
-      reportWordMutation.mutate({ reportText: input });
+    if (input.trim() === '') {
+      setShowInvalidInputDialog(true);
+      setReportType(null);
+      setShowDialog(false);
+    } else {
+      if (reportType === 'definition') {
+        reportDefinitionMutation.mutate({ reportText: input });
+      } else if (reportType === 'word') {
+        reportWordMutation.mutate({ reportText: input });
+      }
+      setReportClicked(false);
+      setShowDialog(false);
     }
-    setReportClicked(true);
-    setShowDialog(false);
   };
   
   useEffect(() => {
@@ -211,6 +222,14 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
             setShowDialog(false);
             setReportType(null);
           }}
+        />
+      )}
+      {showInvalidInputDialog && (
+        <CustomDialog
+          text="Invalid input. Report Cancelled."
+          okButtonText="OK"
+          onOkButtonClick={handleInvalidInputOkClick}
+          onClose={handleInvalidInputOkClick}
         />
       )}
       <div className={'content-box-title'}>
