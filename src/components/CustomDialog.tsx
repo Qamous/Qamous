@@ -5,31 +5,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface CustomDialogProps {
   text: string;
-  buttonText1: string;
-  buttonText2: string;
-  onButton1Click: () => void;
-  onButton2Click: () => void;
-  onClose: () => void;
-  showTextInput: boolean;
-  onSubmit: (input: string) => void;
-  onCancel: () => void;
+  buttonText1?: string; // Make this prop optional
+  buttonText2?: string; // Make this prop optional
+  onButton1Click?: () => void; // Make this prop optional
+  onButton2Click?: () => void; // Make this prop optional
+  onClose?: () => void; // Make this prop optional
+  showTextInput?: boolean; // Make this prop optional
+  onSubmit?: (input: string) => void; // Make this prop optional
+  onCancel?: () => void; // Make this prop optional
+  okButtonText?: string;
+  onOkButtonClick?: () => void;
 }
 
-const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonText2, onButton1Click, onButton2Click, onClose, showTextInput, onSubmit, onCancel }) => {
+const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonText2, onButton1Click, onButton2Click, onClose, showTextInput, onSubmit, onCancel, okButtonText, onOkButtonClick }) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
-
+  
   const handleSubmit = () => {
-    onSubmit(inputValue);
+    if (onSubmit) {
+      onSubmit(inputValue);
+    }
     setInputValue('');
   };
   
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && onClose) {
         onClose();
       }
     };
@@ -60,8 +64,15 @@ const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonTe
         )}
         {!showTextInput && (
           <div>
-          <button onClick={onButton1Click}>{buttonText1}</button>
-            <button onClick={onButton2Click}>{buttonText2}</button>
+            {buttonText1 && onButton1Click && (
+              <button onClick={onButton1Click}>{buttonText1}</button>
+            )}
+            {buttonText2 && onButton2Click && (
+              <button onClick={onButton2Click}>{buttonText2}</button>
+            )}
+            {okButtonText && onOkButtonClick && (
+              <button onClick={onOkButtonClick}>{okButtonText}</button>
+            )}
           </div>
         )}
       </div>

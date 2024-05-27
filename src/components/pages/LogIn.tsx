@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import './LogIn.scss';
 import { useMutation } from 'react-query';
 import OAuthStrategies from '../OAuthStrategies';
+import CustomDialog from '../CustomDialog';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -10,6 +11,10 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   
   const forgotPasswordHuh = (): void => {
     const forgotPasswordElement = document.querySelector('.container-forgot');
@@ -38,11 +43,12 @@ const Login: React.FC = () => {
     return response.json();
   }), {
     onSuccess: () => {
-      alert('Login successful');
-      navigate('/');
+      setSuccessMessage('Login successful');
+      setShowSuccessDialog(true);
     },
     onError: (error: any) => {
-      alert(`Login failed: ${error.message}`);
+      setErrorMessage(`Login failed: ${error.message}`);
+      setShowErrorDialog(true);
       forgotPasswordHuh();
     },
   });
@@ -80,58 +86,81 @@ const Login: React.FC = () => {
   };
   
   return (
-    <form onSubmit={onLoginClick} className={'container'}>
-      <div className={'container-title'}>
-        <div>Log in</div>
-      </div>
-      <br />
-      <div className={'container-input'}>
-        <input
-          type={'username'}
-          value={username}
-          placeholder="Enter your username here"
-          onChange={(ev) => setUsername(ev.target.value)}
-          className={'container-input-box'}
+    <>
+      {showErrorDialog && (
+        <CustomDialog
+          text={errorMessage}
+          okButtonText="OK"
+          onOkButtonClick={() => setShowErrorDialog(false)}
+          onClose={() => setShowErrorDialog(false)}
         />
-        <label className="container-input-error">{usernameError}</label>
-      </div>
-      <br />
-      <div className={'container-input'}>
-        <input
-          type={'password'}
-          value={password}
-          placeholder="Enter your password here"
-          onChange={(ev) => setPassword(ev.target.value)}
-          className={'container-input-box'}
+      )}
+      {showSuccessDialog && (
+        <CustomDialog
+          text={successMessage}
+          okButtonText="OK"
+          onOkButtonClick={() => {
+            setShowSuccessDialog(false);
+            navigate('/');
+          }}
+          onClose={() => setShowSuccessDialog(false)}
         />
-        <label className="container-input-error">{passwordError}</label>
-      </div>
-      <NavLink to={'/forgot-password'} className={'container-forgot'}>Forgot password?</NavLink>
-      <br />
-      <div className={'container-buttons'}>
-        <button
-          className={'container-buttons-button'}
-          type="submit"
-          onClick={onLoginClick}
-          value={'Log in'}
-        >
-          Log in
-        </button>
-        <button
-          className="container-buttons-button container-buttons-button-secondary"
-          onClick={onSignUpClick}
-          value={'Sign Up'}
-        >
-          Sign up
-        </button>
-      </div>
-      {/*<div className={'container-oauth'}>*/}
-      {/*  <p>*/}
-      {/*    — Or continue with —*/}
-      {/*  </p>*/}
-      {/*  <OAuthStrategies />*/}
-      {/*</div>*/}
-    </form>
+      )}
+      
+      <form onSubmit={onLoginClick} className={'container'}>
+        
+        <div className={'container-title'}>
+          <div>Log in</div>
+        </div>
+        <br />
+        <div className={'container-input'}>
+          <input
+            type={'username'}
+            value={username}
+            placeholder="Enter your username here"
+            onChange={(ev) => setUsername(ev.target.value)}
+            className={'container-input-box'}
+          />
+          <label className="container-input-error">{usernameError}</label>
+        </div>
+        <br />
+        <div className={'container-input'}>
+          <input
+            type={'password'}
+            value={password}
+            placeholder="Enter your password here"
+            onChange={(ev) => setPassword(ev.target.value)}
+            className={'container-input-box'}
+          />
+          <label className="container-input-error">{passwordError}</label>
+        </div>
+        <NavLink to={'/forgot-password'} className={'container-forgot'}>Forgot password?</NavLink>
+        <br />
+        <div className={'container-buttons'}>
+          <button
+            className={'container-buttons-button'}
+            type="submit"
+            onClick={onLoginClick}
+            value={'Log in'}
+          >
+            Log in
+          </button>
+          <button
+            className="container-buttons-button container-buttons-button-secondary"
+            onClick={onSignUpClick}
+            value={'Sign Up'}
+          >
+            Sign up
+          </button>
+        </div>
+        {/*<div className={'container-oauth'}>*/}
+        {/*  <p>*/}
+        {/*    — Or continue with —*/}
+        {/*  </p>*/}
+        {/*  <OAuthStrategies />*/}
+        {/*</div>*/}
+      </form>
+    </>
   );
 };
 
