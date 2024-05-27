@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { findLocationByIP, findLocationByLatLong } from '../../assets/utils';
 import { useMutation } from 'react-query';
 import OAuthStrategies from '../OAuthStrategies';
+import CustomDialog from '../CustomDialog';
 
 type User = {
   username: string;
@@ -34,6 +35,8 @@ const SignUp: React.FC = () => {
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
   const [dobError, setDobError] = useState('');
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
   
   const mutation = useMutation((newUser: User) =>
     fetch('http://localhost:3000/users/register', {
@@ -57,11 +60,13 @@ const SignUp: React.FC = () => {
       mutation.reset();
     },
     onSuccess: () => {
-      alert('You have successfully registered! Please use your credentials to log in.');
+      setDialogMessage('You have successfully registered! Please use your credentials to log in.');
+      setShowDialog(true);
       navigate('/login');
     },
     onError: (error: any) => {
-      alert(`Sign up failed: ${error.message}`);
+      setDialogMessage(`Sign up failed: ${error.message}`);
+      setShowDialog(true);
     },
   });
   
@@ -144,6 +149,19 @@ const SignUp: React.FC = () => {
   
   return (
     <div className={'container'}>
+      {showDialog && (
+        <CustomDialog
+          text={dialogMessage}
+          okButtonText="OK"
+          onOkButtonClick={() => {
+            setShowDialog(false);
+            if (dialogMessage.includes('successfully')) {
+              navigate('/login');
+            }
+          }}
+          onClose={() => setShowDialog(false)}
+        />
+      )}
       <div className={'container-title'}>
         <div>Sign Up</div>
       </div>
