@@ -13,6 +13,7 @@ interface HomeContentProps {
   },
   index: number,
   lang: string,
+  wordId: number,
   definitionId: number,
   countryCode?: string,
   //likeCount: number,
@@ -25,7 +26,7 @@ interface ButtonText {
   report: string
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionId, countryCode }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, definitionId, countryCode }) => {
   const { t } = useTranslation();
   const buttonText = t('content_box_buttons', {
     returnObjects: true,
@@ -93,13 +94,14 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
   };
   
   const reportWord = async ({ reportText }: { reportText: string }) => {
-    const response = await fetch('http://localhost:3000/word-reports', {
+    const response: Response = await fetch('http://localhost:3000/word-reports', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         reportText,
+        wordId,
       }),
       credentials: 'include',
     });
@@ -121,7 +123,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
   };
   
   const reportDefinition = async ({ reportText }: { reportText: string }) => {
-    const response = await fetch('http://localhost:3000/definition-reports', {
+    const response: Response = await fetch('http://localhost:3000/definition-reports', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -140,7 +142,13 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
     return await response.json();
   };
   
-  const reportMutation = useMutation(reportDefinition, {
+  const reportWordMutation = useMutation(reportWord, {
+    onError: (error) => {
+      console.error('There has been a problem with your fetch operation:', error);
+    },
+  });
+  
+  const reportDefinitionMutation = useMutation(reportDefinition, {
     onError: (error) => {
       console.error('There has been a problem with your fetch operation:', error);
     },
@@ -157,12 +165,12 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
     }
   };
   
-  // In the onSubmit handler of the dialog
   const onSubmit = (input: string) => {
     if (reportType === 'definition') {
-      reportMutation.mutate({ reportText: input });
+      reportDefinitionMutation.mutate({ reportText: input });
+    } else if (reportType === 'word') {
+      reportWordMutation.mutate({ reportText: input });
     }
-    // handle other report types
     setReportClicked(true);
     setShowDialog(false);
   };

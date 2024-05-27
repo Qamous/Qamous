@@ -8,6 +8,7 @@ import Snackbar from '../Snackbar';
 
 interface HomeContent {
   word: string,
+  wordId: number,
   definition: string,
   definitionId: number,
   likeCount: number,
@@ -55,6 +56,7 @@ const Home: React.FC = () => {
           index={0}
           lang={lang}
           definitionId={0}
+          wordId={0}
         />
         <div className={'loading-ring'}>
           <div></div>
@@ -74,6 +76,7 @@ const Home: React.FC = () => {
           index={0}
           lang={lang}
           definitionId={0}
+          wordId={0}
         />
         <Snackbar
           open={errorSnackbarOpen}
@@ -90,6 +93,7 @@ const Home: React.FC = () => {
         index={0}
         lang={lang}
         definitionId={0}
+        wordId={0}
       />
       {homeContent && homeContent
         .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
@@ -100,6 +104,7 @@ const Home: React.FC = () => {
             index={index + 1}
             lang={lang}
             definitionId={item.definitionId}
+            wordId={item.wordId}
             countryCode={item.countryCode}
           />
         ))}
