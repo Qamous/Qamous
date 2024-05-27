@@ -111,12 +111,6 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
     return await response.json();
   };
   
-  const reportMutation = useMutation(reportWord, {
-    onError: (error) => {
-      console.error('There has been a problem with your fetch operation:', error);
-    },
-  });
-  
   const handleReportClick = () => {
     if (reportClicked) {
       setReportSnackbarOpen(true);
@@ -126,14 +120,51 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
     }
   };
   
+  const reportDefinition = async ({ reportText }: { reportText: string }) => {
+    const response = await fetch('http://localhost:3000/definition-reports', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        reportText,
+        definitionId,
+      }),
+      credentials: 'include',
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to post definition report');
+    }
+  
+    return await response.json();
+  };
+  
+  const reportMutation = useMutation(reportDefinition, {
+    onError: (error) => {
+      console.error('There has been a problem with your fetch operation:', error);
+    },
+  });
+  
   const handleReport = (reportType: string) => {
-    if (reportType === 'word' || reportType === 'definition') {
-      // Remove the window.prompt and directly set the reportType and showDialog state
+    if (reportType === 'definition') {
       setReportType(reportType);
       setShowDialog(true);
+    } else if (reportType === 'word') {
+      // handle word report
     } else {
       window.alert('Invalid input. Report Cancelled.');
     }
+  };
+  
+  // In the onSubmit handler of the dialog
+  const onSubmit = (input: string) => {
+    if (reportType === 'definition') {
+      reportMutation.mutate({ reportText: input });
+    }
+    // handle other report types
+    setReportClicked(true);
+    setShowDialog(false);
   };
   
   useEffect(() => {
@@ -166,12 +197,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, definitionI
             setReportType(null);
           }}
           showTextInput={reportType !== null}
-          onSubmit={(input) => {
-            // Handle the input submission here
-            console.log(`Reported ${reportType} with reason: ${input}`);
-            setReportClicked(true);
-            setShowDialog(false);
-          }}
+          onSubmit={onSubmit} // Add this line
           onCancel={() => {
             // Handle the cancel action here
             setShowDialog(false);
