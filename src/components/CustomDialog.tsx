@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import './CustomDialog.scss';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface CustomDialogProps {
-  text: string;
+  text: ReactNode;
   buttonText1?: string; // Make this prop optional
   buttonText2?: string; // Make this prop optional
   onButton1Click?: () => void; // Make this prop optional

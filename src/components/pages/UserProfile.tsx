@@ -35,6 +35,7 @@ const UserProfile = () => {
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [submittingPostId, setSubmittingPostId] = useState<number | null>(null);
+  const [isInvalidInput, setIsInvalidInput] = useState(false);
   
   const handlePostLanguageClick = () => {
   };
@@ -55,21 +56,27 @@ const UserProfile = () => {
     }
   );
   
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     logoutMutation.mutate();
   };
   
-  const handleEditClick = (postId: number, definitionText: string) => {
+  const handleEditClick = (postId: number, definitionText: string): void => {
     if (editingPostId !== postId) {
       setEditingPostId(postId);
       setEditedText(definitionText);
     } else {
-      setSubmittingPostId(postId);
-      setIsDialogOpen(true);
+      if (editedText.trim() === '') {
+        setIsInvalidInput(true);
+        setIsDialogOpen(true);
+      } else {
+        setIsInvalidInput(false); // Reset isInvalidInput to false
+        setSubmittingPostId(postId);
+        setIsDialogOpen(true);
+      }
     }
   };
   
-  const handleDialogSubmit = () => {
+  const handleDialogSubmit = (): void => {
     if (submittingPostId !== null) {
       setDefinitions(definitions.map(def => {
         if (def.id === submittingPostId) {
@@ -83,7 +90,7 @@ const UserProfile = () => {
     setIsDialogOpen(false);
   };
   
-  const handleDialogClose = () => {
+  const handleDialogClose = (): void => {
     setIsDialogOpen(false);
     setEditingPostId(null);
   };
@@ -122,14 +129,25 @@ const UserProfile = () => {
   return (
     <div className="profile">
       {isDialogOpen && (
-        <CustomDialog
-          text="Are you sure you want to submit your changes?"
-          buttonText1="Submit"
-          onButton1Click={handleDialogSubmit}
-          buttonText2="Cancel"
-          onButton2Click={handleDialogClose}
-          onClose={handleDialogClose}
-        />
+        isInvalidInput ? (
+          <CustomDialog
+            text={
+              <p><strong>Edit unsuccessful:</strong> The definition cannot be left empty.</p>
+            }
+            okButtonText="OK"
+            onOkButtonClick={handleDialogClose}
+            onClose={handleDialogClose}
+          />
+        ) : (
+          <CustomDialog
+            text="Are you sure you want to submit your changes?"
+            buttonText1="Submit"
+            onButton1Click={handleDialogSubmit}
+            buttonText2="Cancel"
+            onButton2Click={handleDialogClose}
+            onClose={handleDialogClose}
+          />
+        )
       )}
       {/*<h1 className="profile-primary">Qamous<span className="profile-primary-secondary">,</span></h1>*/}
       {/*<h1 className="profile-secondary">a dictionary written</h1>*/}
@@ -171,7 +189,7 @@ const UserProfile = () => {
       {/*  <input type="search" placeholder="Search your posts..." required />*/}
       {/*</form>*/}
       
-      {definitions.map((definition) => (
+      {definitions.map((definition: Definition, index: number) => (
         <div className="profile-post" key={definition.id}>
           <div className="profile-post-language">
             <p className="profile-post-language-left">
@@ -221,7 +239,7 @@ const UserProfile = () => {
               <p>{definition.reportCount}</p>
             </button>
           </div>
-          <hr />
+          {index !== definitions.length - 1 && <hr />}
         </div>
       ))}
     </div>
