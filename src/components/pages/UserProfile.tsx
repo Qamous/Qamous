@@ -85,6 +85,7 @@ const UserProfile = () => {
   
   const handleDialogClose = () => {
     setIsDialogOpen(false);
+    setEditingPostId(null);
   };
   
   // Redirect to /profile if the user is on /signup or /login
@@ -105,6 +106,18 @@ const UserProfile = () => {
       .catch(error => {
         console.error('Error:', error);
       });
+    
+    // Allow Esc to cancel editing
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setEditingPostId(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    // Remove event listener on cleanup
+    return (): void => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
   return (
     <div className="profile">
@@ -115,6 +128,7 @@ const UserProfile = () => {
           onButton1Click={handleDialogSubmit}
           buttonText2="Cancel"
           onButton2Click={handleDialogClose}
+          onClose={handleDialogClose}
         />
       )}
       {/*<h1 className="profile-primary">Qamous<span className="profile-primary-secondary">,</span></h1>*/}
