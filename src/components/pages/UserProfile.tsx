@@ -134,7 +134,7 @@ const UserProfile = () => {
               <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
             </div>
           </div>
-          <h2>{definition.word.arabicWord}</h2>
+          <h2>{definition.isArabic ? definition.word.arabicWord : definition.word.francoArabicWord}</h2>
           {editingPostId === definition.id ? (
             <textarea
               typeof={'text'}
