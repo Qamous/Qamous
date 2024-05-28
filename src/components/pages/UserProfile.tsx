@@ -22,6 +22,7 @@ const UserProfile = () => {
     'Its primary translation is "let\'s go" or "come on" in English. Yalla is commonly used to spur action, rally ' +
     'enthusiasm, or prompt others to join in an activity. Whether used casually among friends or in more formal ' +
     'settings, yalla embodies a dynamic and spirited tone, encouraging engagement and participation.');
+  const [definitions, setDefinitions] = useState([]);
   
   const handlePostLanguageClick = () => {
   };
@@ -64,6 +65,18 @@ const UserProfile = () => {
     }
   }, [location, navigate]);
   
+  useEffect(() => {
+    const userId = 1; // Replace with the actual user ID
+    
+    fetch(`http://localhost:3000/definitions/user/${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        setDefinitions(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, []);
   return (
     <div className="profile">
       {/*<h1 className="profile-primary">Qamous<span className="profile-primary-secondary">,</span></h1>*/}
@@ -106,92 +119,44 @@ const UserProfile = () => {
       {/*  <input type="search" placeholder="Search your posts..." required />*/}
       {/*</form>*/}
       
-      <div className="profile-post">
-        <div className="profile-post-language">
-          <p className="profile-post-language-left">FRANCO-ARABIC</p>
-          <div
-            className="profile-post-language-right"
-            onClick={handlePostLanguageClick}
-          >
-            <p>View translations</p>
-            &nbsp;
-            <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
+      {definitions.map((definition) => (
+        <div className="profile-post" key={definition.id}>
+          <div className="profile-post-language">
+            <p className="profile-post-language-left">
+              {definition.isArabic ? 'ARABIC' : 'FRANCO-ARABIC'}
+            </p>
+            <div
+              className="profile-post-language-right"
+              onClick={handlePostLanguageClick}
+            >
+              <p>View translations</p>
+              &nbsp;
+              <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
+            </div>
           </div>
-        
-        </div>
-        <h2>Yalla</h2>
-        {isEditing ? (
-          <textarea
-            typeof="text"
-            value={editedText}
-            className="profile-post-inputtext"
-            onChange={(e) => setEditedText(e.target.value)}
-            autoSave="true"
-            rows={4}
-          />
-        ) : (
-          <p>
-            {editedText}
-          </p>
-        )}
-        <p className="profile-post-date">October 9th, 2024</p>
-        <div className="buttons">
-          <button onClick={handleEditClick} className="profile-post-buttons-button">
-            {isEditing ? 'Submit' : 'Edit'}
-          </button>
-          <button className="profile-post-buttons-button" disabled>
-            <FontAwesomeIcon icon={faThumbsUp} />
-            <p>2</p>
-          </button>
-          <button className="profile-post-buttons-button" disabled>
-            <FontAwesomeIcon icon={faThumbsDown} />
-            <p>1</p>
-          </button>
-          <button className="profile-post-buttons-button" disabled>
-            <FontAwesomeIcon icon={faFlag} />
-            <p>3</p>
-          </button>
-        </div>
-        <hr />
-      </div>
-      
-      <div className="profile-post">
-        <div className="profile-post-language">
-          <p className="profile-post-language-left">ARABIC</p>
-          <div
-            className="profile-post-language-right"
-            onClick={handlePostLanguageClick}
-          >
-            <p>View translations</p>
-            &nbsp;
-            <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
+          <h2>{definition.word.arabicWord}</h2>
+          <p>{definition.definition}</p>
+          <p className="profile-post-date">{definition.AddedTimestamp}</p>
+          <div className="buttons">
+            <button onClick={handleEditClick} className="profile-post-buttons-button">
+              {isEditing ? 'Submit' : 'Edit'}
+            </button>
+            <button className="profile-post-buttons-button" disabled>
+              <FontAwesomeIcon icon={faThumbsUp} />
+              <p>{definition.likeCount}</p>
+            </button>
+            <button className="profile-post-buttons-button" disabled>
+              <FontAwesomeIcon icon={faThumbsDown} />
+              <p>{definition.dislikeCount}</p>
+            </button>
+            <button className="profile-post-buttons-button" disabled>
+              <FontAwesomeIcon icon={faFlag} />
+              <p>{definition.reportCount}</p>
+            </button>
           </div>
-        
+          <hr />
         </div>
-        <h2 dir="rtl">معلش</h2>
-        <p dir="rtl">
-          تعبير عامي مصري يُستخدم للتعبير عن الموافقة أو الاستسماح،
-          ويعني "ما فيش مشكلة" أو "ما عليك". يُستخدم كبديل عن التعبير عن الشكر
-          أو الاعتذار.
-        </p>
-        <p className="profile-post-date">October 9th, 2024</p>
-        <div className="buttons">
-          <button className="profile-post-buttons-button">Edit</button>
-          <button className="profile-post-buttons-button" disabled>
-            <FontAwesomeIcon icon={faThumbsUp} />
-            <p>100</p>
-          </button>
-          <button className="profile-post-buttons-button" disabled>
-            <FontAwesomeIcon icon={faThumbsDown} />
-            <p>16</p>
-          </button>
-          <button className="profile-post-buttons-button" disabled>
-            <FontAwesomeIcon icon={faFlag} />
-            <p>11</p>
-          </button>
-        </div>
-        <hr />
-      </div>
+      ))}
     </div>
   );
 };
