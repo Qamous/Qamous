@@ -136,7 +136,11 @@ const UserProfile = () => {
           </div>
           <h2>{definition.word.arabicWord}</h2>
           <p>{definition.definition}</p>
-          <p className="profile-post-date">{definition.AddedTimestamp}</p>
+          <p className="profile-post-date">
+            {new Date(definition.AddedTimestamp).toLocaleDateString(
+              'en-US', { year: 'numeric', month: 'long', day: 'numeric' }
+            )}
+          </p>
           <div className="buttons">
             <button onClick={handleEditClick} className="profile-post-buttons-button">
               {isEditing ? 'Submit' : 'Edit'}
