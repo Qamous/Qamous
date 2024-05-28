@@ -12,6 +12,20 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from 'react-query';
 
+interface Definition {
+  id: number;
+  isArabic: boolean;
+  word: {
+    arabicWord: string;
+    francoArabicWord: string;
+  };
+  definition: string;
+  AddedTimestamp: string;
+  likeCount: number;
+  dislikeCount: number;
+  reportCount: number;
+}
+
 const UserProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,7 +35,7 @@ const UserProfile = () => {
     'Its primary translation is "let\'s go" or "come on" in English. Yalla is commonly used to spur action, rally ' +
     'enthusiasm, or prompt others to join in an activity. Whether used casually among friends or in more formal ' +
     'settings, yalla embodies a dynamic and spirited tone, encouraging engagement and participation.');
-  const [definitions, setDefinitions] = useState([]);
+  const [definitions, setDefinitions] = useState<Definition[]>([]);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   
   const handlePostLanguageClick = () => {
@@ -48,15 +62,20 @@ const UserProfile = () => {
   };
   
   const handleEditClick = (postId: number, definitionText: string) => {
-    if (editingPostId !== postId) {
-      setEditingPostId(postId);
-      setEditedText(definitionText);
-    } else {
-      // Handle the submission of the edited text here
-      console.log(editedText);
-      setEditingPostId(null);
-    }
-  };
+  if (editingPostId !== postId) {
+    setEditingPostId(postId);
+    setEditedText(definitionText);
+  } else {
+    // Handle the submission of the edited text here
+    setDefinitions(definitions.map(def => {
+      if (def.id === postId) {
+        return { ...def, definition: editedText };
+      }
+      return def;
+    }));
+    setEditingPostId(null);
+  }
+};
   
   // Redirect to /profile if the user is on /signup or /login
   useEffect(() => {
