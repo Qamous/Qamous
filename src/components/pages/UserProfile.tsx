@@ -11,6 +11,7 @@ import {
   faThumbsUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from 'react-query';
+import CustomDialog from '../CustomDialog';
 
 interface Definition {
   id: number;
@@ -29,14 +30,11 @@ interface Definition {
 const UserProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [editedText, setEditedText] = useState('The Arabic word "يلا" ' +
-    '(pronounced: yalla) is a popular term used across different Arabic dialects, including Levantine, Egyptian, and ' +
-    'Gulf dialects. Yalla is a versatile expression that conveys encouragement, motivation, or a sense of urgency. ' +
-    'Its primary translation is "let\'s go" or "come on" in English. Yalla is commonly used to spur action, rally ' +
-    'enthusiasm, or prompt others to join in an activity. Whether used casually among friends or in more formal ' +
-    'settings, yalla embodies a dynamic and spirited tone, encouraging engagement and participation.');
+  const [editedText, setEditedText] = useState('');
   const [definitions, setDefinitions] = useState<Definition[]>([]);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [submittingPostId, setSubmittingPostId] = useState<number | null>(null);
   
   const handlePostLanguageClick = () => {
   };
@@ -62,20 +60,32 @@ const UserProfile = () => {
   };
   
   const handleEditClick = (postId: number, definitionText: string) => {
-  if (editingPostId !== postId) {
-    setEditingPostId(postId);
-    setEditedText(definitionText);
-  } else {
-    // Handle the submission of the edited text here
-    setDefinitions(definitions.map(def => {
-      if (def.id === postId) {
-        return { ...def, definition: editedText };
-      }
-      return def;
-    }));
-    setEditingPostId(null);
-  }
-};
+    if (editingPostId !== postId) {
+      setEditingPostId(postId);
+      setEditedText(definitionText);
+    } else {
+      setSubmittingPostId(postId);
+      setIsDialogOpen(true);
+    }
+  };
+  
+  const handleDialogSubmit = () => {
+    if (submittingPostId !== null) {
+      setDefinitions(definitions.map(def => {
+        if (def.id === submittingPostId) {
+          return { ...def, definition: editedText };
+        }
+        return def;
+      }));
+      setEditingPostId(null);
+      setSubmittingPostId(null);
+    }
+    setIsDialogOpen(false);
+  };
+  
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
   
   // Redirect to /profile if the user is on /signup or /login
   useEffect(() => {
@@ -98,6 +108,15 @@ const UserProfile = () => {
   }, []);
   return (
     <div className="profile">
+      {isDialogOpen && (
+        <CustomDialog
+          text="Are you sure you want to submit your changes?"
+          buttonText1="Submit"
+          onButton1Click={handleDialogSubmit}
+          buttonText2="Cancel"
+          onButton2Click={handleDialogClose}
+        />
+      )}
       {/*<h1 className="profile-primary">Qamous<span className="profile-primary-secondary">,</span></h1>*/}
       {/*<h1 className="profile-secondary">a dictionary written</h1>*/}
       {/*<h1 className="profile-secondary">by the people</h1>*/}
@@ -171,7 +190,8 @@ const UserProfile = () => {
             )}
           </p>
           <div className="buttons">
-            <button onClick={() => handleEditClick(definition.id, definition.definition)} className="profile-post-buttons-button">
+            <button onClick={() => handleEditClick(definition.id, definition.definition)}
+                    className="profile-post-buttons-button">
               {editingPostId === definition.id ? 'Submit' : 'Edit'}
             </button>
             <button className="profile-post-buttons-button" disabled>
