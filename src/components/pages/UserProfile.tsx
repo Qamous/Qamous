@@ -15,7 +15,6 @@ import { useMutation } from 'react-query';
 const UserProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState('The Arabic word "يلا" ' +
     '(pronounced: yalla) is a popular term used across different Arabic dialects, including Levantine, Egyptian, and ' +
     'Gulf dialects. Yalla is a versatile expression that conveys encouragement, motivation, or a sense of urgency. ' +
@@ -23,6 +22,7 @@ const UserProfile = () => {
     'enthusiasm, or prompt others to join in an activity. Whether used casually among friends or in more formal ' +
     'settings, yalla embodies a dynamic and spirited tone, encouraging engagement and participation.');
   const [definitions, setDefinitions] = useState([]);
+  const [editingPostId, setEditingPostId] = useState<number | null>(null);
   
   const handlePostLanguageClick = () => {
   };
@@ -47,14 +47,14 @@ const UserProfile = () => {
     logoutMutation.mutate();
   };
   
-  const handleEditClick = () => {
-    if (!isEditing) {
-      setEditedText(editedText);
-      setIsEditing(true);
+  const handleEditClick = (postId: number, definitionText: string) => {
+    if (editingPostId !== postId) {
+      setEditingPostId(postId);
+      setEditedText(definitionText);
     } else {
       // Handle the submission of the edited text here
       console.log(editedText);
-      setIsEditing(false);
+      setEditingPostId(null);
     }
   };
   
@@ -135,15 +135,25 @@ const UserProfile = () => {
             </div>
           </div>
           <h2>{definition.word.arabicWord}</h2>
-          <p>{definition.definition}</p>
+          {editingPostId === definition.id ? (
+            <textarea
+              typeof={'text'}
+              value={editedText}
+              className={`profile-post-inputtext`}
+              rows={4}
+              onChange={(e) => setEditedText(e.target.value)}
+            />
+          ) : (
+            <p>{definition.definition}</p>
+          )}
           <p className="profile-post-date">
             {new Date(definition.AddedTimestamp).toLocaleDateString(
               'en-US', { year: 'numeric', month: 'long', day: 'numeric' }
             )}
           </p>
           <div className="buttons">
-            <button onClick={handleEditClick} className="profile-post-buttons-button">
-              {isEditing ? 'Submit' : 'Edit'}
+            <button onClick={() => handleEditClick(definition.id, definition.definition)} className="profile-post-buttons-button">
+              {editingPostId === definition.id ? 'Submit' : 'Edit'}
             </button>
             <button className="profile-post-buttons-button" disabled>
               <FontAwesomeIcon icon={faThumbsUp} />
