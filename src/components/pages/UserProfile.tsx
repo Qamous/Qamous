@@ -15,16 +15,24 @@ import CustomDialog from '../CustomDialog';
 
 interface Definition {
   id: number;
-  isArabic: boolean;
-  word: {
-    arabicWord: string;
-    francoArabicWord: string;
-  };
+  wordId: number;
+  userId: number;
+  countryCode: string;
   definition: string;
+  example: string;
+  isArabic: boolean;
   AddedTimestamp: string;
   likeCount: number;
   dislikeCount: number;
   reportCount: number;
+  word: {
+    id: number;
+    userId: number;
+    arabicWord: string;
+    francoArabicWord: string;
+    createdAt: string;
+    reportCount: number;
+  };
 }
 
 const UserProfile = () => {
