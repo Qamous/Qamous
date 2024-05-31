@@ -61,7 +61,7 @@ const UserProfile = () => {
         // Redirect to login page after successful logout
         navigate('/login');
       },
-    }
+    },
   );
   
   const handleLogout = (): void => {
@@ -212,21 +212,24 @@ const UserProfile = () => {
               <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
             </div>
           </div>
-          <h2>{definition.isArabic ? definition.word.arabicWord : definition.word.francoArabicWord}</h2>
+          <h2 dir={definition.isArabic ? 'rtl' : 'ltr'}>
+            {definition.isArabic ? definition.word.arabicWord : definition.word.francoArabicWord}
+          </h2>
           {editingPostId === definition.id ? (
             <textarea
               typeof={'text'}
               value={editedText}
               className={`profile-post-inputtext`}
               rows={4}
+              dir={definition.isArabic ? 'rtl' : 'ltr'}
               onChange={(e) => setEditedText(e.target.value)}
             />
           ) : (
-            <p>{definition.definition}</p>
+            <p dir={definition.isArabic ? 'rtl' : 'ltr'}>{definition.definition}</p>
           )}
           <p className="profile-post-date">
             {new Date(definition.AddedTimestamp).toLocaleDateString(
-              'en-US', { year: 'numeric', month: 'long', day: 'numeric' }
+              'en-US', { year: 'numeric', month: 'long', day: 'numeric' },
             )}
           </p>
           <div className="buttons">
