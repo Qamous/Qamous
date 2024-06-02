@@ -259,14 +259,16 @@ const UserProfile = () => {
               <p className="profile-post-language-left">
                 {currentLanguage[word.id] === 'ARABIC' ? 'ARABIC' : 'FRANCO-ARABIC'}
               </p>
-              <div
-                className="profile-post-language-right"
-                onClick={() => handlePostLanguageClick(word.id)}
-              >
-                <p>Switch translation</p>
-                &nbsp;
-                <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
-              </div>
+              {wordDefinitionsData.length > 1 && (
+                <div
+                  className="profile-post-language-right"
+                  onClick={() => handlePostLanguageClick(word.id)}
+                >
+                  <p>Switch translation</p>
+                  &nbsp;
+                  <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
+                </div>
+              )}
             </div>
             <h2 dir={currentLanguage[word.id] === 'ARABIC' ? 'rtl' : 'ltr'}>
               {currentLanguage[word.id] === 'ARABIC' ? word.arabicWord : word.francoArabicWord}
