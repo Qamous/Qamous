@@ -306,8 +306,18 @@ const UserProfile = () => {
       
       {uniqueWords.map((word: Word, index: number) => {
         const wordDefinitionsData = wordDefinitions[word.id];
-        const currentDefinition = wordDefinitionsData.find((def: Definition) => def.isArabic === (currentLanguage[word.id] === 'ARABIC'));
+        let currentDefinition = wordDefinitionsData.find((def: Definition) => def.isArabic === (currentLanguage[word.id] === 'ARABIC'));
         
+        // If there is no Franco-Arabic definition, show the Arabic definition
+        if (!currentDefinition) {
+          currentDefinition = wordDefinitionsData.find((def: Definition) => def.isArabic);
+          if (currentDefinition) {
+            setCurrentLanguage(prevState => ({
+              ...prevState,
+              [word.id]: 'ARABIC',
+            }));
+          }
+        }
         return (
           <div className="profile-post" key={word.id}>
             <div className="profile-post-language">
