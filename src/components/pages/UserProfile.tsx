@@ -7,7 +7,7 @@ import {
   faArrowRightFromBracket,
   faFlag,
   faThumbsDown,
-  faThumbsUp,
+  faThumbsUp, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from 'react-query';
 import CustomDialog from '../CustomDialog';
@@ -50,6 +50,7 @@ const UserProfile = () => {
   const [currentLanguage, setCurrentLanguage] = useState<{ [key: number]: 'ARABIC' | 'FRANCO-ARABIC' }>({});
   const [uniqueWords, setUniqueWords] = useState<Word[]>([]);
   const [wordDefinitions, setWordDefinitions] = useState<{ [key: number]: Definition[] }>({});
+  const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] = useState(false);
   
   const handlePostLanguageClick = (postId: number) => {
     setCurrentLanguage(prevState => ({
@@ -98,15 +99,25 @@ const UserProfile = () => {
     if (submittingPostId !== null) {
       const updatedDefinition = definitions.find(def => def.id === submittingPostId);
       if (updatedDefinition) {
-        updatedDefinition.definition = editedText;
+        const updatedDefinitionWithWordId = {
+          ...updatedDefinition,
+          definition: editedText,
+          wordId: updatedDefinition.word.id,
+        };
         fetch(`http://localhost:3000/definitions/${submittingPostId}`, {
-          method: 'PUT',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(updatedDefinition),
+          body: JSON.stringify(updatedDefinitionWithWordId),
+          credentials: 'include',
         })
-          .then(response => response.json())
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error updating definition');
+            }
+            return response.json();
+          })
           .then(data => {
             setDefinitions(definitions.map(def => {
               if (def.id === submittingPostId) {
@@ -123,6 +134,36 @@ const UserProfile = () => {
       }
       setIsDialogOpen(false);
     }
+  };
+  
+  const handleDeleteAccount = (): void => {
+    setIsDeleteAccountDialogOpen(true);
+  };
+  
+  const handleDeleteAccountSubmit = (): void => {
+    fetch('http://localhost:3000/auth/delete', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error deleting account');
+        }
+        return response.json();
+      })
+      .then(data => {
+        navigate('/login');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+  
+  const handleDeleteAccountClose = (): void => {
+    setIsDeleteAccountDialogOpen(false);
   };
   
   const handleDialogCloseEdit = (): void => {
@@ -208,6 +249,16 @@ const UserProfile = () => {
             onClose={handleDialogCloseEdit}
           />
         )
+      )}
+      {isDeleteAccountDialogOpen && (
+        <CustomDialog
+          text="Are you sure you want to delete your account?"
+          buttonText1="Confirm"
+          onButton1Click={handleDeleteAccountSubmit}
+          buttonText2="Cancel"
+          onButton2Click={handleDeleteAccountClose}
+          onClose={handleDeleteAccountClose}
+        />
       )}
       {/*<h1 className="profile-primary">Qamous<span className="profile-primary-secondary">,</span></h1>*/}
       {/*<h1 className="profile-secondary">a dictionary written</h1>*/}
@@ -316,6 +367,12 @@ const UserProfile = () => {
           </div>
         );
       })}
+      <div className="buttons profile-delete">
+        <button onClick={handleDeleteAccount} className="buttons-button">
+          <FontAwesomeIcon icon={faTrash} />
+          <p>Delete Account</p>
+        </button>
+      </div>
     </div>
   );
 };
