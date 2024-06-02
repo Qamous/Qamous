@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './UserProfile.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-//import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRight,
@@ -12,6 +11,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from 'react-query';
 import CustomDialog from '../CustomDialog';
+
+//import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
+
+interface Word {
+  id: number;
+  userId: number;
+  arabicWord: string;
+  francoArabicWord: string;
+  createdAt: string;
+  reportCount: number;
+}
 
 interface Definition {
   id: number;
@@ -25,14 +35,7 @@ interface Definition {
   likeCount: number;
   dislikeCount: number;
   reportCount: number;
-  word: {
-    id: number;
-    userId: number;
-    arabicWord: string;
-    francoArabicWord: string;
-    createdAt: string;
-    reportCount: number;
-  };
+  word: Word;
 }
 
 const UserProfile = () => {
@@ -44,8 +47,15 @@ const UserProfile = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [submittingPostId, setSubmittingPostId] = useState<number | null>(null);
   const [isInvalidInput, setIsInvalidInput] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<{ [key: number]: 'ARABIC' | 'FRANCO-ARABIC' }>({});
+  const [uniqueWords, setUniqueWords] = useState<Word[]>([]);
+  const [wordDefinitions, setWordDefinitions] = useState<{ [key: number]: Definition[] }>({});
   
-  const handlePostLanguageClick = () => {
+  const handlePostLanguageClick = (postId: number) => {
+    setCurrentLanguage(prevState => ({
+      ...prevState,
+      [postId]: prevState[postId] === 'ARABIC' ? 'FRANCO-ARABIC' : 'ARABIC',
+    }));
   };
   
   const logoutMutation = useMutation(() =>
@@ -84,23 +94,61 @@ const UserProfile = () => {
     }
   };
   
-  const handleDialogSubmit = (): void => {
+  const handleDialogSubmitEdit = (): void => {
     if (submittingPostId !== null) {
-      setDefinitions(definitions.map(def => {
-        if (def.id === submittingPostId) {
-          return { ...def, definition: editedText };
-        }
-        return def;
-      }));
-      setEditingPostId(null);
-      setSubmittingPostId(null);
+      const updatedDefinition = definitions.find(def => def.id === submittingPostId);
+      if (updatedDefinition) {
+        updatedDefinition.definition = editedText;
+        fetch(`http://localhost:3000/definitions/${submittingPostId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedDefinition),
+        })
+          .then(response => response.json())
+          .then(data => {
+            setDefinitions(definitions.map(def => {
+              if (def.id === submittingPostId) {
+                return { ...def, definition: editedText };
+              }
+              return def;
+            }));
+            setEditingPostId(null);
+            setSubmittingPostId(null);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      setIsDialogOpen(false);
     }
-    setIsDialogOpen(false);
   };
   
-  const handleDialogClose = (): void => {
+  const handleDialogCloseEdit = (): void => {
     setIsDialogOpen(false);
     setEditingPostId(null);
+  };
+  
+  const rearrangeDefinitions = (definitions: Definition[]) => {
+    const wordDefinitions: { [key: number]: Definition[] } = {};
+    const uniqueWords: { [key: number]: Word } = {};
+    
+    definitions.forEach((definition) => {
+      const wordId = definition.word.id;
+      
+      if (!wordDefinitions[wordId]) {
+        wordDefinitions[wordId] = [];
+      }
+      
+      if (!uniqueWords[wordId]) {
+        uniqueWords[wordId] = definition.word;
+      }
+      
+      wordDefinitions[wordId].push(definition);
+    });
+    
+    return [wordDefinitions, Object.values(uniqueWords)];
   };
   
   // Redirect to /profile if the user is on /signup or /login
@@ -117,6 +165,10 @@ const UserProfile = () => {
       .then(response => response.json())
       .then(data => {
         setDefinitions(data);
+        
+        const [wordDefinitionsData, uniqueWordsData] = rearrangeDefinitions(data);
+        setWordDefinitions(wordDefinitionsData as { [key: number]: Definition[] });
+        setUniqueWords(uniqueWordsData as Word[]);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -143,17 +195,17 @@ const UserProfile = () => {
               <p><strong>Edit unsuccessful:</strong> The definition cannot be left empty.</p>
             }
             okButtonText="OK"
-            onOkButtonClick={handleDialogClose}
-            onClose={handleDialogClose}
+            onOkButtonClick={handleDialogCloseEdit}
+            onClose={handleDialogCloseEdit}
           />
         ) : (
           <CustomDialog
             text="Are you sure you want to submit your changes?"
-            buttonText1="Submit"
-            onButton1Click={handleDialogSubmit}
+            buttonText1="Confirm"
+            onButton1Click={handleDialogSubmitEdit}
             buttonText2="Cancel"
-            onButton2Click={handleDialogClose}
-            onClose={handleDialogClose}
+            onButton2Click={handleDialogCloseEdit}
+            onClose={handleDialogCloseEdit}
           />
         )
       )}
@@ -197,62 +249,71 @@ const UserProfile = () => {
       {/*  <input type="search" placeholder="Search your posts..." required />*/}
       {/*</form>*/}
       
-      {definitions.map((definition: Definition, index: number) => (
-        <div className="profile-post" key={definition.id}>
-          <div className="profile-post-language">
-            <p className="profile-post-language-left">
-              {definition.isArabic ? 'ARABIC' : 'FRANCO-ARABIC'}
-            </p>
-            <div
-              className="profile-post-language-right"
-              onClick={handlePostLanguageClick}
-            >
-              <p>View translations</p>
-              &nbsp;
-              <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
+      {uniqueWords.map((word: Word, index: number) => {
+        const wordDefinitionsData = wordDefinitions[word.id];
+        const currentDefinition = wordDefinitionsData.find((def: Definition) => def.isArabic === (currentLanguage[word.id] === 'ARABIC'));
+        
+        return (
+          <div className="profile-post" key={word.id}>
+            <div className="profile-post-language">
+              <p className="profile-post-language-left">
+                {currentLanguage[word.id] === 'ARABIC' ? 'ARABIC' : 'FRANCO-ARABIC'}
+              </p>
+              <div
+                className="profile-post-language-right"
+                onClick={() => handlePostLanguageClick(word.id)}
+              >
+                <p>Switch translation</p>
+                &nbsp;
+                <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
+              </div>
             </div>
-          </div>
-          <h2 dir={definition.isArabic ? 'rtl' : 'ltr'}>
-            {definition.isArabic ? definition.word.arabicWord : definition.word.francoArabicWord}
-          </h2>
-          {editingPostId === definition.id ? (
-            <textarea
-              typeof={'text'}
-              value={editedText}
-              className={`profile-post-inputtext`}
-              rows={4}
-              dir={definition.isArabic ? 'rtl' : 'ltr'}
-              onChange={(e) => setEditedText(e.target.value)}
-            />
-          ) : (
-            <p dir={definition.isArabic ? 'rtl' : 'ltr'}>{definition.definition}</p>
-          )}
-          <p className="profile-post-date">
-            {new Date(definition.AddedTimestamp).toLocaleDateString(
-              'en-US', { year: 'numeric', month: 'long', day: 'numeric' },
+            <h2 dir={currentLanguage[word.id] === 'ARABIC' ? 'rtl' : 'ltr'}>
+              {currentLanguage[word.id] === 'ARABIC' ? word.arabicWord : word.francoArabicWord}
+            </h2>
+            {editingPostId === currentDefinition?.id ? (
+              <textarea
+                typeof={'text'}
+                value={editedText}
+                className={`profile-post-inputtext`}
+                rows={4}
+                dir={currentLanguage === 'ARABIC' ? 'rtl' : 'ltr'}
+                onChange={(e) => setEditedText(e.target.value)}
+              />
+            ) : (
+              <p dir={currentDefinition?.isArabic ? 'rtl' : 'ltr'}>
+                {currentDefinition?.definition}
+              </p>
             )}
-          </p>
-          <div className="buttons">
-            <button onClick={() => handleEditClick(definition.id, definition.definition)}
-                    className="profile-post-buttons-button">
-              {editingPostId === definition.id ? 'Submit' : 'Edit'}
-            </button>
-            <button className="profile-post-buttons-button" disabled>
-              <FontAwesomeIcon icon={faThumbsUp} />
-              <p>{definition.likeCount}</p>
-            </button>
-            <button className="profile-post-buttons-button" disabled>
-              <FontAwesomeIcon icon={faThumbsDown} />
-              <p>{definition.dislikeCount}</p>
-            </button>
-            <button className="profile-post-buttons-button" disabled>
-              <FontAwesomeIcon icon={faFlag} />
-              <p>{definition.reportCount}</p>
-            </button>
+            <p className="profile-post-date">
+              {currentDefinition?.AddedTimestamp && new Date(currentDefinition.AddedTimestamp).toLocaleDateString(
+                'en-US', { year: 'numeric', month: 'long', day: 'numeric' },
+              )}
+            </p>
+            <div className="buttons">
+              {currentDefinition?.id && currentDefinition?.definition && (
+                <button onClick={() => handleEditClick(currentDefinition.id, currentDefinition.definition)}
+                        className="profile-post-buttons-button">
+                  {editingPostId === currentDefinition.id ? 'Submit' : 'Edit'}
+                </button>
+              )}
+              <button className="profile-post-buttons-button" disabled>
+                <FontAwesomeIcon icon={faThumbsUp} />
+                <p>{currentDefinition?.likeCount}</p>
+              </button>
+              <button className="profile-post-buttons-button" disabled>
+                <FontAwesomeIcon icon={faThumbsDown} />
+                <p>{currentDefinition?.dislikeCount}</p>
+              </button>
+              <button className="profile-post-buttons-button" disabled>
+                <FontAwesomeIcon icon={faFlag} />
+                <p>{currentDefinition?.reportCount}</p>
+              </button>
+            </div>
+            {index !== uniqueWords.length - 1 && <hr />}
           </div>
-          {index !== definitions.length - 1 && <hr />}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
