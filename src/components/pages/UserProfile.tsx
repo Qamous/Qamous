@@ -99,10 +99,14 @@ const UserProfile = () => {
     if (submittingPostId !== null) {
       const updatedDefinition = definitions.find(def => def.id === submittingPostId);
       if (updatedDefinition) {
+        definitions.forEach(def => {
+          if (def.id === submittingPostId) {
+            def.definition = editedText;
+          }
+        });
         const updatedDefinitionWithWordId = {
           ...updatedDefinition,
           definition: editedText,
-          wordId: updatedDefinition.word.id,
         };
         fetch(`http://localhost:3000/definitions/${submittingPostId}`, {
           method: 'PATCH',
