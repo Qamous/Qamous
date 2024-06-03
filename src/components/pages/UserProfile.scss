@@ -12,6 +12,28 @@
   display: flex;
   flex-direction: column;
 
+  &-title {
+    margin: 10px 0 0;
+    width: 100%;
+    text-align: center;
+    font-weight: 400;
+    text-decoration: none;
+
+    &-name {
+      border-bottom: 2px solid styles.$secondary-color-90;
+    }
+  }
+
+  &-subtitle {
+    margin: 5px 0 10px;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    text-decoration: none;
+    color: styles.$primary-color-50;
+    font-size: 16px;
+  }
+
   &-logout {
     justify-content: center;
     margin: 10px 5px 0;

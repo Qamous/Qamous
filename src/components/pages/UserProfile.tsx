@@ -9,7 +9,7 @@ import {
   faThumbsDown,
   faThumbsUp, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import CustomDialog from '../CustomDialog';
 import Snackbar from '../Snackbar';
 
@@ -55,6 +55,21 @@ const UserProfile = () => {
   const [likeSnackbarOpen, setLikeSnackbarOpen] = useState(false);
   const [dislikeSnackbarOpen, setDislikeSnackbarOpen] = useState(false);
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
+  const name: string = 'Anthony'; // Replace with the actual user name
+  const userId: number = 1; // Replace with the actual user ID
+  
+  const fetchDefinitions = (userId: number) =>
+    fetch(`http://localhost:3000/definitions/user/${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        setDefinitions(data);
+        
+        const [wordDefinitionsData, uniqueWordsData] = rearrangeDefinitions(data);
+        setWordDefinitions(wordDefinitionsData as { [key: number]: Definition[] });
+        setUniqueWords(uniqueWordsData as Word[]);
+      });
+  
+  const { data, isLoading, isError } = useQuery(['definitions', userId], () => fetchDefinitions(userId));
   
   const handlePostLanguageClick = (postId: number) => {
     setCurrentLanguage(prevState => ({
@@ -233,21 +248,6 @@ const UserProfile = () => {
   }, [location, navigate]);
   
   useEffect(() => {
-    const userId = 1; // Replace with the actual user ID
-    
-    fetch(`http://localhost:3000/definitions/user/${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        setDefinitions(data);
-        
-        const [wordDefinitionsData, uniqueWordsData] = rearrangeDefinitions(data);
-        setWordDefinitions(wordDefinitionsData as { [key: number]: Definition[] });
-        setUniqueWords(uniqueWordsData as Word[]);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    
     // Allow Esc to cancel editing
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -260,6 +260,20 @@ const UserProfile = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+  
+  if (isLoading) {
+    return (
+      <div className="profile">
+        <h2 className="profile-title">Hello!</h2>
+        <div className={'loading-ring'}>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="profile">
       {isDialogOpen && (
@@ -320,6 +334,8 @@ const UserProfile = () => {
       {/*  <h2>Hello,</h2>*/}
       {/*  <h1>User!</h1>*/}
       {/*</div>*/}
+      <h2 className="profile-title">Hi, <span className="profile-title-name">{name}</span>!</h2>
+      <h3 className="profile-subtitle">anthonyyoussef01</h3>
       <div className="buttons profile-logout">
         <button onClick={handleLogout} className="buttons-button">
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
@@ -347,6 +363,7 @@ const UserProfile = () => {
             }));
           }
         }
+        
         return (
           <div className="profile-post" key={word.id}>
             <div className="profile-post-language">
@@ -398,21 +415,21 @@ const UserProfile = () => {
                 onClick={handleLikeClick}
               >
                 <FontAwesomeIcon icon={faThumbsUp} />
-                <p>{currentDefinition?.likeCount}</p>
+                <p>{currentDefinition?.likeCount ?? 0}</p>
               </button>
               <button
                 className="profile-post-buttons-button profile-post-buttons-button-disabled"
                 onClick={handleDislikeClick}
               >
                 <FontAwesomeIcon icon={faThumbsDown} />
-                <p>{currentDefinition?.dislikeCount}</p>
+                <p>{currentDefinition?.dislikeCount ?? 0}</p>
               </button>
               <button
                 className="profile-post-buttons-button profile-post-buttons-button-disabled"
                 onClick={handleReportClick}
               >
                 <FontAwesomeIcon icon={faFlag} />
-                <p>{currentDefinition?.reportCount}</p>
+                <p>{currentDefinition?.reportCount ?? 0}</p>
               </button>
             </div>
             {index !== uniqueWords.length - 1 && <hr />}
