@@ -18,6 +18,9 @@ interface HomeContent {
   francoArabicWord: string,
   reportCount: number,
   countryCode: string
+  isLiked: number,
+  isDisliked: number,
+  isReported: number
 }
 
 interface JsonContent {
@@ -26,6 +29,7 @@ interface JsonContent {
 }
 
 const fetchHomeContent: () => Promise<HomeContent[]> = () =>
+  // after fetching the data, console log the data and return it
   fetch('http://localhost:3000/definitions/most-liked', {
     mode: 'cors',
     credentials: 'include',
@@ -47,6 +51,11 @@ const Home: React.FC = () => {
       setTimeout(() => setErrorSnackbarOpen(false), 3000);
     }
   }, [isError]);
+  useEffect(() => {
+    if (homeContent) {
+      console.log(homeContent);
+    }
+  }, []);
   
   if (isLoading) {
     return (
@@ -57,6 +66,9 @@ const Home: React.FC = () => {
           lang={lang}
           definitionId={0}
           wordId={0}
+          isLiked={false}
+          isDisliked={false}
+          isReported={false}
         />
         <div className={'loading-ring'}>
           <div></div>
@@ -77,6 +89,9 @@ const Home: React.FC = () => {
           lang={lang}
           definitionId={0}
           wordId={0}
+          isLiked={false}
+          isDisliked={false}
+          isReported={false}
         />
         <Snackbar
           open={errorSnackbarOpen}
@@ -94,6 +109,9 @@ const Home: React.FC = () => {
         lang={lang}
         definitionId={0}
         wordId={0}
+        isLiked={false}
+        isDisliked={false}
+        isReported={false}
       />
       {homeContent && homeContent
         .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
@@ -106,6 +124,9 @@ const Home: React.FC = () => {
             definitionId={item.definitionId}
             wordId={item.wordId}
             countryCode={item.countryCode}
+            isLiked={item.isLiked !== 0}
+            isDisliked={item.isDisliked !== 0}
+            isReported={item.isReported !== 0}
           />
         ))}
     </div>

@@ -15,6 +15,9 @@ interface HomeContentProps {
   lang: string,
   wordId: number,
   definitionId: number,
+  isLiked: boolean,
+  isDisliked: boolean,
+  isReported: boolean,
   countryCode?: string,
   //likeCount: number,
   //dislikeCount: number,
@@ -26,15 +29,25 @@ interface ButtonText {
   report: string
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, definitionId, countryCode }) => {
+const ContentBox: React.FC<HomeContentProps> = ({
+                                                  item,
+                                                  index,
+                                                  lang,
+                                                  wordId,
+                                                  definitionId,
+                                                  countryCode,
+                                                  isLiked,
+                                                  isDisliked,
+                                                  isReported,
+                                                }) => {
   const { t } = useTranslation();
   const buttonText = t('content_box_buttons', {
     returnObjects: true,
   }) as ButtonText;
   
-  const [likeClicked, setLikeClicked] = useState(false);
-  const [dislikeClicked, setDislikeClicked] = useState(false);
-  const [reportClicked, setReportClicked] = useState(false);
+  const [likeClicked, setLikeClicked] = useState(isLiked);
+  const [dislikeClicked, setDislikeClicked] = useState(isDisliked);
+  const [reportClicked, setReportClicked] = useState(isReported);
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
@@ -54,7 +67,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
       onError: (error) => {
         console.error('There has been a problem with your fetch operation:', error);
       },
-    }
+    },
   );
   
   const dislikeMutation = useMutation(() =>
@@ -65,7 +78,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
       onError: (error) => {
         console.error('There has been a problem with your fetch operation:', error);
       },
-    }
+    },
   );
   
   const handleLikeClick = () => {
@@ -76,8 +89,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
       
       // Use the mutation
       likeMutation.mutate();
-    }
-    else if (clickCount >= 5) {
+    } else if (clickCount >= 5) {
       setExcessiveClickSnackbarOpen(true);
       setTimeout(() => setExcessiveClickSnackbarOpen(false), 3000);
     }
@@ -91,8 +103,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
       
       // Use the mutation
       dislikeMutation.mutate();
-    }
-    else if (clickCount >= 5) {
+    } else if (clickCount >= 5) {
       setExcessiveClickSnackbarOpen(true);
       setTimeout(() => setExcessiveClickSnackbarOpen(false), 3000);
     }
@@ -110,11 +121,11 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
       }),
       credentials: 'include',
     });
-  
+    
     if (!response.ok) {
       throw new Error('Failed to post word report');
     }
-  
+    
     return await response.json();
   };
   
@@ -139,11 +150,11 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
       }),
       credentials: 'include',
     });
-  
+    
     if (!response.ok) {
       throw new Error('Failed to post definition report');
     }
-  
+    
     return await response.json();
   };
   
@@ -194,13 +205,20 @@ const ContentBox: React.FC<HomeContentProps> = ({ item, index, lang, wordId, def
     }
   }, [clickCount]);
   
+  // Update the like, dislike, and report buttons when language is changed
+  useEffect(() => {
+    setLikeClicked(isLiked);
+    setDislikeClicked(isDisliked);
+    setReportClicked(isReported);
+  }, [isLiked, isDisliked, isReported]);
+  
   return (
     <div className={'content-box' +
       (index === 0 ? ' content-box-first' : '') +
       (lang === 'ar' ? ' content-box-ar' : ' content-box-latin')}>
       {showDialog && (
         <CustomDialog
-          text={reportType ? `Why are you reporting this ${reportType}?` : "Are you reporting the word or the definition?"}
+          text={reportType ? `Why are you reporting this ${reportType}?` : 'Are you reporting the word or the definition?'}
           buttonText1="Word"
           buttonText2="Definition"
           onButton1Click={() => {
