@@ -302,7 +302,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
       )}
       <Snackbar
         open={reportSnackbarOpen}
-        message="You are unable to report the same word/definition more than once"
+        message="You are unable to report the same word / definition more than once"
       />
       <Snackbar
         open={excessiveClickSnackbarOpen}
