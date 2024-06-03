@@ -34,8 +34,11 @@ const WordOfTheDay: React.FC = () => {
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
     useEffect(() => {
         if (isError) {
-            setErrorSnackbarOpen(true);
-            setTimeout(() => setErrorSnackbarOpen(false), 3000);
+            setErrorSnackbarOpen(false);
+            // A delay to allow the state to propagate before the snackbar opens
+            setTimeout(() => {
+                setErrorSnackbarOpen(true);
+            }, 100);
         }
     }, [isError]);
 

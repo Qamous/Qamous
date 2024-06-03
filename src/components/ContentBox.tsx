@@ -90,8 +90,11 @@ const ContentBox: React.FC<HomeContentProps> = ({
       // Use the mutation
       likeMutation.mutate();
     } else if (clickCount >= 5) {
-      setExcessiveClickSnackbarOpen(true);
-      setTimeout(() => setExcessiveClickSnackbarOpen(false), 3000);
+      setExcessiveClickSnackbarOpen(false);
+      // A delay to allow the state to propagate before the snackbar opens
+      setTimeout(() => {
+        setExcessiveClickSnackbarOpen(true);
+      }, 100);
     }
   };
   
@@ -104,8 +107,11 @@ const ContentBox: React.FC<HomeContentProps> = ({
       // Use the mutation
       dislikeMutation.mutate();
     } else if (clickCount >= 5) {
-      setExcessiveClickSnackbarOpen(true);
-      setTimeout(() => setExcessiveClickSnackbarOpen(false), 3000);
+      setExcessiveClickSnackbarOpen(false);
+      // A delay to allow the state to propagate before the snackbar opens
+      setTimeout(() => {
+        setExcessiveClickSnackbarOpen(true);
+      }, 100);
     }
   };
   
@@ -131,8 +137,11 @@ const ContentBox: React.FC<HomeContentProps> = ({
   
   const handleReportClick = () => {
     if (reportClicked) {
-      setReportSnackbarOpen(true);
-      setTimeout(() => setReportSnackbarOpen(false), 3000);
+      setReportSnackbarOpen(false);
+      // A delay to allow the state to propagate before the snackbar opens
+      setTimeout(() => {
+        setReportSnackbarOpen(true);
+      }, 100);
     } else {
       setShowDialog(true);
     }
