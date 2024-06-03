@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from 'react-query';
 import CustomDialog from '../CustomDialog';
+import Snackbar from '../Snackbar';
 
 //import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
 
@@ -51,6 +52,9 @@ const UserProfile = () => {
   const [uniqueWords, setUniqueWords] = useState<Word[]>([]);
   const [wordDefinitions, setWordDefinitions] = useState<{ [key: number]: Definition[] }>({});
   const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] = useState(false);
+  const [likeSnackbarOpen, setLikeSnackbarOpen] = useState(false);
+  const [dislikeSnackbarOpen, setDislikeSnackbarOpen] = useState(false);
+  const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
   
   const handlePostLanguageClick = (postId: number) => {
     setCurrentLanguage(prevState => ({
@@ -173,6 +177,31 @@ const UserProfile = () => {
   const handleDialogCloseEdit = (): void => {
     setIsDialogOpen(false);
     setEditingPostId(null);
+  };
+  
+  const handleLikeClick = () => {
+    setLikeSnackbarOpen(false);
+    // A delay to allow the state to propagate before the snackbar opens
+    setTimeout(() => {
+      setLikeSnackbarOpen(true);
+    }, 100);
+  };
+  
+  
+  const handleDislikeClick = () => {
+    setDislikeSnackbarOpen(false);
+    // A delay to allow the state to propagate before the snackbar opens
+    setTimeout(() => {
+      setDislikeSnackbarOpen(true);
+    }, 100);
+  };
+  
+  const handleReportClick = () => {
+    setReportSnackbarOpen(false);
+    // A delay to allow the state to propagate before the snackbar opens
+    setTimeout(() => {
+      setReportSnackbarOpen(true);
+    }, 100);
   };
   
   const rearrangeDefinitions = (definitions: Definition[]) => {
@@ -364,15 +393,24 @@ const UserProfile = () => {
                   {editingPostId === currentDefinition.id ? 'Submit' : 'Edit'}
                 </button>
               )}
-              <button className="profile-post-buttons-button" disabled>
+              <button
+                className="profile-post-buttons-button profile-post-buttons-button-disabled"
+                onClick={handleLikeClick}
+              >
                 <FontAwesomeIcon icon={faThumbsUp} />
                 <p>{currentDefinition?.likeCount}</p>
               </button>
-              <button className="profile-post-buttons-button" disabled>
+              <button
+                className="profile-post-buttons-button profile-post-buttons-button-disabled"
+                onClick={handleDislikeClick}
+              >
                 <FontAwesomeIcon icon={faThumbsDown} />
                 <p>{currentDefinition?.dislikeCount}</p>
               </button>
-              <button className="profile-post-buttons-button" disabled>
+              <button
+                className="profile-post-buttons-button profile-post-buttons-button-disabled"
+                onClick={handleReportClick}
+              >
                 <FontAwesomeIcon icon={faFlag} />
                 <p>{currentDefinition?.reportCount}</p>
               </button>
@@ -387,6 +425,18 @@ const UserProfile = () => {
           <p>Delete Account</p>
         </button>
       </div>
+      <Snackbar
+        open={likeSnackbarOpen}
+        message="You cannot like your own definitions"
+      />
+      <Snackbar
+        open={dislikeSnackbarOpen}
+        message="You cannot dislike your own definitions"
+      />
+      <Snackbar
+        open={reportSnackbarOpen}
+        message="You cannot report your own definitions"
+      />
     </div>
   );
 };

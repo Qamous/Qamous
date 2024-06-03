@@ -14,7 +14,7 @@
 
     &.show {
         visibility: visible;
-        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s forwards;
     }
 }
 
@@ -25,5 +25,5 @@
 
 @keyframes fadeout {
     from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+    to {bottom: 0; opacity: 0; visibility: hidden;}
 }

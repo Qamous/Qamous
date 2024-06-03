@@ -189,7 +189,7 @@
           outline: 0;
         }
 
-        &:disabled {
+        &-disabled {
           background-color: styles.$primary-color-50;
           cursor: not-allowed;
           &:hover {
