@@ -103,7 +103,10 @@ const Login: React.FC = () => {
             setShowSuccessDialog(false);
             navigate('/');
           }}
-          onClose={() => setShowSuccessDialog(false)}
+          onClose={() => {
+            setShowSuccessDialog(false);
+            navigate('/');
+          }}
         />
       )}
       

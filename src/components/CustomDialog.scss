@@ -1,5 +1,16 @@
 @use '../assets/Styles.scss' as styles;
 
+@keyframes zoomIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .custom-dialog {
   position: fixed;
   top: 0;
@@ -19,6 +30,7 @@
     width: 80%;
     max-width: 500px;
     text-align: center;
+    animation: zoomIn 0.3s ease-out; // Add this line to apply the zoom-in animation
 
     &-input {
       textarea {

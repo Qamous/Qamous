@@ -243,9 +243,8 @@ const ContentBox: React.FC<HomeContentProps> = ({
             setReportType(null);
           }}
           showTextInput={reportType !== null}
-          onSubmit={onSubmit} // Add this line
+          onSubmit={onSubmit}
           onCancel={() => {
-            // Handle the cancel action here
             setShowDialog(false);
             setReportType(null);
           }}
