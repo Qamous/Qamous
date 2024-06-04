@@ -15,6 +15,8 @@ interface WordOfTheDayContent {
     reportCount: number
 }
 
+// TODO: use a different api endpoint to fetch the word of the day content, this
+//  one does a lot of calculations
 const fetchWordOfTheDayContent = () =>
     fetch('http://localhost:3000/definitions/most-liked', {
         mode: 'cors',
