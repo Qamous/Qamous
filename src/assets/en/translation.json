@@ -74,5 +74,20 @@
     "country_selection": "Select the country / countries of origin (if applicable)",
     "ar_definition-error": "Arabic definition is required if English definition and Franco-Arabic word are not provided",
     "ar_word-error": "The Arabic word must be in Arabic"
+  },
+  "login": {
+    "title": "Log in",
+    "enter_username": "Enter your username here",
+    "enter_password": "Enter your password here",
+    "forgot_password": "Forgot password?",
+    "login": "Log in",
+    "sign_up": "Sign up",
+    "continue_with": "Or continue with",
+    "username_required": "Username is required",
+    "invalid_username": "Invalid username",
+    "password_required": "Password is required",
+    "success_message": "Login successful",
+    "error_message": "Login failed",
+    "ok": "OK"
   }
 }

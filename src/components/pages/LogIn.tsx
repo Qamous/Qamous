@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './LogIn.scss';
 import { useMutation } from 'react-query';
-import OAuthStrategies from '../OAuthStrategies';
 import CustomDialog from '../CustomDialog';
+import { useTranslation } from 'react-i18next';
+//import OAuthStrategies from '../OAuthStrategies';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Login: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const { t } = useTranslation();
   
   const forgotPasswordHuh = (): void => {
     const forgotPasswordElement = document.querySelector('.container-forgot');
@@ -43,11 +45,11 @@ const Login: React.FC = () => {
     return response.json();
   }), {
     onSuccess: () => {
-      setSuccessMessage('Login successful');
+      setSuccessMessage(t('login.success_message'));
       setShowSuccessDialog(true);
     },
     onError: (error: any) => {
-      setErrorMessage(`Login failed: ${error.message}`);
+      setErrorMessage(`${t('login.error_message')}: ${error.message}`);
       setShowErrorDialog(true);
       forgotPasswordHuh();
     },
@@ -61,17 +63,17 @@ const Login: React.FC = () => {
     
     // Basic Username validation
     if (!username || '' === username) {
-      setUsernameError('Username is required');
+      setUsernameError(t('login.username_required'));
       return;
     }
     // SQL injection prevention
     if (username.includes('\'') || username.includes('"') || username.includes(';')) {
-      setUsernameError('Invalid username');
+      setUsernameError(t('login.invalid_username'));
       return;
     }
     // Basic password validation
     if (!password || '' === password) {
-      setPasswordError('Password is required');
+      setPasswordError(t('login.password_required'));
       // make container-forgot visible
       forgotPasswordHuh();
     }
@@ -90,7 +92,7 @@ const Login: React.FC = () => {
       {showErrorDialog && (
         <CustomDialog
           text={errorMessage}
-          okButtonText="OK"
+          okButtonText={t('login.ok')}
           onOkButtonClick={() => setShowErrorDialog(false)}
           onClose={() => setShowErrorDialog(false)}
         />
@@ -98,7 +100,7 @@ const Login: React.FC = () => {
       {showSuccessDialog && (
         <CustomDialog
           text={successMessage}
-          okButtonText="OK"
+          okButtonText={t('login.ok')}
           onOkButtonClick={() => {
             setShowSuccessDialog(false);
             navigate('/');
@@ -113,14 +115,14 @@ const Login: React.FC = () => {
       <form onSubmit={onLoginClick} className={'container'}>
         
         <div className={'container-title'}>
-          <div>Log in</div>
+          <div>{t('login.title')}</div>
         </div>
         <br />
         <div className={'container-input'}>
           <input
             type={'username'}
             value={username}
-            placeholder="Enter your username here"
+            placeholder={t('login.enter_username')}
             onChange={(ev) => setUsername(ev.target.value)}
             className={'container-input-box'}
           />
@@ -131,34 +133,34 @@ const Login: React.FC = () => {
           <input
             type={'password'}
             value={password}
-            placeholder="Enter your password here"
+            placeholder={t('login.enter_password')}
             onChange={(ev) => setPassword(ev.target.value)}
             className={'container-input-box'}
           />
           <label className="container-input-error">{passwordError}</label>
         </div>
-        <NavLink to={'/forgot-password'} className={'container-forgot'}>Forgot password?</NavLink>
+        <NavLink to={'/forgot-password'} className={'container-forgot'}>{t('login.forgot_password')}</NavLink>
         <br />
         <div className={'container-buttons'}>
           <button
             className={'container-buttons-button'}
             type="submit"
             onClick={onLoginClick}
-            value={'Log in'}
+            value={t('login.login')}
           >
-            Log in
+            {t('login.login')}
           </button>
           <button
             className="container-buttons-button container-buttons-button-secondary"
             onClick={onSignUpClick}
-            value={'Sign Up'}
+            value={t('login.sign_up')}
           >
-            Sign up
+            {t('login.sign_up')}
           </button>
         </div>
         {/*<div className={'container-oauth'}>*/}
         {/*  <p>*/}
-        {/*    — Or continue with —*/}
+        {/*    — {i18n.t('login.continue_with')} —*/}
         {/*  </p>*/}
         {/*  <OAuthStrategies />*/}
         {/*</div>*/}
