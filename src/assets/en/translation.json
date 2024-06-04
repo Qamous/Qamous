@@ -62,5 +62,17 @@
   "search_results": {
     "word": "Search Results for \"{{searchTerm}}\"",
     "definition": "Here are the search results for the term \"{{searchTerm}}\"."
+  },
+  "add_word": {
+    "title": "Add a New Word",
+    "add_word": "Add Word",
+    "enter_word_ar": "Enter the word in Arabic",
+    "enter_word_en": "Enter the word in Franco-Arabic",
+    "enter_definition_ar": "Enter the definition in Arabic",
+    "enter_definition_en": "Enter the definition in English",
+    "enter_example_en": "Enter an example in English",
+    "country_selection": "Select the country / countries of origin (if applicable)",
+    "ar_definition-error": "Arabic definition is required if English definition and Franco-Arabic word are not provided",
+    "ar_word-error": "The Arabic word must be in Arabic"
   }
 }

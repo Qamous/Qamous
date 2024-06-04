@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
+import i18n from 'i18next';
 import './AddWord.scss';
+import { useTranslation } from 'react-i18next';
 
 const AddWord = () => {
   const [options, setOptions] = useState<string[]>([]);
@@ -14,6 +16,7 @@ const AddWord = () => {
   const [francoArabicWordError, setFrancoArabicWordError] = useState('');
   const [arabicDefinitionError, setArabicDefinitionError] = useState('');
   const [englishDefinitionError, setEnglishDefinitionError] = useState('');
+  const { t } = useTranslation();
   
   function onCountrySelect(ev: React.ChangeEvent<HTMLSelectElement>) {
     const selectedOptions = Array.from(ev.target.selectedOptions).map(option => option.value);
@@ -31,13 +34,13 @@ const AddWord = () => {
     if (!arabicDefinition || '' === arabicDefinition) {
       // If it is, check if both English definition and Franco-Arabic word are not empty
       if ((!englishDefinition || '' === englishDefinition) && (!francoArabicWord || '' === francoArabicWord)) {
-        setArabicDefinitionError('Arabic definition is required if English definition and Franco-Arabic word are not provided');
+        setArabicDefinitionError(t('add_word.ar_definition-error'));
         return;
       }
     }
     // Validate Arabic word is in Arabic
     if (!/^[\u060C-\u061B\u061E-\u06D6ء-ي\s٠-٩]+$/u.test(arabicWord)) {
-      setArabicWordError('The Arabic word must be in Arabic');
+      setArabicWordError(t('add_word.ar_word-error'));
       return;
     }
     
@@ -125,12 +128,11 @@ const AddWord = () => {
     Papa.parse('countries.csv', {
       download: true,
       header: true,
-      complete: function(results: { data: { ' CountryName': string }[] }) {
-        //console.log("Papa Parse results:", results);
+      complete: function (results: { data: { ' CountryName': string }[] }) {
         const countries = results.data.map(row => row[' CountryName']);
         setOptions(countries);
       },
-      error: function(err) {
+      error: function (err) {
         console.log('Papa Parse error:', err);
       },
     });
@@ -139,7 +141,7 @@ const AddWord = () => {
   return (
     <div className={'container'}>
       <div className={'container-title'}>
-        <div>Add a new word</div>
+        <div>{t('add_word.title')}</div>
       </div>
       <br />
       <div className={'container-input'}>
@@ -147,7 +149,7 @@ const AddWord = () => {
           style={{ direction: 'rtl', textAlign: 'left' }}
           type={'text'}
           value={arabicWord}
-          placeholder="Enter the word in Arabic here"
+          placeholder={t('add_word.enter_word_ar')}
           onChange={(ev) => setArabicWord(ev.target.value)}
           className={'container-input-box'}
           required={true}
@@ -159,7 +161,7 @@ const AddWord = () => {
           style={{ direction: 'ltr', textAlign: 'left' }}
           type={'text'}
           value={francoArabicWord}
-          placeholder="Enter the word in Franco-Arabic here"
+          placeholder={t('add_word.enter_word_en')}
           onChange={(ev) => setFrancoArabicWord(ev.target.value)}
           className={'container-input-box'}
           required={false}
@@ -171,7 +173,7 @@ const AddWord = () => {
           style={{ direction: 'rtl', textAlign: 'left' }}
           rows={2}
           value={arabicDefinition}
-          placeholder="Enter the definition in Arabic here"
+          placeholder={t('add_word.enter_definition_ar')}
           onChange={(ev) => setArabicDefinition(ev.target.value)}
           className={'container-input-box'}
           required={true}
@@ -183,7 +185,7 @@ const AddWord = () => {
           style={{ direction: 'ltr', textAlign: 'left' }}
           rows={2}
           value={englishDefinition}
-          placeholder="Enter the definition in English here"
+          placeholder={t('add_word.enter_definition_en')}
           onChange={(ev) => setEnglishDefinition(ev.target.value)}
           className={'container-input-box'}
           required={false}
@@ -195,7 +197,7 @@ const AddWord = () => {
           style={{ direction: 'ltr', textAlign: 'left' }}
           rows={2}
           value={example}
-          placeholder="Enter the example here"
+          placeholder={t('add_word.enter_example_en')}
           onChange={(ev) => setExample(ev.target.value)}
           className={'container-input-box'}
           required={false}
@@ -209,7 +211,7 @@ const AddWord = () => {
           required={false}
           onChange={onCountrySelect}
         >
-          <option value="">Select the country / countries of origin here (if applicable)</option>
+          <option value="">{t('add_word.country_selection')}</option>
           {options.map((option, index) => (
             <option key={index} value={option}
                     selected={selectedCountries.includes(option)}>{option}</option>
@@ -223,9 +225,9 @@ const AddWord = () => {
           className={'container-buttons-button'}
           onClick={onAddWordClick}
           type="button"
-          value={'Add word'}
+          value={t('add_word.add_word')}
         >
-          Add word
+          {t('add_word.add_word')}
         </button>
       </div>
     </div>
