@@ -35,12 +35,12 @@ const SearchResults: React.FC = () => {
   }
   
   return (
-    <div>
+    <div className={'home'}>
       {results.map((result, index) => (
         <ContentBox
           key={index}
           item={result}
-          index={index}
+          index={index + 1}
           lang={'en'}
           wordId={0}
           definitionId={0}
