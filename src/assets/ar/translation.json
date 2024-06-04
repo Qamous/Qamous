@@ -131,7 +131,21 @@
     "password_reset_success": "تم إعادة تعيين كلمة المرور بنجاح",
     "password_reset_error": "فشل في إعادة تعيين كلمة المرور"
   },
+  "user_profile": {
+    "logout": "تسجيل الخروج",
+    "hi": "مرحبًا،",
+    "switch_translation": "تبديل الترجمة",
+    "franco_arabic": "الفرانكو-عربي",
+    "arabic": "العربية",
+    "definition_like_error": "لا يمكنك الإعجاب بتعريفك الخاص",
+    "definition_dislike_error": "لا يمكنك الكرِه بتعريفك الخاص",
+    "definition_report_error": "لا يمكنك الإبلاغ عن تعريفك الخاص",
+    "delete_account": "حذف الحساب"
+  },
   "common": {
-    "ok": "حسنا"
+    "ok": "حسنا",
+    "cancel": "إلغاء",
+    "submit": "إرسال",
+    "edit": "تعديل"
   }
 }

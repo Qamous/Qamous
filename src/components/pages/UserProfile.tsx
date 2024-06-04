@@ -12,6 +12,8 @@ import {
 import { useMutation, useQuery } from 'react-query';
 import CustomDialog from '../CustomDialog';
 import Snackbar from '../Snackbar';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 
 //import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
 
@@ -57,6 +59,7 @@ const UserProfile = () => {
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
   const name: string = 'Anthony'; // Replace with the actual user name
   const userId: number = 1; // Replace with the actual user ID
+  const { t } = useTranslation();
   
   const fetchDefinitions = (userId: number) =>
     fetch(`http://localhost:3000/definitions/user/${userId}`)
@@ -334,12 +337,18 @@ const UserProfile = () => {
       {/*  <h2>Hello,</h2>*/}
       {/*  <h1>User!</h1>*/}
       {/*</div>*/}
-      <h2 className="profile-title">Hi, <span className="profile-title-name">{name}</span>!</h2>
+      <h2 className="profile-title" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+        {t('user_profile.hi') + ' '}
+        <span className="profile-title-name">{name}</span>
+        !
+      </h2>
       <h3 className="profile-subtitle">anthonyyoussef01</h3>
       <div className="buttons profile-logout">
         <button onClick={handleLogout} className="buttons-button">
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
-          <p>Logout</p>
+          <p>
+            {t('user_profile.logout')}
+          </p>
         </button>
       </div>
       
@@ -368,14 +377,18 @@ const UserProfile = () => {
           <div className="profile-post" key={word.id}>
             <div className="profile-post-language">
               <p className="profile-post-language-left">
-                {currentLanguage[word.id] === 'ARABIC' ? 'ARABIC' : 'FRANCO-ARABIC'}
+                {currentLanguage[word.id] === 'ARABIC' ?
+                  t('user_profile.arabic') :
+                  t('user_profile.franco_arabic')}
               </p>
               {wordDefinitionsData.length > 1 && (
                 <div
                   className="profile-post-language-right"
                   onClick={() => handlePostLanguageClick(word.id)}
                 >
-                  <p>Switch translation</p>
+                  <p>
+                    {t('user_profile.switch_translation')}
+                  </p>
                   &nbsp;
                   <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
                 </div>
@@ -400,14 +413,14 @@ const UserProfile = () => {
             )}
             <p className="profile-post-date">
               {currentDefinition?.AddedTimestamp && new Date(currentDefinition.AddedTimestamp).toLocaleDateString(
-                'en-US', { year: 'numeric', month: 'long', day: 'numeric' },
+                i18n.language, { year: 'numeric', month: 'long', day: 'numeric' },
               )}
             </p>
             <div className="buttons">
               {currentDefinition?.id && currentDefinition?.definition && (
                 <button onClick={() => handleEditClick(currentDefinition.id, currentDefinition.definition)}
                         className="profile-post-buttons-button">
-                  {editingPostId === currentDefinition.id ? 'Submit' : 'Edit'}
+                  {editingPostId === currentDefinition.id ? t('common.submit') : t('common.edit')}
                 </button>
               )}
               <button
@@ -439,20 +452,22 @@ const UserProfile = () => {
       <div className="buttons profile-delete">
         <button onClick={handleDeleteAccount} className="buttons-button">
           <FontAwesomeIcon icon={faTrash} />
-          <p>Delete Account</p>
+          <p>
+            {t('user_profile.delete_account')}
+          </p>
         </button>
       </div>
       <Snackbar
         open={likeSnackbarOpen}
-        message="You cannot like your own definitions"
+        message={t('user_profile.definition_like_error')}
       />
       <Snackbar
         open={dislikeSnackbarOpen}
-        message="You cannot dislike your own definitions"
+        message={t('user_profile.definition_dislike_error')}
       />
       <Snackbar
         open={reportSnackbarOpen}
-        message="You cannot report your own definitions"
+        message={t('user_profile.definition_report_error')}
       />
     </div>
   );

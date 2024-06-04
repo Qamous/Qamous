@@ -131,7 +131,21 @@
     "password_reset_success": "Password reset successful",
     "password_reset_error": "Failed to reset password"
   },
+  "user_profile": {
+    "logout": "Log out",
+    "hi": "Hi,",
+    "switch_translation": "Switch translation",
+    "franco_arabic": "FRANCO-ARABIC",
+    "arabic": "ARABIC",
+    "definition_like_error": "You cannot like your own definitions",
+    "definition_dislike_error": "You cannot dislike your own definitions",
+    "definition_report_error": "You cannot report your own definitions",
+    "delete_account": "Delete Account"
+  },
   "common": {
-    "ok": "OK"
+    "ok": "OK",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "edit": "Edit"
   }
 }
