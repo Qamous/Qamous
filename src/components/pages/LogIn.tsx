@@ -92,7 +92,7 @@ const Login: React.FC = () => {
       {showErrorDialog && (
         <CustomDialog
           text={errorMessage}
-          okButtonText={t('login.ok')}
+          okButtonText={t('common.ok')}
           onOkButtonClick={() => setShowErrorDialog(false)}
           onClose={() => setShowErrorDialog(false)}
         />
@@ -100,7 +100,7 @@ const Login: React.FC = () => {
       {showSuccessDialog && (
         <CustomDialog
           text={successMessage}
-          okButtonText={t('login.ok')}
+          okButtonText={t('common.ok')}
           onOkButtonClick={() => {
             setShowSuccessDialog(false);
             navigate('/');

@@ -3,8 +3,9 @@ import './SignUp.scss';
 import { useNavigate } from 'react-router-dom';
 import { findLocationByIP, findLocationByLatLong } from '../../assets/utils';
 import { useMutation } from 'react-query';
-import OAuthStrategies from '../OAuthStrategies';
 import CustomDialog from '../CustomDialog';
+import OAuthStrategies from '../OAuthStrategies';
+import { useTranslation } from 'react-i18next';
 
 type User = {
   username: string;
@@ -18,7 +19,7 @@ type User = {
 
 findLocationByIP();
 const SignUp: React.FC = () => {
-  // TODO: check if the user is already logged in and redirect to the user page
+  const { t } = useTranslation();
   const navigate = useNavigate();
   
   const [email, setEmail] = useState('');
@@ -56,22 +57,20 @@ const SignUp: React.FC = () => {
       return response.json();
     }), {
     onMutate: () => {
-      // Clear mutation error before the mutation function is called
       mutation.reset();
     },
     onSuccess: () => {
-      setDialogMessage('You have successfully registered! Please use your credentials to log in.');
+      setDialogMessage(t('sign_up.success_message'));
       setShowDialog(true);
       navigate('/login');
     },
     onError: (error: any) => {
-      setDialogMessage(`Sign up failed: ${error.message}`);
+      setDialogMessage(`${t('sign_up.error_message')}: ${error.message}`);
       setShowDialog(true);
     },
   });
   
   const onSignUpClick = () => {
-    // Clear previous errors
     setUsernameError('');
     setFirstNameError('');
     setLastNameError('');
@@ -79,59 +78,45 @@ const SignUp: React.FC = () => {
     setEmailError('');
     setPasswordError('');
     
-    // Basic Username validation
     if (!username || '' === username) {
-      setUsernameError('Username is required');
+      setUsernameError(t('sign_up.username_error'));
       return;
     }
-    // Advanced Username validation
     if (username.includes('\'') || username.includes('"') || username.includes(';')) {
-      setUsernameError('Username cannot contain \', ", or ;');
+      setUsernameError(t('sign_up.username_invalid_error'));
       return;
     }
-    // Basic First name validation
     if (!firstName || '' === firstName) {
-      setFirstNameError('First name is required');
+      setFirstNameError(t('sign_up.first_name_error'));
       return;
     }
-    // Basic Last name validation
     if (!lastName || '' === lastName) {
-      setLastNameError('Last name is required');
+      setLastNameError(t('sign_up.last_name_error'));
       return;
     }
-    // Basic Date of birth validation
     if (!dob || '' === dob) {
-      setDobError('Date of birth is required');
+      setDobError(t('sign_up.dob_error'));
       return;
     }
-    // Basic Email validation
     if (!email || '' === email) {
-      setEmailError('Email is required');
+      setEmailError(t('sign_up.email_error'));
       return;
     }
-    // Advanced Email validation
     if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
-      setEmailError('Invalid email');
+      setEmailError(t('sign_up.email_invalid_error'));
       return;
     }
-    // Basic password validation
     if (!password || '' === password) {
-      setPasswordError('Password is required');
+      setPasswordError(t('sign_up.password_error'));
       return;
     }
-    // password confirmation validation
     if (!passwordConfirmation || passwordConfirmation !== password) {
-      setPasswordConfirmationError('Password confirmation must match password');
+      setPasswordConfirmationError(t('sign_up.password_confirmation_error'));
       return;
     }
     
-    // TODO: Implement sign up logic here and send the data to the server (including the user's location)
-    // findLocationByLatLong();
     findLocationByIP();
-    // If sign up is successful, navigate to another page
-    // navigate('/dashboard');
     
-    // Call the mutation
     mutation.mutate({
       username,
       firstName,
@@ -152,10 +137,10 @@ const SignUp: React.FC = () => {
       {showDialog && (
         <CustomDialog
           text={dialogMessage}
-          okButtonText="OK"
+          okButtonText={t('common.ok')}
           onOkButtonClick={() => {
             setShowDialog(false);
-            if (dialogMessage.includes('successfully')) {
+            if (dialogMessage.includes(t('sign_up.success_message_part'))) {
               navigate('/login');
             }
           }}
@@ -163,14 +148,14 @@ const SignUp: React.FC = () => {
         />
       )}
       <div className={'container-title'}>
-        <div>Sign Up</div>
+        <div>{t('sign_up.title')}</div>
       </div>
       <br />
       <div className={'container-input'}>
         <input
           type={'text'}
           value={username}
-          placeholder="Enter your username here"
+          placeholder={t('sign_up.enter_username')}
           onChange={(ev) => setUsername(ev.target.value)}
           className={'container-input-box'}
         />
@@ -181,7 +166,7 @@ const SignUp: React.FC = () => {
         <input
           type={'text'}
           value={firstName}
-          placeholder="Enter your first name here"
+          placeholder={t('sign_up.enter_first_name')}
           onChange={(ev) => setFirstName(ev.target.value)}
           className={'container-input-box'}
         />
@@ -192,7 +177,7 @@ const SignUp: React.FC = () => {
         <input
           type={'text'}
           value={lastName}
-          placeholder="Enter your last name here"
+          placeholder={t('sign_up.enter_last_name')}
           onChange={(ev) => setLastName(ev.target.value)}
           className={'container-input-box'}
         />
@@ -203,7 +188,7 @@ const SignUp: React.FC = () => {
         <input
           type={'date'}
           value={dob}
-          placeholder="Enter your date of birth here"
+          placeholder={t('sign_up.enter_dob')}
           onChange={(ev) => setDob(ev.target.value)}
           className={'container-input-box'}
         />
@@ -214,7 +199,7 @@ const SignUp: React.FC = () => {
         <input
           type={'email'}
           value={email}
-          placeholder="Enter your email here"
+          placeholder={t('sign_up.enter_email')}
           onChange={(ev) => setEmail(ev.target.value)}
           className={'container-input-box'}
         />
@@ -225,7 +210,7 @@ const SignUp: React.FC = () => {
         <input
           type={'password'}
           value={password}
-          placeholder="Enter your password here"
+          placeholder={t('sign_up.enter_password')}
           onChange={(ev) => setPassword(ev.target.value)}
           className={'container-input-box'}
         />
@@ -236,7 +221,7 @@ const SignUp: React.FC = () => {
         <input
           type={'password'}
           value={passwordConfirmation}
-          placeholder="Confirm your password here"
+          placeholder={t('sign_up.confirm_password')}
           onChange={(ev) => setPasswordConfirmation(ev.target.value)}
           className={'container-input-box'}
         />
@@ -247,24 +232,18 @@ const SignUp: React.FC = () => {
         <button
           className="container-buttons-button"
           onClick={onSignUpClick}
-          value={'Sign Up'}
+          value={t('sign_up.sign_up_button')}
         >
-          Sign up
+          {t('sign_up.sign_up_button')}
         </button>
         <button
           className="container-buttons-button container-buttons-button-secondary"
           onClick={onLogInClick}
-          value={'Sign Up'}
+          value={t('sign_up.log_in_button')}
         >
-          Log in
+          {t('sign_up.log_in_button')}
         </button>
       </div>
-      {/*<div className={'container-oauth'}>*/}
-      {/*  <p>*/}
-      {/*    — Or continue with —*/}
-      {/*  </p>*/}
-      {/*  <OAuthStrategies />*/}
-      {/*</div>*/}
     </div>
   );
 };

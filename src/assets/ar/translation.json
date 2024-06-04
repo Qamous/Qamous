@@ -89,5 +89,32 @@
     "success_message": "تم تسجيل الدخول بنجاح",
     "error_message": "فشل تسجيل الدخول",
     "ok": "حسنا"
+  },
+  "sign_up": {
+    "title": "التسجيل",
+    "enter_username": "أدخل اسم المستخدم هنا",
+    "enter_first_name": "أدخل اسمك الأول هنا",
+    "enter_last_name": "أدخل اسم العائلة هنا",
+    "enter_dob": "أدخل تاريخ ميلادك هنا",
+    "enter_email": "أدخل بريدك الإلكتروني هنا",
+    "enter_password": "أدخل كلمة المرور هنا",
+    "confirm_password": "أكد كلمة المرور هنا",
+    "username_error": "اسم المستخدم مطلوب",
+    "username_invalid_error": "لا يمكن أن يحتوي اسم المستخدم على ', \" أو ؛",
+    "first_name_error": "الاسم الأول مطلوب",
+    "last_name_error": "اسم العائلة مطلوب",
+    "dob_error": "تاريخ الميلاد مطلوب",
+    "email_error": "البريد الإلكتروني مطلوب",
+    "email_invalid_error": "بريد إلكتروني غير صالح",
+    "password_error": "كلمة المرور مطلوبة",
+    "password_confirmation_error": "يجب أن تتطابق تأكيد كلمة المرور مع كلمة المرور",
+    "success_message": "لقد قمت بالتسجيل بنجاح! يرجى استخدام بيانات اعتمادك لتسجيل الدخول.",
+    "error_message": "فشل التسجيل",
+    "success_message_part": "بنجاح",
+    "sign_up_button": "تسجيل",
+    "log_in_button": "تسجيل الدخول"
+  },
+  "common": {
+    "ok": "حسنا"
   }
 }

@@ -87,7 +87,33 @@
     "invalid_username": "Invalid username",
     "password_required": "Password is required",
     "success_message": "Login successful",
-    "error_message": "Login failed",
+    "error_message": "Login failed"
+  },
+  "sign_up": {
+    "title": "Sign Up",
+    "enter_username": "Enter your username here",
+    "enter_first_name": "Enter your first name here",
+    "enter_last_name": "Enter your last name here",
+    "enter_dob": "Enter your date of birth here",
+    "enter_email": "Enter your email here",
+    "enter_password": "Enter your password here",
+    "confirm_password": "Confirm your password here",
+    "username_error": "Username is required",
+    "username_invalid_error": "Username cannot contain ', \", or ;",
+    "first_name_error": "First name is required",
+    "last_name_error": "Last name is required",
+    "dob_error": "Date of birth is required",
+    "email_error": "Email is required",
+    "email_invalid_error": "Invalid email",
+    "password_error": "Password is required",
+    "password_confirmation_error": "Password confirmation must match password",
+    "success_message": "You have successfully registered! Please use your credentials to log in.",
+    "error_message": "Sign up failed",
+    "success_message_part": "successfully registered",
+    "sign_up_button": "Sign up",
+    "log_in_button": "Log in"
+  },
+  "common": {
     "ok": "OK"
   }
 }
