@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ContentBox from '../ContentBox';
+import i18n from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 interface SearchResult {
   word: string;
   definition: string;
+  isArabic: number;
 }
 
 const SearchResults: React.FC = () => {
   const { query } = useParams();
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [allResults, setAllResults] = useState<SearchResult[]>([]);
+  const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [language, setLanguage] = useState(i18n.language);
   
-  const searchbutton = document.getElementById('myOverlay');
-  if (searchbutton) {
-    searchbutton.style.display = 'block';
-  }
-  const searchboxsubmit = document.getElementById('search-overlay');
-  if (searchboxsubmit) {
-    searchboxsubmit.style.display = 'block';
-  }
-  //restart Searchbar component
   useEffect(() => {
     const searchbutton = document.getElementById('myOverlay');
     if (searchbutton) {
@@ -30,25 +26,45 @@ const SearchResults: React.FC = () => {
     if (searchboxsubmit) {
       searchboxsubmit.style.display = 'block';
     }
+    
+    const handleLanguageChange = (lng: string) => {
+      setLanguage(lng);
+    };
+    i18n.on('languageChanged', handleLanguageChange);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
   }, []);
   
   useEffect(() => {
-    if (query) {
-      fetchSearchResults(query)
-        .then((data) => {
-          setResults(data);
-          console.log(data);
-        })
-        .catch((err) => {
+    const fetchResults = async () => {
+      if (query) {
+        try {
+          const data = await fetchSearchResults(query);
+          setAllResults(data);
+        } catch (err) {
           console.error(err);
           setError('Failed to fetch search results');
-          setResults([]);
-        });
-      console.log("query", query);
-    } else {
-      setResults([]);
-    }
+          setAllResults([]);
+        }
+      } else {
+        setAllResults([]);
+      }
+    };
+    
+    fetchResults();
   }, [query]);
+  
+  useEffect(() => {
+    const filterResults = () => {
+      const filteredData = allResults.filter((item) =>
+        i18n.language === 'ar' ? item.isArabic === 1 : item.isArabic === 0
+      );
+      setFilteredResults(filteredData);
+    };
+    
+    filterResults();
+  }, [language, allResults]);
   
   if (error) {
     return <div>Error: {error}</div>;
@@ -56,12 +72,12 @@ const SearchResults: React.FC = () => {
   
   return (
     <div className={'home'}>
-      {results.map((result, index) => (
+      {filteredResults.map((result, index) => (
         <ContentBox
           key={index}
           item={result}
           index={index + 1}
-          lang={'en'}
+          lang={i18n.language}
           wordId={0}
           definitionId={0}
           isLiked={false}
@@ -74,12 +90,11 @@ const SearchResults: React.FC = () => {
 };
 
 async function fetchSearchResults(query: string): Promise<SearchResult[]> {
-  const response = fetch('http://localhost:3000/word/search/kwd=' + query, {
+  const response = await fetch('http://localhost:3000/word/search/kwd=' + query, {
     mode: 'cors',
     credentials: 'include',
   });
-  console.log("response", response);
-  return (await response).json();
+  return response.json();
 }
 
 export default SearchResults;
