@@ -53,7 +53,7 @@ interface CheckUserStatusProps {
   children: ReactNode;
 }
 
-const CheckUserStatus: React.FC<CheckUserStatusProps> = ({ children }) => {
+const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [userStatus, setUserStatus] = useState(null);
@@ -86,7 +86,49 @@ const CheckUserStatus: React.FC<CheckUserStatusProps> = ({ children }) => {
     }
   }, [location, navigate]);
   
-  return userStatus == null ? <>{children}</> : null;
+  return <>{children}</>;
+};
+
+const CheckUserLoggedOut: React.FC<CheckUserStatusProps> = ({ children }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [userStatus, setUserStatus] = useState(null);
+  
+  const checkUserStatus = async () => {
+    const response = await fetch('http://localhost:3000/auth/session', {
+      credentials: 'include', // Include credentials in the request
+    });
+    if (response.ok) {
+      const { session, sessionId } = await response.json();
+      if (session && sessionId && session.passport) {
+        const { user } = session.passport;
+        if (user) {
+          //console.log("user", user);
+          return user;
+        }
+      }
+    }
+    return null;
+  };
+  
+  useEffect(() => {
+    if (location.pathname === '/profile') {
+      checkUserStatus().then(status => {
+        setUserStatus(status);
+        if (!status) {
+          navigate('/login');
+        }
+      });
+    }
+  }, [location, navigate]);
+  
+  return (
+    
+    <>
+      {children}
+    </>
+  );
+  
 };
 
 const App: React.FC = () => {
@@ -167,7 +209,7 @@ const App: React.FC = () => {
             </div>
           } />
           <Route path="/login" element={
-            <CheckUserStatus>
+            <CheckUserLoggedIn>
               <div className="app">
                 <div className="header">
                   <Header />
@@ -178,10 +220,10 @@ const App: React.FC = () => {
                 <div className="footer">
                 </div>
               </div>
-            </CheckUserStatus>
+            </CheckUserLoggedIn>
           } />
           <Route path="/signup" element={
-            <CheckUserStatus>
+            <CheckUserLoggedIn>
               <div className="app">
                 <div className="header">
                   <Header />
@@ -192,19 +234,21 @@ const App: React.FC = () => {
                 <div className="footer">
                 </div>
               </div>
-            </CheckUserStatus>
+            </CheckUserLoggedIn>
           } />
           <Route path="/forgot-password" element={
-            <div className="app">
-              <div className="header">
-                <Header />
+            <CheckUserLoggedIn>
+              <div className="app">
+                <div className="header">
+                  <Header />
+                </div>
+                <div className="content">
+                  <ForgotPassword />
+                </div>
+                <div className="footer">
+                </div>
               </div>
-              <div className="content">
-                <ForgotPassword />
-              </div>
-              <div className="footer">
-              </div>
-            </div>
+            </CheckUserLoggedIn>
           } />
           <Route path="/reset-password/:token" element={
             <div className="app">
@@ -219,16 +263,18 @@ const App: React.FC = () => {
             </div>
           } />
           <Route path="/profile" element={
-            <div className="app">
-              <div className="header">
-                <Header />
+            <CheckUserLoggedOut>
+              <div className="app">
+                <div className="header">
+                  <Header />
+                </div>
+                <div className="content">
+                  <UserProfile />
+                </div>
+                <div className="footer">
+                </div>
               </div>
-              <div className="content">
-                <UserProfile />
-              </div>
-              <div className="footer">
-              </div>
-            </div>
+            </CheckUserLoggedOut>
           } />
           <Route path="*" element={
             <div className="app">
