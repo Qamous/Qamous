@@ -21,6 +21,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import ForgotPassword from './components/pages/ForgotPassword';
 import ResetPassword from './components/pages/ResetPassword';
 import UserProfile from './components/pages/UserProfile';
+import SearchResults from './components/pages/SearchResults';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -203,6 +204,18 @@ const App: React.FC = () => {
               </div>
               <div className="content">
                 <AddWord />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/search/:query" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <SearchResults />
               </div>
               <div className="footer">
               </div>

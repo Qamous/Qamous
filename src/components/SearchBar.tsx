@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import './SearchBar.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-
+  const navigate = useNavigate();
+  
   const closeSearch = () => {
     const overlay = document.getElementById("myOverlay");
     if (overlay) {
@@ -25,8 +27,8 @@ const SearchBar: React.FC = () => {
       openSearch();
     }
     event.preventDefault();
-    // Perform your search operation here
-    console.log(`Searching for "${searchQuery}"`);
+    
+    navigate(`/search/${searchQuery}`);
     // Reset the search field
     setSearchQuery('');
   };
