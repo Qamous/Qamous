@@ -12,6 +12,26 @@ const SearchResults: React.FC = () => {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   
+  const searchbutton = document.getElementById('myOverlay');
+  if (searchbutton) {
+    searchbutton.style.display = 'block';
+  }
+  const searchboxsubmit = document.getElementById('search-overlay');
+  if (searchboxsubmit) {
+    searchboxsubmit.style.display = 'block';
+  }
+  //restart Searchbar component
+  useEffect(() => {
+    const searchbutton = document.getElementById('myOverlay');
+    if (searchbutton) {
+      searchbutton.style.display = 'block';
+    }
+    const searchboxsubmit = document.getElementById('search-overlay');
+    if (searchboxsubmit) {
+      searchboxsubmit.style.display = 'block';
+    }
+  }, []);
+  
   useEffect(() => {
     if (query) {
       fetchSearchResults(query)
