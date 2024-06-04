@@ -413,7 +413,7 @@ const UserProfile = () => {
             )}
             <p className="profile-post-date">
               {currentDefinition?.AddedTimestamp && new Date(currentDefinition.AddedTimestamp).toLocaleDateString(
-                i18n.language, { year: 'numeric', month: 'long', day: 'numeric' },
+                i18n.language === 'ar' ? 'ar-EG' : i18n.language, { year: 'numeric', month: 'long', day: 'numeric' },
               )}
             </p>
             <div className="buttons">
