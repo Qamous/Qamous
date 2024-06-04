@@ -58,5 +58,9 @@
     "terms_of_service": "Terms of Service",
     "under_construction": "This page is under construction",
     "under_construction_message": "It will be completed in {{days}} days, {{hours}} hours, {{minutes}} minutes, and {{seconds}} seconds."
+  },
+  "search_results": {
+    "word": "Search Results for \"{{searchTerm}}\"",
+    "definition": "Here are the search results for the term \"{{searchTerm}}\"."
   }
 }

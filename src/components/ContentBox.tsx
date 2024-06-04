@@ -19,8 +19,10 @@ interface HomeContentProps {
   isDisliked: boolean,
   isReported: boolean,
   countryCode?: string,
+  definitionHuh?: boolean,
   //likeCount: number,
   //dislikeCount: number,
+  
 }
 
 interface ButtonText {
@@ -39,6 +41,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
                                                   isLiked,
                                                   isDisliked,
                                                   isReported,
+                                                  definitionHuh,
                                                 }) => {
   const { t } = useTranslation();
   const buttonText = t('content_box_buttons', {
@@ -272,11 +275,13 @@ const ContentBox: React.FC<HomeContentProps> = ({
           />
         }
       </div>
-      <div className={'content-box-description'}>
-        <p>
-          {item.definition}
-        </p>
-      </div>
+      {definitionHuh !== false && (
+        <div className={'content-box-description'}>
+          <p>
+            {item.definition}
+          </p>
+        </div>
+      )}
       {index !== 0 && (
         <div className="content-box-buttons">
           <button

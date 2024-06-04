@@ -58,5 +58,9 @@
     "terms_of_service": "شُروط الاسْتِخْدامِ",
     "under_construction": "هذه الصفحة تحت الإنشاء",
     "under_construction_message": "سيتم الانتهاء من بناء الصفحة في {{days}} أيام، {{hours}} ساعات، {{minutes}} دقائق، و {{seconds}} ثواني."
+  },
+  "search_results": {
+    "word": "نتائج البحث عن \"{{searchTerm}}\"",
+    "definition": "فيما يلي نتائج البحث عن المصطلح \"{{searchTerm}}\"."
   }
 }

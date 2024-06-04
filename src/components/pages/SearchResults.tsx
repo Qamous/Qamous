@@ -10,12 +10,23 @@ interface SearchResult {
   isArabic: number;
 }
 
+interface JsonContent {
+  word: string,
+  definition: string
+}
+
 const SearchResults: React.FC = () => {
   const { query } = useParams();
   const [allResults, setAllResults] = useState<SearchResult[]>([]);
   const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [language, setLanguage] = useState(i18n.language);
+  
+  const { t } = useTranslation();
+  const searchResults = t('search_results', {
+    searchTerm: query,
+    returnObjects: true,
+  }) as JsonContent;
   
   useEffect(() => {
     const searchbutton = document.getElementById('myOverlay');
@@ -72,6 +83,17 @@ const SearchResults: React.FC = () => {
   
   return (
     <div className={'home'}>
+      <ContentBox
+        item={searchResults}
+        index={0}
+        lang={i18n.language}
+        definitionId={0}
+        wordId={0}
+        isLiked={false}
+        isDisliked={false}
+        isReported={false}
+        definitionHuh={false}
+      />
       {filteredResults.map((result, index) => (
         <ContentBox
           key={index}
