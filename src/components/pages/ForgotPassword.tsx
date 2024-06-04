@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
+import { useTranslation } from 'react-i18next';
 
 const ForgotPassword = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [email, setEmail] = useState('');
@@ -11,33 +13,36 @@ const ForgotPassword = () => {
     setImageLoaded(true);
   };
   
-  function onLoginClick() {
+  const onLoginClick = () => {
     navigate('/login');
-  }
+  };
   
-  const mutation = useMutation((email: string) => fetch('http://localhost:3000/users/reset-password', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email }),
-  }).then(async response => {
-    if (!response.ok) {
-      throw new Error('Failed to reset password');
+  const mutation = useMutation(
+    (email: string) =>
+      fetch('http://localhost:3000/users/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      }).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(t('forgot_password.email_error'));
+        }
+        const text = await response.text();
+        return text ? JSON.parse(text) : {};
+      }),
+    {
+      onSuccess: () => {
+        alert(t('forgot_password.email_sent'));
+        navigate('/login');
+      },
+      onError: (error: any) => {
+        alert(t('forgot_password.email_sent'));
+        navigate('/login');
+      },
     }
-    const text = await response.text();
-    return text ? JSON.parse(text) : {};
-  }), {
-    onSuccess: () => {
-      alert('Password reset email sent');
-      navigate('/login');
-    },
-    onError: (error: any) => {
-      alert('Password reset email sent');
-      navigate('/login');
-      //alert(`Failed to reset password: ${error.message}`);
-    },
-  });
+  );
   
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -56,16 +61,16 @@ const ForgotPassword = () => {
             alt={'Confused Dog'}
             className={'container-left-image'}
           />
-          <h1>Forgot Something?</h1>
-          <p>Don't worry! We've got you covered.</p>
-          <p>Just enter your email address below and we'll send you a link to reset your password.</p>
+          <h1>{t('forgot_password.title')}</h1>
+          <p>{t('forgot_password.description_1')}</p>
+          <p>{t('forgot_password.description_2')}</p>
           <br />
           <div className={'container-left-input'}>
             <input
               type={'email'}
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
-              placeholder="Enter your email address here"
+              placeholder={t('forgot_password.enter_email')}
               className={'container-input-box'}
             />
           </div>
@@ -77,20 +82,19 @@ const ForgotPassword = () => {
             type="submit"
             value={'Submit'}
           >
-            Submit
+            {t('forgot_password.submit_button')}
           </button>
           <button
             className="container-buttons-button container-buttons-button-secondary"
             onClick={onLoginClick}
             value={'Go Back'}
           >
-            Go Back
+            {t('forgot_password.go_back_button')}
           </button>
         </div>
       </form>
     </div>
-  )
-    ;
+  );
 };
 
 export default ForgotPassword;

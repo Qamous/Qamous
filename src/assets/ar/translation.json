@@ -87,8 +87,7 @@
     "invalid_username": "اسم مستخدم غير صالح",
     "password_required": "كلمة المرور مطلوبة",
     "success_message": "تم تسجيل الدخول بنجاح",
-    "error_message": "فشل تسجيل الدخول",
-    "ok": "حسنا"
+    "error_message": "فشل تسجيل الدخول: اسم المستخدم أو كلمة المرور غير صحيحة",
   },
   "sign_up": {
     "title": "التسجيل",
@@ -113,6 +112,24 @@
     "success_message_part": "بنجاح",
     "sign_up_button": "تسجيل",
     "log_in_button": "تسجيل الدخول"
+  },
+  "forgot_password": {
+    "title": "هل نسيت شيئاً؟",
+    "description_1": "لا تقلق! نحن هنا لمساعدتك.",
+    "description_2": "فقط أدخل عنوان بريدك الإلكتروني أدناه وسنرسل لك رابطًا لإعادة تعيين كلمة المرور.",
+    "enter_email": "أدخل عنوان بريدك الإلكتروني هنا",
+    "submit_button": "إرسال",
+    "go_back_button": "عودة",
+    "email_sent": "تم إرسال بريد إعادة تعيين كلمة المرور",
+    "email_error": "فشل في إعادة تعيين كلمة المرور"
+  },
+  "reset_password": {
+    "title": "إعادة تعيين كلمة المرور",
+    "description": "أدخل عنوان بريدك الإلكتروني لإعادة تعيين كلمة المرور.",
+    "enter_password": "أدخل كلمة المرور هنا",
+    "submit_button": "إرسال",
+    "password_reset_success": "تم إعادة تعيين كلمة المرور بنجاح",
+    "password_reset_error": "فشل في إعادة تعيين كلمة المرور"
   },
   "common": {
     "ok": "حسنا"

@@ -87,7 +87,7 @@
     "invalid_username": "Invalid username",
     "password_required": "Password is required",
     "success_message": "Login successful",
-    "error_message": "Login failed"
+    "error_message": "Login failed: Invalid username or password"
   },
   "sign_up": {
     "title": "Sign Up",
@@ -112,6 +112,24 @@
     "success_message_part": "successfully registered",
     "sign_up_button": "Sign up",
     "log_in_button": "Log in"
+  },
+  "forgot_password": {
+    "title": "Forgot Something?",
+    "description_1": "Don't worry! We've got you covered.",
+    "description_2": "Just enter your email address below and we'll send you a link to reset your password.",
+    "enter_email": "Enter your email address here",
+    "submit_button": "Submit",
+    "go_back_button": "Go Back",
+    "email_sent": "Password reset email sent",
+    "email_error": "Failed to reset password"
+  },
+  "reset_password": {
+    "title": "Reset Password",
+    "description": "Enter your email address to reset your password.",
+    "enter_password": "Enter your password here",
+    "submit_button": "Submit",
+    "password_reset_success": "Password reset successful",
+    "password_reset_error": "Failed to reset password"
   },
   "common": {
     "ok": "OK"

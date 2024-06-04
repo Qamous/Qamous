@@ -49,7 +49,7 @@ const Login: React.FC = () => {
       setShowSuccessDialog(true);
     },
     onError: (error: any) => {
-      setErrorMessage(`${t('login.error_message')}: ${error.message}`);
+      setErrorMessage(`${t('login.error_message')}`);
       setShowErrorDialog(true);
       forgotPasswordHuh();
     },
