@@ -59,6 +59,7 @@ const Header: React.FC = () => {
         root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
         root.style.setProperty('--primary-color-75', isDarkMode ? styles.primaryColorSeventyFiveDark : styles.primaryColorSeventyFiveLight);
         root.style.setProperty('--primary-color-50', isDarkMode ? styles.primaryColorFiftyDark : styles.primaryColorFiftyLight);
+        root.style.setProperty('--primary-color-40', isDarkMode ? styles.primaryColorFortyDark : styles.primaryColorFortyLight);
         root.style.setProperty('--secondary-color-90', isDarkMode ? styles.secondaryColorNinetyDark : styles.secondaryColorNinetyLight);
         root.style.setProperty('--tertiary-color-90', isDarkMode ? styles.tertiaryColorNinetyDark : styles.tertiaryColorNinetyLight);
         root.style.setProperty('--header-border-color', isDarkMode ? styles.headerBorderColorDark : styles.headerBorderColorLight);

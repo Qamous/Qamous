@@ -212,17 +212,17 @@
         }
 
         &-disabled {
-          background-color: styles.$primary-color-50;
+          background-color: styles.$primary-color-40;
           cursor: not-allowed;
           &:hover {
-            background-color: styles.$primary-color-50;
+            background-color: styles.$primary-color-40;
             color: styles.$primary-color-90;
             * {
               color: styles.$primary-color-90;
             }
           }
           &:focus {
-            background-color: styles.$primary-color-50;
+            background-color: styles.$primary-color-40;
             color: styles.$primary-color-90;
             * {
               color: styles.$primary-color-90;
