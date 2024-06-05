@@ -292,9 +292,9 @@ const UserProfile = () => {
         ) : (
           <CustomDialog
             text="Are you sure you want to submit your changes?"
-            buttonText1="Confirm"
+            buttonText1={t('common.confirm')}
             onButton1Click={handleDialogSubmitEdit}
-            buttonText2="Cancel"
+            buttonText2={t('common.cancel')}
             onButton2Click={handleDialogCloseEdit}
             onClose={handleDialogCloseEdit}
           />
@@ -303,9 +303,9 @@ const UserProfile = () => {
       {isDeleteAccountDialogOpen && (
         <CustomDialog
           text="Are you sure you want to delete your account?"
-          buttonText1="Confirm"
+          buttonText1={t('common.confirm')}
           onButton1Click={handleDeleteAccountSubmit}
-          buttonText2="Cancel"
+          buttonText2={t('common.cancel')}
           onButton2Click={handleDeleteAccountClose}
           onClose={handleDeleteAccountClose}
         />

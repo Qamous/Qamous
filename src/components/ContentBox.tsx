@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
 import ReactCountryFlag from 'react-country-flag';
 import CustomDialog from './CustomDialog';
+import i18n from 'i18next';
 
 interface HomeContentProps {
   item: {
@@ -230,9 +231,17 @@ const ContentBox: React.FC<HomeContentProps> = ({
       (lang === 'ar' ? ' content-box-ar' : ' content-box-latin')}>
       {showDialog && (
         <CustomDialog
-          text={reportType ? `Why are you reporting this ${reportType}?` : 'Are you reporting the word or the definition?'}
-          buttonText1="Word"
-          buttonText2="Definition"
+          text=
+            {reportType ?
+              (i18n.language === 'ar' ?
+                t('report_dialog.why', {
+                  reportType:
+                    reportType === 'word' ? 'هذه الكلمة' : 'هذا التعريف',
+                }) :
+                t('report_dialog.why', { reportType: reportType })) :
+              t('report_dialog.what')}
+          buttonText1={t('report_dialog.word')}
+          buttonText2={t('report_dialog.definition')}
           onButton1Click={() => {
             setReportType('word');
             handleReport('word');
@@ -255,8 +264,8 @@ const ContentBox: React.FC<HomeContentProps> = ({
       )}
       {showInvalidInputDialog && (
         <CustomDialog
-          text="Invalid input. Report Cancelled."
-          okButtonText="OK"
+          text={t('content_box_buttons.report_cancelled')}
+          okButtonText={t('common.ok')}
           onOkButtonClick={handleInvalidInputOkClick}
           onClose={handleInvalidInputOkClick}
         />

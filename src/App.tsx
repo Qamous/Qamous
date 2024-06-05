@@ -139,7 +139,11 @@ const App: React.FC = () => {
     // If a 'Bug Report Form' window is already open, the form submission will open in that existing window instead of
     // creating a new one.
     // If no window is open, a new window will be created.
-    window.open('https://forms.gle/E91Ydr4aw68W5RWr7', 'Bug Report Form');
+    if (i18n.language === 'ar') {
+      window.open('https://forms.gle/RLpZ56CngSzhGWQw9', 'Bug Report Form');
+    } else {
+      window.open('https://forms.gle/E91Ydr4aw68W5RWr7', 'Bug Report Form');
+    }
   };
   
   return (

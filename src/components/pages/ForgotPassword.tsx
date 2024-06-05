@@ -82,7 +82,7 @@ const ForgotPassword = () => {
             type="submit"
             value={'Submit'}
           >
-            {t('forgot_password.submit_button')}
+            {t('common.submit')}
           </button>
           <button
             className="container-buttons-button container-buttons-button-secondary"
