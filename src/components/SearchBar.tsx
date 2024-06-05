@@ -3,10 +3,12 @@ import './SearchBar.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const SearchBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   const closeSearch = () => {
     const overlay = document.getElementById("myOverlay");
@@ -74,7 +76,7 @@ const SearchBar: React.FC = () => {
               className="search-box-submit"
               onClick={closeSearch}
             >
-              Search
+              {t('common.search')}
             </button>
           </form>
         </div>

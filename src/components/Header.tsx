@@ -104,25 +104,25 @@ const Header: React.FC = () => {
                     to="/"
                     onClick={handleBurgerClick}
                   >
-                      Home
+                      {t('toolbar_items.home')}
                   </NavLink>
                   <NavLink
                     to="/advanced-search"
                     onClick={handleBurgerClick}
                   >
-                      Advanced Search
+                      {t('toolbar_items.advanced_search')}
                   </NavLink>
                   <NavLink
                     to="/word-of-the-day"
                     onClick={handleBurgerClick}
                   >
-                      Word of The Day
+                      {t('toolbar_items.word_of_the_day')}
                   </NavLink>
                   <NavLink
                     to="/advertise"
                     onClick={handleBurgerClick}
                   >
-                      Advertise
+                      {t('toolbar_items.advertise')}
                   </NavLink>
                   <div
                     className="nav-overlay-content-bottom"

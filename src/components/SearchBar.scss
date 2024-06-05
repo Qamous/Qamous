@@ -195,27 +195,26 @@ $close-trans-time: 150ms;
         input[type=text] {
             padding: 15px;
             font-size: 17px;
-            border: none;
             float: left;
             width: 95%;
-            background: white;
-        }
-
-        input[type=text]:hover {
-            background: #f1f1f1;
+            background: styles.$quaternary-color;
+            color: styles.$primary-color;
+            border: rgba(255, 255, 255, 0.5) solid 0.5px;
         }
 
         button {
             float: left;
             min-width: 20%;
             padding: 15px;
-            background: #ddd;
+            color: styles.$primary-color;
+            background: styles.$quaternary-color;
             font-size: 17px;
             border: none;
             cursor: pointer;
 
             &:hover {
-                background: #bbb;
+                background: styles.$primary-color-50;
+                color: styles.$tertiary-color;
             }
         }
     }
