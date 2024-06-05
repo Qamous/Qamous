@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import './CustomDialog.scss';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 interface CustomDialogProps {
   text: ReactNode;
@@ -19,7 +20,8 @@ interface CustomDialogProps {
 
 const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonText2, onButton1Click, onButton2Click, onClose, showTextInput, onSubmit, onCancel, okButtonText, onOkButtonClick }) => {
   const [inputValue, setInputValue] = useState('');
-
+  const { t } = useTranslation();
+  
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
@@ -58,8 +60,12 @@ const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonTe
                 onChange={handleInputChange}
               />
             </div>
-            <button onClick={handleSubmit}>Submit</button>
-            <button onClick={onCancel}>Cancel</button>
+            <button onClick={handleSubmit}>
+              {t('common.submit')}
+            </button>
+            <button onClick={onCancel}>
+              {t('common.cancel')}
+            </button>
           </div>
         )}
         {!showTextInput && (

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './WordOfTheDay.scss';
 import { useQuery } from 'react-query';
 import Snackbar from '../Snackbar';
+import { useTranslation } from 'react-i18next';
 
 interface WordOfTheDayContent {
     wordId: number,
@@ -25,6 +26,9 @@ const fetchWordOfTheDayContent = () =>
         .then(response => response.json());
 
 const WordOfTheDay: React.FC = () => {
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+    const { t } = useTranslation();
+    
     const {
         data,
         isLoading,
@@ -33,7 +37,6 @@ const WordOfTheDay: React.FC = () => {
         staleTime: 86400000, // 24 hours in milliseconds
         cacheTime: 100000000,
     });
-    const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
     useEffect(() => {
         if (isError) {
             setErrorSnackbarOpen(false);
@@ -61,7 +64,10 @@ const WordOfTheDay: React.FC = () => {
     if (isError) {
         return (
             <div className={'word-of-day'}>
-                <Snackbar open={errorSnackbarOpen} message={'Data fetching error occurred. Please try again later.'} />
+                <Snackbar
+                  open={errorSnackbarOpen}
+                  message={t('common.data_fetch_error')}
+                />
             </div>
         );
     }

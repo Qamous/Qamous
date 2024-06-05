@@ -47,7 +47,9 @@
     "like": "Like",
     "dislike": "Dislike",
     "report": "Report",
-    "report_cancelled": "Invalid input. Report Cancelled."
+    "report_cancelled": "Invalid input. Report Cancelled.",
+    "repeated_report_error": "You are unable to report the same word / definition more than once.",
+    "repeated_reaction_error": "You have reacted too many times. Please wait before clicking again."
   },
   "common_terms": {
     "qamous": "Qamous",
@@ -153,6 +155,7 @@
     "confirm": "Confirm",
     "submit": "Submit",
     "edit": "Edit",
-    "search": "Search"
+    "search": "Search",
+    "data_fetch_error": "Data fetching error occurred. Please try again later."
   }
 }

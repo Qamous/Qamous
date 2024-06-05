@@ -47,7 +47,9 @@
     "like": "أعجبني",
     "dislike": "لم يعجبني",
     "report": "الإبلاغ",
-    "report_cancelled": "تم إلغاء الإبلاغ"
+    "report_cancelled": "تم إلغاء الإبلاغ",
+    "repeated_report_error": "لا يمكنك الإبلاغ عن نفس الكلمة / التعريف أكثر من مرة",
+    "repeated_reaction_error": "لقد قمت بالتفاعل مرات كثيرة. يرجى الانتظار قبل النقر مرة أخرى."
   },
   "common_terms": {
     "qamous": "قَامُوس",
@@ -153,6 +155,7 @@
     "confirm": "تأكيد",
     "submit": "إرسال",
     "edit": "تعديل",
-    "search": "بحث"
+    "search": "بحث",
+    "data_fetch_error": "حدث خطأ أثناء جلب البيانات"
   }
 }

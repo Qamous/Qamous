@@ -98,7 +98,7 @@ const Home: React.FC = () => {
         />
         <Snackbar
           open={errorSnackbarOpen}
-          message={'Data fetching error occurred. Please try again later.'}
+          message={t('common.data_fetch_error')}
         />
       </div>
     );
