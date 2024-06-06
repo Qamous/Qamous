@@ -149,6 +149,11 @@
     "word": "Word",
     "definition": "Definition"
   },
+  "page_not_found": {
+    "404": "404",
+    "hmmm": "Hmmm...",
+    "text": "We couldn't find the page you were looking for!"
+  },
   "common": {
     "ok": "OK",
     "cancel": "Cancel",

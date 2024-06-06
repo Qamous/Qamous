@@ -1,0 +1,16 @@
+@use '../../assets/Styles.scss' as styles;
+
+.not-found-text {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+
+  &-header {
+    color: styles.$secondary-color;
+    text-align: center;
+    font-size: 2.7rem;
+    margin-bottom: 1rem;
+    // nice shadow effect
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  }
+}

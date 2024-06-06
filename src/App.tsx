@@ -22,6 +22,7 @@ import ForgotPassword from './components/pages/ForgotPassword';
 import ResetPassword from './components/pages/ResetPassword';
 import UserProfile from './components/pages/UserProfile';
 import SearchResults from './components/pages/SearchResults';
+import NotFound from './components/pages/NotFound';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -298,10 +299,8 @@ const App: React.FC = () => {
               <div className="header">
                 <Header />
               </div>
-              <div className="not-found">
-                <h1>
-                  404 - Page not found
-                </h1>
+              <div className="content">
+                <NotFound />
               </div>
               <div className="footer">
               </div>
