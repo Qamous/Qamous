@@ -90,7 +90,8 @@
     "invalid_username": "Invalid username",
     "password_required": "Password is required",
     "success_message": "Login successful",
-    "error_message": "Login failed: Invalid username or password"
+    "error_message": "Login failed: Invalid username or password",
+    "must_login": "You must be logged in to perform this action"
   },
   "sign_up": {
     "title": "Sign Up",

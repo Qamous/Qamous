@@ -8,7 +8,7 @@ import Home from './components/pages/Home';
 import translationEN from './assets/en/translation.json';
 import translationAR from './assets/ar/translation.json';
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import { initReactI18next, useTranslation } from 'react-i18next';
 import { getFunctionalCookie } from './assets/utils';
 import PageUnderConstruction from './components/pages/PageUnderConstruction';
 import LogIn from './components/pages/LogIn';
@@ -23,6 +23,7 @@ import ResetPassword from './components/pages/ResetPassword';
 import UserProfile from './components/pages/UserProfile';
 import SearchResults from './components/pages/SearchResults';
 import NotFound from './components/pages/NotFound';
+import Snackbar from './components/Snackbar';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -88,24 +89,23 @@ const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
     }
   }, [location, navigate]);
   
-  return <>{children}</>;
+  return children ? <>{children}</> : null;
 };
 
-const CheckUserLoggedOut: React.FC<CheckUserStatusProps> = ({ children }) => {
+const CheckUserLoggedOut: React.FC<CheckUserStatusProps & { setMustLoginSnackbarOpen: (open: boolean) => void }> = ({ children, setMustLoginSnackbarOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [userStatus, setUserStatus] = useState(null);
   
   const checkUserStatus = async () => {
     const response = await fetch('http://localhost:3000/auth/session', {
-      credentials: 'include', // Include credentials in the request
+      credentials: 'include',
     });
     if (response.ok) {
       const { session, sessionId } = await response.json();
       if (session && sessionId && session.passport) {
         const { user } = session.passport;
         if (user) {
-          //console.log("user", user);
           return user;
         }
       }
@@ -113,28 +113,31 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps> = ({ children }) => {
     return null;
   };
   
+  const handleMustLoginSnackbarOpen = () => {
+    setMustLoginSnackbarOpen(true);
+    // A delay to allow the state to propagate before the snackbar opens
+    setTimeout(() => {
+      setMustLoginSnackbarOpen(false);
+    }, 3000);
+  };
+  
   useEffect(() => {
-    if (location.pathname === '/profile') {
-      checkUserStatus().then(status => {
-        setUserStatus(status);
-        if (!status) {
-          navigate('/login');
-        }
-      });
-    }
+    checkUserStatus().then(status => {
+      setUserStatus(status);
+      if (!status) {
+        handleMustLoginSnackbarOpen();
+        navigate('/login');
+      }
+    });
   }, [location, navigate]);
   
-  return (
-    
-    <>
-      {children}
-    </>
-  );
-  
+  return children ? <>{children}</> : null;
 };
 
 const App: React.FC = () => {
   const queryClient = new QueryClient();
+  const { t } = useTranslation();
+  const [mustLoginSnackbarOpen, setMustLoginSnackbarOpen] = useState(false);
   
   const handleReportClick = () => {
     // If a 'Bug Report Form' window is already open, the form submission will open in that existing window instead of
@@ -203,16 +206,18 @@ const App: React.FC = () => {
             </div>
           } />
           <Route path="/add-definition" element={
+            <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
             <div className="app">
-              <div className="header">
-                <Header />
+                <div className="header">
+                  <Header />
+                </div>
+                <div className="content">
+                  <AddWord />
+                </div>
+                <div className="footer">
+                </div>
               </div>
-              <div className="content">
-                <AddWord />
-              </div>
-              <div className="footer">
-              </div>
-            </div>
+            </CheckUserLoggedOut>
           } />
           <Route path="/search/:query" element={
             <div className="app">
@@ -281,7 +286,7 @@ const App: React.FC = () => {
             </div>
           } />
           <Route path="/profile" element={
-            <CheckUserLoggedOut>
+            <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
               <div className="app">
                 <div className="header">
                   <Header />
@@ -317,6 +322,10 @@ const App: React.FC = () => {
             className={'home-report-icon'}
           />
         </div>
+        <Snackbar
+          open={mustLoginSnackbarOpen}
+          message={t('login.must_login')}
+        />
       </BrowserRouter>
       {/* TODO: Only in the dev branch */}
       <ReactQueryDevtools />
