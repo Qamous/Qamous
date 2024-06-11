@@ -63,6 +63,7 @@ const Header: React.FC = () => {
         root.style.setProperty('--secondary-color-90', isDarkMode ? styles.secondaryColorNinetyDark : styles.secondaryColorNinetyLight);
         root.style.setProperty('--tertiary-color-90', isDarkMode ? styles.tertiaryColorNinetyDark : styles.tertiaryColorNinetyLight);
         root.style.setProperty('--header-border-color', isDarkMode ? styles.headerBorderColorDark : styles.headerBorderColorLight);
+        root.style.setProperty('--icon-background-color', isDarkMode ? styles.iconBackgroundColorDark : styles.iconBackgroundColorLight);
     };
     const toggleDarkMode = (checked: boolean) => {
         setDarkMode(checked);
@@ -177,25 +178,19 @@ const Header: React.FC = () => {
                     isDarkMode={isDarkMode}
                   /> {/* Insert the ToolbarItems component above the SearchBar */}
               </div>
-
+              
               <div className="header-right-side">
+                  <SearchBar />
+                  
                   <div
                     className="header-right-side-add">
                       <NavLink to="/add-definition">
                           <FontAwesomeIcon icon={faPlus} size="2x" />
                       </NavLink>
                   </div>
-
-                  <SearchBar />
-
-                  <DarkModeSwitch
-                    className="header-right-side-mode"
-                    checked={isDarkMode}
-                    onChange={toggleDarkMode}
-                    moonColor="#bfbfbf"
-                    sunColor="#dd8500"
-                  />
-
+                  
+                  <div className="header-right-side-divider"></div>
+                  
                   <div className="header-right-side-language"
                        onClick={handleCountrySwitch}
                        onMouseEnter={handleHover}
@@ -212,7 +207,15 @@ const Header: React.FC = () => {
                         </>
                       }
                   </div>
-
+                  
+                  <DarkModeSwitch
+                    className="header-right-side-mode"
+                    checked={isDarkMode}
+                    onChange={toggleDarkMode}
+                    moonColor="#bfbfbf"
+                    sunColor="#dd8500"
+                  />
+                  
                   <div className="header-right-side-user">
                       <NavLink to="/login">
                           <i className="fa-solid fa-user"></i>
@@ -220,7 +223,7 @@ const Header: React.FC = () => {
                           {/*<img src={userImage} alt={t('common_terms.user')} />*/}
                       </NavLink>
                   </div>
-
+                  
                   {/* Burger menu */}
                   <nav
                     className={`header-right-side-burger ${change ? 'change' : ''}`}

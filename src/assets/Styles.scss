@@ -18,7 +18,9 @@
   --primary-color-50: rgba(255, 255, 255, 0.5);
   --primary-color-40: rgba(255, 255, 255, 0.4);
   --secondary-color-90: rgba(221, 133, 0, 0.9);
+  --secondary-color-20: rgba(221, 133, 0, 0.2);
   --tertiary-color-90: rgba(0, 0, 0, 0.9);
+  --icon-background-color: rgb(78 78 78 / 44%);
 
   --font-stack: "Segoe UI", Sans-Serif, serif;
   --font-stack-arabic: "Rubik", serif;
@@ -29,6 +31,7 @@
 
 $primary-color: var(--primary-color);
 $secondary-color: var(--secondary-color);
+$secondary-color-20: var(--secondary-color-20);
 $tertiary-color: var(--tertiary-color);
 $quaternary-color: var(--quaternary-color);
 $primary-color-90: var(--primary-color-90);
@@ -37,6 +40,7 @@ $primary-color-50: var(--primary-color-50);
 $primary-color-40: var(--primary-color-40);
 $secondary-color-90: var(--secondary-color-90);
 $tertiary-color-90: var(--tertiary-color-90);
+$icon-background-color: var(--icon-background-color);
 
 $font-stack: var(--font-stack);
 $font-stack-arabic: var(--font-stack-arabic);
@@ -55,6 +59,7 @@ $primary-color-50-dark: rgba(255, 255, 255, 0.5);
 $primary-color-40-dark: rgba(255, 255, 255, 0.4);
 $secondary-color-90-dark: rgba(221, 133, 0, 0.9);
 $tertiary-color-90-dark: rgba(0, 0, 0, 0.9);
+$icon-background-color-dark: rgb(78 78 78 / 44%);
 
 $header-border-color-dark: #1e1e1e;
 
@@ -69,45 +74,50 @@ $primary-color-50-light: rgba(0, 0, 0, 0.5);
 $primary-color-40-light: rgba(0, 0, 0, 0.4);
 $secondary-color-90-light: rgba(221, 133, 0, 0.9);
 $tertiary-color-90-light: rgba(208, 208, 208, 0.9);
+$icon-background-color-light: rgb(173 173 173 / 44%);
 
 $header-border-color-light: #eae7e7;
 
 :export {
   primaryColor: $primary-color;
   secondaryColor: $secondary-color;
+  secondaryColorNinety: $secondary-color-90;
+  secondaryColorTwenty: $secondary-color-20;
   tertiaryColor: $tertiary-color;
   quaternaryColor: $quaternary-color;
   primaryColorNinety: $primary-color-90;
   primaryColorSeventyFive: $primary-color-75;
   primaryColorFifty: $primary-color-50;
   primaryColorForty: $primary-color-40;
-  secondaryColorNinety: $secondary-color-90;
   tertiaryColorNinety: $tertiary-color-90;
   headerBorderColor: $header-border-color;
+  iconBackgroundColor: $icon-background-color;
 
   primaryColorLight: $primary-color-light;
   secondaryColorLight: $secondary-color-light;
+  secondaryColorNinetyLight: $secondary-color-90-light;
   tertiaryColorLight: $tertiary-color-light;
   quaternaryColorLight: $quaternary-color-light;
   primaryColorNinetyLight: $primary-color-90-light;
   primaryColorSeventyFiveLight: $primary-color-75-light;
   primaryColorFiftyLight: $primary-color-50-light;
   primaryColorFortyLight: $primary-color-40-light;
-  secondaryColorNinetyLight: $secondary-color-90-light;
   tertiaryColorNinetyLight: $tertiary-color-90-light;
   headerBorderColorLight: $header-border-color-light;
+  iconBackgroundColorLight: $icon-background-color-light;
 
   primaryColorDark: $primary-color-dark;
   secondaryColorDark: $secondary-color-dark;
+  secondaryColorNinetyDark: $secondary-color-90-dark;
   tertiaryColorDark: $tertiary-color-dark;
   quaternaryColorDark: $quaternary-color-dark;
   primaryColorNinetyDark: $primary-color-90-dark;
   primaryColorSeventyFiveDark: $primary-color-75-dark;
   primaryColorFiftyDark: $primary-color-50-dark;
   primaryColorFortyDark: $primary-color-40-dark;
-  secondaryColorNinetyDark: $secondary-color-90-dark;
   tertiaryColorNinetyDark: $tertiary-color-90-dark;
   headerBorderColorDark: $header-border-color-dark;
+  iconBackgroundColorDark: $icon-background-color-dark;
 
   fontStack: $font-stack;
   fontStackArabic: $font-stack-arabic;
