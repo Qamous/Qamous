@@ -168,11 +168,13 @@ const Header: React.FC = () => {
           </div>
           <div className="header">
               <div className="header-left-side">
-                  <img
-                    src={require('../assets/qamous-logo-transparent.png')}
-                    alt={t('common_terms.qamous')}
-                    loading="lazy"
-                    title="This is Qamous for Arabic" /> {/* TODO: do more research on lazy loading for a faster experience */}
+                  <NavLink to="/">
+                      <img
+                        src={require('../assets/qamous-logo-transparent.png')}
+                        alt={t('common_terms.qamous')}
+                        loading="lazy"
+                      /> {/* TODO: do more research on lazy loading for a faster experience */}
+                  </NavLink>
                   <ToolbarItems
                     language={currentLang}
                     isDarkMode={isDarkMode}
