@@ -8,6 +8,8 @@ interface SearchResult {
   word: string;
   definition: string;
   isArabic: number;
+  wordId: number;
+  definitionId: number;
 }
 
 interface JsonContent {
@@ -52,6 +54,7 @@ const SearchResults: React.FC = () => {
       if (query) {
         try {
           const data = await fetchSearchResults(query);
+          console.log(data);
           setAllResults(data);
         } catch (err) {
           console.error(err);
@@ -69,7 +72,7 @@ const SearchResults: React.FC = () => {
   useEffect(() => {
     const filterResults = () => {
       const filteredData = allResults.filter((item) =>
-        i18n.language === 'ar' ? item.isArabic === 1 : item.isArabic === 0
+        i18n.language === 'ar' ? item.isArabic === 1 : item.isArabic === 0,
       );
       setFilteredResults(filteredData);
     };
@@ -100,8 +103,8 @@ const SearchResults: React.FC = () => {
           item={result}
           index={index + 1}
           lang={i18n.language}
-          wordId={0}
-          definitionId={0}
+          wordId={result.wordId}
+          definitionId={result.definitionId}
           isLiked={false}
           isDisliked={false}
           isReported={false}
