@@ -7,6 +7,7 @@ import ReactCountryFlag from 'react-country-flag';
 import CustomDialog from './CustomDialog';
 import i18n from 'i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { getCountryName } from '../assets/utils';
 
 export interface HomeContentProps {
   item: {
@@ -57,7 +58,14 @@ const ContentBox: React.FC<HomeContentProps> = ({
   const [showDialog, setShowDialog] = useState(false);
   const [reportType, setReportType] = useState<string | null>(null);
   const [showInvalidInputDialog, setShowInvalidInputDialog] = useState(false);
+  const [countryName, setCountryName] = useState<string>('');
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (countryCode) {
+      getCountryName(countryCode).then(setCountryName);
+    }
+  }, [countryCode]);
   
   const handleInvalidInputOkClick = () => {
     setShowInvalidInputDialog(false);
@@ -291,7 +299,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
             countryCode={countryCode}
             svg
             style={{ width: '2em', height: '2em' }}
-            title={countryCode}
+            title={countryName}
           />
         }
       </div>

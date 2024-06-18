@@ -422,24 +422,34 @@ interface Country {
  * @returns string - The country name.
  * @returns undefined - If the country code is not found.
  */
-export async function getCountryName(countryCode: string): Promise<string | undefined> {
+export async function getCountryName(countryCode: string | undefined): Promise<string> {
   let countries: { [key: string]: string } = {};
   
-  // Fetch and parse the CSV file
-  const response = await fetch('/public/countries.csv');
-  const data = await response.text();
-  const rows = data.split('\n');
-  
-  rows.forEach(row => {
-    const [code, name] = row.split(',');
-    if (code && name) {
-      countries[code.trim()] = name.trim();
+  try {
+    // Fetch and parse the CSV file
+    const response = await fetch('/countries.csv');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-  });
-  
-  return countries[countryCode];
+    const data = await response.text();
+    const rows = data.split('\n').slice(1); // Skip the header row if it exists
+    
+    rows.forEach(row => {
+      const [code, name] = row.split(',');
+      if (code && name) {
+        countries[code.trim()] = name.trim();
+      }
+    });
+    
+    if (!countryCode) {
+      return '';
+    }
+    return countries[countryCode] || '';
+  } catch (error) {
+    console.error('Failed to fetch country name:', error);
+    return '';
+  }
 }
-
 /**
  * This function gets the country code from the country name.
  *
