@@ -13,7 +13,6 @@ $close-trans-time: 150ms;
 
 @import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
 
-
 .search-button {
     padding: 15px;
     margin: 0 10px 0 0;
@@ -87,8 +86,7 @@ $close-trans-time: 150ms;
             border: none;
             box-sizing: border-box;
             border-radius: $size;
-            transition:
-                    width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55) $close-trans-time;
+            transition: width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55) $close-trans-time;
 
             &:focus {
                 cursor: text;
@@ -101,16 +99,14 @@ $close-trans-time: 150ms;
 
                 + button[type="reset"] {
                     transform: rotate(-45deg) translateY(0);
-                    transition:
-                            transform $close-trans-time ease-out $open-trans-time;
+                    transition: transform $close-trans-time ease-out $open-trans-time;
                 }
 
                 + button[type="reset"]:after {
                     opacity: 1;
-                    transition:
-                            top $close-trans-time ease-out ($open-trans-time + $close-trans-time),
-                            right $close-trans-time ease-out ($open-trans-time + $close-trans-time),
-                            opacity $close-trans-time ease ($open-trans-time + $close-trans-time);
+                    transition: top $close-trans-time ease-out ($open-trans-time + $close-trans-time),
+                    right $close-trans-time ease-out ($open-trans-time + $close-trans-time),
+                    opacity $close-trans-time ease ($open-trans-time + $close-trans-time);
                 }
             }
         }
@@ -130,8 +126,7 @@ $close-trans-time: 150ms;
             top: math.div($size, 2) - math.div($handle-height, 2);
             right: math.div($size, 2) - math.div($handle-height, 2);
             transform: rotate(-45deg) translateY($size - $frame-thickness);
-            transition:
-                    transform $close-trans-time ease-out $close-trans-time;
+            transition: transform $close-trans-time ease-out $close-trans-time;
 
             &:before, &:after {
                 content: "";
@@ -144,9 +139,8 @@ $close-trans-time: 150ms;
             &:after {
                 transform: rotate(90deg);
                 opacity: 0;
-                transition:
-                        transform $close-trans-time ease-out,
-                        opacity $close-trans-time ease-out;
+                transition: transform $close-trans-time ease-out,
+                opacity $close-trans-time ease-out;
             }
         }
     }
@@ -157,7 +151,6 @@ $close-trans-time: 150ms;
         display: none;
     }
 
-    /* The overlay effect with black background */
     .search-overlay {
         height: 100%;
         width: 100%;
@@ -167,9 +160,8 @@ $close-trans-time: 150ms;
         top: 0;
         left: 0;
         background-color: rgb(0,0,0);
-        background-color: rgba(0,0,0, 0.9); /* Black with a little bit see-through */
+        background-color: rgba(0,0,0, 0.9);
 
-        /* Close button */
         &-closebtn {
             position: absolute;
             top: 25px;
@@ -183,7 +175,6 @@ $close-trans-time: 150ms;
             }
         }
 
-        /* Overlay effect when you click on the "nav" icon */
         &-content {
             position: relative;
             top: 46%;

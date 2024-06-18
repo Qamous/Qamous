@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SearchBar.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -16,43 +16,43 @@ const SearchBar: React.FC = () => {
       overlay.style.display = "none";
     }
   };
-
+  
   const openSearch = () => {
     const overlay = document.getElementById("myOverlay");
     if (overlay) {
       overlay.style.display = "block";
     }
   };
-
+  
   const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
     if (window.innerWidth < 1200) {
       openSearch();
     }
-    event.preventDefault();
-    
     navigate(`/search/${searchQuery}`);
-    // Reset the search field
+    // Reset the search field after navigating
     setSearchQuery('');
   };
-
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 1200) {
-      openSearch();
-    } else {
-      closeSearch();
-    }
-  });
+  
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1200) {
+        openSearch();
+      } else {
+        closeSearch();
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
   return (
     <>
-      <div
-        className="search-button"
-        onClick={openSearch}
-      >
-        <button
-          className="search-button-bar"
-          onClick={openSearch}
-        >
-        </button>
+      <div className="search-button" onClick={openSearch}>
+        <button className="search-button-bar" onClick={openSearch}></button>
       </div>
       <div id="myOverlay" className="search-overlay">
         <span
@@ -74,7 +74,6 @@ const SearchBar: React.FC = () => {
             <button
               type="submit"
               className="search-box-submit"
-              onClick={closeSearch}
             >
               {t('common.search')}
             </button>

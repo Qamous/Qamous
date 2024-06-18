@@ -29,6 +29,7 @@ const SearchResults: React.FC = () => {
     searchTerm: query,
     returnObjects: true,
   }) as JsonContent;
+  const noResults = "No results found for \"" + query + "\"";
   
   useEffect(() => {
     const searchbutton = document.getElementById('myOverlay');
@@ -86,17 +87,21 @@ const SearchResults: React.FC = () => {
   
   return (
     <div className={'home'}>
-      <ContentBox
-        item={searchResults}
-        index={0}
-        lang={i18n.language}
-        definitionId={0}
-        wordId={0}
-        isLiked={false}
-        isDisliked={false}
-        isReported={false}
-        definitionHuh={false}
-      />
+      {filteredResults.length > 0 ? (
+        <ContentBox
+          item={searchResults}
+          index={0}
+          lang={i18n.language}
+          definitionId={0}
+          wordId={0}
+          isLiked={false}
+          isDisliked={false}
+          isReported={false}
+          definitionHuh={false}
+        />
+      ) : (
+        <p>{noResults}</p>
+      )}
       {filteredResults.map((result, index) => (
         <ContentBox
           key={index}
