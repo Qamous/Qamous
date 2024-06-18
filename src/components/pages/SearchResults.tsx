@@ -100,23 +100,42 @@ const SearchResults: React.FC = () => {
           definitionHuh={false}
         />
       ) : (
-        <p>{noResults}</p>
-      )}
-      {filteredResults.map((result, index) => (
-        <ContentBox
-          key={index}
-          item={result}
-          index={index + 1}
-          lang={i18n.language}
-          wordId={result.wordId}
-          definitionId={result.definitionId}
-          isLiked={false}
-          isDisliked={false}
-          isReported={false}
-        />
-      ))}
-    </div>
-  );
+        <div className={'container'} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+          <div className={'container-left'}>
+            <img
+              src="/cool-dog.jpg"
+              loading="lazy"
+              alt={'Cool Dog'}
+              className={'container-left-image'}
+            />
+            <h1 className="not-found-text-header" style={{ width: '100%' }}>
+              {"Hmmm..."}
+            </h1>
+            <p className="not-found-text" style={{ width: '100%' }}>
+              {noResults}
+            </p>
+          </div>
+        </div>
+      )
+      }
+      {
+        filteredResults.map((result, index) => (
+    <ContentBox
+      key={index}
+      item={result}
+      index={index + 1}
+      lang={i18n.language}
+      wordId={result.wordId}
+      definitionId={result.definitionId}
+      isLiked={false}
+      isDisliked={false}
+      isReported={false}
+    />
+  ))
+}
+</div>
+)
+  ;
 };
 
 async function fetchSearchResults(query: string): Promise<SearchResult[]> {
