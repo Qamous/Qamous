@@ -457,26 +457,31 @@ export async function getCountryName(countryCode: string | undefined): Promise<s
  * @returns string - The country code.
  * @returns undefined - If the country name is not found.
  */
-export async function getCountryCode(countryName: string): Promise<string | undefined> {
+export async function getCountryCode(countryName: string | undefined): Promise<string> {
   let countries: { [key: string]: string } = {};
   
-  // Fetch and parse the CSV file
-  const response = await fetch('/public/countries.csv');
-  const data = await response.text();
-  const rows = data.split('\n');
-  
-  rows.forEach(row => {
-    const [code, name] = row.split(',');
-    if (code && name) {
-      countries[code.trim()] = name.trim();
+  try {
+    // Fetch and parse the CSV file
+    const response = await fetch('/countries.csv');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-  });
-  
-  for (let code in countries) {
-    if (countries[code] === countryName) {
-      return code;
+    const data = await response.text();
+    const rows = data.split('\n').slice(1); // Skip the header row if it exists
+    
+    rows.forEach(row => {
+      const [code, name] = row.split(',');
+      if (code && name) {
+        countries[name.trim()] = code.trim();
+      }
+    });
+    
+    if (!countryName) {
+      return '';
     }
+    return countries[countryName] || '';
+  } catch (error) {
+    console.error('Failed to fetch country code:', error);
+    return '';
   }
-  
-  return undefined;
 }
