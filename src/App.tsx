@@ -24,6 +24,7 @@ import UserProfile from './components/pages/UserProfile';
 import SearchResults from './components/pages/SearchResults';
 import NotFound from './components/pages/NotFound';
 import Snackbar from './components/Snackbar';
+import WordPage from './components/pages/WordPage';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -226,6 +227,18 @@ const App: React.FC = () => {
               </div>
               <div className="content">
                 <SearchResults />
+              </div>
+              <div className="footer">
+              </div>
+            </div>
+          } />
+          <Route path="/word/:wordId" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <WordPage />
               </div>
               <div className="footer">
               </div>

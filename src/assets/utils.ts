@@ -407,3 +407,66 @@ export async function findLocationByIP(): Promise<IPAPIResponse> {
 //   }
 //   return location as NominatimAddress & IPAPIResponse;
 // }
+
+// Utils for getting country name from country code and vice versa
+
+interface Country {
+  CountryCode: string;
+  CountryName: string;
+}
+
+/**
+ * This function gets the country name from the country code.
+ *
+ * @param {string} countryCode - The country code.
+ * @returns string - The country name.
+ * @returns undefined - If the country code is not found.
+ */
+export async function getCountryName(countryCode: string): Promise<string | undefined> {
+  let countries: { [key: string]: string } = {};
+  
+  // Fetch and parse the CSV file
+  const response = await fetch('/public/countries.csv');
+  const data = await response.text();
+  const rows = data.split('\n');
+  
+  rows.forEach(row => {
+    const [code, name] = row.split(',');
+    if (code && name) {
+      countries[code.trim()] = name.trim();
+    }
+  });
+  
+  return countries[countryCode];
+}
+
+/**
+ * This function gets the country code from the country name.
+ *
+ * @param {string} countryName - The country name.
+ * @returns string - The country code.
+ * @returns undefined - If the country name is not found.
+ */
+export async function getCountryCode(countryName: string): Promise<string | undefined> {
+  let countries: { [key: string]: string } = {};
+  
+  // Fetch and parse the CSV file
+  const response = await fetch('/public/countries.csv');
+  const data = await response.text();
+  const rows = data.split('\n');
+  
+  rows.forEach(row => {
+    const [code, name] = row.split(',');
+    if (code && name) {
+      countries[code.trim()] = name.trim();
+    }
+  });
+  
+  for (let code in countries) {
+    if (countries[code] === countryName) {
+      return code;
+    }
+  }
+  
+  return undefined;
+}

@@ -6,8 +6,9 @@ import { useMutation } from 'react-query';
 import ReactCountryFlag from 'react-country-flag';
 import CustomDialog from './CustomDialog';
 import i18n from 'i18next';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface HomeContentProps {
+export interface HomeContentProps {
   item: {
     word: string,
     definition: string
@@ -23,7 +24,6 @@ interface HomeContentProps {
   definitionHuh?: boolean,
   //likeCount: number,
   //dislikeCount: number,
-  
 }
 
 interface ButtonText {
@@ -45,9 +45,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
                                                   definitionHuh,
                                                 }) => {
   const { t } = useTranslation();
-  const buttonText = t('content_box_buttons', {
-    returnObjects: true,
-  }) as ButtonText;
+  const buttonText = t('content_box_buttons', { returnObjects: true }) as ButtonText;
   
   const [likeClicked, setLikeClicked] = useState(isLiked);
   const [dislikeClicked, setDislikeClicked] = useState(isDisliked);
@@ -55,47 +53,58 @@ const ContentBox: React.FC<HomeContentProps> = ({
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
+  const [mustLoginSnackbarOpen, setMustLoginSnackbarOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [reportType, setReportType] = useState<string | null>(null);
   const [showInvalidInputDialog, setShowInvalidInputDialog] = useState(false);
+  const navigate = useNavigate();
   
   const handleInvalidInputOkClick = () => {
     setShowInvalidInputDialog(false);
   };
   
+  const handleMutationError = (error: Response) => {
+    console.error('There has been a problem with your fetch operation:', error);
+    if (error.status === 401 || error.status === 403) {
+      setMustLoginSnackbarOpen(true);
+      navigate('/login');
+    }
+  };
+  
   const likeMutation = useMutation(() =>
-      fetch(`http://localhost:3000/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
-        method: 'POST',
-        credentials: 'include',
-      }), {
-      onError: (error) => {
-        console.error('There has been a problem with your fetch operation:', error);
-      },
-    },
-  );
+    fetch(`http://localhost:3000/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
+      method: 'POST',
+      credentials: 'include',
+    }).then(response => {
+      if (!response.ok) {
+        throw response;
+      }
+      return response.json();
+    }), {
+    onError: handleMutationError,
+  });
   
   const dislikeMutation = useMutation(() =>
-      fetch(`http://localhost:3000/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
-        method: 'POST',
-        credentials: 'include',
-      }), {
-      onError: (error) => {
-        console.error('There has been a problem with your fetch operation:', error);
-      },
-    },
-  );
+    fetch(`http://localhost:3000/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
+      method: 'POST',
+      credentials: 'include',
+    }).then(response => {
+      if (!response.ok) {
+        throw response;
+      }
+      return response.json();
+    }), {
+    onError: handleMutationError,
+  });
   
   const handleLikeClick = () => {
     if (clickCount < 5) {
       setClickCount(prevCount => prevCount + 1);
+      if (dislikeClicked && !likeClicked) handleDislikeClick();
       setLikeClicked(!likeClicked);
-      if (dislikeClicked) setDislikeClicked(false);
-      
-      // Use the mutation
       likeMutation.mutate();
     } else if (clickCount >= 5) {
       setExcessiveClickSnackbarOpen(false);
-      // A delay to allow the state to propagate before the snackbar opens
       setTimeout(() => {
         setExcessiveClickSnackbarOpen(true);
       }, 100);
@@ -105,14 +114,11 @@ const ContentBox: React.FC<HomeContentProps> = ({
   const handleDislikeClick = () => {
     if (clickCount < 5) {
       setClickCount(prevCount => prevCount + 1);
+      if (likeClicked && !dislikeClicked) handleLikeClick();
       setDislikeClicked(!dislikeClicked);
-      if (likeClicked) setLikeClicked(false);
-      
-      // Use the mutation
       dislikeMutation.mutate();
     } else if (clickCount >= 5) {
       setExcessiveClickSnackbarOpen(false);
-      // A delay to allow the state to propagate before the snackbar opens
       setTimeout(() => {
         setExcessiveClickSnackbarOpen(true);
       }, 100);
@@ -142,7 +148,6 @@ const ContentBox: React.FC<HomeContentProps> = ({
   const handleReportClick = () => {
     if (reportClicked) {
       setReportSnackbarOpen(false);
-      // A delay to allow the state to propagate before the snackbar opens
       setTimeout(() => {
         setReportSnackbarOpen(true);
       }, 100);
@@ -174,12 +179,14 @@ const ContentBox: React.FC<HomeContentProps> = ({
   const reportWordMutation = useMutation(reportWord, {
     onError: (error) => {
       console.error('There has been a problem with your fetch operation:', error);
+      navigate('/login');
     },
   });
   
   const reportDefinitionMutation = useMutation(reportDefinition, {
     onError: (error) => {
       console.error('There has been a problem with your fetch operation:', error);
+      navigate('/login');
     },
   });
   
@@ -218,7 +225,6 @@ const ContentBox: React.FC<HomeContentProps> = ({
     }
   }, [clickCount]);
   
-  // Update the like, dislike, and report buttons when language is changed
   useEffect(() => {
     setLikeClicked(isLiked);
     setDislikeClicked(isDisliked);
@@ -231,15 +237,16 @@ const ContentBox: React.FC<HomeContentProps> = ({
       (lang === 'ar' ? ' content-box-ar' : ' content-box-latin')}>
       {showDialog && (
         <CustomDialog
-          text=
-            {reportType ?
+          text={
+            reportType ?
               (i18n.language === 'ar' ?
                 t('report_dialog.why', {
                   reportType:
                     reportType === 'word' ? 'هذه الكلمة' : 'هذا التعريف',
                 }) :
                 t('report_dialog.why', { reportType: reportType })) :
-              t('report_dialog.what')}
+              t('report_dialog.what')
+          }
           buttonText1={t('report_dialog.word')}
           buttonText2={t('report_dialog.definition')}
           onButton1Click={() => {
@@ -271,24 +278,26 @@ const ContentBox: React.FC<HomeContentProps> = ({
         />
       )}
       <div className={'content-box-title'}>
-        <h1>{item.word}</h1>
+        {(wordId && (
+          <Link to={`/word/${wordId}`} key={index + 1}>
+            <h1>{item.word}</h1>
+          </Link>
+        )) || (
+          <h1>{item.word}</h1>
+        )}
+        
         {countryCode &&
           <ReactCountryFlag
             countryCode={countryCode}
             svg
-            style={{
-              width: '2em',
-              height: '2em',
-            }}
+            style={{ width: '2em', height: '2em' }}
             title={countryCode}
           />
         }
       </div>
       {definitionHuh !== false && (
         <div className={'content-box-description'}>
-          <p>
-            {item.definition}
-          </p>
+          <p>{item.definition}</p>
         </div>
       )}
       {index !== 0 && (
@@ -320,6 +329,10 @@ const ContentBox: React.FC<HomeContentProps> = ({
       <Snackbar
         open={excessiveClickSnackbarOpen}
         message={t('content_box_buttons.repeated_reaction_error')}
+      />
+      <Snackbar
+        open={mustLoginSnackbarOpen}
+        message={t('login.must_login')}
       />
     </div>
   );
