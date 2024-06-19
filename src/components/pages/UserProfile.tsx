@@ -57,8 +57,10 @@ const UserProfile = () => {
   const [likeSnackbarOpen, setLikeSnackbarOpen] = useState(false);
   const [dislikeSnackbarOpen, setDislikeSnackbarOpen] = useState(false);
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
-  const name: string = 'Anthony'; // Replace with the actual user name
-  const userId: number = 1; // Replace with the actual user ID
+  const userData = location.state.user;
+  const name: string = userData.firstName;
+  const userId: number = userData.id;
+  const username: string = userData.username;
   const { t } = useTranslation();
   
   const fetchDefinitions = (userId: number) =>
@@ -342,7 +344,7 @@ const UserProfile = () => {
         <span className="profile-title-name">{name}</span>
         !
       </h2>
-      <h3 className="profile-subtitle">anthonyyoussef01</h3>
+      <h3 className="profile-subtitle">{username}</h3>
       <div className="buttons profile-logout">
         <button onClick={handleLogout} className="buttons-button">
           <FontAwesomeIcon icon={faArrowRightFromBracket} />

@@ -57,6 +57,8 @@ interface CheckUserStatusProps {
   children: ReactNode;
 }
 
+let userId = null;
+
 const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -84,7 +86,7 @@ const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
       checkUserStatus().then(status => {
         setUserStatus(status);
         if (status) {
-          navigate('/profile');
+          navigate('/profile', { state: { user: status } });
         }
       });
     }
