@@ -103,7 +103,11 @@ const UserProfile = () => {
     logoutMutation.mutate();
   };
   
-  const handleEditClick = (postId: number, definitionText: string): void => {
+  const handleEditClick = (postId: number | undefined, definitionText: string | undefined): void => {
+    if (postId === undefined || definitionText === undefined) {
+      return;
+    }
+    
     if (editingPostId !== postId) {
       setEditingPostId(postId);
       setEditedText(definitionText);
@@ -420,7 +424,7 @@ const UserProfile = () => {
             </p>
             <div className="buttons">
               {currentDefinition?.id && currentDefinition?.definition && (
-                <button onClick={() => handleEditClick(currentDefinition.id, currentDefinition.definition)}
+                <button onClick={() => handleEditClick(currentDefinition?.id, currentDefinition?.definition)}
                         className="profile-post-buttons-button">
                   {editingPostId === currentDefinition.id ? t('common.submit') : t('common.edit')}
                 </button>
