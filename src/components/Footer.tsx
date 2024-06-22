@@ -26,14 +26,20 @@ const Footer: React.FC = () => {
         </NavLink>
       </div>
       <div className="footer-socials">
-        <FontAwesomeIcon icon={faFacebookF} href="www.instagram.com" />
-        <FontAwesomeIcon icon={faInstagram} href="www.instagram.com" />
-        <FontAwesomeIcon icon={faXTwitter} href="www.instagram.com" />
-        <FontAwesomeIcon icon={faEnvelope} href="www.instagram.com" />
-        <FontAwesomeIcon icon={faHandHoldingMedical} href="www.instagram.com" />
+        {/*<FontAwesomeIcon icon={faFacebookF} />*/}
+        <NavLink to="https://www.instagram.com/qamousar/">
+          <FontAwesomeIcon icon={faInstagram} />
+        </NavLink>
+        {/*<FontAwesomeIcon icon={faXTwitter} />*/}
+        <NavLink to="mailto:QamousAR@gmail.com">
+          <FontAwesomeIcon icon={faEnvelope} />
+        </NavLink>
+        <NavLink to="https://www.github.com/sponsors/anthonyyoussef01">
+          <FontAwesomeIcon icon={faHandHoldingMedical} />
+        </NavLink>
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;
