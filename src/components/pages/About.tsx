@@ -28,14 +28,16 @@ const About: React.FC = () => {
         directly to the ongoing development and improvement of this vital
         resource for Arabic language enthusiasts worldwide.
         <br /><br />
-        <h2 style={{ margin: 0, textDecoration: "underline" }}>Your support can take many forms:</h2>
+        <h2 style={{ margin: 0, textDecoration: 'underline' }}>Your support can take many forms:</h2>
         <span style={{ fontWeight: 'bold' }}>Spread the Word: </span>
+        <br />
         Share Qamous with your friends, colleagues, and fellow
         language enthusiasts. Together, we can build a strong community around
         this project and foster a greater appreciation for the Arabic language
         and its many unique and rich dialects
         <br />
         <span style={{ fontWeight: 'bold' }}>Contribute: </span>
+        <br />
         If you have skills in software development, Arabic
         linguistics, or design, consider contributing to Qamous on GitHub or
         connecting with me over LinkedIn where we can speak more. Every
