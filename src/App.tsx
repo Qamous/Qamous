@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import './App.scss';
 import Header from './components/Header';
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import WordOfTheDay from './components/pages/WordOfTheDay';
 import Adverts from './components/Adverts';
 import Home from './components/pages/Home';
@@ -15,7 +15,7 @@ import LogIn from './components/pages/LogIn';
 import SignUp from './components/pages/SignUp';
 import AddWord from './components/pages/AddWord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBug } from '@fortawesome/free-solid-svg-icons';
+import { faBug, faEnvelope, faHandHoldingMedical } from '@fortawesome/free-solid-svg-icons';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import ForgotPassword from './components/pages/ForgotPassword';
@@ -25,6 +25,9 @@ import SearchResults from './components/pages/SearchResults';
 import NotFound from './components/pages/NotFound';
 import Snackbar from './components/Snackbar';
 import WordPage from './components/pages/WordPage';
+import { faFacebookF, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import About from './components/pages/About';
+import Footer from './components/Footer';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -95,7 +98,9 @@ const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   return children ? <>{children}</> : null;
 };
 
-const CheckUserLoggedOut: React.FC<CheckUserStatusProps & { setMustLoginSnackbarOpen: (open: boolean) => void }> = ({ children, setMustLoginSnackbarOpen }) => {
+const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
+  setMustLoginSnackbarOpen: (open: boolean) => void
+}> = ({ children, setMustLoginSnackbarOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [userStatus, setUserStatus] = useState(null);
@@ -164,8 +169,7 @@ const App: React.FC = () => {
               </div>
               <div className="content">
                 <Home />
-              </div>
-              <div className="footer">
+                <Footer />
               </div>
             </div>
           } />
@@ -176,8 +180,6 @@ const App: React.FC = () => {
               </div>
               <div className="content">
                 <PageUnderConstruction />
-              </div>
-              <div className="footer">
               </div>
             </div>
           } />
@@ -192,8 +194,6 @@ const App: React.FC = () => {
               <div className="content">
                 <WordOfTheDay />
               </div>
-              <div className="footer">
-              </div>
             </div>
           } />
           <Route path="/advertise" element={
@@ -204,20 +204,16 @@ const App: React.FC = () => {
               <div className="content">
                 <PageUnderConstruction />
               </div>
-              <div className="footer">
-              </div>
             </div>
           } />
           <Route path="/add-definition" element={
             <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
-            <div className="app">
+              <div className="app">
                 <div className="header">
                   <Header />
                 </div>
                 <div className="content">
                   <AddWord />
-                </div>
-                <div className="footer">
                 </div>
               </div>
             </CheckUserLoggedOut>
@@ -230,8 +226,6 @@ const App: React.FC = () => {
               <div className="content">
                 <SearchResults />
               </div>
-              <div className="footer">
-              </div>
             </div>
           } />
           <Route path="/word/:wordId" element={
@@ -241,8 +235,6 @@ const App: React.FC = () => {
               </div>
               <div className="content">
                 <WordPage />
-              </div>
-              <div className="footer">
               </div>
             </div>
           } />
@@ -254,8 +246,6 @@ const App: React.FC = () => {
                 </div>
                 <div className="content">
                   <LogIn />
-                </div>
-                <div className="footer">
                 </div>
               </div>
             </CheckUserLoggedIn>
@@ -269,8 +259,6 @@ const App: React.FC = () => {
                 <div className="content">
                   <SignUp />
                 </div>
-                <div className="footer">
-                </div>
               </div>
             </CheckUserLoggedIn>
           } />
@@ -283,8 +271,6 @@ const App: React.FC = () => {
                 <div className="content">
                   <ForgotPassword />
                 </div>
-                <div className="footer">
-                </div>
               </div>
             </CheckUserLoggedIn>
           } />
@@ -295,8 +281,6 @@ const App: React.FC = () => {
               </div>
               <div className="content">
                 <ResetPassword />
-              </div>
-              <div className="footer">
               </div>
             </div>
           } />
@@ -309,10 +293,29 @@ const App: React.FC = () => {
                 <div className="content">
                   <UserProfile />
                 </div>
-                <div className="footer">
-                </div>
               </div>
             </CheckUserLoggedOut>
+          } />
+          <Route path="/opportunities" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <PageUnderConstruction />
+              </div>
+            </div>
+          } />
+          <Route path="/about" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <About />
+                <Footer />
+              </div>
+            </div>
           } />
           <Route path="*" element={
             <div className="app">
@@ -321,8 +324,6 @@ const App: React.FC = () => {
               </div>
               <div className="content">
                 <NotFound />
-              </div>
-              <div className="footer">
               </div>
             </div>
           } /> {/* Catch-all route */}

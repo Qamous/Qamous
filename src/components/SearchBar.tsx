@@ -12,8 +12,13 @@ const SearchBar: React.FC = () => {
   
   const closeSearch = () => {
     const overlay = document.getElementById("myOverlay");
-    if (overlay) {
-      overlay.style.display = "none";
+    
+    if (window.innerWidth > 1200) {
+      openSearch();
+    } else {
+      if (overlay) {
+        overlay.style.display = "none";
+      }
     }
   };
   
@@ -74,6 +79,7 @@ const SearchBar: React.FC = () => {
             <button
               type="submit"
               className="search-box-submit"
+              onClick={closeSearch}
             >
               {t('common.search')}
             </button>

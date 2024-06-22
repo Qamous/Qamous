@@ -1,0 +1,64 @@
+@use '../../assets/Styles.scss' as styles;
+
+.about {
+  padding: 15px;
+
+  p {
+    font-size: clamp(0.9rem, 2.6vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.5;
+
+    a {
+      color: styles.$secondary-color-90;
+      text-decoration: none;
+      font-weight: 700;
+    }
+  }
+
+  &-hero {
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    column-gap: 1rem;
+
+    &-img {
+      max-width: 30rem;
+      width: 21vw;
+      min-width: 10rem;
+      height: auto;
+      position: relative;
+
+      &-pic {
+        width: 100%;
+        position: absolute;
+      }
+    }
+
+    &-txt {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      row-gap: 1.75rem;
+
+      h1 {
+        font-size: clamp(2.155rem, 6.35vw, 4.541rem);
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.15;
+        letter-spacing: -0.5px;
+      }
+
+      p {
+        text-wrap: balance;
+      }
+    }
+  }
+
+  &-sponsor {
+    left: 50%;
+    right: 50%;
+  }
+
+  iframe {
+    border: 0;
+  }
+}

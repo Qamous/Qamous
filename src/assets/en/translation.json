@@ -155,6 +155,11 @@
     "hmmm": "Hmmm...",
     "text": "We couldn't find the page you were looking for!"
   },
+  "footer": {
+    "franco_arabic_basics": "Franco-Arabic Basics",
+    "about": "About",
+    "opportunities": "Career Opportunities"
+  },
   "common": {
     "ok": "OK",
     "cancel": "Cancel",
@@ -162,6 +167,7 @@
     "submit": "Submit",
     "edit": "Edit",
     "search": "Search",
-    "data_fetch_error": "Data fetching error occurred. Please try again later."
+    "data_fetch_error": "Data fetching error occurred. Please try again later.",
+    "copyright": "Copyright © 2024 Qamous. All rights reserved."
   }
 }

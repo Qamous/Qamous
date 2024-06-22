@@ -324,6 +324,37 @@ $dark-grey: #292929;
   }
 }
 
+.footer {
+  padding: 20px;
+  background-color: $quaternary-color;
+
+  &-copyright {
+    color: $primary-color-50;
+    margin: 0;
+  }
+
+  &-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    color: $primary-color;
+    margin: 25px 0;
+    font-weight: 500;
+
+    * {
+      margin: 0;
+      padding: 0;
+      color: $primary-color;
+      text-decoration: none;
+    }
+  }
+
+  &-socials {
+    display: flex;
+    gap: 10px;
+  }
+}
+
 /**
  * Loading Ring Animation
  * ----------------------
