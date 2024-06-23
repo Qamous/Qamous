@@ -27,8 +27,10 @@ const Footer: React.FC = () => {
         </NavLink>
       </div>
       <div className="footer-socials">
-        {/*<FontAwesomeIcon icon={faFacebookF} />*/}
-        <NavLink to="https://www.instagram.com/qamousar/">
+        <NavLink to="https://www.facebook.com/QamousAR/">
+          <FontAwesomeIcon icon={faFacebookF} />
+        </NavLink>
+        <NavLink to="https://www.instagram.com/QamousAR/">
           <FontAwesomeIcon icon={faInstagram} />
         </NavLink>
         {/*<FontAwesomeIcon icon={faXTwitter} />*/}
