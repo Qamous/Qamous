@@ -303,7 +303,7 @@ const UserProfile = () => {
       )}
       {isDeleteAccountDialogOpen && (
         <CustomDialog
-          text="Are you sure you want to delete your account?"
+          text={t('user_profile.delete_account_confirmation')}
           buttonText1={t('common.confirm')}
           onButton1Click={handleDeleteAccountSubmit}
           buttonText2={t('common.cancel')}

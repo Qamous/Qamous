@@ -142,7 +142,8 @@
     "definition_like_error": "You cannot like your own definitions",
     "definition_dislike_error": "You cannot dislike your own definitions",
     "definition_report_error": "You cannot report your own definitions",
-    "delete_account": "Delete Account"
+    "delete_account": "Delete Account",
+    "delete_account_confirmation": "Are you sure you want to delete your account? This action cannot be undone"
   },
   "report_dialog": {
     "why": "Why are you reporting this {{reportType}}?",
