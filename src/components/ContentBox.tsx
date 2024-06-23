@@ -10,6 +10,7 @@ import i18n from 'i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCountryName } from '../assets/utils';
 import * as htmlToImage from 'html-to-image';
+import logo from '../assets/qamous-logo-transparent.png';
 
 export interface HomeContentProps {
   item: {
@@ -198,6 +199,19 @@ const ContentBox: React.FC<HomeContentProps> = ({
     const definitionElement = postRef.current.querySelector('.content-box-description p') as HTMLElement;
     if (definitionElement) definitionElement.style.fontSize = `${fontSizeDefinition}px`;
     
+    // Add the logo to the bottom left of the square
+    const logoElement = document.createElement('img');
+    logoElement.src = logo;
+    logoElement.style.display = 'block';
+    logoElement.style.position = 'relative';
+    logoElement.style.width = '100px';
+    logoElement.style.margin = 'auto';
+    const contentBoxDiv = postRef.current.querySelector('.content-box');
+    if (contentBoxDiv) {
+      contentBoxDiv.appendChild(logoElement);
+    }
+    contentBox.appendChild(logoElement);
+    
     htmlToImage
       .toPng(postRef.current, { cacheBust: true, pixelRatio: 2 }) // Set pixelRatio to 2 for higher quality
       .then((dataUrl) => {
@@ -215,10 +229,11 @@ const ContentBox: React.FC<HomeContentProps> = ({
         contentBox.style.width = originalWidth;
         contentBox.style.height = originalHeight;
         
-        // Reset font sizes
+        // Reset changes
         if (wordElement) wordElement.style.fontSize = ''; // Reset to default
-        if (wordElement) wordElement.style.color = ''; // Reset to default
-        if (definitionElement) definitionElement.style.fontSize = ''; // Reset to default
+        if (wordElement) wordElement.style.color = '';
+        if (definitionElement) definitionElement.style.fontSize = '';
+        if (logoElement) contentBox.removeChild(logoElement);
       });
   }, [postRef]);
   
