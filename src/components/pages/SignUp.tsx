@@ -156,6 +156,7 @@ const SignUp: React.FC = () => {
           type={'text'}
           value={username}
           placeholder={t('sign_up.enter_username')}
+          autoComplete={'username'}
           onChange={(ev) => setUsername(ev.target.value)}
           className={'container-input-box'}
         />
@@ -210,6 +211,7 @@ const SignUp: React.FC = () => {
         <input
           type={'password'}
           value={password}
+          autoComplete={'new-password'}
           placeholder={t('sign_up.enter_password')}
           onChange={(ev) => setPassword(ev.target.value)}
           className={'container-input-box'}
