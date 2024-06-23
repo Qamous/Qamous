@@ -63,6 +63,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   const [reportType, setReportType] = useState<string | null>(null);
   const [showInvalidInputDialog, setShowInvalidInputDialog] = useState(false);
   const [countryName, setCountryName] = useState<string>('');
+  const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -169,7 +170,8 @@ const ContentBox: React.FC<HomeContentProps> = ({
   };
   
   const postRef = useRef<HTMLDivElement>(null);
-  const handleShareClick = useCallback(() => {
+  
+  const handleInstagramShareClick = useCallback(() => {
     if (!postRef.current) {
       return;
     }
@@ -255,6 +257,10 @@ const ContentBox: React.FC<HomeContentProps> = ({
     }
     
     return await response.json();
+  };
+  
+  const handleShareClick = () => {
+    setShowTooltip(!showTooltip);
   };
   
   const reportWordMutation = useMutation(reportWord, {
@@ -396,12 +402,19 @@ const ContentBox: React.FC<HomeContentProps> = ({
           >
             {buttonText.dislike}
           </button>
-          <button
-            className={`content-box-buttons-share-button`}
-            onClick={handleShareClick}
-          >
-            {buttonText.share}
-          </button>
+          <div className="tooltip">
+            <button
+              className={`content-box-buttons-share-button`}
+              onClick={handleShareClick}
+            >
+              {buttonText.share}
+            </button>
+            {showTooltip && (
+              <div className="tooltiptext">
+                <button onClick={handleInstagramShareClick}>Instagram</button>
+              </div>
+            )}
+          </div>
           <button
             className={`content-box-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
             onClick={handleReportClick}

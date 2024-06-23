@@ -168,6 +168,44 @@
   }
 }
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: 100%; /* Position it below the button */
+  left: 50%;
+  margin-left: -60px; /* Center the tooltip */
+}
+
+.tooltip .tooltiptext button {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext button:hover {
+  text-decoration: underline;
+}
+
+.tooltip:hover .tooltiptext,
+.tooltip .tooltiptext:hover {
+  visibility: visible;
+}
+
+
 @media (max-width: 1200px) {
   .content-box {
     width: 100%;
