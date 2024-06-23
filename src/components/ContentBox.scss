@@ -151,7 +151,7 @@
       cursor: pointer;
       border-radius: 5px;
 
-      border-color: styles.$primary-color;
+      border-color: styles.$primary-color-75;
       background-color: styles.$quaternary-color;
       color: white;
 
@@ -162,7 +162,7 @@
       &:hover {
         background-color: styles.$primary-color;
         border-color: styles.$primary-color;
-        color: styles.$tertiary-color;
+        color: styles.$quaternary-color;
       }
     }
   }
