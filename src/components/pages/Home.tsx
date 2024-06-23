@@ -5,6 +5,7 @@ import i18n from 'i18next';
 import ContentBox from '../ContentBox';
 import { useQuery } from 'react-query';
 import Snackbar from '../Snackbar';
+import CustomDialog from '../CustomDialog';
 
 interface HomeContent {
   word: string,
@@ -44,6 +45,7 @@ const Home: React.FC = () => {
   
   const { data: homeContent, isLoading, isError } = useQuery<HomeContent[]>('homeContent', fetchHomeContent);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+  const [showDialog, setShowDialog] = useState(true);
   
   useEffect(() => {
     if (isError) {
@@ -132,6 +134,13 @@ const Home: React.FC = () => {
             isReported={item.isReported !== 0}
           />
         ))}
+      {showDialog && (
+        <CustomDialog
+          text={t('common.beta_warning')}
+          okButtonText={t('common.ok')}
+          onOkButtonClick={() => setShowDialog(false)}
+        />
+      )}
     </div>
   );
 };

@@ -195,6 +195,7 @@
     "edit": "Edit",
     "search": "Search",
     "data_fetch_error": "Data fetching error occurred. Please try again later.",
+    "beta_warning": "Please excuse any issues you encounter; we're currently in beta and working hard to improve. Thank you for your understanding!",
     "copyright": "Copyright © 2024 Qamous. All rights reserved."
   }
 }
