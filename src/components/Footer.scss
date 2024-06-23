@@ -1,0 +1,32 @@
+@use '../assets/Styles.scss' as styles;
+
+.footer {
+  padding: 20px;
+  background-color: styles.$quaternary-color;
+
+  &-copyright {
+    color: styles.$primary-color-50;
+    margin: 0;
+  }
+
+  &-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    color: styles.$primary-color;
+    margin: 25px 0;
+    font-weight: 500;
+
+    * {
+      margin: 0;
+      padding: 0;
+      color: styles.$primary-color;
+      text-decoration: none;
+    }
+  }
+
+  &-socials {
+    display: flex;
+    gap: 10px;
+  }
+}

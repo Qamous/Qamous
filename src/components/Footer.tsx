@@ -1,3 +1,4 @@
+import './Footer.scss';
 import i18n from 'i18next';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
