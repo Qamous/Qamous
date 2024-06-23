@@ -216,7 +216,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
       .toPng(postRef.current, { cacheBust: true, pixelRatio: 2 }) // Set pixelRatio to 2 for higher quality
       .then((dataUrl) => {
         const link = document.createElement('a');
-        link.download = 'post.png';
+        link.download = `${item.word}.png`;
         link.href = dataUrl;
         link.click();
       })
