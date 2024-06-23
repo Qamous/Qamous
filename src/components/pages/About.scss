@@ -2,6 +2,7 @@
 
 .about {
   padding: 15px;
+  display: grid;
 
   p {
     font-size: clamp(0.9rem, 2.6vw, 1.6rem);
@@ -54,8 +55,8 @@
   }
 
   &-sponsor {
-    left: 50%;
-    right: 50%;
+    align-self: center;
+    margin: 0 auto;
   }
 
   iframe {

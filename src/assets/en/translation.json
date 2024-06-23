@@ -160,6 +160,31 @@
     "about": "About",
     "opportunities": "Career Opportunities"
   },
+  "about": {
+    "title": "Welcome to Qamous!",
+    "text_1": "A project founded by ",
+    "founder": "Anthony Elkommos Youssef",
+    "text_2": ". The goal of this project is to provide a platform for Arabic speakers to learn other dialects of Arabic and to allow others to learn Arabic more easily. We aim to provide a comprehensive resource for learners of Arabic dialects, including the Egyptian, Levantine, Gulf, and many more dialects.",
+    "text_3": "This project is open source and can be found on ",
+    "github": "GitHub",
+    "text_4": ". By supporting Qamous on GitHub, you'll be contributing directly to the ongoing development and improvement of this vital resource for Arabic language enthusiasts worldwide.",
+    "text_5": "Your support can take many forms:",
+    "text_6": "Spread the Word:",
+    "text_7": "Share Qamous with your friends, colleagues, and fellow language enthusiasts. Together, we can build a strong community around this project and foster a greater appreciation for the Arabic language and its many unique and rich dialects. The more people who know about Qamous, the more valuable it becomes as a resource for learners and speakers of Arabic.",
+    "text_8": "Contribute Content:",
+    "text_9": "If you're a native speaker of an Arabic dialect or have expertise in Arabic linguistics, consider contributing words, definitions, examples, and other content to Qamous. Your contributions will help enrich the platform and make it more useful and engaging for learners of Arabic dialects. By sharing your knowledge and insights, you can help others learn and appreciate the beauty and diversity of Arabic language and culture.",
+    "text_10": "Contribute Code:",
+    "text_11": "If you're a developer or have experience in software development or design, consider ",
+    "text_12": "contributing to the Qamous project on GitHub",
+    "text_13": ". Whether you're skilled in front-end design, back-end development, database management, or other areas of expertise, your contributions can help enhance the functionality, usability, and performance of the platform. By collaborating with other developers and contributors, you can help shape the future of Qamous and make it an even more valuable resource for Arabic language learners and enthusiasts.",
+    "text_14": "Sponsor the Project:",
+    "text_15": "If you or your organization is passionate about supporting language learning, cultural exchange, and the preservation of Arabic dialects, consider sponsoring the Qamous project. Your sponsorship can help cover the costs of hosting, maintenance, development, and promotion, ensuring that Qamous remains a free, accessible, and high-quality resource for Arabic language enthusiasts worldwide. By sponsoring Qamous, you'll be making a meaningful contribution to the preservation and promotion of Arabic language and culture. Your sponsorship will enable us to dedicate more time and resources to roll out Qamous faster and build new features that benefit the Arabic language community.",
+    "sponsor": "Sponsor Qamous",
+    "text_16": "Qamous is more than just a dictionary; it's a celebration of Arabic language and culture. With your support, we can take Qamous to new heights and ensure that Arabic language learners have the tools they need to succeed.",
+    "text_17": "Together, we can make Qamous a vibrant, inclusive, and dynamic platform for learning, sharing, and celebrating the richness of Arabic language and culture. Thank you for your support and for being part of the Qamous community!",
+
+    "description": "Qamous is a platform dedicated to preserving and promoting colloquial Arabic words and phrases. Our mission is to provide a comprehensive resource for learners of Arabic dialects, including the Egyptian, Levantine, Gulf, and many more dialects. By offering a diverse collection of words, definitions, and examples, we aim to facilitate language learning and cultural exchange. Qamous is designed to be an inclusive and interactive space where users can contribute, learn, and engage with the richness of Arabic language and culture."
+  },
   "common": {
     "ok": "OK",
     "cancel": "Cancel",
