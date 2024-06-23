@@ -169,7 +169,20 @@ const UserProfile = () => {
   };
   
   const handleDeleteAccount = (): void => {
-    setIsDeleteAccountDialogOpen(true);
+    fetch('http://localhost:3000/users/' + userId, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        // Navigate to home page after successful account deletion
+        navigate('/');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   };
   
   const handleDeleteAccountSubmit = (): void => {
