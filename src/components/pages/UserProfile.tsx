@@ -169,6 +169,10 @@ const UserProfile = () => {
   };
   
   const handleDeleteAccount = (): void => {
+    setIsDeleteAccountDialogOpen(true);
+  };
+  
+  const handleDeleteAccountSubmit = (): void => {
     fetch('http://localhost:3000/users/' + userId, {
       method: 'DELETE',
       credentials: 'include',
@@ -179,28 +183,6 @@ const UserProfile = () => {
         }
         // Navigate to home page after successful account deletion
         navigate('/');
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  };
-  
-  const handleDeleteAccountSubmit = (): void => {
-    fetch('http://localhost:3000/auth/delete', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error deleting account');
-        }
-        return response.json();
-      })
-      .then(data => {
-        navigate('/login');
       })
       .catch(error => {
         console.error('Error:', error);
