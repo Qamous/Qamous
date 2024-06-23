@@ -77,13 +77,13 @@
 
       &:hover {
         transition: background-color 0.5s, color 0.5s, border-color 0.5s;
-        color: white;
       }
     }
 
     &-like-button {
       border-color: #4CAF50; /* Green */
       background-color: styles.$quaternary-color;
+      color: white;
 
       &:hover {
         background-color: #4CAF50;
@@ -93,13 +93,13 @@
       &.clicked {
         border-color: #2b622d;
         background-color: #4CAF50;
-        color: white;
       }
     }
 
     &-dislike-button {
       border-color: #f44336; /* Red */
       background-color: styles.$quaternary-color;
+      color: white;
 
       &:hover {
         background-color: #f44336;
@@ -109,7 +109,6 @@
       &.clicked {
         border-color: #9b2b22;
         background-color: #f44336;
-        color: white;
       }
     }
 
@@ -120,7 +119,7 @@
       //border: none;
       border-radius: 5px;
       //background-color: styles.$secondary-color;
-      //color: white;
+      color: white;
 
       border-color: styles.$secondary-color;
       background-color: styles.$quaternary-color;
@@ -137,13 +136,33 @@
       &.clicked {
         border-color: black;
         background-color: #101010;
-        color: white;
 
         cursor: not-allowed;
 
         &:active {
           transform: none;
         }
+      }
+    }
+
+    &-share-button {
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+
+      border-color: styles.$primary-color;
+      background-color: styles.$quaternary-color;
+      color: white;
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &:hover {
+        background-color: styles.$primary-color;
+        border-color: styles.$primary-color;
+        color: styles.$tertiary-color;
       }
     }
   }

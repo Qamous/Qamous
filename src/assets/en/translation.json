@@ -47,6 +47,7 @@
     "like": "Like",
     "dislike": "Dislike",
     "report": "Report",
+    "share": "Share",
     "report_cancelled": "Invalid input. Report Cancelled.",
     "repeated_report_error": "You are unable to report the same word / definition more than once.",
     "repeated_reaction_error": "You have reacted too many times. Please wait before clicking again."

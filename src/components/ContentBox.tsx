@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './ContentBox.scss';
+import styles from '../assets/Styles.scss';
 import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
@@ -8,6 +9,7 @@ import CustomDialog from './CustomDialog';
 import i18n from 'i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCountryName } from '../assets/utils';
+import * as htmlToImage from 'html-to-image';
 
 export interface HomeContentProps {
   item: {
@@ -23,14 +25,15 @@ export interface HomeContentProps {
   isReported: boolean,
   countryCode?: string,
   definitionHuh?: boolean,
-  //likeCount: number,
-  //dislikeCount: number,
+  // likeCount: number,
+  // dislikeCount: number,
 }
 
 interface ButtonText {
   like: string,
   dislike: string,
-  report: string
+  report: string,
+  share: string,
 }
 
 const ContentBox: React.FC<HomeContentProps> = ({
@@ -164,6 +167,61 @@ const ContentBox: React.FC<HomeContentProps> = ({
     }
   };
   
+  const postRef = useRef<HTMLDivElement>(null);
+  const handleShareClick = useCallback(() => {
+    if (!postRef.current) {
+      return;
+    }
+    
+    // Temporarily hide buttons and adjust to square dimensions
+    const buttons = postRef.current.querySelector('.content-box-buttons') as HTMLElement;
+    if (buttons) buttons.style.display = 'none';
+    
+    const contentBox = postRef.current as HTMLElement;
+    const originalWidth = contentBox.style.width;
+    const originalHeight = contentBox.style.height;
+    
+    const boundingRect = contentBox.getBoundingClientRect();
+    const sideLength = Math.max(boundingRect.width, boundingRect.height);
+    
+    contentBox.style.width = `${sideLength}px`;
+    contentBox.style.height = `${sideLength}px`;
+    
+    // Calculate font sizes based on the side length
+    const fontSizeWord = Math.floor(sideLength * 0.06); // Adjust multiplier as needed
+    const fontSizeDefinition = Math.floor(sideLength * 0.04); // Adjust multiplier as needed
+    
+    const wordElement = postRef.current.querySelector('.content-box-title h1') as HTMLElement;
+    if (wordElement) wordElement.style.fontSize = `${fontSizeWord}px`;
+    if (wordElement) wordElement.style.color = styles.secondaryColor;
+    
+    const definitionElement = postRef.current.querySelector('.content-box-description p') as HTMLElement;
+    if (definitionElement) definitionElement.style.fontSize = `${fontSizeDefinition}px`;
+    
+    htmlToImage
+      .toPng(postRef.current, { cacheBust: true, pixelRatio: 2 }) // Set pixelRatio to 2 for higher quality
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'post.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      })
+      .finally(() => {
+        // Restore buttons and original dimensions
+        if (buttons) buttons.style.display = 'flex';
+        contentBox.style.width = originalWidth;
+        contentBox.style.height = originalHeight;
+        
+        // Reset font sizes
+        if (wordElement) wordElement.style.fontSize = ''; // Reset to default
+        if (wordElement) wordElement.style.color = ''; // Reset to default
+        if (definitionElement) definitionElement.style.fontSize = ''; // Reset to default
+      });
+  }, [postRef]);
+  
   const reportDefinition = async ({ reportText }: { reportText: string }) => {
     const response: Response = await fetch('http://localhost:3000/definition-reports', {
       method: 'POST',
@@ -242,7 +300,8 @@ const ContentBox: React.FC<HomeContentProps> = ({
   return (
     <div className={'content-box' +
       (index === 0 ? ' content-box-first' : '') +
-      (lang === 'ar' ? ' content-box-ar' : ' content-box-latin')}>
+      (lang === 'ar' ? ' content-box-ar' : ' content-box-latin')}
+         ref={postRef}>
       {showDialog && (
         <CustomDialog
           text={
@@ -321,6 +380,12 @@ const ContentBox: React.FC<HomeContentProps> = ({
             onClick={handleDislikeClick}
           >
             {buttonText.dislike}
+          </button>
+          <button
+            className={`content-box-buttons-share-button`}
+            onClick={handleShareClick}
+          >
+            {buttonText.share}
           </button>
           <button
             className={`content-box-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
