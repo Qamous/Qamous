@@ -70,6 +70,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/bcrypt": "^5.0.2",
     "@types/connect-redis": "^0.0.23",
     "@types/express-session": "^1.18.0",
