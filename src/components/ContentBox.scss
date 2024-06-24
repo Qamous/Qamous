@@ -183,7 +183,7 @@
   border-radius: 6px;
   position: absolute;
   z-index: 1;
-  bottom: 100%; /* Position it above the button */
+  bottom: calc(100% - 9px); /* Position it above the button */
   left: 50%;
   transform: translateX(-50%); /* Center the tooltip */
   opacity: 0; /* Start fully transparent */
