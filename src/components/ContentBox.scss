@@ -183,9 +183,9 @@
   border-radius: 6px;
   position: absolute;
   z-index: 1;
-  top: 100%; /* Position it below the button */
+  bottom: 100%; /* Position it above the button */
   left: 50%;
-  margin-left: -60px; /* Center the tooltip */
+  transform: translateX(-50%); /* Center the tooltip */
 }
 
 .tooltip .tooltiptext button {
