@@ -239,6 +239,51 @@ const ContentBox: React.FC<HomeContentProps> = ({
       });
   }, [postRef]);
   
+  const handleFacebookShare = () => {
+    const word = 'Example Word'; // Replace with your actual word
+    const definition = 'Example definition goes here.'; // Replace with your actual definition
+    const shareUrl = 'https://www.qamous.org'; // Example URL
+    
+    const quote = `${word}: ${definition}\n\nCheck out Qamous.org for more!`; // Message for Facebook share
+    
+    // Construct the Facebook feed dialog URL
+    const facebookDialogUrl = `https://www.facebook.com/dialog/feed?
+    app_id=${7661586273928712}
+    &display=popup
+    &link=${encodeURIComponent(shareUrl)}
+    &quote=${encodeURIComponent(quote)}
+    &redirect_uri=${encodeURIComponent('https://www.qamous.org')}`; // Replace with your actual redirect URI
+    
+    // Open the feed dialog in a new window
+    window.open(facebookDialogUrl, '_blank', 'width=600,height=400');
+  };
+  
+  const handleXShare = () => {
+    const promoText = `\n\nCheck out Qamous.org for more!`;
+    const separator = ': ';
+    const maxTweetLength = 280;
+    
+    // Estimate the additional characters added by URL encoding
+    const estimatedExtraChars = 14;
+    
+    // Calculate the maximum length for the definition
+    const maxDefinitionLength = maxTweetLength - item.word.length - separator.length - promoText.length - estimatedExtraChars;
+    
+    let truncatedDefinition = item.definition;
+    
+    if (item.definition.length > maxDefinitionLength) {
+      truncatedDefinition = item.definition.slice(0, maxDefinitionLength - 3) + '...';
+    }
+    
+    const tweetText = `${item.word}${separator}${truncatedDefinition}${promoText}`;
+    
+    // Construct the Twitter intent URL
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+    
+    // Open the Twitter share dialog in a new window
+    window.open(twitterUrl, '_blank');
+  };
+  
   const reportDefinition = async ({ reportText }: { reportText: string }) => {
     const response: Response = await fetch('http://localhost:3000/definition-reports', {
       method: 'POST',
@@ -412,6 +457,8 @@ const ContentBox: React.FC<HomeContentProps> = ({
             {showTooltip && (
               <div className="tooltiptext">
                 <button onClick={handleInstagramShareClick}>Instagram</button>
+                {/*<button onClick={handleFacebookShare}>Facebook</button>*/}
+                <button onClick={handleXShare}>X / Twitter</button>
               </div>
             )}
           </div>
@@ -419,7 +466,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
             className={`content-box-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
             onClick={handleReportClick}
           >
-            {buttonText.report}
+          {buttonText.report}
           </button>
         </div>
       )}
