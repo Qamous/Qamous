@@ -25,9 +25,10 @@ import SearchResults from './components/pages/SearchResults';
 import NotFound from './components/pages/NotFound';
 import Snackbar from './components/Snackbar';
 import WordPage from './components/pages/WordPage';
-import { faFacebookF, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import About from './components/pages/About';
 import Footer from './components/Footer';
+// eslint-disable-next-line
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
