@@ -29,6 +29,7 @@ import About from './components/pages/About';
 import Footer from './components/Footer';
 // eslint-disable-next-line
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Analytics } from "@vercel/analytics/react"
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
