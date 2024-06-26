@@ -22,8 +22,8 @@ const PageUnderConstruction: React.FC = () => {
     // Get the current date
     const currentDate: Date = new Date();
 
-    // Set the completion date (v1.1) to July 1st, 2024
-    let completionDate: Date = new Date(2024, 6, 1);
+    // Set the completion date (v1.1) to August 1st, 2024
+    let completionDate: Date = new Date(2024, 8, 1);
 
     // If the current date is past June 1st, 2024, set the completion date to the first day of the upcoming month
     if (currentDate.getTime() > completionDate.getTime()) {
