@@ -3,6 +3,7 @@
 .footer {
   padding: 20px;
   background-color: styles.$quaternary-color;
+  max-width: 100%;
 
   &-copyright {
     color: styles.$primary-color-50;
@@ -16,6 +17,7 @@
     color: styles.$primary-color;
     margin: 25px 0;
     font-weight: 500;
+    font-size: clamp(0.7rem, 3.4vw, 1.1rem);
 
     * {
       margin: 0;
