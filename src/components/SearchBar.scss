@@ -15,7 +15,7 @@ $close-trans-time: 150ms;
 
 .search-button {
     padding: 15px;
-    margin: 0 10px 0 0;
+    margin: -7px 10px 0 0;
     font-size: $font-size;
     border: solid $frame-thickness styles.$secondary-color;
     display: inline-block;
@@ -63,6 +63,7 @@ $close-trans-time: 150ms;
 
     .search-overlay {
         display: block;
+        margin-top: -7px;
     }
 
     .search-box {
