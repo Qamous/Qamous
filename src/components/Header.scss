@@ -90,6 +90,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
     //#1e1e1e
     border-bottom: 1px solid styles.$header-border-color;
     box-shadow: 0 -6px 5px 5px $header-shadow;
+    transition: height 0.5s ease-in-out;
 
     &-left-side {
         display: flex;
@@ -271,17 +272,21 @@ $header-shadow: rgba(0, 0, 0, 0.1);
         display: none;
     }
 
-    .header-right-side{
-        &-mode {
-            display: none;
-        }
+    .header {
+        height: 60px;
 
-        &-language {
-            display: none;
-        }
+        &-right-side{
+            &-mode {
+                display: none;
+            }
 
-        &-user {
-            display: none;
+            &-language {
+                display: none;
+            }
+
+            &-user {
+                display: none;
+            }
         }
     }
 
