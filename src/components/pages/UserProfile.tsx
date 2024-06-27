@@ -344,7 +344,7 @@ const UserProfile = () => {
         !
       </h2>
       <h3 className="profile-subtitle">{username}</h3>
-      <div className="buttons profile-logout">
+      <div className="buttons buttons-between profile-logout">
         <button onClick={handleLogout} className="buttons-button">
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
           <p>
@@ -417,7 +417,7 @@ const UserProfile = () => {
                 i18n.language === 'ar' ? 'ar-EG' : i18n.language, { year: 'numeric', month: 'long', day: 'numeric' },
               )}
             </p>
-            <div className="buttons">
+            <div className="buttons buttons-between">
               {currentDefinition?.id && currentDefinition?.definition && (
                 <button onClick={() => handleEditClick(currentDefinition?.id, currentDefinition?.definition)}
                         className="profile-post-buttons-button">
@@ -450,7 +450,7 @@ const UserProfile = () => {
           </div>
         );
       })}
-      <div className="buttons profile-delete">
+      <div className="buttons buttons-between profile-delete">
         <button onClick={handleDeleteAccount} className="buttons-button">
           <FontAwesomeIcon icon={faTrash} />
           <p>
