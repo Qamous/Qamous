@@ -81,6 +81,13 @@ const Home: React.FC = () => {
           <div></div>
           <div></div>
         </div>
+        {showDialog && (
+          <CustomDialog
+            text={t('common.beta_warning')}
+            okButtonText={t('common.ok')}
+            onOkButtonClick={() => setShowDialog(false)}
+          />
+        )}
       </div>
     );
   }
