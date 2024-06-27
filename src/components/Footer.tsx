@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
         <NavLink to="mailto:QamousAR@gmail.com">
           <FontAwesomeIcon icon={faEnvelope} />
         </NavLink>
-        <NavLink to="https://www.github.com/sponsors/anthonyyoussef01">
+        <NavLink to="/about#buttons">
           <FontAwesomeIcon icon={faHandHoldingMedical} />
         </NavLink>
       </div>

@@ -69,7 +69,7 @@ const About: React.FC = () => {
         <br />
         {t('about.text_15')}
       </p>
-      <div className="buttons buttons-evenly">
+      <div id="donation-buttons" className="buttons buttons-evenly">
         <a
           href="https://www.github.com/sponsors/anthonyyoussef01"
           className="about-sponsor"
