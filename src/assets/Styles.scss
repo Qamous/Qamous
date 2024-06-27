@@ -384,8 +384,15 @@ $dark-grey: #292929;
 .buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   user-select: none;
+
+  &-between {
+    justify-content: space-between;
+  }
+
+  &-evenly {
+    justify-content: space-evenly;
+  }
 
   &-button {
     padding: 5px 10px;
