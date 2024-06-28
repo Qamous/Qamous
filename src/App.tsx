@@ -27,7 +27,6 @@ import Snackbar from './components/Snackbar';
 import WordPage from './components/pages/WordPage';
 import About from './components/pages/About';
 import Footer from './components/Footer';
-// eslint-disable-next-line
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
 
