@@ -15,7 +15,7 @@ import LogIn from './components/pages/LogIn';
 import SignUp from './components/pages/SignUp';
 import AddWord from './components/pages/AddWord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBug, faEnvelope, faHandHoldingMedical } from '@fortawesome/free-solid-svg-icons';
+import { faBug } from '@fortawesome/free-solid-svg-icons';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import ForgotPassword from './components/pages/ForgotPassword';
@@ -29,6 +29,7 @@ import About from './components/pages/About';
 import Footer from './components/Footer';
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
+import PasswordScreen from './components/pages/PasswordScreen';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -158,6 +159,12 @@ const App: React.FC = () => {
       window.open('https://forms.gle/E91Ydr4aw68W5RWr7', 'Bug Report Form');
     }
   };
+  
+  const [passwordCorrect, setPasswordCorrect] = useState(false);
+  
+  if (!passwordCorrect) {
+    return <PasswordScreen onPasswordCorrect={() => setPasswordCorrect(true)} />;
+  }
   
   return (
     <QueryClientProvider client={queryClient}>

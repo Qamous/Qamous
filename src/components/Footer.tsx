@@ -2,7 +2,7 @@ import './Footer.scss';
 import i18n from 'i18next';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faFacebookF, faGithub, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faHandHoldingMedical } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +34,9 @@ const Footer: React.FC = () => {
           <FontAwesomeIcon icon={faInstagram} />
         </NavLink>
         {/*<FontAwesomeIcon icon={faXTwitter} />*/}
+        <NavLink to="https://github.com/Qamous">
+          <FontAwesomeIcon icon={faGithub} />
+        </NavLink>
         <NavLink to="mailto:QamousAR@gmail.com">
           <FontAwesomeIcon icon={faEnvelope} />
         </NavLink>
