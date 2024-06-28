@@ -162,6 +162,8 @@ const App: React.FC = () => {
   
   return (
     <QueryClientProvider client={queryClient}>
+      <SpeedInsights/>
+      <Analytics/>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={
