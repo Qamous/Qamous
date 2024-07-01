@@ -111,9 +111,7 @@ const About: React.FC = () => {
           </button>
         </a>
       </div>
-      
       <p>
-        <br />
         {t('about.text_16')}
         <br /> <br />
         {t('about.text_17')}
