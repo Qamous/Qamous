@@ -19,7 +19,7 @@ const ForgotPassword = () => {
   
   const mutation = useMutation(
     (email: string) =>
-      fetch('http://localhost:3000/users/reset-password', {
+      fetch(`${process.env.REACT_APP_API_URL}/users/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

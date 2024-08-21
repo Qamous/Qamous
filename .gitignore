@@ -25,3 +25,9 @@ yarn-error.log*
 # folder
 backend
 .vercel
+
+# local env
+.env
+
+# package json
+package-lock.json

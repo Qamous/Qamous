@@ -139,7 +139,7 @@ const SearchResults: React.FC = () => {
 };
 
 async function fetchSearchResults(query: string): Promise<SearchResult[]> {
-  const response = await fetch('http://localhost:3000/word/search/kwd=' + query, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/word/search/kwd=` + query, {
     mode: 'cors',
     credentials: 'include',
   });

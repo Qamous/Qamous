@@ -85,7 +85,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   };
   
   const likeMutation = useMutation(() =>
-    fetch(`http://localhost:3000/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
       method: 'POST',
       credentials: 'include',
     }).then(response => {
@@ -98,7 +98,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   });
   
   const dislikeMutation = useMutation(() =>
-    fetch(`http://localhost:3000/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
       method: 'POST',
       credentials: 'include',
     }).then(response => {
@@ -139,7 +139,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   };
   
   const reportWord = async ({ reportText }: { reportText: string }) => {
-    const response: Response = await fetch('http://localhost:3000/word-reports', {
+    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/word-reports`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -285,7 +285,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   };
   
   const reportDefinition = async ({ reportText }: { reportText: string }) => {
-    const response: Response = await fetch('http://localhost:3000/definition-reports', {
+    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/definition-reports`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

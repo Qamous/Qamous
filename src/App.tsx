@@ -70,7 +70,7 @@ const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   const [userStatus, setUserStatus] = useState(null);
   
   const checkUserStatus = async () => {
-    const response = await fetch('http://localhost:3000/auth/session', {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, {
       credentials: 'include', // Include credentials in the request
     });
     if (response.ok) {
@@ -108,7 +108,7 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
   const [userStatus, setUserStatus] = useState(null);
   
   const checkUserStatus = async () => {
-    const response = await fetch('http://localhost:3000/auth/session', {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, {
       credentials: 'include',
     });
     if (response.ok) {

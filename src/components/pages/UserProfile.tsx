@@ -64,7 +64,7 @@ const UserProfile = () => {
   const { t } = useTranslation();
   
   const fetchDefinitions = (userId: number) =>
-    fetch(`http://localhost:3000/definitions/user/${userId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/definitions/user/${userId}`)
       .then(response => response.json())
       .then(data => {
         setDefinitions(data);
@@ -84,7 +84,7 @@ const UserProfile = () => {
   };
   
   const logoutMutation = useMutation(() =>
-      fetch('http://localhost:3000/auth/logout', {
+      fetch(`${process.env.REACT_APP_API_URL}/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ const UserProfile = () => {
           ...updatedDefinition,
           definition: editedText,
         };
-        fetch(`http://localhost:3000/definitions/${submittingPostId}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/definitions/${submittingPostId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -173,7 +173,7 @@ const UserProfile = () => {
   };
   
   const handleDeleteAccountSubmit = (): void => {
-    fetch('http://localhost:3000/users/' + userId, {
+    fetch(`${process.env.REACT_APP_API_URL}/users/` + userId, {
       method: 'DELETE',
       credentials: 'include',
     })

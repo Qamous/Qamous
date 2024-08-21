@@ -31,7 +31,7 @@ interface JsonContent {
 
 const fetchHomeContent: () => Promise<HomeContent[]> = () =>
   // after fetching the data, console log the data and return it
-  fetch('http://localhost:3000/definitions/most-liked', {
+  fetch(`${process.env.REACT_APP_API_URL}/definitions/most-liked`, {
     mode: 'cors',
     credentials: 'include',
   }).then(response => response.json());
