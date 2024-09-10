@@ -41,6 +41,16 @@
       "word": "Smaitary",
       "definition": "\"Smaitary\" is an informal Arabic term that refers to intense cold weather. The word is derived from the fusion of \"squee\", or \"saq3\", and \"rain\", or \"matar\", forming \"Samaitary\". Over time, the \"sa\" was transformed into just \"s\", resulting in \"Smaitary\". In Libya, cold weather is described using various terms such as \"safengri\", \"smaitary\", and \"shaloondi\".",
       "example": "Al yawm al-jaw smaitary"
+    },
+    {
+      "word": "Kobaya",
+      "definition": "The Arabic word \"كوباية\" (pronounced: kobaya) is a colloquial term used in Egyptian Arabic to refer to a cup or glass. This term is commonly employed in informal contexts, such as casual conversations, social gatherings, or everyday interactions. Kobaya is a versatile word that denotes a container for beverages, typically tea, coffee, or juice.",
+      "example": "Eddini kobaya ma3ak"
+    },
+    {
+      "word": "Fakes",
+      "definition": "The Egyptian Arabic word \"فاكس\" (although it may read like 'fake.s' but it’s pronounced 'fak.es') translates to \"no\" in English. So if someone asks you if you want to go to this place for dinner, just saying fakes will do the trick.",
+      "example": "Wana awga3 demaghi leh? Faaaaakes"
     }
   ],
   "content_box_buttons": {
@@ -146,7 +156,8 @@
     "definition_dislike_error": "You cannot dislike your own definitions",
     "definition_report_error": "You cannot report your own definitions",
     "delete_account": "Delete Account",
-    "delete_account_confirmation": "Are you sure you want to delete your account? This action cannot be undone"
+    "delete_account_confirmation": "Are you sure you want to delete your account? This action cannot be undone",
+    "pick_other_definitions": "Pick other definitions"
   },
   "report_dialog": {
     "why": "Why are you reporting this {{reportType}}?",

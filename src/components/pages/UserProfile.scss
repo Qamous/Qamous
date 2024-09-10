@@ -1,5 +1,9 @@
 @use '../../assets/Styles.scss' as styles;
 
+.dropdown div {
+  cursor: pointer;
+}
+
 .profile {
   width: 55%;
 

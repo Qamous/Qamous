@@ -57,6 +57,9 @@ const UserProfile = () => {
   const [likeSnackbarOpen, setLikeSnackbarOpen] = useState(false);
   const [dislikeSnackbarOpen, setDislikeSnackbarOpen] = useState(false);
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState<{ [key: number]: boolean }>({});
+  const [selectedDefinition, setSelectedDefinition] = useState<{ [key: number]: Definition | null }>({});
+  const [currentDefinition, setCurrentDefinition] = useState<Definition | null>(null);
   const userData = location.state.user;
   const name: string = userData.firstName;
   const userId: number = userData.id;
@@ -244,6 +247,25 @@ const UserProfile = () => {
     return [wordDefinitions, Object.values(uniqueWords)];
   };
   
+  const handleDropdownToggle = (wordId: number) => {
+    setDropdownVisible(prevState => ({
+      ...prevState,
+      [wordId]: !prevState[wordId],
+    }));
+  };
+  
+  const handleDefinitionSelect = (wordId: number, definition: Definition) => {
+    setSelectedDefinition(prevState => ({
+      ...prevState,
+      [wordId]: definition,
+    }));
+    setCurrentDefinition(definition);
+    setDropdownVisible(prevState => ({
+      ...prevState,
+      [wordId]: false,
+    }));
+  };
+  
   // Redirect to /profile if the user is on /signup or /login
   useEffect(() => {
     if (location.pathname !== '/profile') {
@@ -360,96 +382,114 @@ const UserProfile = () => {
       {/*</form>*/}
       
       {uniqueWords.map((word: Word, index: number) => {
-        const wordDefinitionsData = wordDefinitions[word.id];
-        let currentDefinition = wordDefinitionsData.find((def: Definition) => def.isArabic === (currentLanguage[word.id] === 'ARABIC'));
-        
-        // If there is no Franco-Arabic definition, show the Arabic definition
-        if (!currentDefinition) {
-          currentDefinition = wordDefinitionsData.find((def: Definition) => def.isArabic);
-          if (currentDefinition) {
-            setCurrentLanguage(prevState => ({
-              ...prevState,
-              [word.id]: 'ARABIC',
-            }));
-          }
-        }
-        
-        return (
-          <div className="profile-post" key={word.id}>
-            <div className="profile-post-language">
-              <p className="profile-post-language-left">
-                {currentLanguage[word.id] === 'ARABIC' ?
-                  t('user_profile.arabic') :
-                  t('user_profile.franco_arabic')}
-              </p>
-              {wordDefinitionsData.length > 1 && (
-                <div
-                  className="profile-post-language-right"
-                  onClick={() => handlePostLanguageClick(word.id)}
-                >
-                  <p>
-                    {t('user_profile.switch_translation')}
-                  </p>
-                  &nbsp;
-                  <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
-                </div>
-              )}
-            </div>
-            <h2 dir={currentLanguage[word.id] === 'ARABIC' ? 'rtl' : 'ltr'}>
-              {currentLanguage[word.id] === 'ARABIC' ? word.arabicWord : word.francoArabicWord}
-            </h2>
-            {editingPostId === currentDefinition?.id ? (
-              <textarea
-                typeof={'text'}
-                value={editedText}
-                className={`profile-post-inputtext`}
-                rows={4}
-                dir={currentLanguage === 'ARABIC' ? 'rtl' : 'ltr'}
-                onChange={(e) => setEditedText(e.target.value)}
-              />
-            ) : (
-              <p dir={currentDefinition?.isArabic ? 'rtl' : 'ltr'}>
-                {currentDefinition?.definition}
-              </p>
-            )}
-            <p className="profile-post-date">
-              {currentDefinition?.AddedTimestamp && new Date(currentDefinition.AddedTimestamp).toLocaleDateString(
-                i18n.language === 'ar' ? 'ar-EG' : i18n.language, { year: 'numeric', month: 'long', day: 'numeric' },
-              )}
+  const wordDefinitionsData = wordDefinitions[word.id];
+  let currentDefinition = selectedDefinition[word.id] || wordDefinitionsData.find((def: Definition) => def.isArabic === (currentLanguage[word.id] === 'ARABIC'));
+
+  // If there is no Franco-Arabic definition, show the Arabic definition
+  if (!currentDefinition) {
+    currentDefinition = wordDefinitionsData.find((def: Definition) => def.isArabic);
+    if (currentDefinition) {
+      setCurrentLanguage(prevState => ({
+        ...prevState,
+        [word.id]: 'ARABIC',
+      }));
+    }
+  }
+
+  const otherDefinitions = wordDefinitionsData.filter(def => def.id !== currentDefinition?.id && def.isArabic === currentDefinition?.isArabic);
+
+  return (
+    <div className="profile-post" key={word.id}>
+      <div className="profile-post-language">
+        <p className="profile-post-language-left">
+          {currentLanguage[word.id] === 'ARABIC' ?
+            t('user_profile.arabic') :
+            t('user_profile.franco_arabic')}
+        </p>
+        {wordDefinitionsData.length > 1 && (
+          <div
+            className="profile-post-language-right"
+            onClick={() => handlePostLanguageClick(word.id)}
+          >
+            <p>
+              {t('user_profile.switch_translation')}
             </p>
-            <div className="buttons buttons-between">
-              {currentDefinition?.id && currentDefinition?.definition && (
-                <button onClick={() => handleEditClick(currentDefinition?.id, currentDefinition?.definition)}
-                        className="profile-post-buttons-button">
-                  {editingPostId === currentDefinition.id ? t('common.submit') : t('common.edit')}
-                </button>
-              )}
-              <button
-                className="profile-post-buttons-button profile-post-buttons-button-disabled"
-                onClick={handleLikeClick}
-              >
-                <FontAwesomeIcon icon={faThumbsUp} />
-                <p>{currentDefinition?.likeCount ?? 0}</p>
-              </button>
-              <button
-                className="profile-post-buttons-button profile-post-buttons-button-disabled"
-                onClick={handleDislikeClick}
-              >
-                <FontAwesomeIcon icon={faThumbsDown} />
-                <p>{currentDefinition?.dislikeCount ?? 0}</p>
-              </button>
-              <button
-                className="profile-post-buttons-button profile-post-buttons-button-disabled"
-                onClick={handleReportClick}
-              >
-                <FontAwesomeIcon icon={faFlag} />
-                <p>{currentDefinition?.reportCount ?? 0}</p>
-              </button>
-            </div>
-            {index !== uniqueWords.length - 1 && <hr />}
+            &nbsp;
+            <FontAwesomeIcon icon={faArrowRight} className="profile-post-language-right-arrow" />
           </div>
-        );
-      })}
+        )}
+      </div>
+      <h2 dir={currentLanguage[word.id] === 'ARABIC' ? 'rtl' : 'ltr'}>
+        {currentLanguage[word.id] === 'ARABIC' ? word.arabicWord : word.francoArabicWord}
+      </h2>
+      {editingPostId === currentDefinition?.id ? (
+        <textarea
+          typeof={'text'}
+          value={editedText}
+          className={`profile-post-inputtext`}
+          rows={4}
+          dir={currentLanguage === 'ARABIC' ? 'rtl' : 'ltr'}
+          onChange={(e) => setEditedText(e.target.value)}
+        />
+      ) : (
+        <p dir={currentDefinition?.isArabic ? 'rtl' : 'ltr'}>
+          {currentDefinition?.definition}
+        </p>
+      )}
+      <p className="profile-post-date">
+        {currentDefinition?.AddedTimestamp && new Date(currentDefinition.AddedTimestamp).toLocaleDateString(
+          i18n.language === 'ar' ? 'ar-EG' : i18n.language, { year: 'numeric', month: 'long', day: 'numeric' },
+        )}
+        {otherDefinitions.length > 0 && (
+          <>
+            <button className="buttons-button" onClick={() => handleDropdownToggle(word.id)}>
+              {t('user_profile.pick_other_definitions')}
+            </button>
+            {dropdownVisible[word.id] && (
+              <div className="dropdown">
+                {otherDefinitions.map(def => (
+                  <div key={def.id} onClick={() => handleDefinitionSelect(word.id, def)}>
+                    {def.definition}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </p>
+      <div className="buttons buttons-between">
+        {currentDefinition?.id && currentDefinition?.definition && (
+          <button onClick={() => handleEditClick(currentDefinition?.id, currentDefinition?.definition)}
+                  className="profile-post-buttons-button">
+            {editingPostId === currentDefinition.id ? t('common.submit') : t('common.edit')}
+          </button>
+        )}
+        <button
+          className="profile-post-buttons-button profile-post-buttons-button-disabled"
+          onClick={handleLikeClick}
+        >
+          <FontAwesomeIcon icon={faThumbsUp} />
+          <p>{currentDefinition?.likeCount ?? 0}</p>
+        </button>
+        <button
+          className="profile-post-buttons-button profile-post-buttons-button-disabled"
+          onClick={handleDislikeClick}
+        >
+          <FontAwesomeIcon icon={faThumbsDown} />
+          <p>{currentDefinition?.dislikeCount ?? 0}</p>
+        </button>
+        <button
+          className="profile-post-buttons-button profile-post-buttons-button-disabled"
+          onClick={handleReportClick}
+        >
+          <FontAwesomeIcon icon={faFlag} />
+          <p>{currentDefinition?.reportCount ?? 0}</p>
+        </button>
+      </div>
+      {index !== uniqueWords.length - 1 && <hr />}
+    </div>
+  );
+})}
       <div className="buttons buttons-between profile-delete">
         <button onClick={handleDeleteAccount} className="buttons-button">
           <FontAwesomeIcon icon={faTrash} />
