@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import i18n from 'i18next';
 import './AddWord.scss';
 import { useTranslation } from 'react-i18next';
+import Snackbar from '../Snackbar';
 
 const AddWord = () => {
   const [options, setOptions] = useState<string[]>([]);
@@ -17,6 +18,8 @@ const AddWord = () => {
   const [arabicDefinitionError, setArabicDefinitionError] = useState('');
   const [englishDefinitionError, setEnglishDefinitionError] = useState('');
   const { t } = useTranslation();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   
   function onCountrySelect(ev: React.ChangeEvent<HTMLSelectElement>) {
     const selectedOptions = Array.from(ev.target.selectedOptions).map(option => option.value);
@@ -119,8 +122,15 @@ const AddWord = () => {
       setEnglishDefinition('');
       setExample('');
       setSelectedCountries([]);
+      
+      // On successful addition of the word
+      setSnackbarMessage(t('add_word.success_message'));
+      setSnackbarOpen(true);
     } catch (error) {
       console.error(error);
+      // On error, show a snackbar with the error message
+      setSnackbarMessage(t('add_word.error_message'));
+      setSnackbarOpen(true);
     }
   }
   
@@ -230,6 +240,7 @@ const AddWord = () => {
           {t('add_word.add_word')}
         </button>
       </div>
+      <Snackbar open={snackbarOpen} message={snackbarMessage} />
     </div>
   );
 };

@@ -77,7 +77,9 @@
     "enter_example_en": "Enter an example in English",
     "country_selection": "Select the country / countries of origin (if applicable)",
     "ar_definition-error": "Arabic definition is required if English definition and Franco-Arabic word are not provided",
-    "ar_word-error": "The Arabic word must be in Arabic"
+    "ar_word-error": "The Arabic word must be in Arabic",
+    "success_message": "Word added successfully",
+    "error_message": "Failed to add word"
   },
   "login": {
     "title": "Log in",
