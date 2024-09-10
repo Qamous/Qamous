@@ -169,6 +169,7 @@ $dark-grey: #292929;
   width: 100%;
   transition: 0.3s;
   box-sizing: border-box;
+  gap: 12px;
 
   &-title {
     font-size: 44px;
@@ -183,9 +184,12 @@ $dark-grey: #292929;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 20px;
     max-width: 1000px;
     width: 80%;
+
+    @media (max-width: 700px) {
+      width: 95%;
+    }
 
     &-box {
       padding: 10px;
@@ -244,8 +248,8 @@ $dark-grey: #292929;
       font-size: 20px;
       align-self: center;
 
-      color: $secondary-color;
-      background-color: $quaternary-color;
+      color: $primary-color;
+      background-color: $secondary-color;
       border: 1px solid $secondary-color;
 
       &:hover {
@@ -258,8 +262,8 @@ $dark-grey: #292929;
       }
 
       &-secondary {
-        background-color: $secondary-color;
-        color: $primary-color;
+        background-color: $quaternary-color;
+        color: $secondary-color;
       }
     }
   }

@@ -1,0 +1,12 @@
+# backend
+backend/
+
+# dependencies
+/node_modules/
+
+# testing
+
+# ReadMe, License, etc.
+README.md
+LICENSE.md
+readme-files/

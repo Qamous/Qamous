@@ -117,30 +117,38 @@ const Login: React.FC = () => {
         <div className={'container-title'}>
           <div>{t('login.title')}</div>
         </div>
-        <br />
+        
         <div className={'container-input'}>
+          <label htmlFor="username" className={'container-input-label'}>
+            {t('login.enter_username')}
+          </label>
           <input
             type={'username'}
             value={username}
             placeholder={t('login.enter_username')}
             onChange={(ev) => setUsername(ev.target.value)}
             className={'container-input-box'}
+            autoComplete="username"
           />
           <label className="container-input-error">{usernameError}</label>
         </div>
-        <br />
+        
         <div className={'container-input'}>
+          <label htmlFor="password" className={'container-input-label'}>
+            {t('login.enter_password')}
+          </label>
           <input
             type={'password'}
             value={password}
             placeholder={t('login.enter_password')}
             onChange={(ev) => setPassword(ev.target.value)}
             className={'container-input-box'}
+            autoComplete="current-password"
           />
           <label className="container-input-error">{passwordError}</label>
         </div>
         <NavLink to={'/forgot-password'} className={'container-forgot'}>{t('login.forgot_password')}</NavLink>
-        <br />
+        
         <div className={'container-buttons'}>
           <button
             className={'container-buttons-button'}

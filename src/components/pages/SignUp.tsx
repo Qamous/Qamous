@@ -150,86 +150,114 @@ const SignUp: React.FC = () => {
       <div className={'container-title'}>
         <div>{t('sign_up.title')}</div>
       </div>
-      <br />
+      
       <div className={'container-input'}>
+        <label htmlFor="username" className={'container-input-label'}>
+          {t('sign_up.enter_username')}
+        </label>
         <input
           type={'text'}
           value={username}
           placeholder={t('sign_up.enter_username')}
-          autoComplete={'username'}
           onChange={(ev) => setUsername(ev.target.value)}
           className={'container-input-box'}
+          autoComplete="username"
         />
         <label className="container-input-error">{usernameError}</label>
       </div>
-      <br />
+      
       <div className={'container-input'}>
+        <label htmlFor="firstName" className={'container-input-label'}>
+          {t('sign_up.enter_first_name')}
+        </label>
         <input
           type={'text'}
           value={firstName}
           placeholder={t('sign_up.enter_first_name')}
           onChange={(ev) => setFirstName(ev.target.value)}
           className={'container-input-box'}
+          autoComplete="given-name"
         />
         <label className="container-input-error">{firstNameError}</label>
       </div>
-      <br />
+      
       <div className={'container-input'}>
+        <label htmlFor="lastName" className={'container-input-label'}>
+          {t('sign_up.enter_last_name')}
+        </label>
         <input
           type={'text'}
           value={lastName}
           placeholder={t('sign_up.enter_last_name')}
           onChange={(ev) => setLastName(ev.target.value)}
           className={'container-input-box'}
+          autoComplete="family-name"
         />
         <label className="container-input-error">{lastNameError}</label>
       </div>
-      <br />
+      
       <div className={'container-input'}>
+        <label htmlFor="dob" className={'container-input-label'}>
+          {t('sign_up.enter_dob')}
+        </label>
         <input
+          id="dob"
           type={'date'}
           value={dob}
           placeholder={t('sign_up.enter_dob')}
           onChange={(ev) => setDob(ev.target.value)}
           className={'container-input-box'}
+          autoComplete="bday"
         />
         <label className="container-input-error">{dobError}</label>
       </div>
-      <br />
+      
       <div className={'container-input'}>
+        <label htmlFor="email" className={'container-input-label'}>
+          {t('sign_up.enter_email')}
+        </label>
         <input
           type={'email'}
           value={email}
           placeholder={t('sign_up.enter_email')}
           onChange={(ev) => setEmail(ev.target.value)}
           className={'container-input-box'}
+          autoComplete="email"
         />
         <label className="container-input-error">{emailError}</label>
       </div>
-      <br />
+      
       <div className={'container-input'}>
+        <label htmlFor="password" className={'container-input-label'}>
+          {t('sign_up.enter_password')}
+        </label>
         <input
           type={'password'}
           value={password}
-          autoComplete={'new-password'}
           placeholder={t('sign_up.enter_password')}
           onChange={(ev) => setPassword(ev.target.value)}
           className={'container-input-box'}
+          autoComplete="new-password"
         />
         <label className="container-input-error">{passwordError}</label>
       </div>
-      <br />
+      
       <div className={'container-input'}>
+        <label htmlFor="passwordConfirmation" className={'container-input-label'}>
+          {t('sign_up.confirm_password')}
+        </label>
         <input
           type={'password'}
           value={passwordConfirmation}
           placeholder={t('sign_up.confirm_password')}
           onChange={(ev) => setPasswordConfirmation(ev.target.value)}
           className={'container-input-box'}
+          autoComplete="new-password"
         />
         <label className="container-input-error">{passwordConfirmationError}</label>
       </div>
-      <br />
+      
+      <br/>
       <div className={'container-buttons'}>
         <button
           className="container-buttons-button"

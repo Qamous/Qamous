@@ -160,7 +160,7 @@ const App: React.FC = () => {
     }
   };
   
-  const [passwordCorrect, setPasswordCorrect] = useState(false);
+  const [passwordCorrect, setPasswordCorrect] = useState(true);
   
   if (!passwordCorrect) {
     return <PasswordScreen onPasswordCorrect={() => setPasswordCorrect(true)} />;

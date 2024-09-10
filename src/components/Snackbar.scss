@@ -1,7 +1,6 @@
 .snackbar {
     visibility: hidden;
     min-width: 250px;
-    margin-left: -125px;
     background-color: #333;
     color: #fff;
     text-align: center;
@@ -11,6 +10,7 @@
     z-index: 1;
     left: 50%;
     bottom: 30px;
+    transform: translateX(-50%);
 
     &.show {
         visibility: visible;
