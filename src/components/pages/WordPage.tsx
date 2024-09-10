@@ -46,8 +46,15 @@ const WordPage = () => {
 
     fetchCountryName();
   }, [homeContent]);
-
-  if (isLoading) return <div>Loading...</div>;
+  
+  if (isLoading) return (
+    <div className="loading-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  );
   if (error) return <div>Error fetching data</div>;
 
   // Filter the homeContent based on the current language
