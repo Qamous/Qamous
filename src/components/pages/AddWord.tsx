@@ -20,19 +20,19 @@ const AddWord = () => {
   const { t } = useTranslation();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  
+
   function onCountrySelect(ev: React.ChangeEvent<HTMLSelectElement>) {
     const selectedOptions = Array.from(ev.target.selectedOptions).map(option => option.value);
     setSelectedCountries(selectedOptions);
   }
-  
+
   async function onAddWordClick() {
     // Clear previous errors
     setArabicWordError('');
     setFrancoArabicWordError('');
     setArabicDefinitionError('');
     setEnglishDefinitionError('');
-    
+
     // Basic Arabic word validation
     if (!arabicDefinition || '' === arabicDefinition) {
       // If it is, check if both English definition and Franco-Arabic word are not empty
@@ -46,13 +46,13 @@ const AddWord = () => {
       setArabicWordError(t('add_word.ar_word-error'));
       return;
     }
-    
+
     const wordDetails = {
       arabicWord,
       francoArabicWord,
       selectedCountries,
     };
-    
+
     try {
       const wordResponse = await fetch(`${process.env.REACT_APP_API_URL}/word`, {
         method: 'POST',
@@ -62,13 +62,13 @@ const AddWord = () => {
         body: JSON.stringify(wordDetails),
         credentials: 'include',
       });
-      
+
       if (!wordResponse.ok) {
         throw new Error(`Error creating word: ${wordResponse.status} ${wordResponse.statusText}`);
       }
-      
+
       const word = await wordResponse.json();
-      
+
       if (arabicDefinition) {
         const arabicDefinitionDetails = {
           wordId: word.id,
@@ -77,7 +77,7 @@ const AddWord = () => {
           isArabic: true,
           countryName: selectedCountries[0],
         };
-        
+
         const arabicDefinitionResponse = await fetch(`${process.env.REACT_APP_API_URL}/definitions`, {
           method: 'POST',
           headers: {
@@ -86,12 +86,12 @@ const AddWord = () => {
           body: JSON.stringify(arabicDefinitionDetails),
           credentials: 'include',
         });
-        
+
         if (!arabicDefinitionResponse.ok) {
           throw new Error('Error creating Arabic definition');
         }
       }
-      
+
       if (englishDefinition) {
         const englishDefinitionDetails = {
           wordId: word.id,
@@ -100,7 +100,7 @@ const AddWord = () => {
           isArabic: false,
           countryName: selectedCountries[0],
         };
-        
+
         const englishDefinitionResponse = await fetch(`${process.env.REACT_APP_API_URL}/definitions`, {
           method: 'POST',
           headers: {
@@ -109,12 +109,12 @@ const AddWord = () => {
           body: JSON.stringify(englishDefinitionDetails),
           credentials: 'include',
         });
-        
+
         if (!englishDefinitionResponse.ok) {
           throw new Error('Error creating English definition');
         }
       }
-      
+
       // Clear the form
       setArabicWord('');
       setFrancoArabicWord('');
@@ -122,7 +122,7 @@ const AddWord = () => {
       setEnglishDefinition('');
       setExample('');
       setSelectedCountries([]);
-      
+
       // On successful addition of the word
       setSnackbarMessage(t('add_word.success_message'));
       setSnackbarOpen(true);
@@ -133,7 +133,7 @@ const AddWord = () => {
       setSnackbarOpen(true);
     }
   }
-  
+
   useEffect(() => {
     Papa.parse('countries.csv', {
       download: true,
@@ -147,7 +147,7 @@ const AddWord = () => {
       },
     });
   }, []);
-  
+
   return (
     <div className={'container'}>
       <div className={'container-title'}>
@@ -156,6 +156,7 @@ const AddWord = () => {
       <br />
       <div className={'container-input'}>
         <input
+          id="arabicWord"
           style={{ direction: 'rtl', textAlign: 'left' }}
           type={'text'}
           value={arabicWord}
@@ -180,6 +181,7 @@ const AddWord = () => {
       </div>
       <div className={'container-input'}>
         <textarea
+          id="arabicDefinition"
           style={{ direction: 'rtl', textAlign: 'left' }}
           rows={2}
           value={arabicDefinition}

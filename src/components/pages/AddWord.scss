@@ -1,0 +1,17 @@
+a.yamliapi_simpleLink, a.yamliapi_simpleLink * {
+  filter: grayscale(1) opacity(0.9);
+  left: 0;
+  position: inherit;
+  animation: fadeInUp 0.5s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+}
