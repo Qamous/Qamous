@@ -264,10 +264,10 @@ const ContentBox: React.FC<HomeContentProps> = ({
     const maxTweetLength = 280;
     
     // Estimate the additional characters added by URL encoding
-    const estimatedExtraChars = 14;
+    const estimatedExtraChars = 47;
     
     // Calculate the maximum length for the definition
-    const maxDefinitionLength = maxTweetLength - item.word.length - separator.length - promoText.length - estimatedExtraChars;
+    const maxDefinitionLength = maxTweetLength - item.word.length - separator.length - estimatedExtraChars;
     
     let truncatedDefinition = item.definition;
     

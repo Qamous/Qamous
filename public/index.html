@@ -23,6 +23,7 @@
       property="twitter:description"
       content="Welcome to Qamous, a platform for learning colloquial Arabic words and phrases. Our goal is to provide a comprehensive resource for learners of Arabic dialects, including the Egyptian, Levantine, Gulf, and many more dialects."
     />
+    <meta name="google-adsense-account" content="ca-pub-4293590491700199">
     <link rel="apple-touch-icon" href="../src/assets/qamous-logo-transparent.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -39,6 +40,17 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Qamous</title>
+
+    <!-- YAMLI CODE START -->
+    <script type="text/javascript" src="https://api.yamli.com/js/yamli_api.js"></script>
+    <script type="text/javascript">
+      if (typeof(Yamli) == "object" && Yamli.init( { uiLanguage: "en" , startMode: "onOrUserDefault" } ))
+      {
+        Yamli.yamlify( "arabicWord", { settingsPlacement: "inside" } );
+        Yamli.yamlify( "arabicDefinition", { settingsPlacement: "inside" } );
+      }
+    </script>
+    <!-- YAMLI CODE END -->
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

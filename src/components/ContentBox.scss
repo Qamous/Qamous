@@ -2,8 +2,7 @@
 
 .content-box {
   background-color: styles.$quaternary-color;
-  width: 50%;
-  transition: width 0.5s;
+  width: 100%;
 
   &-title {
     padding: 0 25px 0 25px;
@@ -207,11 +206,4 @@
   visibility: visible;
   opacity: 1; /* Fade in */
   transform: translateX(-50%) translateY(-10px); /* Move up slightly */
-}
-
-
-@media (max-width: 1200px) {
-  .content-box {
-    width: 100%;
-  }
 }

@@ -61,4 +61,12 @@
     font-size: 0.75em;
     cursor: pointer;
   }
+
+  &-rtl {
+    direction: rtl;
+  }
+
+  &-ltr {
+    direction: ltr;
+  }
 }

@@ -20,7 +20,8 @@ interface CustomDialogProps {
 
 const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonText2, onButton1Click, onButton2Click, onClose, showTextInput, onSubmit, onCancel, okButtonText, onOkButtonClick }) => {
   const [inputValue, setInputValue] = useState('');
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
@@ -48,7 +49,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({ text, buttonText1, buttonTe
     };
   }, [onClose]);
   return (
-    <div className="custom-dialog">
+    <div className={`custom-dialog ${isRTL ? 'rtl' : 'ltr'}`}>
       <div className="custom-dialog-content">
         <FontAwesomeIcon className="custom-dialog-close" onClick={onClose} icon={faX} />
         <p>{text}</p>
