@@ -157,7 +157,7 @@ const AddWord = () => {
       <div className={'container-input'}>
         <input
           id="arabicWord"
-          style={{ direction: 'rtl', textAlign: 'left' }}
+          style={{ direction: 'rtl', textAlign: 'right' }}
           type={'text'}
           value={arabicWord}
           placeholder={t('add_word.enter_word_ar')}
@@ -182,7 +182,7 @@ const AddWord = () => {
       <div className={'container-input'}>
         <textarea
           id="arabicDefinition"
-          style={{ direction: 'rtl', textAlign: 'left' }}
+          style={{ direction: 'rtl', textAlign: 'right' }}
           rows={2}
           value={arabicDefinition}
           placeholder={t('add_word.enter_definition_ar')}

@@ -384,7 +384,6 @@ $dark-grey: #292929;
  * This section contains the styles for the buttons used in the application.
  * It includes a disabled state.
  */
-
 .buttons {
   display: flex;
   flex-direction: row;
@@ -449,6 +448,39 @@ $dark-grey: #292929;
         * {
           color: $primary-color-90;
         }
+      }
+    }
+
+    &.primary {
+      background-color: $secondary-color;
+      color: $primary-color;
+      border: 1px solid $secondary-color;
+
+      &:hover {
+        background-color: $secondary-color-20;
+        color: $primary-color;
+      }
+    }
+
+    &.secondary {
+      background-color: transparent;
+      color: $secondary-color;
+      border: 1px solid $secondary-color;
+
+      &:hover {
+        background-color: $secondary-color;
+        color: $primary-color;
+      }
+    }
+
+    &.danger {
+      background-color: $alert-red;
+      color: $primary-color;
+      border: 1px solid $alert-red;
+
+      &:hover {
+        background-color: #470000FF;
+        color: $primary-color;
       }
     }
   }

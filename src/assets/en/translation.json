@@ -2,7 +2,7 @@
   "toolbar_items": {
     "home": "Home",
     "advanced_search": "Advanced Search",
-    "word_of_the_day": "Word of the Day",
+    "word_of_the_day": "Feeling Lucky",
     "advertise": "Advertise"
   },
   "sample_advertisements": [
@@ -157,7 +157,10 @@
     "definition_report_error": "You cannot report your own definitions",
     "delete_account": "Delete Account",
     "delete_account_confirmation": "Are you sure you want to delete your account? This action cannot be undone",
-    "pick_other_definitions": "Pick other definitions"
+    "pick_other_definitions": "Pick other definitions",
+    "no_posts": "No posts found",
+    "no_posts_description": "You haven't added any words or definitions yet. Start contributing to the Qamous community by adding new words and definitions!",
+    "add_first_definition": "Add your first definition"
   },
   "report_dialog": {
     "why": "Why are you reporting this {{reportType}}?",

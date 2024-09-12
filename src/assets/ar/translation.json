@@ -2,7 +2,7 @@
   "toolbar_items": {
     "home": "الرئيسية",
     "advanced_search": "البحث المتقدم",
-    "word_of_the_day": "كلمة اليوم",
+    "word_of_the_day": "اختيار عشوائي",
     "advertise": "أعلن معنا"
   },
   "sample_advertisements": [
@@ -157,7 +157,10 @@
     "definition_report_error": "لا يمكنك الإبلاغ عن تعريفك الخاص",
     "delete_account": "حذف الحساب",
     "delete_account_confirmation": "هل أنت متأكد من أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء",
-    "pick_other_definitions": "اختر تعاريف أخرى"
+    "pick_other_definitions": "اختر تعاريف أخرى",
+    "no_posts": "لا توجد تعاريف",
+    "no_posts_description": "لم تقم بإضافة أي كلمات أو تعاريف بعد. ابدأ بالمساهمة في مجتمع قاموس من خلال إضافة كلمات وتعاريف جديدة!",
+    "add_first_definition": "أضف أول تعريف"
   },
   "report_dialog": {
     "why": "لماذا تقوم بالإبلاغ عن {{reportType}}؟",
