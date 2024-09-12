@@ -453,3 +453,48 @@ $dark-grey: #292929;
     }
   }
 }
+
+/**
+ * Feed Styling Section
+ * --------------------
+ * This section contains the styles for the feed section used in the application.
+ */
+.feed {
+  display: flex;
+  justify-content: space-between; /* Ensure space between the ad spaces */
+  align-items: stretch; /* Make children take the same height */
+
+  &-posts {
+    display: flex;
+    justify-content: space-between; /* Ensure space between the ad spaces */
+    padding: 25px;
+    margin: 0;
+    min-height: 0;
+    overflow: auto;
+    text-align: justify;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    color: $primary-color;
+
+    &-ad-space {
+      width: 100%;
+      height: 25vh;
+      display: none; //for now
+
+      @media (min-width: 1200px) {
+        display: none;
+      }
+    }
+  }
+
+  &-ad-space {
+    width: 25%;
+    display: none;
+
+    @media (min-width: 1200px) {
+      display: block;
+      flex: 0 0 25%; /* Ensure the ad space takes 25% width */
+    }
+  }
+}

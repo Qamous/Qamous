@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import ContentBox from '../ContentBox';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
+import AdSense from 'react-adsense';
 
 interface SearchResult {
   word: string;
@@ -86,56 +87,114 @@ const SearchResults: React.FC = () => {
   }
   
   return (
-    <div className={'home'}>
-      {filteredResults.length > 0 ? (
-        <ContentBox
-          item={searchResults}
-          index={0}
-          lang={i18n.language}
-          definitionId={0}
-          wordId={0}
-          isLiked={false}
-          isDisliked={false}
-          isReported={false}
-          definitionHuh={false}
+    <div className={'feed'}>
+      <div className="feed-ad-space">
+        <AdSense.Google
+          client='ca-pub-4293590491700199'
+          slot='7898075502'
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'var(--tertiary-color)',
+            border: '0',
+            padding: '10px',
+            fontFamily: 'var(--font-stack)',
+            color: 'var(--primary-color)',
+          }}
+          format='auto'
+          responsive='true'
         />
-      ) : (
-        <div className={'container'} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
-          <div className={'container-left'}>
-            <img
-              src="/cool-dog.jpg"
-              loading="lazy"
-              alt={'Cool Dog'}
-              className={'container-left-image'}
+      </div>
+      <div className="feed-posts">
+        {
+          filteredResults.length > 0 ? (
+            <>
+              <ContentBox
+                item={searchResults}
+                index={0}
+                lang={i18n.language}
+                definitionId={0}
+                wordId={0}
+                isLiked={false}
+                isDisliked={false}
+                isReported={false}
+                definitionHuh={false}
+              />
+              <div className="feed-posts-ad-space">
+                <AdSense.Google
+                  client="ca-pub-4293590491700199"
+                  slot="6473874271"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'var(--tertiary-color)',
+                    border: '0',
+                    padding: '10px',
+                    fontFamily: 'var(--font-stack)',
+                    color: 'var(--primary-color)',
+                  }}
+                  format="auto"
+                  responsive="true"
+                />
+              </div>
+            </>
+          ) : (
+            <div className={'container'} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+              <div className={'container-left'}>
+                <img
+                  src="/cool-dog.jpg"
+                  loading="lazy"
+                  alt={'Cool Dog'}
+                  className={'container-left-image'}
+                />
+                <h1 className="not-found-text-header" style={{ width: '100%' }}>
+                  {'Hmmm...'}
+                </h1>
+                <p className="not-found-text" style={{ width: '100%' }}>
+                  {noResults}
+                </p>
+              </div>
+            </div>
+          )
+        }
+        {
+          filteredResults.map((result, index) => (
+            <ContentBox
+              key={index}
+              item={result}
+              index={index + 1}
+              lang={i18n.language}
+              wordId={result.wordId}
+              definitionId={result.definitionId}
+              isLiked={false}
+              isDisliked={false}
+              isReported={false}
             />
-            <h1 className="not-found-text-header" style={{ width: '100%' }}>
-              {"Hmmm..."}
-            </h1>
-            <p className="not-found-text" style={{ width: '100%' }}>
-              {noResults}
-            </p>
-          </div>
-        </div>
-      )
-      }
-      {
-        filteredResults.map((result, index) => (
-    <ContentBox
-      key={index}
-      item={result}
-      index={index + 1}
-      lang={i18n.language}
-      wordId={result.wordId}
-      definitionId={result.definitionId}
-      isLiked={false}
-      isDisliked={false}
-      isReported={false}
-    />
-  ))
-}
-</div>
-)
-  ;
+          ))
+        }
+      </div>
+      <div className="feed-ad-space">
+        <AdSense.Google
+          client='ca-pub-4293590491700199'
+          slot='1590891296'
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'var(--tertiary-color)',
+            border: '0',
+            padding: '10px',
+            fontFamily: 'var(--font-stack)',
+            color: 'var(--primary-color)',
+          }}
+          format='auto'
+          responsive='true'
+        />
+      </div>
+    </div>
+  );
 };
 
 async function fetchSearchResults(query: string): Promise<SearchResult[]> {

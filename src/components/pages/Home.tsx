@@ -6,6 +6,7 @@ import ContentBox from '../ContentBox';
 import { useQuery } from 'react-query';
 import Snackbar from '../Snackbar';
 import CustomDialog from '../CustomDialog';
+import AdSense from 'react-adsense';
 
 interface HomeContent {
   word: string,
@@ -64,28 +65,31 @@ const Home: React.FC = () => {
   
   if (isLoading) {
     return (
-      <div className={'home'}>
-        <ContentBox
-          item={sampleHome[0]}
-          index={0}
-          lang={lang}
-          definitionId={0}
-          wordId={0}
-          isLiked={false}
-          isDisliked={false}
-          isReported={false}
-        />
-        <div className={'loading-ring'}>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+      <div className={'feed'}>
+        <div className="feed-posts">
+          <ContentBox
+            item={sampleHome[0]}
+            index={0}
+            lang={lang}
+            definitionId={0}
+            wordId={0}
+            isLiked={false}
+            isDisliked={false}
+            isReported={false}
+          />
+          <div className={'loading-ring'}>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
         {showDialog && (
           <CustomDialog
             text={t('common.beta_warning')}
             okButtonText={t('common.ok')}
             onOkButtonClick={() => setShowDialog(false)}
+            onClose={() => setShowDialog(false)}
           />
         )}
       </div>
@@ -94,17 +98,19 @@ const Home: React.FC = () => {
   
   if (isError) {
     return (
-      <div className={'home'}>
-        <ContentBox
-          item={sampleHome[0]}
-          index={0}
-          lang={lang}
-          definitionId={0}
-          wordId={0}
-          isLiked={false}
-          isDisliked={false}
-          isReported={false}
-        />
+      <div className={'feed'}>
+        <div className="feed-posts">
+          <ContentBox
+            item={sampleHome[0]}
+            index={0}
+            lang={lang}
+            definitionId={0}
+            wordId={0}
+            isLiked={false}
+            isDisliked={false}
+            isReported={false}
+          />
+        </div>
         <Snackbar
           open={errorSnackbarOpen}
           message={t('common.data_fetch_error')}
@@ -114,40 +120,116 @@ const Home: React.FC = () => {
   }
   
   return (
-    <div className={'home'}>
-      <ContentBox
-        item={sampleHome[0]}
-        index={0}
-        lang={lang}
-        definitionId={0}
-        wordId={0}
-        isLiked={false}
-        isDisliked={false}
-        isReported={false}
-      />
-      {homeContent && homeContent
-        .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
-        .map((item, index) => (
-          <ContentBox
-            key={index + 1}
-            item={item}
-            index={index + 1}
-            lang={lang}
-            definitionId={item.definitionId}
-            wordId={item.wordId}
-            countryCode={item.countryCode}
-            isLiked={item.isLiked !== 0}
-            isDisliked={item.isDisliked !== 0}
-            isReported={item.isReported !== 0}
-          />
-        ))}
-      {showDialog && (
-        <CustomDialog
-          text={t('common.beta_warning')}
-          okButtonText={t('common.ok')}
-          onOkButtonClick={() => setShowDialog(false)}
+    <div className={'feed'}>
+      <div className="feed-ad-space">
+        <AdSense.Google
+          client='ca-pub-4293590491700199'
+          slot='7898075502'
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'var(--tertiary-color)',
+            border: '0',
+            padding: '10px',
+            fontFamily: 'var(--font-stack)',
+            color: 'var(--primary-color)',
+          }}
+          format='auto'
+          responsive='true'
         />
-      )}
+      </div>
+      <div className="feed-posts">
+        <ContentBox
+          item={sampleHome[0]}
+          index={0}
+          lang={lang}
+          definitionId={0}
+          wordId={0}
+          isLiked={false}
+          isDisliked={false}
+          isReported={false}
+        />
+        <div className="feed-posts-ad-space">
+          <AdSense.Google
+            client='ca-pub-4293590491700199'
+            slot='6473874271'
+            style={{
+              display: 'block',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'var(--tertiary-color)',
+              border: '0',
+              padding: '10px',
+              fontFamily: 'var(--font-stack)',
+              color: 'var(--primary-color)',
+            }}
+            format='auto'
+            responsive='true'
+          />
+        </div>
+        {homeContent && homeContent
+          .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
+          .map((item, index) => (
+            <React.Fragment key={index}>
+              <ContentBox
+                item={item}
+                index={index + 1}
+                lang={lang}
+                definitionId={item.definitionId}
+                wordId={item.wordId}
+                countryCode={item.countryCode}
+                isLiked={item.isLiked !== 0}
+                isDisliked={item.isDisliked !== 0}
+                isReported={item.isReported !== 0}
+              />
+              {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
+                <AdSense.Google
+                  client='ca-pub-4293590491700199'
+                  slot='6473874271'
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'var(--tertiary-color)',
+                    border: '0',
+                    padding: '10px',
+                    fontFamily: 'var(--font-stack)',
+                    color: 'var(--primary-color)',
+                  }}
+                  format='auto'
+                  responsive='true'
+                />
+              </div>}
+            </React.Fragment>
+          ))}
+        {showDialog && (
+          <CustomDialog
+            text={t('common.beta_warning')}
+            okButtonText={t('common.ok')}
+            onOkButtonClick={() => setShowDialog(false)}
+            onClose={() => setShowDialog(false)}
+          />
+        )}
+      </div>
+      <div className="feed-ad-space">
+        <AdSense.Google
+          client='ca-pub-4293590491700199'
+          slot='1590891296'
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'var(--tertiary-color)',
+            border: '0',
+            padding: '10px',
+            fontFamily: 'var(--font-stack)',
+            color: 'var(--primary-color)',
+          }}
+          format='auto'
+          responsive='true'
+        />
+      </div>
     </div>
   );
 };
