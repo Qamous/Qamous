@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import Snackbar from '../Snackbar';
 import CustomDialog from '../CustomDialog';
 import AdSense from 'react-adsense';
+import { Helmet } from 'react-helmet';
 
 interface HomeContent {
   word: string,
@@ -66,6 +67,11 @@ const Home: React.FC = () => {
   if (isLoading) {
     return (
       <div className={'feed'}>
+        <Helmet>
+          <title>Qamous - Arabic Slang Dictionary</title>
+          <meta name="description" content="Explore Qamous, your go-to platform for learning Arabic slang and colloquial phrases. Discover a comprehensive Arabic dictionary for various dialects." />
+          <meta name="keywords" content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
+        </Helmet>
         <div className="feed-posts">
           <ContentBox
             item={sampleHome[0]}
@@ -99,6 +105,11 @@ const Home: React.FC = () => {
   if (isError) {
     return (
       <div className={'feed'}>
+        <Helmet>
+          <title>Qamous - Arabic Slang Dictionary</title>
+          <meta name="description" content="Explore Qamous, your go-to platform for learning Arabic slang and colloquial phrases. Discover a comprehensive Arabic dictionary for various dialects." />
+          <meta name="keywords" content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
+        </Helmet>
         <div className="feed-posts">
           <ContentBox
             item={sampleHome[0]}
@@ -121,6 +132,11 @@ const Home: React.FC = () => {
   
   return (
     <div className={'feed'}>
+      <Helmet>
+        <title>Qamous - Arabic Slang Dictionary</title>
+        <meta name="description" content="Explore Qamous, your go-to platform for learning Arabic slang and colloquial phrases. Discover a comprehensive Arabic dictionary for various dialects." />
+        <meta name="keywords" content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
+      </Helmet>
       <div className="feed-ad-space">
         <AdSense.Google
           client='ca-pub-4293590491700199'
