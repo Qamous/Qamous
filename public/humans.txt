@@ -26,4 +26,4 @@
 	Chef: Anthony Elkommos Youssef
 	Contact: anthony [at] elkommos [dot] com
 	From: New City, New York, USA
-  Developer: Anthony Elkommos Youssef
+	Developer: Anthony Elkommos Youssef
