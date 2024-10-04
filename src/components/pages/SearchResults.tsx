@@ -85,7 +85,24 @@ const SearchResults: React.FC = () => {
   
   if (error) {
     const typedError = error as Error;
-    return <div>Error: {typedError.message}</div>;
+    return (
+      <div className={'container'} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className={'container-left'}>
+          <img
+            src="/cool-dog.jpg"
+            loading="lazy"
+            alt={'Cool Dog'}
+            className={'container-left-image'}
+          />
+          <h1 className="not-found-text-header" style={{ width: '100%' }}>
+            {'Hmmm...'}
+          </h1>
+          <p className="not-found-text" style={{ width: '100%' }}>
+            {`Error: ${typedError.message}`}
+          </p>
+        </div>
+      </div>
+    );
   }
   
   return (
