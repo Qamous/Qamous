@@ -193,7 +193,7 @@ const App: React.FC = () => {
               </div>
             </div>
           } />
-          <Route path="/word-of-the-day" element={
+          <Route path="/feeling-lucky" element={
             <div className="app">
               <div className="header">
                 <Header />
