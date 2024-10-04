@@ -4,6 +4,7 @@ import ContentBox from '../ContentBox';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AdSense from 'react-adsense';
+import { useQuery } from 'react-query';
 
 interface SearchResult {
   word: string;
@@ -18,19 +19,30 @@ interface JsonContent {
   definition: string
 }
 
+const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/word/search/kwd=` + query, {
+    mode: 'cors',
+    credentials: 'include',
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+};
+
 const SearchResults: React.FC = () => {
   const { query } = useParams();
-  const [allResults, setAllResults] = useState<SearchResult[]>([]);
-  const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [language, setLanguage] = useState(i18n.language);
-  
   const { t } = useTranslation();
   const searchResults = t('search_results', {
     searchTerm: query,
     returnObjects: true,
   }) as JsonContent;
   const noResults = "No results found for \"" + query + "\"";
+  
+  const { data: allResults, isLoading, error } = useQuery(['searchResults', query], () => fetchSearchResults(query || ''));
+  
+  const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
+  const [language, setLanguage] = useState(i18n.language);
   
   useEffect(() => {
     const searchbutton = document.getElementById('myOverlay');
@@ -52,38 +64,28 @@ const SearchResults: React.FC = () => {
   }, []);
   
   useEffect(() => {
-    const fetchResults = async () => {
-      if (query) {
-        try {
-          const data = await fetchSearchResults(query);
-          console.log(data);
-          setAllResults(data);
-        } catch (err) {
-          console.error(err);
-          setError('Failed to fetch search results');
-          setAllResults([]);
-        }
-      } else {
-        setAllResults([]);
-      }
-    };
-    
-    fetchResults();
-  }, [query]);
-  
-  useEffect(() => {
-    const filterResults = () => {
+    if (allResults) {
       const filteredData = allResults.filter((item) =>
         i18n.language === 'ar' ? item.isArabic === 1 : item.isArabic === 0,
       );
       setFilteredResults(filteredData);
-    };
-    
-    filterResults();
+    }
   }, [language, allResults]);
   
+  if (isLoading) {
+    return (
+      <div className="loading-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    );
+  }
+  
   if (error) {
-    return <div>Error: {error}</div>;
+    const typedError = error as Error;
+    return <div>Error: {typedError.message}</div>;
   }
   
   return (
@@ -196,13 +198,5 @@ const SearchResults: React.FC = () => {
     </div>
   );
 };
-
-async function fetchSearchResults(query: string): Promise<SearchResult[]> {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/word/search/kwd=` + query, {
-    mode: 'cors',
-    credentials: 'include',
-  });
-  return response.json();
-}
 
 export default SearchResults;
