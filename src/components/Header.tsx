@@ -115,7 +115,7 @@ const Header: React.FC = () => {
                       {t('toolbar_items.advanced_search')}
                   </NavLink>
                   <NavLink
-                    to="/word-of-the-day"
+                    to="/feeling-lucky"
                     onClick={handleBurgerClick}
                   >
                       {t('toolbar_items.word_of_the_day')}
