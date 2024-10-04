@@ -497,6 +497,7 @@ $dark-grey: #292929;
   align-items: stretch; /* Make children take the same height */
 
   &-posts {
+    width: 100%;
     display: flex;
     justify-content: space-between; /* Ensure space between the ad spaces */
     padding: 25px;
