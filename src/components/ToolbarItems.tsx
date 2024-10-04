@@ -33,7 +33,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                         </StyledNavLink>
                     </li>
                     <li>
-                        <StyledNavLink to="/word-of-the-day"
+                        <StyledNavLink to="/feeling-lucky"
                                        language={language}
                                        isDarkMode={isDarkMode}
                         >
