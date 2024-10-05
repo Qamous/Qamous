@@ -16,6 +16,7 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
   return data.map((item: any) => ({
     item: {
       word: item.isArabic ? item.word.arabicWord : item.word.francoArabicWord,
+      otherLangWord: item.isArabic ? item.word.francoArabicWord : item.word.arabicWord,
       definition: item.definition
     },
     index: item.id,
@@ -64,11 +65,11 @@ const WordPage = () => {
   return (
     <div className='feed'>
       <Helmet>
-        <title>{homeContent?.[0]?.item.word}</title>
+        <title>{homeContent?.[0]?.item.word} / {homeContent?.[0]?.item.otherLangWord} Meaning</title>
       </Helmet>
       <div className="feed-ad-space">
         <AdSense.Google
-          client='ca-pub-4293590491700199'
+          client="ca-pub-4293590491700199"
           slot='7898075502'
           style={{
             display: 'block',
