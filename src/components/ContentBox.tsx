@@ -15,6 +15,7 @@ import logo from '../assets/qamous-logo-transparent.png';
 export interface HomeContentProps {
   item: {
     word: string,
+    otherLangWord?: string,
     definition: string
   },
   index: number,
