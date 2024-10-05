@@ -509,6 +509,12 @@ $dark-grey: #292929;
     gap: 25px;
     align-items: center;
     color: $primary-color;
+    transition: padding 0.3s ease-in-out, gap 0.3s ease-in-out;
+
+    @media (max-width: 1200px) {
+      gap: 1px;
+      padding: 0 0 2px 0;
+    }
 
     &-ad-space {
       width: 100%;
