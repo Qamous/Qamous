@@ -115,6 +115,8 @@ const About: React.FC = () => {
         {t('about.text_16')}
         <br /> <br />
         {t('about.text_17')}
+        <br /> <br />
+        <a href="https://sites.utexas.edu/qamous">{t('about.text_18')}</a>
       </p>
     </div>
   );
