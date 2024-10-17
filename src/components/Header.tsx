@@ -176,6 +176,9 @@ const Header: React.FC = () => {
                   options: {
                       primaryColor: '#dd8500',
                   },
+                  tooltipContent: {
+                      color: '#000000', // Ensure the tooltip content text color is black (in case of dark mode)
+                  },
               }}
           />
           <div ref={overlayNav} className="nav-overlay">
