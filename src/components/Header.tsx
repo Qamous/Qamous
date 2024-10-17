@@ -118,51 +118,47 @@ const Header: React.FC = () => {
     };
     
     const steps: Step[] = [
-        {
-            target: '.header-right-side-language',
-            content: 'Click here to switch between Arabic and English. \n' +
-              'اضغط هنا للتبديل بين العربية والإنجليزية.',
-            locale: {
-                next: 'Next',
-                back: 'Back',
-                skip: 'Skip',
-                last: 'Finish',
-            },
+    {
+        target: '.header-right-side-language',
+        content: `Click here to switch between Arabic and English\nاضغط هنا للتبديل بين العربية والإنجليزية`,
+        locale: {
+            next: 'Next',
+            back: 'Back',
+            skip: 'Skip',
+            last: 'Finish',
         },
-        {
-            target: '.header-right-side-mode',
-            content: 'Click here to switch between light and dark mode. \n' +
-              'اضغط هنا للتبديل بين الوضع الفاتح والوضع الداكن.',
-            locale: {
-                next: 'Next',
-                back: 'Back',
-                skip: 'Skip',
-                last: 'Finish',
-            },
+    },
+    {
+        target: '.header-right-side-mode',
+        content: `Click here to switch between light and dark mode\nاضغط هنا للتبديل بين الوضع الفاتح والوضع الداكن`,
+        locale: {
+            next: 'Next',
+            back: 'Back',
+            skip: 'Skip',
+            last: 'Finish',
         },
-        {
-            target: '.header-right-side-user',
-            content: 'Click here to login or sign up. \n' +
-              'اضغط هنا لتسجيل الدخول أو التسجيل.',
-            locale: {
-                next: 'Next',
-                back: 'Back',
-                skip: 'Skip',
-                last: 'Finish',
-            },
+    },
+    {
+        target: '.header-right-side-user',
+        content: `Click here to login or sign up\nاضغط هنا لتسجيل الدخول أو التسجيل`,
+        locale: {
+            next: 'Next',
+            back: 'Back',
+            skip: 'Skip',
+            last: 'Finish',
         },
-        {
-            target: '.header-right-side-add',
-            content: 'Click here to add a new word or definition. \n' +
-              'اضغط هنا لإضافة كلمة أو تعريف جديد.',
-            locale: {
-                next: 'Next',
-                back: 'Back',
-                skip: 'Skip',
-                last: 'Finish',
-            },
+    },
+    {
+        target: '.header-right-side-add',
+        content: `Click here to add a new word or definition\nاضغط هنا لإضافة كلمة أو تعريف جديد`,
+        locale: {
+            next: 'Next',
+            back: 'Back',
+            skip: 'Skip',
+            last: 'Finish',
         },
-    ];
+    },
+];
 
     return (
       <>

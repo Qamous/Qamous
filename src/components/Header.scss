@@ -1,6 +1,10 @@
 @use '../assets/Styles.scss' as styles;
 $header-shadow: rgba(0, 0, 0, 0.1);
 
+.react-joyride__tooltip {
+    white-space: pre-line;
+}
+
 /* The Overlay (background) */
 .nav-overlay {
     height: 100%;
