@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import ToolbarItems from "./ToolbarItems";
 import SearchBar from "./SearchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,7 @@ import { DarkModeSwitch } from "react-toggle-dark-mode";
 import styles from '../assets/Styles.scss';
 import { setFunctionalCookie, getFunctionalCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
+import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
 
 const Header: React.FC = () => {
     const { i18n, t } = useTranslation();
@@ -98,8 +99,85 @@ const Header: React.FC = () => {
         }
     };
 
+    const [runTour, setRunTour] = useState(false);
+
+    useEffect(() => {
+        if (!getFunctionalCookie('tourCompleted')) {
+            setRunTour(true);
+        }
+    }, []);
+
+    const handleJoyrideCallback = (data: CallBackProps) => {
+        const { status } = data;
+        const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+
+        if (finishedStatuses.includes(status)) {
+            setFunctionalCookie('tourCompleted', 'true');
+            setRunTour(false);
+        }
+    };
+    
+    const steps: Step[] = [
+        {
+            target: '.header-right-side-language',
+            content: 'Click here to switch between Arabic and English. \n' +
+              'اضغط هنا للتبديل بين العربية والإنجليزية.',
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+        {
+            target: '.header-right-side-mode',
+            content: 'Click here to switch between light and dark mode. \n' +
+              'اضغط هنا للتبديل بين الوضع الفاتح والوضع الداكن.',
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+        {
+            target: '.header-right-side-user',
+            content: 'Click here to login or sign up. \n' +
+              'اضغط هنا لتسجيل الدخول أو التسجيل.',
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+        {
+            target: '.header-right-side-add',
+            content: 'Click here to add a new word or definition. \n' +
+              'اضغط هنا لإضافة كلمة أو تعريف جديد.',
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+    ];
+
     return (
       <>
+          <Joyride
+              steps={steps}
+              run={runTour}
+              continuous
+              showSkipButton
+              callback={handleJoyrideCallback}
+              styles={{
+                  options: {
+                      primaryColor: '#dd8500',
+                  },
+              }}
+          />
           <div ref={overlayNav} className="nav-overlay">
               <div className="nav-overlay-content">
                   <NavLink
