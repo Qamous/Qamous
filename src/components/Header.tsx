@@ -75,6 +75,7 @@ const Header: React.FC = () => {
     setTheme(isDarkMode);
 
     const overlayNav = useRef<HTMLDivElement>(null);
+    const burgerMenuRef = useRef<HTMLDivElement>(null);
 
     const openNav = () => {
         if (overlayNav.current) {
@@ -106,59 +107,137 @@ const Header: React.FC = () => {
             setRunTour(true);
         }
     }, []);
+    
+    const isPhone = window.innerWidth <= 1200;
 
     const handleJoyrideCallback = (data: CallBackProps) => {
-        const { status } = data;
+        const { status, index, action } = data;
         const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
         if (finishedStatuses.includes(status)) {
             setFunctionalCookie('tourCompleted', 'true');
             setRunTour(false);
         }
+
+        // Open the nav-overlay and add .change class when the burger menu step is clicked
+        if (isPhone && index === 0 && action === 'next') {
+            handleBurgerClick();
+        }
     };
-    
-    const steps: Step[] = [
-    {
-        target: '.header-right-side-language',
-        content: `Click here to switch between Arabic and English\nاضغط هنا للتبديل بين العربية والإنجليزية`,
-        locale: {
-            next: 'Next',
-            back: 'Back',
-            skip: 'Skip',
-            last: 'Finish',
+
+    const steps: Step[] = isPhone ? [
+        {
+            target: '.header-right-side-burger',
+            content: `Click here to open the menu\nاضغط هنا لفتح القائمة`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
         },
-    },
-    {
-        target: '.header-right-side-mode',
-        content: `Click here to switch between light and dark mode\nاضغط هنا للتبديل بين الوضع الفاتح والوضع الداكن`,
-        locale: {
-            next: 'Next',
-            back: 'Back',
-            skip: 'Skip',
-            last: 'Finish',
+        {
+            target: '.report',
+            content: `Click here to report a bug or suggest an improvement\nاضغط هنا للإبلاغ عن خطأ أو اقتراح تحسين`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
         },
-    },
-    {
-        target: '.header-right-side-user',
-        content: `Click here to login or sign up\nاضغط هنا لتسجيل الدخول أو التسجيل`,
-        locale: {
-            next: 'Next',
-            back: 'Back',
-            skip: 'Skip',
-            last: 'Finish',
+        {
+            target: '.nav-overlay-content-bottom-mode',
+            content: `Click here to switch between light and dark mode\nاضغط هنا للتبديل بين الوضع الفاتح والوضع الداكن`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
         },
-    },
-    {
-        target: '.header-right-side-add',
-        content: `Click here to add a new word or definition\nاضغط هنا لإضافة كلمة أو تعريف جديد`,
-        locale: {
-            next: 'Next',
-            back: 'Back',
-            skip: 'Skip',
-            last: 'Finish',
+        {
+            target: '.nav-overlay-content-bottom-language',
+            content: `Click here to switch between Arabic and English\nاضغط هنا للتبديل بين العربية والإنجليزية`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
         },
-    },
-];
+        {
+            target: '.nav-overlay-content-bottom-user',
+            content: `Click here to login or sign up\nاضغط هنا لتسجيل الدخول أو التسجيل`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+        {
+            target: '.header-right-side-add',
+            content: `Click here to add a new word or definition\nاضغط هنا لإضافة كلمة أو تعريف جديد`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+    ] : [
+        {
+            target: '.header-right-side-language',
+            content: `Click here to switch between Arabic and English\nاضغط هنا للتبديل بين العربية والإنجليزية`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+        {
+            target: '.header-right-side-mode',
+            content: `Click here to switch between light and dark mode\nاضغط هنا للتبديل بين الوضع الفاتح والوضع الداكن`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+        {
+            target: '.header-right-side-user',
+            content: `Click here to login or sign up\nاضغط هنا لتسجيل الدخول أو التسجيل`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+        {
+            target: '.header-right-side-add',
+            content: `Click here to add a new word or definition\nاضغط هنا لإضافة كلمة أو تعريف جديد`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+        {
+            target: '.report',
+            content: `Click here to report a bug or suggest an improvement\nاضغط هنا للإبلاغ عن خطأ أو اقتراح تحسين`,
+            locale: {
+                next: 'Next',
+                back: 'Back',
+                skip: 'Skip',
+                last: 'Finish',
+            },
+        },
+    ];
 
     return (
       <>
@@ -257,19 +336,19 @@ const Header: React.FC = () => {
                     isDarkMode={isDarkMode}
                   /> {/* Insert the ToolbarItems component above the SearchBar */}
               </div>
-              
+
               <div className="header-right-side">
                   <SearchBar />
-                  
+
                   <div
                     className="header-right-side-add">
                       <NavLink to="/add-definition">
                           <FontAwesomeIcon icon={faPlus} size="2x" />
                       </NavLink>
                   </div>
-                  
+
                   <div className="header-right-side-divider"></div>
-                  
+
                   <div className="header-right-side-language"
                        onClick={handleCountrySwitch}
                        onMouseEnter={handleHover}
@@ -286,7 +365,7 @@ const Header: React.FC = () => {
                         </>
                       }
                   </div>
-                  
+
                   <DarkModeSwitch
                     className="header-right-side-mode"
                     checked={isDarkMode}
@@ -294,7 +373,7 @@ const Header: React.FC = () => {
                     moonColor="#bfbfbf"
                     sunColor="#dd8500"
                   />
-                  
+
                   <div className="header-right-side-user">
                       <NavLink to="/login">
                           <i className="fa-solid fa-user"></i>
@@ -302,9 +381,10 @@ const Header: React.FC = () => {
                           {/*<img src={userImage} alt={t('common_terms.user')} />*/}
                       </NavLink>
                   </div>
-                  
+
                   {/* Burger menu */}
                   <nav
+                    ref={burgerMenuRef}
                     className={`header-right-side-burger ${change ? 'change' : ''}`}
                     role="navigation"
                     onClick={handleBurgerClick}
