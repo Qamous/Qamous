@@ -12,6 +12,7 @@ The Qamous Frontend is the client-side component of the Qamous application, a pl
 - **PostCSS**: A tool for transforming CSS with JavaScript plugins.
 - **React Query**: A library for managing, caching, and syncing server state; used for http request.
 - **i18next**: An internationalization-framework for managing the English and Arabic translations.
+- **Firebase**: A database service used for storing blog posts.
 
 ## Setup Instructions
 1. Clone the repository: `git clone <repository-url>`
