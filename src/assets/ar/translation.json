@@ -3,7 +3,8 @@
     "home": "الرئيسية",
     "advanced_search": "البحث المتقدم",
     "word_of_the_day": "اختيار عشوائي",
-    "advertise": "أعلن معنا"
+    "advertise": "أعلن معنا",
+    "blog": "المدونات"
   },
   "sample_advertisements": [
     "اكتشف العالم مع حزم السفر الراقية لدينا. احجز الآن ووفر ٢٠٪!",
@@ -149,6 +150,7 @@
   "user_profile": {
     "logout": "تسجيل الخروج",
     "hi": "مرحبًا،",
+    "points": "نقاط (مكتسبة من إضافة التعاريف)",
     "switch_translation": "تبديل الترجمة",
     "franco_arabic": "الفرانكو-عربي",
     "arabic": "العربية",
@@ -176,6 +178,8 @@
   "footer": {
     "franco_arabic_basics": "أساسيات الفرانكو-عربي",
     "about": "من نحن؟",
+    "blog": "مدونة",
+    "advertise": "إعلن معنا",
     "opportunities": "فرص العمل"
   },
   "about": {

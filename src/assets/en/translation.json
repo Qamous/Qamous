@@ -3,7 +3,8 @@
     "home": "Home",
     "advanced_search": "Advanced Search",
     "word_of_the_day": "Feeling Lucky",
-    "advertise": "Advertise"
+    "advertise": "Advertise",
+    "blog": "Blog"
   },
   "sample_advertisements": [
     "Discover the world with our premium travel packages. Book now and save 20%!",
@@ -149,6 +150,7 @@
   "user_profile": {
     "logout": "Log out",
     "hi": "Hi,",
+    "points": "Points (Earned by adding definitions)",
     "switch_translation": "Switch translation",
     "franco_arabic": "FRANCO-ARABIC",
     "arabic": "ARABIC",
@@ -176,6 +178,8 @@
   "footer": {
     "franco_arabic_basics": "Franco-Arabic Basics",
     "about": "About",
+    "blog": "Blog",
+    "advertise": "Advertise",
     "opportunities": "Career Opportunities"
   },
   "about": {
