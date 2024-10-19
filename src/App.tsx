@@ -318,6 +318,7 @@ const App: React.FC = () => {
               </div>
               <div className="content">
                 <Blog />
+                <Footer />
               </div>
             </div>
           } />
