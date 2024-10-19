@@ -4,7 +4,7 @@ import { collection, addDoc, getDocs, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import ReactMarkdown from 'react-markdown';
 import './Blog.scss';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface Post {
   id: string;
@@ -25,7 +25,9 @@ const queryClient = new QueryClient({
 const Blog = () => {
   const [postText, setPostText] = useState('');
   const [postTitle, setPostTitle] = useState('');
-
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === 'ar';
+  
   const { data: authData, isLoading: authLoading } = useQuery('authStatus', async () => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, { credentials: 'include' });
     if (!response.ok) {
@@ -77,7 +79,7 @@ const Blog = () => {
 
   return (
     <div className="blog">
-      <h1>Blog</h1>
+      <h1>{t('blog.title')}</h1>
       {authLoading ? (
         <div className={'loading-ring'}>
           <div></div>
@@ -91,20 +93,32 @@ const Blog = () => {
             type="text"
             value={postTitle}
             onChange={(e) => setPostTitle(e.target.value)}
-            placeholder="Enter a title"
+            placeholder={t('blog.enter_title')}
+            dir={isRtl ? 'rtl' : 'ltr'}
           />
           <textarea
             value={postText}
             onChange={(e) => setPostText(e.target.value)}
-            placeholder="Write a post (Markdown supported)..."
+            placeholder={t('blog.enter_content')}
             rows={5}
             style={{ resize: 'vertical', color: 'black' }}
+            dir={isRtl ? 'rtl' : 'ltr'}
           />
           <button type="submit">Post</button>
+          <small style={{ textAlign: isRtl ? 'right' : 'left', display: 'block' }}>
+          <a
+              href="https://www.markdownguide.org/basic-syntax/"
+              target="_blank"
+              rel="noopener noreferrer"
+              dir={isRtl ? 'rtl' : 'ltr'}
+            >
+              {t('blog.markdown_guide')}
+            </a>
+          </small>
         </form>
       ) : (
         <div className="not-logged-in">
-          <p>Please <Link to="/login" className="login-link">log in</Link> to post.</p>
+          <p dangerouslySetInnerHTML={{ __html: t('blog.please_log_in_to_post') }}></p>
         </div>
       )}
       {postsLoading ? (

@@ -72,6 +72,14 @@ $color-gray: #888;
       border: none;
       cursor: pointer;
     }
+
+    small {
+      font-size: 0.7em;
+
+      a {
+        color: styles.$primary-color-75;
+      }
+    }
   }
 
   .posts {
