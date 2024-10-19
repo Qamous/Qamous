@@ -78,6 +78,11 @@ $color-gray: #888;
 
       a {
         color: styles.$primary-color-75;
+        transition: ease-in-out 0.2s;
+
+        &:hover {
+          color: styles.$primary-color-90;
+        }
       }
     }
   }

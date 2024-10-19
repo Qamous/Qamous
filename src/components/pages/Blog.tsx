@@ -106,13 +106,13 @@ const Blog = () => {
           />
           <button type="submit">Post</button>
           <small style={{ textAlign: isRtl ? 'right' : 'left', display: 'block' }}>
-          <a
-              href="https://www.markdownguide.org/basic-syntax/"
-              target="_blank"
-              rel="noopener noreferrer"
-              dir={isRtl ? 'rtl' : 'ltr'}
-            >
-              {t('blog.markdown_guide')}
+            <a
+                href="https://www.markdownguide.org/basic-syntax/"
+                target="_blank"
+                rel="noopener noreferrer"
+                dir={isRtl ? 'rtl' : 'ltr'}
+              >
+                {t('blog.markdown_guide')}
             </a>
           </small>
         </form>
