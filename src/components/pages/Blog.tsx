@@ -21,7 +21,13 @@ const Blog = () => {
   const { data: authData, isLoading: authLoading } = useQuery('authStatus', async () => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, { credentials: 'include' });
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      const { session, sessionId } = await response.json();
+      if (session && sessionId && session.passport) {
+        const { user } = session.passport;
+        if (user) {
+          return user;
+        }
+      }
     }
     return response.json();
   });
@@ -71,7 +77,7 @@ const Blog = () => {
           <div></div>
           <div></div>
         </div>
-      ) : authData?.authenticated ? (
+      ) : authData ? (
         <form onSubmit={handlePostSubmit}>
           <input
             type="text"

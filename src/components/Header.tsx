@@ -277,10 +277,10 @@ const Header: React.FC = () => {
                       {t('toolbar_items.word_of_the_day')}
                   </NavLink>
                   <NavLink
-                    to="/advertise"
+                    to="/blog"
                     onClick={handleBurgerClick}
                   >
-                      {t('toolbar_items.advertise')}
+                      {t('toolbar_items.blog')}
                   </NavLink>
                   <div
                     className="nav-overlay-content-bottom"

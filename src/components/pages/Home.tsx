@@ -8,6 +8,7 @@ import Snackbar from '../Snackbar';
 import CustomDialog from '../CustomDialog';
 import AdSense from 'react-adsense';
 import { Helmet } from 'react-helmet';
+import { getCookie, setCookieWithExpiration } from '../../assets/utils';
 
 interface HomeContent {
   word: string,
@@ -44,11 +45,11 @@ const Home: React.FC = () => {
     returnObjects: true,
   }) as JsonContent[];
   const lang = i18n.language;
-  
+
   const { data: homeContent, isLoading, isError } = useQuery<HomeContent[]>('homeContent', fetchHomeContent);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
-  const [showDialog, setShowDialog] = useState(true);
-  
+  const [showDialog, setShowDialog] = useState(false);
+
   useEffect(() => {
     if (isError) {
       setErrorSnackbarOpen(false);
@@ -58,12 +59,21 @@ const Home: React.FC = () => {
       }, 100);
     }
   }, [isError]);
+
   useEffect(() => {
     if (homeContent) {
       console.log(homeContent);
     }
+  }, [homeContent]);
+
+  useEffect(() => {
+    const lastShown = getCookie('betaWarningShown');
+    if (!lastShown || (new Date().getTime() - new Date(lastShown).getTime()) > 7 * 24 * 60 * 60 * 1000) {
+      setShowDialog(true);
+      setCookieWithExpiration('betaWarningShown', new Date().toISOString(), 7);
+    }
   }, []);
-  
+
   if (isLoading) {
     return (
       <div className={'feed'}>
@@ -90,18 +100,10 @@ const Home: React.FC = () => {
             <div></div>
           </div>
         </div>
-        {showDialog && (
-          <CustomDialog
-            text={t('common.beta_warning')}
-            okButtonText={t('common.ok')}
-            onOkButtonClick={() => setShowDialog(false)}
-            onClose={() => setShowDialog(false)}
-          />
-        )}
       </div>
     );
   }
-  
+
   if (isError) {
     return (
       <div className={'feed'}>
@@ -129,7 +131,7 @@ const Home: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
     <div className={'feed'}>
       <Helmet>
@@ -219,14 +221,6 @@ const Home: React.FC = () => {
               </div>}
             </React.Fragment>
           ))}
-        {showDialog && (
-          <CustomDialog
-            text={t('common.beta_warning')}
-            okButtonText={t('common.ok')}
-            onOkButtonClick={() => setShowDialog(false)}
-            onClose={() => setShowDialog(false)}
-          />
-        )}
       </div>
       <div className="feed-ad-space">
         <AdSense.Google
@@ -246,6 +240,14 @@ const Home: React.FC = () => {
           responsive='true'
         />
       </div>
+      {showDialog && (
+        <CustomDialog
+          text={t('common.beta_warning')}
+          okButtonText={t('common.ok')}
+          onOkButtonClick={() => setShowDialog(false)}
+          onClose={() => setShowDialog(false)}
+        />
+      )}
     </div>
   );
 };
