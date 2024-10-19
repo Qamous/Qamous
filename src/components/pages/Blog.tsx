@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useQuery, useMutation, QueryClient } from 'react-query';
 import { collection, addDoc, getDocs, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import ReactMarkdown from 'react-markdown';
@@ -13,23 +13,30 @@ interface Post {
   createdAt: { seconds: number; nanoseconds: number };
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 const Blog = () => {
   const [postText, setPostText] = useState('');
   const [postTitle, setPostTitle] = useState('');
-  const queryClient = useQueryClient();
 
   const { data: authData, isLoading: authLoading } = useQuery('authStatus', async () => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, { credentials: 'include' });
     if (!response.ok) {
-      const { session, sessionId } = await response.json();
-      if (session && sessionId && session.passport) {
-        const { user } = session.passport;
-        if (user) {
-          return user;
-        }
+      throw new Error('Not logged in');
+    }
+    const { session, sessionId } = await response.json();
+    if (session && sessionId && session.passport) {
+      const { user } = session.passport;
+      if (user) {
+        return user;
       }
     }
-    return response.json();
   });
 
   const fetchPosts = async (): Promise<Post[]> => {
