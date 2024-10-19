@@ -1,0 +1,65 @@
+@use '../../assets/Styles.scss' as styles;
+
+$max-width: 800px;
+$padding: 20px;
+$margin-bottom: 10px;
+$font-size-small: 0.9em;
+$color-gray: #888;
+
+.blog {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $padding;
+
+  h1 {
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $padding;
+
+    input, textarea {
+      color: black;
+
+    }
+
+    input[type="text"], textarea {
+      background-color: #ececec;
+    }
+
+    textarea {
+      resize: none;
+      padding: $padding / 2;
+      margin-bottom: $margin-bottom;
+      height: 100px;
+    }
+
+    button {
+      padding: $padding / 2;
+      background-color: styles.$secondary-color;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  .posts {
+    display: flex;
+    flex-direction: column;
+
+    .post {
+      padding: $padding / 2;
+      border: 1px solid #ddd;
+      margin-bottom: $margin-bottom;
+    }
+  }
+}
+
+.not-logged-in {
+  text-align: center;
+  margin-top: $padding;
+  font-size: 1.2em;
+  color: $color-gray;
+}

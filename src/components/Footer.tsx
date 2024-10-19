@@ -22,8 +22,8 @@ const Footer: React.FC = () => {
         <NavLink to="/about">
           {t('footer.about')}
         </NavLink>
-        <NavLink to="/opportunities">
-          {t('footer.opportunities')}
+        <NavLink to="/blog">
+          {t('footer.blog')}
         </NavLink>
       </div>
       <div className="footer-socials">

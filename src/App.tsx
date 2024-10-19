@@ -30,6 +30,7 @@ import Footer from './components/Footer';
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
 import PasswordScreen from './components/pages/PasswordScreen';
+import Blog from './components/pages/Blog';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -238,6 +239,10 @@ const App: React.FC = () => {
               </div>
             </div>
           } />
+          {/*
+          TODO: Accept WordId or Word in Arabic or Word in Franco-Arabic
+          <Route path="/word/:identifier" element={
+          */}
           <Route path="/word/:wordId" element={
             <div className="app">
               <div className="header">
@@ -305,6 +310,16 @@ const App: React.FC = () => {
                 </div>
               </div>
             </CheckUserLoggedOut>
+          } />
+          <Route path="/blog" element={
+            <div className="app">
+              <div className="header">
+                <Header />
+              </div>
+              <div className="content">
+                <Blog />
+              </div>
+            </div>
           } />
           <Route path="/opportunities" element={
             <div className="app">
