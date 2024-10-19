@@ -31,3 +31,8 @@ backend
 
 # package json
 package-lock.json
+
+# ids and keys
+firestore.indexes.json
+firestore.rules
+src/firebaseConfig.js
