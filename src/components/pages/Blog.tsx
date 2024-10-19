@@ -4,6 +4,7 @@ import { collection, addDoc, getDocs, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import ReactMarkdown from 'react-markdown';
 import './Blog.scss';
+import { Link } from 'react-router-dom';
 
 interface Post {
   id: string;
@@ -95,7 +96,7 @@ const Blog = () => {
           <textarea
             value={postText}
             onChange={(e) => setPostText(e.target.value)}
-            placeholder="Write a post..."
+            placeholder="Write a post (Markdown supported)..."
             rows={5}
             style={{ resize: 'vertical', color: 'black' }}
           />
@@ -103,13 +104,13 @@ const Blog = () => {
         </form>
       ) : (
         <div className="not-logged-in">
-          <p>Please log in to post.</p>
+          <p>Please <Link to="/login" className="login-link">log in</Link> to post.</p>
         </div>
       )}
       {postsLoading ? (
         <div className="profile">
           <div className={'loading-ring'}>
-            <div></div>
+          <div></div>
             <div></div>
             <div></div>
             <div></div>
