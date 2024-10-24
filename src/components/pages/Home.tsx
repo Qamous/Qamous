@@ -3,12 +3,12 @@ import './Home.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import ContentBox from '../ContentBox';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import Snackbar from '../Snackbar';
 import CustomDialog from '../CustomDialog';
 import AdSense from 'react-adsense';
 import { Helmet } from 'react-helmet';
-import { getCookie, setCookieWithExpiration } from '../../assets/utils';
+import { getCookie, setCookieWithExpiration, useIntersectionObserver } from '../../assets/utils';
 
 interface HomeContent {
   word: string,
@@ -32,9 +32,8 @@ interface JsonContent {
   definition: string
 }
 
-const fetchHomeContent: () => Promise<HomeContent[]> = () =>
-  // after fetching the data, console log the data and return it
-  fetch(`${process.env.REACT_APP_API_URL}/definitions/most-liked`, {
+const fetchHomeContent: (page: number, limit: number) => Promise<HomeContent[]> = (page = 1, limit = 10) =>
+  fetch(`${process.env.REACT_APP_API_URL}/definitions/most-liked?page=${page}&limit=${limit}`, {
     mode: 'cors',
     credentials: 'include',
   }).then(response => response.json());
@@ -46,7 +45,17 @@ const Home: React.FC = () => {
   }) as JsonContent[];
   const lang = i18n.language;
 
-  const { data: homeContent, isLoading, isError } = useQuery<HomeContent[]>('homeContent', fetchHomeContent);
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<HomeContent[]>('homeContent', ({ pageParam = 1 }) => fetchHomeContent(pageParam, 10), {
+    getNextPageParam: (lastPage, pages) => lastPage.length === 10 ? pages.length + 1 : undefined,
+    refetchOnWindowFocus: false,
+  });
+
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
@@ -61,18 +70,23 @@ const Home: React.FC = () => {
   }, [isError]);
 
   useEffect(() => {
-    if (homeContent) {
-      console.log(homeContent);
-    }
-  }, [homeContent]);
-
-  useEffect(() => {
     const lastShown = getCookie('betaWarningShown');
     if (!lastShown || (new Date().getTime() - new Date(lastShown).getTime()) > 7 * 24 * 60 * 60 * 1000) {
       setShowDialog(true);
       setCookieWithExpiration('betaWarningShown', new Date().toISOString(), 7);
     }
   }, []);
+
+  const [useIntersectionObserverElement, isIntersecting] = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '50px',
+  });
+
+  useEffect(() => {
+    if (isIntersecting && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [isIntersecting, fetchNextPage, hasNextPage]);
 
   if (isLoading) {
     return (
@@ -133,45 +147,19 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className={'feed'}>
-      <Helmet>
-        <title>Qamous - Arabic Slang Dictionary</title>
-        <meta name="description" content="Explore Qamous, your go-to platform for learning Arabic slang and colloquial phrases. Discover a comprehensive Arabic dictionary for various dialects." />
-        <meta name="keywords" content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
-      </Helmet>
-      <div className="feed-ad-space">
-        <AdSense.Google
-          client='ca-pub-4293590491700199'
-          slot='7898075502'
-          style={{
-            display: 'block',
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'var(--tertiary-color)',
-            border: '0',
-            padding: '10px',
-            fontFamily: 'var(--font-stack)',
-            color: 'var(--primary-color)',
-          }}
-          format='auto'
-          responsive='true'
-        />
-      </div>
-      <div className="feed-posts">
-        <ContentBox
-          item={sampleHome[0]}
-          index={0}
-          lang={lang}
-          definitionId={0}
-          wordId={0}
-          isLiked={false}
-          isDisliked={false}
-          isReported={false}
-        />
-        <div className="feed-posts-ad-space">
+    <>
+      <div className={'feed'}>
+        <Helmet>
+          <title>Qamous - Arabic Slang Dictionary</title>
+          <meta name="description"
+                content="Explore Qamous, your go-to platform for learning Arabic slang and colloquial phrases. Discover a comprehensive Arabic dictionary for various dialects." />
+          <meta name="keywords"
+                content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
+        </Helmet>
+        <div className="feed-ad-space">
           <AdSense.Google
-            client='ca-pub-4293590491700199'
-            slot='6473874271'
+            client="ca-pub-4293590491700199"
+            slot="7898075502"
             style={{
               display: 'block',
               width: '100%',
@@ -182,73 +170,113 @@ const Home: React.FC = () => {
               fontFamily: 'var(--font-stack)',
               color: 'var(--primary-color)',
             }}
-            format='auto'
-            responsive='true'
+            format="auto"
+            responsive="true"
           />
         </div>
-        {homeContent && homeContent
-          .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
-          .map((item, index) => (
-            <React.Fragment key={index}>
-              <ContentBox
-                item={item}
-                index={index + 1}
-                lang={lang}
-                definitionId={item.definitionId}
-                wordId={item.wordId}
-                countryCode={item.countryCode}
-                isLiked={item.isLiked !== 0}
-                isDisliked={item.isDisliked !== 0}
-                isReported={item.isReported !== 0}
-              />
-              {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
-                <AdSense.Google
-                  client='ca-pub-4293590491700199'
-                  slot='6473874271'
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'var(--tertiary-color)',
-                    border: '0',
-                    padding: '10px',
-                    fontFamily: 'var(--font-stack)',
-                    color: 'var(--primary-color)',
-                  }}
-                  format='auto'
-                  responsive='true'
-                />
-              </div>}
-            </React.Fragment>
-          ))}
+        <div className="feed-posts">
+          <ContentBox
+            item={sampleHome[0]}
+            index={0}
+            lang={lang}
+            definitionId={0}
+            wordId={0}
+            isLiked={false}
+            isDisliked={false}
+            isReported={false}
+          />
+          <div className="feed-posts-ad-space">
+            <AdSense.Google
+              client="ca-pub-4293590491700199"
+              slot="6473874271"
+              style={{
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'var(--tertiary-color)',
+                border: '0',
+                padding: '10px',
+                fontFamily: 'var(--font-stack)',
+                color: 'var(--primary-color)',
+              }}
+              format="auto"
+              responsive="true"
+            />
+          </div>
+          {data?.pages.map((page, pageIndex) =>
+            page
+              .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
+              .map((item, index) => (
+                <React.Fragment key={`${pageIndex}-${index}`}>
+                  <ContentBox
+                    item={item}
+                    index={index + 1}
+                    lang={lang}
+                    definitionId={item.definitionId}
+                    wordId={item.wordId}
+                    countryCode={item.countryCode}
+                    isLiked={item.isLiked !== 0}
+                    isDisliked={item.isDisliked !== 0}
+                    isReported={item.isReported !== 0}
+                  />
+                  {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
+                    <AdSense.Google
+                      client="ca-pub-4293590491700199"
+                      slot="6473874271"
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'var(--tertiary-color)',
+                        border: '0',
+                        padding: '10px',
+                        fontFamily: 'var(--font-stack)',
+                        color: 'var(--primary-color)',
+                      }}
+                      format="auto"
+                      responsive="true"
+                    />
+                  </div>}
+                </React.Fragment>
+              )),
+          )}
+        </div>
+        <div className="feed-ad-space">
+          <AdSense.Google
+            client="ca-pub-4293590491700199"
+            slot="1590891296"
+            style={{
+              display: 'block',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'var(--tertiary-color)',
+              border: '0',
+              padding: '10px',
+              fontFamily: 'var(--font-stack)',
+              color: 'var(--primary-color)',
+            }}
+            format="auto"
+            responsive="true"
+          />
+        </div>
+        {showDialog && (
+          <CustomDialog
+            text={t('common.beta_warning')}
+            okButtonText={t('common.ok')}
+            onOkButtonClick={() => setShowDialog(false)}
+            onClose={() => setShowDialog(false)}
+          />
+        )}
       </div>
-      <div className="feed-ad-space">
-        <AdSense.Google
-          client='ca-pub-4293590491700199'
-          slot='1590891296'
-          style={{
-            display: 'block',
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'var(--tertiary-color)',
-            border: '0',
-            padding: '10px',
-            fontFamily: 'var(--font-stack)',
-            color: 'var(--primary-color)',
-          }}
-          format='auto'
-          responsive='true'
-        />
+      <div ref={useIntersectionObserverElement} className={`feed-loading${!hasNextPage ? '-hidden' : ''}`}>
+        <div className={"loading-ring"}>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
-      {showDialog && (
-        <CustomDialog
-          text={t('common.beta_warning')}
-          okButtonText={t('common.ok')}
-          onOkButtonClick={() => setShowDialog(false)}
-          onClose={() => setShowDialog(false)}
-        />
-      )}
-    </div>
+    </>
   );
 };
 

@@ -530,6 +530,12 @@ $dark-grey: #292929;
     }
   }
 
+  &-loading {
+    &-hidden {
+      display: none;
+    }
+  }
+
   &-ad-space {
     width: 25%;
     display: none;
@@ -539,4 +545,8 @@ $dark-grey: #292929;
       flex: 0 0 25%; /* Ensure the ad space takes 25% width */
     }
   }
+}
+
+.hidden {
+  display: none;
 }

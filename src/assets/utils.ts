@@ -1,5 +1,7 @@
 // General utils for managing cookies in Typescript.
 
+import { useEffect, useRef, useState } from 'react';
+
 /**
  * This function sets a cookie with a given name and value. This cookie is considered functional and is, then,
  * not subject to the user's consent.
@@ -484,4 +486,168 @@ export async function getCountryCode(countryName: string | undefined): Promise<s
     console.error('Failed to fetch country code:', error);
     return '';
   }
+}
+
+/**
+ * This function converts a country name to its corresponding demonyms.
+ *
+ * @param {string} countryName - The country name.
+ * @returns string - The demonyms of the country.
+ */
+export async function getDemonyms(countryName: string): Promise<string> {
+  const response = await fetch('https://restcountries.com/v3.1/name/' + countryName);
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  const data = await response.json();
+  const demonyms = data.flatMap((country: any) =>
+    Object.values(country.demonyms).flatMap((dem: any) => [dem.f, dem.m])
+  );
+  // make demonyms unique
+  const unique_demonyms = Array.from(new Set(demonyms));
+  return unique_demonyms.join(', ');
+}
+
+// Custom React hooks ----------------------------------------------------------
+type State = {
+  isIntersecting: boolean
+  entry?: IntersectionObserverEntry
+}
+
+type UseIntersectionObserverOptions = {
+  root?: Element | Document | null
+  rootMargin?: string
+  threshold?: number | number[]
+  freezeOnceVisible?: boolean
+  onChange?: (isIntersecting: boolean, entry: IntersectionObserverEntry) => void
+  initialIsIntersecting?: boolean
+}
+
+type IntersectionReturn = [
+  (node?: Element | null) => void,
+  boolean,
+    IntersectionObserverEntry | undefined,
+] & {
+  ref: (node?: Element | null) => void
+  isIntersecting: boolean
+  entry?: IntersectionObserverEntry
+}
+
+/**
+ * Custom hook that tracks the intersection of a DOM element with its containing element or the viewport using the Intersection Observer API.
+ * It returns a ref that should be assigned to the element that needs to be tracked.
+ * All parameters are optional and have default values.
+ *
+ * @param {number | number[] | undefined} threshold - A threshold indicating the percentage of the target's visibility needed to trigger the callback. Default ts 0
+ * @param {Element | Document | null | undefined} root The element that is used as the viewport for checking visibility of the target. Default ts null
+ * @param {string | undefined} rootMargin - A margin around the root. Default ts '0%'
+ * @param {boolean | undefined} freezeOnceVisible - If true, the callback is only invoked once until the element is no longer visible. Default ts false
+ * @param {boolean | undefined} initialIsIntersecting - The initial state of isIntersecting. Default ts false
+ * @param {((isIntersecting: boolean, entry: IntersectionObserverEntry) => void) | undefined} onChange - A callback function to be invoked when the intersection state changes. Default ts undefined
+ * @returns {IntersectionReturn} - An array containing the ref, isIntersecting, and entry values.
+ */
+export function useIntersectionObserver({
+                                          threshold = 0,
+                                          root = null,
+                                          rootMargin = '0%',
+                                          freezeOnceVisible = false,
+                                          initialIsIntersecting = false,
+                                          onChange,
+                                        }: UseIntersectionObserverOptions = {}): IntersectionReturn {
+  const [ref, setRef] = useState<Element | null>(null)
+  
+  const [state, setState] = useState<State>(() => ({
+    isIntersecting: initialIsIntersecting,
+    entry: undefined,
+  }))
+  
+  const callbackRef = useRef<UseIntersectionObserverOptions['onChange']>()
+  
+  callbackRef.current = onChange
+  
+  const frozen = state.entry?.isIntersecting && freezeOnceVisible
+  
+  useEffect(() => {
+    // Ensure we have a ref to observe
+    if (!ref) return
+    
+    // Ensure the browser supports the Intersection Observer API
+    if (!('IntersectionObserver' in window)) return
+    
+    // Skip if frozen
+    if (frozen) return
+    
+    let unobserve: (() => void) | undefined
+    
+    const observer = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]): void => {
+        const thresholds = Array.isArray(observer.thresholds)
+          ? observer.thresholds
+          : [observer.thresholds]
+        
+        entries.forEach(entry => {
+          const isIntersecting =
+            entry.isIntersecting &&
+            thresholds.some(threshold => entry.intersectionRatio >= threshold)
+          
+          setState({ isIntersecting, entry })
+          
+          if (callbackRef.current) {
+            callbackRef.current(isIntersecting, entry)
+          }
+          
+          if (isIntersecting && freezeOnceVisible && unobserve) {
+            unobserve()
+            unobserve = undefined
+          }
+        })
+      },
+      { threshold, root, rootMargin },
+    )
+    
+    observer.observe(ref)
+    
+    return () => {
+      observer.disconnect()
+    }
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    ref,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    JSON.stringify(threshold),
+    root,
+    rootMargin,
+    frozen,
+    freezeOnceVisible,
+  ])
+  
+  // ensures that if the observed element changes, the intersection observer is reinitialized
+  const prevRef = useRef<Element | null>(null)
+  
+  useEffect(() => {
+    if (
+      !ref &&
+      state.entry?.target &&
+      !freezeOnceVisible &&
+      !frozen &&
+      prevRef.current !== state.entry.target
+    ) {
+      prevRef.current = state.entry.target
+      setState({ isIntersecting: initialIsIntersecting, entry: undefined })
+    }
+  }, [ref, state.entry, freezeOnceVisible, frozen, initialIsIntersecting])
+  
+  const result = [
+    setRef,
+    !!state.isIntersecting,
+    state.entry,
+  ] as IntersectionReturn
+  
+  // Support object destructuring, by adding the specific values.
+  result.ref = result[0]
+  result.isIntersecting = result[1]
+  result.entry = result[2]
+  
+  return result
 }
