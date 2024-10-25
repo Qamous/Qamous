@@ -3,6 +3,7 @@ import './WordOfTheDay.scss';
 import { useQuery } from 'react-query';
 import Snackbar from '../Snackbar';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 
 interface WordOfTheDayContent {
     wordId: number,
@@ -19,7 +20,7 @@ interface WordOfTheDayContent {
 // TODO: use a different api endpoint to fetch the word of the day content, this
 //  one does a lot of calculations
 const fetchWordOfTheDayContent = () =>
-    fetch(`${process.env.REACT_APP_API_URL}/definitions/most-liked`, {
+    fetch(`${process.env.REACT_APP_API_URL}/definitions/most-liked?page=${1}&limit=${10}`, {
         mode: 'cors',
         credentials: 'include',
     })
@@ -81,6 +82,11 @@ const WordOfTheDay: React.FC = () => {
     const englishWord = data?.find((word: WordOfTheDayContent) => word.isArabic === 0 && word.wordId === arabicWord?.wordId);
     return (
         <div className={'word-of-day'}>
+            <Helmet>
+                <title>Word of the Day - Enhance Your Vocabulary with Franco Arabic Slang</title>
+                <meta name="description" content="Discover the word of the day in both Arabic and English. Enhance your vocabulary with detailed definitions, usage examples, and more." />
+                <meta name="keywords" content="word of the day, Arabic words, English words, vocabulary, definitions, translations, language learning" />
+            </Helmet>
             {arabicWord && englishWord && (
                 <>
                     <p className={'word-of-day-word'} dir={'rtl'} lang={'ar'}>

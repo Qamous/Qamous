@@ -69,13 +69,14 @@ const Home: React.FC = () => {
     }
   }, [isError]);
 
-  useEffect(() => {
-    const lastShown = getCookie('betaWarningShown');
-    if (!lastShown || (new Date().getTime() - new Date(lastShown).getTime()) > 7 * 24 * 60 * 60 * 1000) {
-      setShowDialog(true);
-      setCookieWithExpiration('betaWarningShown', new Date().toISOString(), 7);
-    }
-  }, []);
+  // Beta warning dialog (only shows once a week + disabled for now + has a visual glitch as it shows up on load and then re-renders once the data is fetched)
+  // useEffect(() => {
+  //   const lastShown = getCookie('betaWarningShown');
+  //   if (!lastShown || (new Date().getTime() - new Date(lastShown).getTime()) > 7 * 24 * 60 * 60 * 1000) {
+  //     setShowDialog(true);
+  //     setCookieWithExpiration('betaWarningShown', new Date().toISOString(), 7);
+  //   }
+  // }, []);
 
   const [useIntersectionObserverElement, isIntersecting] = useIntersectionObserver({
     threshold: 0.1,
