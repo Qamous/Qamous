@@ -7,14 +7,21 @@ import { useTranslation } from 'react-i18next';
 import ContentBox from '../ContentBox';
 import i18n from 'i18next';
 import AdSense from 'react-adsense';
+import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const AdvancedSearch: React.FC = () => {
+    const { countryName } = useParams<{ countryName: string }>();
     const [countries, setCountries] = useState<string[]>([]);
-    const [selectedCountry, setSelectedCountry] = useState('');
+    const [selectedCountry, setSelectedCountry] = useState(countryName || '');
     const [results, setResults] = useState<any[]>([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const { t } = useTranslation();
+
+    useEffect(() => {
+        setSelectedCountry(countryName || '');
+    }, [countryName]);
 
     useEffect(() => {
         Papa.parse('countries.csv', {
@@ -30,27 +37,30 @@ const AdvancedSearch: React.FC = () => {
         });
     }, []);
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
+    useEffect(() => {
+        if (selectedCountry) {
+            fetchResults(selectedCountry);
+        }
+    }, [selectedCountry]);
+
+    const fetchResults = async (country: string) => {
         try {
-            if (selectedCountry) {
-                const encodedCountryCode = await getCountryCode(selectedCountry);
-                const url = `${process.env.REACT_APP_API_URL}/word/search/iso=${encodedCountryCode}`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                const data = await response.json();
-                setResults(Array.isArray(data) ? data : []);
-                if (data.length === 0) {
-                    setSnackbarOpen(false);
-                    setSnackbarMessage(t('advanced_search.no_results_found'));
-                    setTimeout(() => {
-                        setSnackbarOpen(true);
-                    }, 100);
-                }
+            const encodedCountryCode = await getCountryCode(country);
+            const url = `${process.env.REACT_APP_API_URL}/word/search/iso=${encodedCountryCode}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            setResults(Array.isArray(data) ? data : []);
+            if (data.length === 0) {
+                setSnackbarOpen(false);
+                setSnackbarMessage(t('advanced_search.no_results_found'));
+                setTimeout(() => {
+                    setSnackbarOpen(true);
+                }, 100);
             }
         } catch (error) {
             console.error('Error fetching search results:', error);
@@ -63,38 +73,44 @@ const AdvancedSearch: React.FC = () => {
         }
     };
 
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        if (selectedCountry) {
+            fetchResults(selectedCountry);
+        }
+    };
+
     return (
-        <div className="container zero-padding">
+        <div className="container zero-side-padding">
+            <Helmet>
+                <title>{`${selectedCountry} Dialect Slang Mo3jam`}</title>
+                <meta name="description" content={`Learn ${selectedCountry} Arabic words and what they mean at Qamous' Urban Dictionary. عبارات عامية)`} />
+                <meta name="keywords" content={`${selectedCountry}, dialect, slang, words, phrases, definitions, meanings, translations`} />
+            </Helmet>
             <div className="container-title">
                 <div>{t('advanced_search.title')}</div>
             </div>
             <br />
-            <form onSubmit={handleSubmit} className="container-input">
-                <div className="container-input">
-                    <select
-                        id="country"
-                        value={selectedCountry}
-                        onChange={(e) => setSelectedCountry(e.target.value)}
-                        className="container-input-box"
-                    >
-                        <option value="">{t('advanced_search.select_country')}</option>
-                        {countries.map((country, index) => (
-                            <option key={index} value={country}>
-                                {country}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <br />
-                <div className="container-buttons">
-                    <button
-                        className="container-buttons-button"
-                        type="submit"
-                    >
-                        {t('advanced_search.search')}
-                    </button>
-                </div>
-            </form>
+            {!countryName && (
+                <form onSubmit={handleSubmit} className="container-input">
+                    <div className="container-input">
+                        <select
+                            id="country"
+                            value={selectedCountry}
+                            onChange={(e) => setSelectedCountry(e.target.value)}
+                            className="container-input-box"
+                        >
+                            <option value="">{t('advanced_search.select_country')}</option>
+                            {countries.map((country, index) => (
+                                <option key={index} value={country}>
+                                    {country}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <br />
+                </form>
+            )}
             <div className="feed">
                 <div className="feed-ad-space">
                     <AdSense.Google

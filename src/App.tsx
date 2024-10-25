@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import './App.scss';
 import Header from './components/Header';
-import { BrowserRouter, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import WordOfTheDay from './components/pages/WordOfTheDay';
 import Adverts from './components/Adverts';
 import Home from './components/pages/Home';
@@ -31,6 +31,9 @@ import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
 import PasswordScreen from './components/pages/PasswordScreen';
 import Blog from './components/pages/Blog';
+import AdvancedSearch from './components/pages/AdvancedSearch';
+// Adverts bar: Uncomment the following line to enable the adverts bar
+// import Adverts from './components/Adverts';
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -147,8 +150,9 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
 
 const App: React.FC = () => {
   const queryClient = new QueryClient();
-  const { t } = useTranslation();
   const [mustLoginSnackbarOpen, setMustLoginSnackbarOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+  const { wordId, lang } = useParams<{ wordId: string; lang?: string }>();
   
   const handleReportClick = () => {
     // If a 'Bug Report Form' window is already open, the form submission will open in that existing window instead of
@@ -161,214 +165,227 @@ const App: React.FC = () => {
     }
   };
   
-  const [passwordCorrect, setPasswordCorrect] = useState(true);
+  useEffect(() => {
+    if (lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang, i18n]);
   
-  if (!passwordCorrect) {
-    return <PasswordScreen onPasswordCorrect={() => setPasswordCorrect(true)} />;
-  }
+  // const [passwordCorrect, setPasswordCorrect] = useState(true);
+  // if (!passwordCorrect) {
+  //   return <PasswordScreen onPasswordCorrect={() => setPasswordCorrect(true)} />;
+  // }
   
   return (
     <QueryClientProvider client={queryClient}>
       <SpeedInsights/>
       <Analytics/>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
+      <Routes>
+        <Route path="/" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <Home />
+              <Footer />
+            </div>
+          </div>
+        } />
+        <Route path="/advanced-search" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <AdvancedSearch />
+            </div>
+          </div>
+        } />
+        <Route path="/advanced-search/:countryName" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <AdvancedSearch />
+            </div>
+          </div>
+        } />
+        <Route path="/feeling-lucky" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            {/*<div className="ads">*/}
+            {/*  <Adverts />*/}
+            {/*</div>*/}
+            <div className="content">
+              <WordOfTheDay />
+            </div>
+          </div>
+        } />
+        <Route path="/advertise" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <PageUnderConstruction />
+            </div>
+          </div>
+        } />
+        <Route path="/add-definition" element={
+          <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
             <div className="app">
               <div className="header">
                 <Header />
               </div>
               <div className="content">
-                <Home />
-                <Footer />
+                <AddWord />
               </div>
             </div>
-          } />
-          <Route path="/advanced-search" element={
+          </CheckUserLoggedOut>
+        } />
+        <Route path="/search/:query" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <SearchResults />
+            </div>
+          </div>
+        } />
+        {/*
+        TODO: Accept WordId or Word in Arabic or Word in Franco-Arabic
+        <Route path="/word/:identifier" element={
+        */}
+        <Route path="/word/:wordId/:lang?" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <WordPage />
+            </div>
+          </div>
+        } />
+        <Route path="/login" element={
+          <CheckUserLoggedIn>
             <div className="app">
               <div className="header">
                 <Header />
               </div>
               <div className="content">
-                <PageUnderConstruction />
+                <LogIn />
               </div>
             </div>
-          } />
-          <Route path="/feeling-lucky" element={
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              {/*<div className="ads">*/}
-              {/*  <Adverts />*/}
-              {/*</div>*/}
-              <div className="content">
-                <WordOfTheDay />
-              </div>
-            </div>
-          } />
-          <Route path="/advertise" element={
+          </CheckUserLoggedIn>
+        } />
+        <Route path="/signup" element={
+          <CheckUserLoggedIn>
             <div className="app">
               <div className="header">
                 <Header />
               </div>
               <div className="content">
-                <PageUnderConstruction />
+                <SignUp />
               </div>
             </div>
-          } />
-          <Route path="/add-definition" element={
-            <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
-              <div className="app">
-                <div className="header">
-                  <Header />
-                </div>
-                <div className="content">
-                  <AddWord />
-                </div>
-              </div>
-            </CheckUserLoggedOut>
-          } />
-          <Route path="/search/:query" element={
+          </CheckUserLoggedIn>
+        } />
+        <Route path="/forgot-password" element={
+          <CheckUserLoggedIn>
             <div className="app">
               <div className="header">
                 <Header />
               </div>
               <div className="content">
-                <SearchResults />
+                <ForgotPassword />
               </div>
             </div>
-          } />
-          {/*
-          TODO: Accept WordId or Word in Arabic or Word in Franco-Arabic
-          <Route path="/word/:identifier" element={
-          */}
-          <Route path="/word/:wordId" element={
+          </CheckUserLoggedIn>
+        } />
+        <Route path="/reset-password/:token" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <ResetPassword />
+            </div>
+          </div>
+        } />
+        <Route path="/profile" element={
+          <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
             <div className="app">
               <div className="header">
                 <Header />
               </div>
               <div className="content">
-                <WordPage />
+                <UserProfile />
               </div>
             </div>
-          } />
-          <Route path="/login" element={
-            <CheckUserLoggedIn>
-              <div className="app">
-                <div className="header">
-                  <Header />
-                </div>
-                <div className="content">
-                  <LogIn />
-                </div>
-              </div>
-            </CheckUserLoggedIn>
-          } />
-          <Route path="/signup" element={
-            <CheckUserLoggedIn>
-              <div className="app">
-                <div className="header">
-                  <Header />
-                </div>
-                <div className="content">
-                  <SignUp />
-                </div>
-              </div>
-            </CheckUserLoggedIn>
-          } />
-          <Route path="/forgot-password" element={
-            <CheckUserLoggedIn>
-              <div className="app">
-                <div className="header">
-                  <Header />
-                </div>
-                <div className="content">
-                  <ForgotPassword />
-                </div>
-              </div>
-            </CheckUserLoggedIn>
-          } />
-          <Route path="/reset-password/:token" element={
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
-                <ResetPassword />
-              </div>
+          </CheckUserLoggedOut>
+        } />
+        <Route path="/blog" element={
+          <div className="app">
+            <div className="header">
+              <Header />
             </div>
-          } />
-          <Route path="/profile" element={
-            <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
-              <div className="app">
-                <div className="header">
-                  <Header />
-                </div>
-                <div className="content">
-                  <UserProfile />
-                </div>
-              </div>
-            </CheckUserLoggedOut>
-          } />
-          <Route path="/blog" element={
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
-                <Blog />
-                <Footer />
-              </div>
+            <div className="content">
+              <Blog />
+              <Footer />
             </div>
-          } />
-          <Route path="/opportunities" element={
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
-                <PageUnderConstruction />
-              </div>
+          </div>
+        } />
+        <Route path="/opportunities" element={
+          <div className="app">
+            <div className="header">
+              <Header />
             </div>
-          } />
-          <Route path="/about" element={
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
-                <About />
-                <Footer />
-              </div>
+            <div className="content">
+              <PageUnderConstruction />
             </div>
-          } />
-          <Route path="*" element={
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
-                <NotFound />
-              </div>
+          </div>
+        } />
+        <Route path="/about" element={
+          <div className="app">
+            <div className="header">
+              <Header />
             </div>
-          } /> {/* Catch-all route */}
-        </Routes>
-        <div
-          className={'report'}
-          onClick={handleReportClick}
-        >
-          <FontAwesomeIcon
-            icon={faBug}
-            size="1x"
-            className={'home-report-icon'}
-          />
-        </div>
-        <Snackbar
-          open={mustLoginSnackbarOpen}
-          message={t('login.must_login')}
+            <div className="content">
+              <About />
+              <Footer />
+            </div>
+          </div>
+        } />
+        <Route path="*" element={
+          <div className="app">
+            <div className="header">
+              <Header />
+            </div>
+            <div className="content">
+              <NotFound />
+            </div>
+          </div>
+        } /> {/* Catch-all route */}
+      </Routes>
+      <div
+        className={'report'}
+        onClick={handleReportClick}
+      >
+        <FontAwesomeIcon
+          icon={faBug}
+          size="1x"
+          className={'home-report-icon'}
         />
-      </BrowserRouter>
+      </div>
+      <Snackbar
+        open={mustLoginSnackbarOpen}
+        message={t('login.must_login')}
+      />
       {/* TODO: Only in the dev branch */}
       <ReactQueryDevtools />
     </QueryClientProvider>
