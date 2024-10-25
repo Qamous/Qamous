@@ -227,5 +227,13 @@
     "enter_title": "Enter the title",
     "enter_content": "Write a post (Markdown supported)...",
     "markdown_guide": "Markdown Guide"
+  },
+  "advanced_search": {
+    "title": "Advanced Search",
+    "select_country": "Select Country",
+    "search": "Search",
+    "no_results_found": "No results found",
+    "error_message": "An error occurred while fetching data. Please try again later.",
+    "results_for": "Results for "
   }
 }

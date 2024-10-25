@@ -1,0 +1,10 @@
+@use '../../assets/Styles.scss' as styles;
+
+.container-input {
+  align-items: center; /* Center horizontally */
+}
+
+.zero-side-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
