@@ -95,7 +95,7 @@ const AdvancedSearch: React.FC = () => {
             </div>
             <br />
             {!countryName && (
-                <form onSubmit={handleSubmit} className="container-input">
+                <form onSubmit={handleSubmit} className="container-input-center">
                     <div className="container-input">
                         <select
                             id="country"
