@@ -83,8 +83,11 @@ const AdvancedSearch: React.FC = () => {
     return (
         <div className="container zero-side-padding">
             <Helmet>
-                <title>{`${selectedCountry} Dialect Slang Mo3jam`}</title>
-                <meta name="description" content={`Learn ${selectedCountry} Arabic words and what they mean at Qamous' Urban Dictionary. عبارات عامية)`} />
+                {i18n.language === 'ar'
+                  ? <title>{`قاموس عامية ${selectedCountry} لتعلم الكلمات والعبارات العربية`}</title>
+                  : <title>{`${selectedCountry} Dialect Slang Mo3jam Lexicon for learning Arabic words and phrases`}</title>
+                }
+                <meta name="description" content={`Learn ${selectedCountry} Arabic words, phrases, and their meanings at Qamous' Urban Dictionary. Discover the unique slang, dialect, and cultural expressions used in ${selectedCountry}. عبارات عامية, كلمات عربية, تعريفات, ترجمات`} />
                 <meta name="keywords" content={`${selectedCountry}, dialect, slang, words, phrases, definitions, meanings, translations`} />
             </Helmet>
             <div className="container-title">

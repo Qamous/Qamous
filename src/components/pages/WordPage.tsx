@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet';
 import ContentBox, { HomeContentProps } from '../ContentBox';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getCountryName } from '../../assets/utils';
+import { getCountryName, getDemonyms } from '../../assets/utils';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import AdSense from 'react-adsense';
@@ -32,21 +32,31 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
 
 const WordPage = () => {
   const { i18n } = useTranslation();
-  const lang: string = i18n.language;
-  const { wordId } = useParams<{ wordId: string }>();
+  const { wordId, lang } = useParams<{ wordId: string, lang?: string }>();
   const wordIdNumber = Number(wordId) || 0;
   const { data: homeContent, isLoading, error } = useQuery(['homeContent', wordIdNumber], () => fetchHomeContent(wordIdNumber));
   const [countryName, setCountryName] = useState("");
-
+  const [demonyms, setDemonyms] = useState("");
+  
   useEffect(() => {
-    const fetchCountryName = async () => {
+    if (lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang, i18n]);
+  
+  useEffect(() => {
+    const fetchCountryNameAndDemonyms = async () => {
       if (homeContent && homeContent[0]) {
         const name = await getCountryName(homeContent[0].countryCode || "");
         setCountryName(name || "");
+        if (name) {
+          const demonyms = await getDemonyms(name);
+          setDemonyms(demonyms);
+        }
       }
     };
-
-    fetchCountryName();
+    
+    fetchCountryNameAndDemonyms();
   }, [homeContent]);
   
   if (isLoading) return (
@@ -58,14 +68,28 @@ const WordPage = () => {
     </div>
   );
   if (error) return <div>Error fetching data</div>;
-
+  
   // Filter the homeContent based on the current language
-  const filteredHomeContent = homeContent?.filter(content => content.lang === lang);
-
+  const filteredHomeContent = homeContent?.filter(content => content.lang === (lang || i18n.language));
+  
   return (
     <div className='feed'>
       <Helmet>
-        <title>{homeContent?.[0]?.item.word} / {homeContent?.[0]?.item.otherLangWord} Meaning</title>
+        <title>
+          {i18n.language === 'ar'
+            ? `${homeContent?.[0]?.item.word} / ${homeContent?.[0]?.item.otherLangWord} معنى في قاموس العامية للهجات ${countryName}`
+            : `${homeContent?.[0]?.item.word} / ${homeContent?.[0]?.item.otherLangWord} Meaning in ${countryName} Dialect Slang Dictionary`}
+        </title>
+        {i18n.language === 'ar'
+          ? <meta name="description"
+                    content={`تعريف ${homeContent?.[0]?.item.word} في لهجة ${demonyms.split(', ')[0] || 'العربية'} العامية ${demonyms.split(', ').slice(1).join(', ') || 'الترجمة إلى الإنجليزية'}`} />
+          : <meta name="description"
+                    content={`The definition of ${homeContent?.[0]?.item.word} in ${demonyms.split(', ')[0] || 'Arabic'} dialect slang ${demonyms.split(', ').slice(1).join(', ') || 'English translation'}`} />}
+        {i18n.language === 'ar'
+          ? <meta name="keywords"
+                  content={`${homeContent?.[0]?.item.word}, ${demonyms}, عربي إلى إنجليزي, إنجليزي إلى عربي, تعريف, عامية `} />
+          : <meta name="keywords"
+                  content={`${countryName}, ${demonyms}, Arabic to English, English to Arabic, definition, slang, dialect`} />}
       </Helmet>
       <div className="feed-ad-space">
         <AdSense.Google
@@ -97,7 +121,7 @@ const WordPage = () => {
               key={index + 1}
               item={content.item}
               index={index + 1}
-              lang={lang}
+              lang={lang || i18n.language}
               definitionId={content.definitionId}
               wordId={content.wordId}
               countryCode={content.countryCode}
