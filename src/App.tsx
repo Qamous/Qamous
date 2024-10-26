@@ -177,218 +177,104 @@ const App: React.FC = () => {
   // }
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <SpeedInsights/>
-      <Analytics/>
-      <Routes>
-        <Route path="/" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+    <div className="app">
+      <QueryClientProvider client={queryClient}>
+        <SpeedInsights />
+        <Analytics />
+        <Header />
+        <div className="content">
+          <Routes>
+            <Route path="/" element={
               <Home />
-              <Footer />
-            </div>
-          </div>
-        } />
-        <Route path="/advanced-search" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+            } />
+            <Route path="/advanced-search" element={
               <AdvancedSearch />
-            </div>
-          </div>
-        } />
-        <Route path="/advanced-search/:countryName" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+            } />
+            <Route path="/advanced-search/:countryName" element={
               <AdvancedSearch />
-            </div>
-          </div>
-        } />
-        <Route path="/feeling-lucky" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
+            } />
             {/*<div className="ads">*/}
             {/*  <Adverts />*/}
             {/*</div>*/}
-            <div className="content">
+            <Route path="/feeling-lucky" element={
               <WordOfTheDay />
-            </div>
-          </div>
-        } />
-        <Route path="/advertise" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+            } />
+            <Route path="/advertise" element={
               <PageUnderConstruction />
-            </div>
-          </div>
-        } />
-        <Route path="/add-definition" element={
-          <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
+            } />
+            <Route path="/add-definition" element={
+              <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
                 <AddWord />
-              </div>
-            </div>
-          </CheckUserLoggedOut>
-        } />
-        <Route path="/search/:query" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+              </CheckUserLoggedOut>
+            } />
+            <Route path="/search/:query" element={
               <SearchResults />
-            </div>
-          </div>
-        } />
-        {/*
-        TODO: Accept WordId or Word in Arabic or Word in Franco-Arabic
-        <Route path="/word/:identifier" element={
-        */}
-        <Route path="/word/:wordId/:lang?" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+            } />
+            {/*
+          TODO: Accept WordId or Word in Arabic or Word in Franco-Arabic
+          <Route path="/word/:identifier" element={
+          */}
+            <Route path="/word/:wordId/:lang?" element={
               <WordPage />
-            </div>
-          </div>
-        } />
-        <Route path="/login" element={
-          <CheckUserLoggedIn>
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
+            } />
+            <Route path="/login" element={
+              <CheckUserLoggedIn>
                 <LogIn />
-              </div>
-            </div>
-          </CheckUserLoggedIn>
-        } />
-        <Route path="/signup" element={
-          <CheckUserLoggedIn>
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
+              </CheckUserLoggedIn>
+            } />
+            <Route path="/signup" element={
+              <CheckUserLoggedIn>
                 <SignUp />
-              </div>
-            </div>
-          </CheckUserLoggedIn>
-        } />
-        <Route path="/forgot-password" element={
-          <CheckUserLoggedIn>
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
+              </CheckUserLoggedIn>
+            } />
+            <Route path="/forgot-password" element={
+              <CheckUserLoggedIn>
                 <ForgotPassword />
-              </div>
-            </div>
-          </CheckUserLoggedIn>
-        } />
-        <Route path="/reset-password/:token" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+              </CheckUserLoggedIn>
+            } />
+            <Route path="/reset-password/:token" element={
               <ResetPassword />
-            </div>
-          </div>
-        } />
-        <Route path="/profile" element={
-          <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
-            <div className="app">
-              <div className="header">
-                <Header />
-              </div>
-              <div className="content">
+            } />
+            <Route path="/profile" element={
+              <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
                 <UserProfile />
+              </CheckUserLoggedOut>
+            } />
+            <Route path="/blog" element={
+              <div className="app">
+                <Blog />
               </div>
-            </div>
-          </CheckUserLoggedOut>
-        } />
-        <Route path="/blog" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
-              <Blog />
-              <Footer />
-            </div>
-          </div>
-        } />
-        <Route path="/opportunities" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+            } />
+            <Route path="/opportunities" element={
               <PageUnderConstruction />
-            </div>
-          </div>
-        } />
-        <Route path="/about" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+            } />
+            <Route path="/about" element={
               <About />
-              <Footer />
-            </div>
-          </div>
-        } />
-        <Route path="*" element={
-          <div className="app">
-            <div className="header">
-              <Header />
-            </div>
-            <div className="content">
+            } />
+            <Route path="*" element={
               <NotFound />
-            </div>
-          </div>
-        } /> {/* Catch-all route */}
-      </Routes>
-      <div
-        className={'report'}
-        onClick={handleReportClick}
-      >
-        <FontAwesomeIcon
-          icon={faBug}
-          size="1x"
-          className={'home-report-icon'}
+            } /> {/* Catch-all route */}
+          </Routes>
+        </div>
+        <div
+          className={'report'}
+          onClick={handleReportClick}
+        >
+          <FontAwesomeIcon
+            icon={faBug}
+            size="1x"
+            className={'home-report-icon'}
+          />
+        </div>
+        <Footer />
+        <Snackbar
+          open={mustLoginSnackbarOpen}
+          message={t('login.must_login')}
         />
-      </div>
-      <Snackbar
-        open={mustLoginSnackbarOpen}
-        message={t('login.must_login')}
-      />
-      {/* TODO: Only in the dev branch */}
-      <ReactQueryDevtools />
-    </QueryClientProvider>
+        {/* TODO: Only in the dev branch */}
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </div>
   );
 };
 

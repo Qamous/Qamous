@@ -6,7 +6,7 @@
 }
 
 * {
-    scrollbar-width: none;
+  scrollbar-width: none;
 }
 /* custom scrollbar */
 //::-webkit-scrollbar {
@@ -31,13 +31,12 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: auto;
 }
 
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Set the height of the app to 100% of the viewport height */
+  min-height: 100vh; /* Set the height of the app to 100% of the viewport height */
   background-color: styles.$tertiary-color;
 }
 
@@ -50,7 +49,8 @@ body {
 }
 
 .content {
-  overflow: auto;
+  overflow: hidden;
+  flex: 1;
 }
 
 .report {
