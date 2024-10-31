@@ -3,6 +3,7 @@ backend/
 
 # dependencies
 /node_modules/
+package-lock.json
 
 # testing
 
@@ -10,3 +11,7 @@ backend/
 README.md
 LICENSE.md
 readme-files/
+
+# Environment variables (declared in Vercel)
+.env
+.env.local.*
