@@ -1,4 +1,4 @@
-@use '../assets/Styles.scss' as styles;
+@use "../assets/Styles.scss" as styles;
 @use "sass:math";
 
 $font-size: 20px;
@@ -14,200 +14,206 @@ $close-trans-time: 150ms;
 @import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
 
 .search-button {
-    padding: 15px;
-    margin: -7px 10px 0 0;
+  padding: 15px;
+  margin: -7px 10px 0 0;
+  font-size: $font-size;
+  border: solid $frame-thickness styles.$secondary-color;
+  display: inline-block;
+  position: relative;
+  border-radius: $size;
+  background-color: styles.$quaternary-color;
+  cursor: pointer;
+
+  &-bar {
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+    outline: 0;
+    top: 0.35em;
+    left: 0.85em;
+    transform: rotate(-45deg) translateY(2.3em);
+    content: "";
+    background-color: var(--secondary-color);
+    width: 0.2em;
+    height: 1.4em;
+    position: absolute;
+  }
+}
+
+.search-box {
+  font-family: styles.$font-stack;
+}
+
+@media (min-width: 1201px) {
+  .search-overlay-closebtn {
+    display: none;
+  }
+
+  .search-button {
+    display: none;
+  }
+
+  .search-box-submit {
+    display: none;
+  }
+
+  .openBtn {
+    display: none;
+  }
+
+  .search-overlay {
+    display: block;
+    margin-top: -7px;
+  }
+
+  .search-box {
+    padding: 0;
+    margin: 0 7px 0 0;
     font-size: $font-size;
     border: solid $frame-thickness styles.$secondary-color;
     display: inline-block;
     position: relative;
     border-radius: $size;
-    background-color: styles.$quaternary-color;
-    cursor: pointer;
 
-    &-bar {
-        cursor: pointer;
-        border: 0;
-        padding: 0;
-        outline: 0;
-        top: 0.35em;
-        left: 0.85em;
-        transform: rotate(-45deg) translateY(2.3em);
+    input[type="text"] {
+      cursor: pointer;
+      background-color: styles.$quaternary-color;
+      color: styles.$primary-color;
+      font-family: styles.$font-stack;
+      font-weight: bold;
+      width: $size;
+      height: $size;
+      padding: $open-padding;
+      border: none;
+      box-sizing: border-box;
+      border-radius: $size;
+      transition: width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55)
+        $close-trans-time;
+
+      &:focus {
+        cursor: text;
+        outline: none;
+      }
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        width: $open-width;
+        transition: width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+        + button[type="reset"] {
+          transform: rotate(-45deg) translateY(0);
+          transition: transform $close-trans-time ease-out $open-trans-time;
+        }
+
+        + button[type="reset"]:after {
+          opacity: 1;
+          transition: top $close-trans-time ease-out
+              ($open-trans-time + $close-trans-time),
+            right $close-trans-time ease-out
+              ($open-trans-time + $close-trans-time),
+            opacity $close-trans-time ease
+              ($open-trans-time + $close-trans-time);
+        }
+      }
+    }
+
+    button[type="reset"] {
+      cursor: pointer;
+      background-color: transparent;
+      width: $handle-height;
+      height: $handle-height;
+      border: 0;
+      padding: 0;
+      outline: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: math.div($size, 2) - math.div($handle-height, 2);
+      right: math.div($size, 2) - math.div($handle-height, 2);
+      transform: rotate(-45deg) translateY($size - $frame-thickness);
+      transition: transform $close-trans-time ease-out $close-trans-time;
+
+      &:before,
+      &:after {
         content: "";
-        background-color: var(--secondary-color);
-        width: 0.2em;
-        height: 1.4em;
+        background-color: styles.$secondary-color;
+        width: $frame-thickness;
+        height: $handle-height;
         position: absolute;
+      }
+
+      &:after {
+        transform: rotate(90deg);
+        opacity: 0;
+        transition: transform $close-trans-time ease-out,
+          opacity $close-trans-time ease-out;
+      }
     }
-}
-
-.search-box {
-    font-family: styles.$font-stack;
-}
-
-@media (min-width: 1201px) {
-    .search-overlay-closebtn {
-        display: none;
-    }
-
-    .search-button {
-        display: none;
-    }
-
-    .search-box-submit {
-        display: none;
-    }
-
-    .openBtn {
-        display: none;
-    }
-
-    .search-overlay {
-        display: block;
-        margin-top: -7px;
-    }
-
-    .search-box {
-        padding: 0;
-        margin: 0 7px 0 0;
-        font-size: $font-size;
-        border: solid $frame-thickness styles.$secondary-color;
-        display: inline-block;
-        position: relative;
-        border-radius: $size;
-
-        input[type="text"] {
-            cursor: pointer;
-            background-color: styles.$quaternary-color;
-            color: styles.$primary-color;
-            font-family: styles.$font-stack;
-            font-weight: bold;
-            width: $size;
-            height: $size;
-            padding: $open-padding;
-            border: none;
-            box-sizing: border-box;
-            border-radius: $size;
-            transition: width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55) $close-trans-time;
-
-            &:focus {
-                cursor: text;
-                outline: none;
-            }
-
-            &:focus, &:not(:placeholder-shown) {
-                width: $open-width;
-                transition: width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55);
-
-                + button[type="reset"] {
-                    transform: rotate(-45deg) translateY(0);
-                    transition: transform $close-trans-time ease-out $open-trans-time;
-                }
-
-                + button[type="reset"]:after {
-                    opacity: 1;
-                    transition: top $close-trans-time ease-out ($open-trans-time + $close-trans-time),
-                    right $close-trans-time ease-out ($open-trans-time + $close-trans-time),
-                    opacity $close-trans-time ease ($open-trans-time + $close-trans-time);
-                }
-            }
-        }
-
-        button[type="reset"] {
-            cursor: pointer;
-            background-color: transparent;
-            width: $handle-height;
-            height: $handle-height;
-            border: 0;
-            padding: 0;
-            outline: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: math.div($size, 2) - math.div($handle-height, 2);
-            right: math.div($size, 2) - math.div($handle-height, 2);
-            transform: rotate(-45deg) translateY($size - $frame-thickness);
-            transition: transform $close-trans-time ease-out $close-trans-time;
-
-            &:before, &:after {
-                content: "";
-                background-color: styles.$secondary-color;
-                width: $frame-thickness;
-                height: $handle-height;
-                position: absolute;
-            }
-
-            &:after {
-                transform: rotate(90deg);
-                opacity: 0;
-                transition: transform $close-trans-time ease-out,
-                opacity $close-trans-time ease-out;
-            }
-        }
-    }
+  }
 }
 
 @media (max-width: 1200px) {
-    .search-box-reset {
-        display: none;
+  .search-box-reset {
+    display: none;
+  }
+
+  .search-overlay {
+    height: 100%;
+    width: 100%;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.9);
+
+    &-closebtn {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      font-size: 30px;
+      cursor: pointer;
+      color: white;
+
+      &:hover {
+        color: #ccc;
+      }
     }
 
-    .search-overlay {
-        height: 100%;
-        width: 100%;
-        display: none;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: rgb(0,0,0);
-        background-color: rgba(0,0,0, 0.9);
-
-        &-closebtn {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            font-size: 30px;
-            cursor: pointer;
-            color: white;
-
-            &:hover {
-                color: #ccc;
-            }
-        }
-
-        &-content {
-            position: relative;
-            top: 46%;
-            width: 80%;
-            text-align: center;
-            margin: auto;
-        }
-
-        input[type=text] {
-            padding: 15px;
-            font-size: 17px;
-            float: left;
-            width: 95%;
-            background: styles.$quaternary-color;
-            color: styles.$primary-color;
-            border: rgba(255, 255, 255, 0.5) solid 0.5px;
-        }
-
-        button {
-            float: left;
-            min-width: 20%;
-            padding: 15px;
-            color: styles.$primary-color;
-            background: styles.$quaternary-color;
-            font-size: 17px;
-            border: none;
-            cursor: pointer;
-
-            &:hover {
-                background: styles.$primary-color-50;
-                color: styles.$tertiary-color;
-            }
-        }
+    &-content {
+      position: relative;
+      top: 46%;
+      width: 80%;
+      text-align: center;
+      margin: auto;
     }
+
+    input[type="text"] {
+      padding: 15px;
+      font-size: 17px;
+      float: left;
+      width: 95%;
+      background: styles.$quaternary-color;
+      color: styles.$primary-color;
+      border: rgba(255, 255, 255, 0.5) solid 0.5px;
+    }
+
+    button {
+      float: left;
+      min-width: 20%;
+      padding: 15px;
+      color: styles.$primary-color;
+      background: styles.$quaternary-color;
+      font-size: 17px;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+      &:hover {
+        background: styles.$primary-color-50;
+        color: styles.$tertiary-color;
+      }
+    }
+  }
 }
