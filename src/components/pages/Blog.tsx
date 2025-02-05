@@ -5,6 +5,7 @@ import { db } from '../../firebaseConfig';
 import ReactMarkdown from 'react-markdown';
 import './Blog.scss';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 
 interface Post {
   id: string;
@@ -41,16 +42,16 @@ const Blog = () => {
       }
     }
   });
-
+  
   const fetchPosts = async (): Promise<Post[]> => {
     const querySnapshot = await getDocs(collection(db, 'posts'));
     return querySnapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() } as Post))
       .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
   };
-
+  
   const { data: posts, isLoading: postsLoading } = useQuery('posts', fetchPosts);
-
+  
   const addPostMutation = useMutation(
     (newPost: Omit<Post, 'id'>) => addDoc(collection(db, 'posts'), newPost),
     {
@@ -62,7 +63,7 @@ const Blog = () => {
       },
     },
   );
-
+  
   const handlePostSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (postText.trim() && postTitle.trim()) {
@@ -76,9 +77,14 @@ const Blog = () => {
       setPostTitle('');
     }
   };
-
+  
   return (
     <div className="blog">
+      <Helmet>
+        <title>Blog - Qamous</title>
+        <meta name="description" content="Read and post on the Qamous blog. Communicate with other Arabic Speakers. Stay updated with the newest trends and insights." />
+        <meta name="keywords" content="Qamous, blog, posts, trends, insights, technology, updates" />
+      </Helmet>
       <h1>{t('blog.title')}</h1>
       {authLoading ? (
         <div className={'loading-ring'}>
@@ -107,12 +113,12 @@ const Blog = () => {
           <button type="submit">Post</button>
           <small style={{ textAlign: isRtl ? 'right' : 'left', display: 'block' }}>
             <a
-                href="https://www.markdownguide.org/basic-syntax/"
-                target="_blank"
-                rel="noopener noreferrer"
-                dir={isRtl ? 'rtl' : 'ltr'}
-              >
-                {t('blog.markdown_guide')}
+              href="https://www.markdownguide.org/basic-syntax/"
+              target="_blank"
+              rel="noopener noreferrer"
+              dir={isRtl ? 'rtl' : 'ltr'}
+            >
+              {t('blog.markdown_guide')}
             </a>
           </small>
         </form>
@@ -124,7 +130,7 @@ const Blog = () => {
       {postsLoading ? (
         <div className="profile">
           <div className={'loading-ring'}>
-          <div></div>
+            <div></div>
             <div></div>
             <div></div>
             <div></div>

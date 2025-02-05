@@ -10,48 +10,47 @@ interface ToolbarItemsProps {
 
 const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: ToolbarItemsProps) => {
     const { t } = useTranslation();
-
+    
     return (
-        <div className="toolbar-items">
-            <nav>
-                <ul>
-                    <li>
-                        <StyledNavLink to="/"
-                                       language={language}
-                                       isDarkMode={isDarkMode}
-                        >
-                            {t('toolbar_items.home')}
-                        </StyledNavLink>
-                    </li>
-                    <li>
-                        <StyledNavLink to="/advanced-search"
-                                       language={language}
-                                       isDarkMode={isDarkMode}
-                                       className={'toolbar-items-not-built-yet'}
-                        >
-                            {t('toolbar_items.advanced_search')}
-                        </StyledNavLink>
-                    </li>
-                    <li>
-                        <StyledNavLink to="/feeling-lucky"
-                                       language={language}
-                                       isDarkMode={isDarkMode}
-                        >
-                            {t('toolbar_items.word_of_the_day')}
-                        </StyledNavLink>
-                    </li>
-                    <li>
-                        <StyledNavLink to="/advertise"
-                                       language={language}
-                                       isDarkMode={isDarkMode}
-                                       className={'toolbar-items-not-built-yet'}
-                        >
-                            {t('toolbar_items.advertise')}
-                        </StyledNavLink>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+      <div className="toolbar-items">
+          <nav>
+              <ul>
+                  <li>
+                      <StyledNavLink to="/"
+                                     language={language}
+                                     isDarkMode={isDarkMode}
+                      >
+                          {t('toolbar_items.home')}
+                      </StyledNavLink>
+                  </li>
+                  <li>
+                      <StyledNavLink to="/feeling-lucky"
+                                     language={language}
+                                     isDarkMode={isDarkMode}
+                      >
+                          {t('toolbar_items.word_of_the_day')}
+                      </StyledNavLink>
+                  </li>
+                  <li>
+                      <StyledNavLink to="/blog"
+                                     language={language}
+                                     isDarkMode={isDarkMode}
+                      >
+                          {t('toolbar_items.blog')}
+                      </StyledNavLink>
+                  </li>
+                  <li>
+                      <StyledNavLink to="/advanced-search"
+                                     language={language}
+                                     isDarkMode={isDarkMode}
+                        // className={'toolbar-items-not-built-yet'}
+                      >
+                          {t('toolbar_items.advanced_search')}
+                      </StyledNavLink>
+                  </li>
+              </ul>
+          </nav>
+      </div>
     );
 };
 

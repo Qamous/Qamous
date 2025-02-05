@@ -17,7 +17,7 @@ type User = {
   passwordConfirmation: string;
 };
 
-findLocationByIP();
+// findLocationByIP();
 const SignUp: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -102,7 +102,8 @@ const SignUp: React.FC = () => {
       setEmailError(t('sign_up.email_error'));
       return;
     }
-    if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       setEmailError(t('sign_up.email_invalid_error'));
       return;
     }
@@ -115,7 +116,7 @@ const SignUp: React.FC = () => {
       return;
     }
     
-    findLocationByIP();
+    // findLocationByIP();
     
     mutation.mutate({
       username,

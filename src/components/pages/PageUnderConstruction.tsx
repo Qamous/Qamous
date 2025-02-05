@@ -21,15 +21,15 @@ const PageUnderConstruction: React.FC = () => {
     const { i18n, t } = useTranslation();
     // Get the current date
     const currentDate: Date = new Date();
-
+    
     // Set the completion date (v1.1) to August 1st, 2024
     let completionDate: Date = new Date(2024, 12, 1);
-
+    
     // If the current date is past June 1st, 2024, set the completion date to the first day of the upcoming month
     if (currentDate.getTime() > completionDate.getTime()) {
         completionDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
     }
-
+    
     // Function to calculate the time left until the completion date
     const calculateTimeLeft = (): TimeLeft => {
         // Calculate the difference between the completion date and the current time
@@ -41,7 +41,7 @@ const PageUnderConstruction: React.FC = () => {
             minutes: 0,
             seconds: 0,
         };
-
+        
         // If the difference is greater than 0, calculate the time left
         if (difference > 0) {
             timeLeft = {
@@ -51,26 +51,26 @@ const PageUnderConstruction: React.FC = () => {
                 seconds: Math.floor((difference / 1000) % 60),
             };
         }
-
+        
         return timeLeft;
     };
-
+    
     // Use the useState hook to store the time left
     const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
-
+    
     // Use the useEffect hook to update the time left every second
     useEffect(() => {
         const timer = setTimeout(() => {
             setTimeLeft(calculateTimeLeft());
         }, 1000);
-
+        
         // Clear the timeout when the component unmounts
         return () => clearTimeout(timer);
     });
-
+    
     const fontFamily = i18n.language === 'ar' ? styles.fontStackArabic : styles.fontStack;
     const direction = i18n.language === 'ar' ? 'rtl' : 'ltr';
-
+    
     return (
       <div className="page-under-construction" style={{fontFamily: fontFamily, direction: direction}}>
           <h1>{t("common_terms.under_construction")}</h1>

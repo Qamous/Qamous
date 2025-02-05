@@ -265,9 +265,9 @@ $header-shadow: rgba(0, 0, 0, 0.1);
 
 /* Hide the burger menu on screens wider than 1200px */
 @media (min-width: 1201px) {
-  .header-right-side-burger {
-    display: none;
-  }
+    .header-right-side-burger {
+        display: none;
+    }
 }
 
 /* Hide existing menu on screens narrower than 1201px */

@@ -10,7 +10,7 @@ const SearchBar: React.FC = () => {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
-
+  
   const closeSearch = () => {
     if (!isInputFocused) {
       const overlay = document.getElementById("myOverlay");
@@ -19,14 +19,14 @@ const SearchBar: React.FC = () => {
       }
     }
   };
-
+  
   const openSearch = () => {
     const overlay = document.getElementById("myOverlay");
     if (overlay) {
       overlay.style.display = "block";
     }
   };
-
+  
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
     navigate(`/search/${searchQuery}`);
@@ -35,7 +35,7 @@ const SearchBar: React.FC = () => {
     // Close the search bar after navigating
     closeSearch();
   };
-
+  
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 1200) {
@@ -44,13 +44,13 @@ const SearchBar: React.FC = () => {
         closeSearch();
       }
     };
-
+    
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [isInputFocused]);
-
+  
   return (
     <>
       <div className="search-button" onClick={openSearch}>

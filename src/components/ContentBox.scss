@@ -84,7 +84,7 @@
       background-color: styles.$quaternary-color;
       color: white;
 
-      &:hover {
+      &:hover, &:active {
         background-color: #4CAF50;
         border-color: #4CAF50;
       }
@@ -100,7 +100,7 @@
       background-color: styles.$quaternary-color;
       color: white;
 
-      &:hover {
+      &:hover, &:active {
         background-color: #f44336;
         border-color: #f44336;
       }
@@ -127,7 +127,7 @@
         transform: scale(0.95);
       }
 
-      &:hover {
+      &:hover, &:active {
         background-color: styles.$secondary-color;
         border-color: styles.$secondary-color;
       }
@@ -158,7 +158,7 @@
         transform: scale(0.95);
       }
 
-      &:hover {
+      &:hover, &:active {
         background-color: styles.$primary-color;
         border-color: styles.$primary-color;
         color: styles.$quaternary-color;

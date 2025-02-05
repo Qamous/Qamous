@@ -15,15 +15,11 @@ import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
 const Header: React.FC = () => {
     const { i18n, t } = useTranslation();
     const root = document.documentElement;
-
-    const [currentLang, setCurrentLang] =
-        useState(getFunctionalCookie('language') || "en");
-    const [languageButtonStyle, setLanguageButtonStyle] =
-        useState({ opacity: 1 });
-    const [isDarkMode, setDarkMode] =
-      React.useState<boolean>(getFunctionalCookie('darkMode') === 'true' ?? true);
+    const [currentLang, setCurrentLang] = useState(getFunctionalCookie('language') || "en");
+    const [languageButtonStyle, setLanguageButtonStyle] = useState({ opacity: 1 });
+    const [isDarkMode, setDarkMode] = useState<boolean>(getFunctionalCookie('darkMode') === 'true' ?? true);
     const [change, setChange] = useState(false);
-
+    
     const handleCountrySwitch = () => {
         // Toggle between US and EG on click
         setCurrentLang((prevLang) => {
@@ -36,22 +32,24 @@ const Header: React.FC = () => {
             //   lang,
             //   'direction'
             // );
-
+            
             // Return the new country
             return lang;
         });
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
-        if (change)
-            handleBurgerClick();
+        if (change) handleBurgerClick();
     };
+    
     const handleHover = () => {
         // Update opacity
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 0.5 }));
     };
+    
     const handleNoHover = () => {
         // Update opacity
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
     };
+    
     const setTheme = (isDarkMode: boolean): void => {
         root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
         root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
@@ -66,31 +64,32 @@ const Header: React.FC = () => {
         root.style.setProperty('--header-border-color', isDarkMode ? styles.headerBorderColorDark : styles.headerBorderColorLight);
         root.style.setProperty('--icon-background-color', isDarkMode ? styles.iconBackgroundColorDark : styles.iconBackgroundColorLight);
     };
+    
     const toggleDarkMode = (checked: boolean) => {
         setDarkMode(checked);
         setFunctionalCookie('darkMode', checked.toString());
-        if (change)
-            setTimeout(handleBurgerClick, 150);
+        if (change) setTimeout(handleBurgerClick, 150);
     };
+    
     setTheme(isDarkMode);
-
+    
     const overlayNav = useRef<HTMLDivElement>(null);
     const burgerMenuRef = useRef<HTMLDivElement>(null);
-
+    
     const openNav = () => {
         if (overlayNav.current) {
             overlayNav.current.style.width = "100%";
             overlayNav.current.style.opacity = "100%";
         }
     };
-
+    
     const closeNav = () => {
         if (overlayNav.current) {
             overlayNav.current.style.width = "0%";
             overlayNav.current.style.opacity = "0.3";
         }
     };
-
+    
     const handleBurgerClick = () => {
         setChange(!change);
         if (!change) {
@@ -99,32 +98,36 @@ const Header: React.FC = () => {
             closeNav();
         }
     };
-
+    
     const [runTour, setRunTour] = useState(false);
-
+    
     useEffect(() => {
         if (!getFunctionalCookie('tourCompleted')) {
             setRunTour(true);
         }
     }, []);
     
+    useEffect(() => {
+        setCurrentLang(i18n.language);
+    }, [i18n.language]);
+    
     const isPhone = window.innerWidth <= 1200;
-
+    
     const handleJoyrideCallback = (data: CallBackProps) => {
         const { status, index, action } = data;
         const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
-
+        
         if (finishedStatuses.includes(status)) {
             setFunctionalCookie('tourCompleted', 'true');
             setRunTour(false);
         }
-
+        
         // Open the nav-overlay and add .change class when the burger menu step is clicked
         if (isPhone && index === 0 && action === 'next') {
             handleBurgerClick();
         }
     };
-
+    
     const steps: Step[] = isPhone ? [
         {
             target: '.header-right-side-burger',
@@ -238,53 +241,39 @@ const Header: React.FC = () => {
             },
         },
     ];
-
+    
     return (
       <>
           <Joyride
-              steps={steps}
-              run={runTour}
-              continuous
-              showSkipButton
-              callback={handleJoyrideCallback}
-              styles={{
-                  options: {
-                      primaryColor: '#dd8500',
-                  },
-                  tooltipContent: {
-                      color: '#000000', // Ensure the tooltip content text color is black (in case of dark mode)
-                  },
-              }}
+            steps={steps}
+            run={runTour}
+            continuous
+            showSkipButton
+            callback={handleJoyrideCallback}
+            styles={{
+                options: {
+                    primaryColor: '#dd8500',
+                },
+                tooltipContent: {
+                    color: '#000000', // Ensure the tooltip content text color is black (in case of dark mode)
+                },
+            }}
           />
           <div ref={overlayNav} className="nav-overlay">
               <div className="nav-overlay-content">
-                  <NavLink
-                    to="/"
-                    onClick={handleBurgerClick}
-                  >
+                  <NavLink to="/" onClick={handleBurgerClick}>
                       {t('toolbar_items.home')}
                   </NavLink>
-                  <NavLink
-                    to="/advanced-search"
-                    onClick={handleBurgerClick}
-                  >
+                  <NavLink to="/advanced-search" onClick={handleBurgerClick}>
                       {t('toolbar_items.advanced_search')}
                   </NavLink>
-                  <NavLink
-                    to="/feeling-lucky"
-                    onClick={handleBurgerClick}
-                  >
+                  <NavLink to="/feeling-lucky" onClick={handleBurgerClick}>
                       {t('toolbar_items.word_of_the_day')}
                   </NavLink>
-                  <NavLink
-                    to="/blog"
-                    onClick={handleBurgerClick}
-                  >
+                  <NavLink to="/blog" onClick={handleBurgerClick}>
                       {t('toolbar_items.blog')}
                   </NavLink>
-                  <div
-                    className="nav-overlay-content-bottom"
-                  >
+                  <div className="nav-overlay-content-bottom">
                       <DarkModeSwitch
                         className="nav-overlay-content-bottom-mode"
                         checked={isDarkMode}
@@ -293,27 +282,25 @@ const Header: React.FC = () => {
                         sunColor="#dd8500"
                         size={30}
                       />
-
+                      
                       <div
                         className="nav-overlay-content-bottom-language"
                         onClick={handleCountrySwitch}
                         style={languageButtonStyle}
                       >
-                          {currentLang === 'en' ?
+                          {currentLang === 'en' ? (
                             <>
                                 <US title="United States" />
                             </>
-                            : <>
+                          ) : (
+                            <>
                                 <EG title="Egypt" />
                             </>
-                          }
+                          )}
                       </div>
-
+                      
                       <div className="nav-overlay-content-bottom-user">
-                          <NavLink
-                            to="/login"
-                            onClick={handleBurgerClick}
-                          >
+                          <NavLink to="/login" onClick={handleBurgerClick}>
                               <i className="fa-solid fa-user"></i>
                               <FontAwesomeIcon icon={faUser} size="sm"/>
                               {/*<img src={userImage} alt={t('common_terms.user')} />*/}
@@ -336,36 +323,35 @@ const Header: React.FC = () => {
                     isDarkMode={isDarkMode}
                   /> {/* Insert the ToolbarItems component above the SearchBar */}
               </div>
-
+              
               <div className="header-right-side">
                   <SearchBar />
-
-                  <div
-                    className="header-right-side-add">
+                  <div className="header-right-side-add">
                       <NavLink to="/add-definition">
                           <FontAwesomeIcon icon={faPlus} size="2x" />
                       </NavLink>
                   </div>
-
                   <div className="header-right-side-divider"></div>
-
-                  <div className="header-right-side-language"
-                       onClick={handleCountrySwitch}
-                       onMouseEnter={handleHover}
-                       onMouseLeave={handleNoHover}
-                       style={languageButtonStyle}>
-                      {currentLang === 'en' ?
+                  <div
+                    className="header-right-side-language"
+                    onClick={handleCountrySwitch}
+                    onMouseEnter={handleHover}
+                    onMouseLeave={handleNoHover}
+                    style={languageButtonStyle}
+                  >
+                      {currentLang === 'en' ? (
                         <>
                             <US title="United States" />
                             <p>EN</p>
                         </>
-                        : <>
+                      ) : (
+                        <>
                             <EG title="Egypt" />
                             <p>AR</p>
                         </>
-                      }
+                      )}
                   </div>
-
+                  
                   <DarkModeSwitch
                     className="header-right-side-mode"
                     checked={isDarkMode}
@@ -373,7 +359,7 @@ const Header: React.FC = () => {
                     moonColor="#bfbfbf"
                     sunColor="#dd8500"
                   />
-
+                  
                   <div className="header-right-side-user">
                       <NavLink to="/login">
                           <i className="fa-solid fa-user"></i>
@@ -381,7 +367,7 @@ const Header: React.FC = () => {
                           {/*<img src={userImage} alt={t('common_terms.user')} />*/}
                       </NavLink>
                   </div>
-
+                  
                   {/* Burger menu */}
                   <nav
                     ref={burgerMenuRef}

@@ -82,9 +82,9 @@ const WordPage = () => {
         </title>
         {i18n.language === 'ar'
           ? <meta name="description"
-                    content={`تعريف ${homeContent?.[0]?.item.word} في لهجة ${demonyms.split(', ')[0] || 'العربية'} العامية ${demonyms.split(', ').slice(1).join(', ') || 'الترجمة إلى الإنجليزية'}`} />
+                  content={`تعريف ${homeContent?.[0]?.item.word} في لهجة ${demonyms.split(', ')[0] || 'العربية'} العامية ${demonyms.split(', ').slice(1).join(', ') || 'الترجمة إلى الإنجليزية'}`} />
           : <meta name="description"
-                    content={`The definition of ${homeContent?.[0]?.item.word} in ${demonyms.split(', ')[0] || 'Arabic'} dialect slang ${demonyms.split(', ').slice(1).join(', ') || 'English translation'}`} />}
+                  content={`The definition of ${homeContent?.[0]?.item.word} in ${demonyms.split(', ')[0] || 'Arabic'} dialect slang ${demonyms.split(', ').slice(1).join(', ') || 'English translation'}`} />}
         {i18n.language === 'ar'
           ? <meta name="keywords"
                   content={`${homeContent?.[0]?.item.word}, ${demonyms}, عربي إلى إنجليزي, إنجليزي إلى عربي, تعريف, عامية `} />

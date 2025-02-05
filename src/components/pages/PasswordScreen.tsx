@@ -20,7 +20,7 @@ const PasswordScreen: React.FC<{ onPasswordCorrect: () => void }> = ({ onPasswor
       setError(true);
     }
   };
-
+  
   return (
     <div className="password-screen">
       <form onSubmit={handlePasswordSubmit}>

@@ -65,6 +65,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   const [showInvalidInputDialog, setShowInvalidInputDialog] = useState(false);
   const [countryName, setCountryName] = useState<string>('');
   const [showTooltip, setShowTooltip] = useState(false);
+  const [instagramSnackbarOpen, setInstagramSnackbarOpen] = useState(false);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -186,7 +187,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
     const originalHeight = contentBox.style.height;
     
     const boundingRect = contentBox.getBoundingClientRect();
-    const sideLength = Math.max(boundingRect.width, boundingRect.height);
+    const sideLength = Math.max(boundingRect.width, boundingRect.height, 1080);
     
     contentBox.style.width = `${sideLength}px`;
     contentBox.style.height = `${sideLength}px`;
@@ -222,6 +223,10 @@ const ContentBox: React.FC<HomeContentProps> = ({
         link.download = `${item.word}.png`;
         link.href = dataUrl;
         link.click();
+        setInstagramSnackbarOpen(false);
+        setTimeout(() => {
+          setInstagramSnackbarOpen(true);
+        }, 100);
       })
       .catch((error) => {
         console.error('oops, something went wrong!', error);
@@ -467,7 +472,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
             className={`content-box-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
             onClick={handleReportClick}
           >
-          {buttonText.report}
+            {buttonText.report}
           </button>
         </div>
       )}
@@ -482,6 +487,10 @@ const ContentBox: React.FC<HomeContentProps> = ({
       <Snackbar
         open={mustLoginSnackbarOpen}
         message={t('login.must_login')}
+      />
+      <Snackbar
+        open={instagramSnackbarOpen}
+        message={t('content_box_buttons.instagram_download')}
       />
     </div>
   );

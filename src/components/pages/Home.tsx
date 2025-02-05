@@ -44,7 +44,7 @@ const Home: React.FC = () => {
     returnObjects: true,
   }) as JsonContent[];
   const lang = i18n.language;
-
+  
   const {
     data,
     isLoading,
@@ -55,10 +55,10 @@ const Home: React.FC = () => {
     getNextPageParam: (lastPage, pages) => lastPage.length === 10 ? pages.length + 1 : undefined,
     refetchOnWindowFocus: false,
   });
-
+  
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
-
+  
   useEffect(() => {
     if (isError) {
       setErrorSnackbarOpen(false);
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
       }, 100);
     }
   }, [isError]);
-
+  
   // Beta warning dialog (only shows once a week + disabled for now + has a visual glitch as it shows up on load and then re-renders once the data is fetched)
   // useEffect(() => {
   //   const lastShown = getCookie('betaWarningShown');
@@ -77,18 +77,18 @@ const Home: React.FC = () => {
   //     setCookieWithExpiration('betaWarningShown', new Date().toISOString(), 7);
   //   }
   // }, []);
-
+  
   const [useIntersectionObserverElement, isIntersecting] = useIntersectionObserver({
     threshold: 0.1,
     rootMargin: '50px',
   });
-
+  
   useEffect(() => {
     if (isIntersecting && hasNextPage) {
       fetchNextPage();
     }
   }, [isIntersecting, fetchNextPage, hasNextPage]);
-
+  
   if (isLoading) {
     return (
       <div className={'feed'}>
@@ -118,7 +118,7 @@ const Home: React.FC = () => {
       </div>
     );
   }
-
+  
   if (isError) {
     return (
       <div className={'feed'}>
@@ -146,7 +146,7 @@ const Home: React.FC = () => {
       </div>
     );
   }
-
+  
   return (
     <>
       <div className={'feed'}>

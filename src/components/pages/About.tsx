@@ -2,13 +2,17 @@ import React from 'react';
 import './About.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFlag, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { Helmet } from 'react-helmet';
 
 const About: React.FC = () => {
   const { t } = useTranslation();
   return (
     <div className={'about'} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+      <Helmet>
+        <title>About Us - Learn More About Qamous</title>
+        <meta name="description" content="Discover more about Qamous, our mission, and the team behind the project. Learn how we aim to enhance your vocabulary with Franco Arabic slang." />
+        <meta name="keywords" content="Qamous, about Qamous, Franco Arabic slang, vocabulary, language learning, team, mission" />
+      </Helmet>
       <div className="about-hero">
         <div className="about-hero-txt">
           <h1>{t('about.title')}</h1>

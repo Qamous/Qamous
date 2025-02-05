@@ -6,14 +6,14 @@ import { useTranslation } from 'react-i18next';
 
 interface CustomDialogProps {
   text: ReactNode;
-  buttonText1?: string; // Make this prop optional
-  buttonText2?: string; // Make this prop optional
-  onButton1Click?: () => void; // Make this prop optional
-  onButton2Click?: () => void; // Make this prop optional
-  onClose?: () => void; // Make this prop optional
-  showTextInput?: boolean; // Make this prop optional
-  onSubmit?: (input: string) => void; // Make this prop optional
-  onCancel?: () => void; // Make this prop optional
+  buttonText1?: string;
+  buttonText2?: string;
+  onButton1Click?: () => void;
+  onButton2Click?: () => void;
+  onClose?: () => void;
+  showTextInput?: boolean;
+  onSubmit?: (input: string) => void;
+  onCancel?: () => void;
   okButtonText?: string;
   onOkButtonClick?: () => void;
 }

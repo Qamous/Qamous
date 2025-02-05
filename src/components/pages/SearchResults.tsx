@@ -5,6 +5,7 @@ import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AdSense from 'react-adsense';
 import { useQuery } from 'react-query';
+import { Helmet } from 'react-helmet';
 
 interface SearchResult {
   word: string;
@@ -107,6 +108,11 @@ const SearchResults: React.FC = () => {
   
   return (
     <div className={'feed'}>
+      <Helmet>
+        <title>{`Search Results for "${query}"`}</title>
+        <meta name="description" content={`Find the best definitions and translations for "${query}" in both Arabic and English. Explore detailed meanings, usage examples, and more.`} />
+        <meta name="keywords" content={`search results, ${query}, Arabic to English, English to Arabic, definitions, translations, slang, dialect`} />
+      </Helmet>
       <div className="feed-ad-space">
         <AdSense.Google
           client='ca-pub-4293590491700199'
