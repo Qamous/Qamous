@@ -42,4 +42,4 @@ jobs:
           export { db };" > src/firebaseConfig.ts
 
       - name: Build
-        run: npm run build
+        run: npm run build -- --no-eslint

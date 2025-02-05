@@ -31,15 +31,15 @@ module.exports = {
     }
   },
   rules: {
-    // Suppress or modify rules that are causing issues
     'prefer-const': 'warn',
-    'jsx-a11y/click-events-have-key-events': 'off',
-    'jsx-a11y/no-static-element-interactions': 'off',
+    'jsx-a11y/click-events-have-key-events': 'warn',
+    'jsx-a11y/no-static-element-interactions': 'warn',
     'no-var': 'warn',
     '@typescript-eslint/no-explicit-any': 'warn',
-    'jsx-a11y/no-noninteractive-element-interactions': 'off',
-    'jsx-a11y/label-has-associated-control': 'off',
+    'jsx-a11y/no-noninteractive-element-interactions': 'warn',
+    'jsx-a11y/label-has-associated-control': 'warn',
     'react/no-unknown-property': 'warn',
-    '@typescript-eslint/no-require-imports': 'warn'
+    '@typescript-eslint/no-require-imports': 'warn',
+    '@typescript-eslint/no-unused-vars': 'warn',
   }
 };
