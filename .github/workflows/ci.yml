@@ -22,5 +22,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create Firebase Config
+        run: |
+          echo "import { initializeApp } from 'firebase/app';
+          import { getAnalytics } from 'firebase/analytics';
+          import { getFirestore } from 'firebase/firestore';
+          const firebaseConfig = {
+            apiKey: '${{ secrets.FIREBASE_API_KEY }}',
+            authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}',
+            projectId: '${{ secrets.FIREBASE_PROJECT_ID }}',
+            storageBucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}',
+            messagingSenderId: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}',
+            appId: '${{ secrets.FIREBASE_APP_ID }}',
+            measurementId: '${{ secrets.MEASUREMENT_ID }}'
+          };
+          const app = initializeApp(firebaseConfig);
+          const db = getFirestore(app);
+          const analytics = getAnalytics(app);
+          export { db };" > src/firebaseConfig.ts
+
       - name: Build
         run: npm run build
