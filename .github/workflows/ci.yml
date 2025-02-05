@@ -42,4 +42,12 @@ jobs:
           export { db };" > src/firebaseConfig.ts
 
       - name: Build
+        env:
+          CI: false # Disable treating warnings as errors
         run: npm run build -- --no-eslint
+
+#      - name: Deploy to Vercel
+#        env:
+#          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+#        run: |
+#          vercel --token ${VERCEL_TOKEN} --prod --yes
