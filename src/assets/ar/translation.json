@@ -225,6 +225,9 @@
     "please_log_in_to_post": "يرجى <a href='/login' class='login-link'>تسجيل الدخول</a> للنشر",
     "enter_title": "أدخل عنوان المدونة",
     "enter_content": "اكتب المدونة (يدعم التنسيق بالماركداون)...",
+    "post": "نشر",
+    "preview": "معاينة",
+    "edit": "تعديل",
     "markdown_guide": "دليل الماركداون (Markdown)"
   },
   "advanced_search": {

@@ -1,13 +1,13 @@
 # Node.js dependencies
-/node_modules
-/.pnp
+/node_modules/
+/.pnp/
 .pnp.js
 
 # Test coverage
 /coverage
 
 # Production build
-/build
+/build/
 
 # Package manager locks
 package-lock.json
@@ -30,5 +30,5 @@ firestore.rules
 src/firebaseConfig.js
 
 # Vercel and IDE-specific
-/.vercel
-/.idea
+/.vercel/
+/.idea/

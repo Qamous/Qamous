@@ -26,6 +26,7 @@ const queryClient = new QueryClient({
 const Blog = () => {
   const [postText, setPostText] = useState('');
   const [postTitle, setPostTitle] = useState('');
+  const [isPreviewing, setIsPreviewing] = useState(false);
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === 'ar';
   
@@ -78,6 +79,38 @@ const Blog = () => {
     }
   };
   
+  const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
+    const date = new Date(timestamp.seconds * 1000);
+    
+    // Format for English
+    if (i18n.language === 'en') {
+      return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+        hour12: true
+      }).format(date);
+    }
+    
+    // Format for Arabic
+    if (i18n.language === 'ar') {
+      return new Intl.DateTimeFormat('ar-SA', {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+        hour12: true
+      }).format(date);
+    }
+    
+    // Default format
+    return date.toLocaleString();
+  };
+  
+  // Preview toggle handler
+  const togglePreview = () => {
+    setIsPreviewing(!isPreviewing);
+  };
+  
   return (
     <div className="blog">
       <Helmet>
@@ -102,15 +135,37 @@ const Blog = () => {
             placeholder={t('blog.enter_title')}
             dir={isRtl ? 'rtl' : 'ltr'}
           />
-          <textarea
-            value={postText}
-            onChange={(e) => setPostText(e.target.value)}
-            placeholder={t('blog.enter_content')}
-            rows={5}
-            style={{ resize: 'vertical', color: 'black' }}
-            dir={isRtl ? 'rtl' : 'ltr'}
-          />
-          <button type="submit">Post</button>
+          {!isPreviewing ? (
+            <textarea
+              value={postText}
+              onChange={(e) => setPostText(e.target.value)}
+              placeholder={t('blog.enter_content')}
+              dir={isRtl ? 'rtl' : 'ltr'}
+            />
+          ) : (
+            <div className="preview-container">
+              <h2>{postTitle}</h2>
+              <div className="post-content">
+                <ReactMarkdown>{postText}</ReactMarkdown>
+              </div>
+            </div>
+          )}
+          <div className="form-buttons">
+            <button
+              type="button"
+              onClick={togglePreview}
+              className={`preview-button ${!postText.trim() || !postTitle.trim() ? 'disabled' : ''}`}
+              disabled={!postText.trim() || !postTitle.trim()}
+            >
+              {isPreviewing ? t('blog.edit') : t('blog.preview')}
+            </button>
+            <button
+              type="submit"
+              disabled={!postTitle.trim() || !postText.trim()}
+            >
+              {t('blog.post')}
+            </button>
+          </div>
           <small style={{ textAlign: isRtl ? 'right' : 'left', display: 'block' }}>
             <a
               href="https://www.markdownguide.org/basic-syntax/"
@@ -123,29 +178,34 @@ const Blog = () => {
           </small>
         </form>
       ) : (
-        <div className="not-logged-in">
+        <div className="login-message">
           <p dangerouslySetInnerHTML={{ __html: t('blog.please_log_in_to_post') }}></p>
         </div>
       )}
-      {postsLoading ? (
-        <div className="profile">
-          <div className={'loading-ring'}>
+      <div className="posts">
+        {postsLoading ? (
+          <div className="loading-ring">
             <div></div>
             <div></div>
             <div></div>
             <div></div>
           </div>
-        </div>
-      ) : (
-        posts && posts.map(post => (
-          <div key={post.id} className="post">
-            <h2>{post.title}</h2>
-            <ReactMarkdown>{post.content}</ReactMarkdown>
-            <span className="profile-post-date">{new Date(post.createdAt.seconds * 1000).toLocaleString()}</span>
-            {posts.indexOf(post) !== posts.length - 1 && <hr />}
-          </div>
-        ))
-      )}
+        ) : (
+          posts?.map((post) => (
+            <article key={post.id} className="post">
+              <header className="post-header">
+                <h2>{post.title}</h2>
+                <small dir={isRtl ? 'rtl' : 'ltr'} className="post-date">
+                  {formatDate(post.createdAt)}
+                </small>
+              </header>
+              <div className="post-content">
+                <ReactMarkdown>{post.content}</ReactMarkdown>
+              </div>
+            </article>
+          ))
+        )}
+      </div>
     </div>
   );
 };

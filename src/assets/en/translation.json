@@ -226,6 +226,9 @@
     "please_log_in_to_post": "Please <a href='/login' class='login-link'>log in</a> to post",
     "enter_title": "Enter the title",
     "enter_content": "Write a post (Markdown supported)...",
+    "post": "Post",
+    "preview": "Preview",
+    "edit": "Edit",
     "markdown_guide": "Markdown Guide"
   },
   "advanced_search": {
