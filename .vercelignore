@@ -1,15 +1,16 @@
-# Ignore Build and Dependencies
+# backend
+backend/
+
+# dependencies
 /node_modules/
 package-lock.json
-/build/
 
-# Ignore Test Coverage Files
-/coverage
+# testing
 
-# Ignore Documentation Files
-/README.md
-/LICENSE.md
-/readme-files/
+# ReadMe, License, etc.
+README.md
+LICENSE.md
+readme-files/
 
 # Environment variables (declared in Vercel)
 .env
