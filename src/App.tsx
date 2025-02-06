@@ -1,9 +1,8 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import './App.scss';
 import Header from './components/Header';
-import { BrowserRouter, NavLink, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import WordOfTheDay from './components/pages/WordOfTheDay';
-import Adverts from './components/Adverts';
 import Home from './components/pages/Home';
 import translationEN from './assets/en/translation.json';
 import translationAR from './assets/ar/translation.json';
@@ -29,7 +28,6 @@ import About from './components/pages/About';
 import Footer from './components/Footer';
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
-import PasswordScreen from './components/pages/PasswordScreen';
 import Blog from './components/pages/Blog';
 import AdvancedSearch from './components/pages/AdvancedSearch';
 // Adverts bar: Uncomment the following line to enable the adverts bar
@@ -66,12 +64,9 @@ interface CheckUserStatusProps {
   children: ReactNode;
 }
 
-let userId = null;
-
 const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [userStatus, setUserStatus] = useState(null);
   
   const checkUserStatus = async () => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, {
@@ -93,7 +88,6 @@ const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   useEffect(() => {
     if (location.pathname === '/login' || location.pathname === '/signup') {
       checkUserStatus().then(status => {
-        setUserStatus(status);
         if (status) {
           navigate('/profile', { state: { user: status } });
         }
@@ -109,7 +103,6 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
 }> = ({ children, setMustLoginSnackbarOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [userStatus, setUserStatus] = useState(null);
   
   const checkUserStatus = async () => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, {
@@ -137,7 +130,6 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
   
   useEffect(() => {
     checkUserStatus().then(status => {
-      setUserStatus(status);
       if (!status) {
         handleMustLoginSnackbarOpen();
         navigate('/login');
