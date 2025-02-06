@@ -24,7 +24,7 @@
     "connect-redis": "^7.1.1",
     "country-flag-icons": "^1.5.9",
     "csv-parser": "^3.0.0",
-    "express-session": "^1.18.0",
+    "express-session": "^1.18.1",
     "firebase": "^11.0.1",
     "font-awesome": "^4.7.0",
     "gsap": "^3.12.5",
