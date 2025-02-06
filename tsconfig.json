@@ -20,8 +20,6 @@
     "noEmit": true,
     "jsx": "preserve"
   },
-  "files": [
-  ],
   "include": [
     "*.d.ts",
     "src",

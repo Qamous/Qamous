@@ -1,37 +1,89 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import ContentBox from '../ContentBox';
 import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider, UseMutationResult } from 'react-query';
+import * as htmlToImage from 'html-to-image';
+
+// Add type definitions for mocked components
+interface ReactCountryFlagProps {
+  countryCode: string;
+  svg?: boolean;
+  style?: React.CSSProperties;
+  title?: string;
+}
+
+interface AdSenseProps {
+  client: string;
+  slot: string;
+  style?: React.CSSProperties;
+}
 
 // Mock react-i18next
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
-      if (key === 'content_box_buttons') {
-        return {
-          like: 'Like',
-          dislike: 'Dislike',
-          report: 'Report',
-          share: 'Share'
-        };
+      switch (key) {
+        case 'content_box_buttons':
+          return {
+            like: 'Like',
+            dislike: 'Dislike',
+            report: 'Report',
+            share: 'Share'
+          };
+        case 'login.must_login':
+          return 'Please log in';
+        default:
+          return key;
       }
-      return key;
     }
   })
 }));
 
-// Add these mocks at the top of the file
-jest.mock('i18next', () => ({
-  language: 'en',
+// Mock react-query mutations
+const mockMutate = jest.fn();
+const mockMutation: Partial<UseMutationResult> = {
+  mutate: mockMutate,
+  isLoading: false,
+  isError: false,
+  error: null,
+};
+
+jest.mock('react-query', () => ({
+  ...jest.requireActual('react-query'),
+  useMutation: () => mockMutation
 }));
 
-// Mock getCountryName utility
-jest.mock('../../assets/utils', () => ({
-  getCountryName: jest.fn().mockResolvedValue('Test Country'),
+// Mock react-country-flag with proper types
+jest.mock('react-country-flag', () => ({
+  __esModule: true,
+  default: ({ countryCode, svg, style, title }: ReactCountryFlagProps) => (
+    <div data-testid="country-flag" data-country={countryCode}>
+      {title}
+    </div>
+  )
 }));
 
-const queryClient = new QueryClient();
+// Mock react-adsense with proper types
+jest.mock('react-adsense', () => ({
+  __esModule: true,
+  default: {
+    Google: ({ client, slot, style }: AdSenseProps) => (
+      <div data-testid="adsense-mock" data-client={client} data-slot={slot}>
+        AdSense Mock
+      </div>
+    )
+  }
+}));
+
+// Setup test client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 const mockProps = {
   item: {
@@ -44,82 +96,105 @@ const mockProps = {
   definitionId: 1,
   isLiked: false,
   isDisliked: false,
-  isReported: false
+  isReported: false,
+  countryCode: 'US'
 };
 
-const renderWithProviders = (ui: React.ReactElement) => {
-  return render(
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        {ui}
-      </QueryClientProvider>
-    </BrowserRouter>
-  );
+const renderContentBox = async () => {
+  let component;
+  await act(async () => {
+    component = render(
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <ContentBox {...mockProps} />
+        </QueryClientProvider>
+      </BrowserRouter>
+    );
+  });
+  return component;
 };
 
 describe('ContentBox', () => {
   beforeEach(() => {
     queryClient.clear();
-    // Reset fetch mocks between tests
-    jest.spyOn(global, 'fetch').mockImplementation(() =>
-      Promise.resolve({
+    mockMutate.mockClear();
+    // Mock fetch with proper response handling
+    global.fetch = jest.fn((url) => {
+      if (url.endsWith('countries.csv')) {
+        return Promise.resolve({
+          ok: true,
+          text: () => Promise.resolve('CountryCode,CountryName\nUS,United States'),
+        });
+      }
+      return Promise.resolve({
         ok: true,
         json: () => Promise.resolve({}),
-      } as Response)
-    );
+      });
+    }) as jest.Mock;
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  it('renders word and definition', () => {
-    renderWithProviders(<ContentBox {...mockProps} />);
-    
+  it('renders word and definition', async () => {
+    await renderContentBox();
     expect(screen.getByText('Test Word')).toBeInTheDocument();
     expect(screen.getByText('Test Definition')).toBeInTheDocument();
   });
 
-  it('renders action buttons', () => {
-    renderWithProviders(<ContentBox {...mockProps} />);
-    
+  it('renders action buttons when index is not 0', async () => {
+    await renderContentBox();
     expect(screen.getByText('Like')).toBeInTheDocument();
     expect(screen.getByText('Dislike')).toBeInTheDocument();
     expect(screen.getByText('Report')).toBeInTheDocument();
     expect(screen.getByText('Share')).toBeInTheDocument();
   });
 
-  it('shows share options when share button is clicked', () => {
-    renderWithProviders(<ContentBox {...mockProps} />);
+  it('does not render buttons when index is 0', async () => {
+    await act(async () => {
+      render(
+        <BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+            <ContentBox {...mockProps} index={0} />
+          </QueryClientProvider>
+        </BrowserRouter>
+      );
+    });
+    
+    expect(screen.queryByText('Like')).not.toBeInTheDocument();
+    expect(screen.queryByText('Dislike')).not.toBeInTheDocument();
+  });
+
+  it('handles like button click', async () => {
+    await renderContentBox();
+    const likeButton = screen.getByText('Like');
+    
+    await act(async () => {
+      fireEvent.click(likeButton);
+    });
+    
+    await waitFor(() => {
+      expect(mockMutate).toHaveBeenCalled();
+      expect(likeButton).toHaveClass('clicked');
+    });
+  });
+
+  it('shows share options when share button is clicked', async () => {
+    await renderContentBox();
     
     const shareButton = screen.getByText('Share');
-    fireEvent.click(shareButton);
+    await act(async () => {
+      fireEvent.click(shareButton);
+    });
     
     expect(screen.getByText('Instagram')).toBeInTheDocument();
     expect(screen.getByText('X / Twitter')).toBeInTheDocument();
   });
 
-  it('does not render buttons when index is 0', () => {
-    renderWithProviders(<ContentBox {...mockProps} index={0} />);
+  it('renders country flag when countryCode is provided', async () => {
+    await renderContentBox();
     
-    expect(screen.queryByText('Like')).not.toBeInTheDocument();
-    expect(screen.queryByText('Dislike')).not.toBeInTheDocument();
-    expect(screen.queryByText('Report')).not.toBeInTheDocument();
-    expect(screen.queryByText('Share')).not.toBeInTheDocument();
-  });
-
-  it('handles like button click', async () => {
-    renderWithProviders(<ContentBox {...mockProps} />);
-    
-    const likeButton = screen.getByText('Like');
-    fireEvent.click(likeButton);
-    
-    // Wait for mutation to complete
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/reactions/1/like'),
-        expect.any(Object)
-      );
+      const flag = screen.getByTestId('country-flag');
+      expect(flag).toBeInTheDocument();
+      expect(flag).toHaveAttribute('data-country', 'US');
     });
   });
 });

@@ -73,3 +73,22 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
+
+// Mock fetch for countries.csv
+const mockCountriesCSV = `CountryCode,CountryName
+US,United States
+GB,United Kingdom
+FR,France`;
+
+global.fetch = jest.fn((url) => {
+  if (url.endsWith('countries.csv')) {
+    return Promise.resolve({
+      ok: true,
+      text: () => Promise.resolve(mockCountriesCSV),
+    });
+  }
+  return Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve({}),
+  });
+}) as jest.Mock;
