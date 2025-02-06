@@ -1,5 +1,4 @@
 import { defineConfig } from "vite";
-import
 import svgrPlugin from "vite-plugin-svgr";
 import envCompatible from "vite-plugin-env-compatible";
 
