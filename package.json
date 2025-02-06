@@ -55,7 +55,7 @@
   "scripts": {
     "start": "set PORT=3001 && vite",
     "build": "tsc && vite build",
-    "test": "jest",
+    "test": "jest --config jest.config.js",
     "serve": "vite preview"
   },
   "eslintConfig": {

@@ -45,7 +45,7 @@ jobs:
       - name: Build
         env:
           CI: false # Disable treating warnings as errors
-        run: npm run build -- --no-eslint
+        run: npm run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
