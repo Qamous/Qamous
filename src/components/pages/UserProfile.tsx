@@ -68,7 +68,7 @@ const UserProfile = () => {
   const { t } = useTranslation();
   
   const fetchDefinitions = (userId: number) =>
-    fetch(`${process.env.REACT_APP_API_URL}/definitions/user/${userId}`)
+    fetch(`${import.meta.env.VITE_API_URL}/definitions/user/${userId}`)
       .then(response => response.json())
       .then(data => {
         setDefinitions(data);
@@ -79,7 +79,7 @@ const UserProfile = () => {
       });
   
   const fetchUserData = (userId: number) =>
-    fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`)
+    fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`)
       .then(response => response.json())
       .then(data => {
         setLikesReceived(data.likesReceived);
@@ -97,7 +97,7 @@ const UserProfile = () => {
   };
   
   const logoutMutation = useMutation(() =>
-      fetch(`${process.env.REACT_APP_API_URL}/auth/logout`, {
+      fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ const UserProfile = () => {
           ...updatedDefinition,
           definition: editedText,
         };
-        fetch(`${process.env.REACT_APP_API_URL}/definitions/${submittingPostId}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/definitions/${submittingPostId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ const UserProfile = () => {
   };
   
   const handleDeleteAccountSubmit = (): void => {
-    fetch(`${process.env.REACT_APP_API_URL}/users/` + userId, {
+    fetch(`${import.meta.env.VITE_API_URL}/users/` + userId, {
       method: 'DELETE',
       credentials: 'include',
     })

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './ContentBox.scss';
-import styles from '../assets/Styles.scss';
+import * as styles from '../assets/Styles.module.scss';
 import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
@@ -87,7 +87,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   };
   
   const likeMutation = useMutation(() =>
-    fetch(`${process.env.REACT_APP_API_URL}/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
       method: 'POST',
       credentials: 'include',
     }).then(response => {
@@ -100,7 +100,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   });
   
   const dislikeMutation = useMutation(() =>
-    fetch(`${process.env.REACT_APP_API_URL}/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
       method: 'POST',
       credentials: 'include',
     }).then(response => {
@@ -141,7 +141,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   };
   
   const reportWord = async ({ reportText }: { reportText: string }) => {
-    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/word-reports`, {
+    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/word-reports`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -291,7 +291,7 @@ const ContentBox: React.FC<HomeContentProps> = ({
   };
   
   const reportDefinition = async ({ reportText }: { reportText: string }) => {
-    const response: Response = await fetch(`${process.env.REACT_APP_API_URL}/definition-reports`, {
+    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/definition-reports`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

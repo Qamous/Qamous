@@ -40,7 +40,7 @@ const SignUp: React.FC = () => {
   const [dialogMessage, setDialogMessage] = useState('');
   
   const mutation = useMutation((newUser: User) =>
-    fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
+    fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

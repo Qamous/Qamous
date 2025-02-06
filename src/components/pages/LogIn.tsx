@@ -28,7 +28,7 @@ const Login: React.FC = () => {
   const mutation = useMutation((data: {
     username: string;
     password: string;
-  }) => fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
+  }) => fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -69,7 +69,7 @@ const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   const navigate = useNavigate();
   
   const checkUserStatus = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/session`, {
       credentials: 'include', // Include credentials in the request
     });
     if (response.ok) {
@@ -105,7 +105,7 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
   const navigate = useNavigate();
   
   const checkUserStatus = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/session`, {
       credentials: 'include',
     });
     if (response.ok) {

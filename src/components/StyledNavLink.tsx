@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import './StyledNavLink.scss';
-import styles from '../assets/Styles.scss';
+import * as styles from '../assets/Styles.module.scss';
 
 interface StyledNavLinkProps extends NavLinkProps {
   language: string;

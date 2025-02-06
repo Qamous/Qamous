@@ -8,7 +8,7 @@
  * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
  * These variables are used to maintain a consistent design language and ease future design updates.
  */
-:root {
+:export {
   --primary-color: #ffffff;
   --secondary-color: #dd8500;
   --tertiary-color: #000000;

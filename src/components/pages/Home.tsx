@@ -33,7 +33,7 @@ interface JsonContent {
 }
 
 const fetchHomeContent: (page: number, limit: number) => Promise<HomeContent[]> = (page = 1, limit = 10) =>
-  fetch(`${process.env.REACT_APP_API_URL}/definitions/most-liked?page=${page}&limit=${limit}`, {
+  fetch(`${import.meta.env.VITE_API_URL}/definitions/most-liked?page=${page}&limit=${limit}`, {
     mode: 'cors',
     credentials: 'include',
   }).then(response => response.json());

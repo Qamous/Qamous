@@ -21,7 +21,7 @@ interface JsonContent {
 }
 
 const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/word/search/kwd=` + query, {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/word/search/kwd=` + query, {
     mode: 'cors',
     credentials: 'include',
   });

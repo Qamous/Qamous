@@ -31,7 +31,7 @@ const Blog = () => {
   const isRtl = i18n.language === 'ar';
   
   const { data: authData, isLoading: authLoading } = useQuery('authStatus', async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/session`, { credentials: 'include' });
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/session`, { credentials: 'include' });
     if (!response.ok) {
       throw new Error('Not logged in');
     }

@@ -53,7 +53,7 @@ const AddWord = () => {
     };
     
     try {
-      const wordResponse = await fetch(`${process.env.REACT_APP_API_URL}/word`, {
+      const wordResponse = await fetch(`${import.meta.env.VITE_API_URL}/word`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const AddWord = () => {
           countryName: selectedCountries[0],
         };
         
-        const arabicDefinitionResponse = await fetch(`${process.env.REACT_APP_API_URL}/definitions`, {
+        const arabicDefinitionResponse = await fetch(`${import.meta.env.VITE_API_URL}/definitions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ const AddWord = () => {
           countryName: selectedCountries[0],
         };
         
-        const englishDefinitionResponse = await fetch(`${process.env.REACT_APP_API_URL}/definitions`, {
+        const englishDefinitionResponse = await fetch(`${import.meta.env.VITE_API_URL}/definitions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

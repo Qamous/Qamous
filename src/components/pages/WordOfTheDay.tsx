@@ -18,7 +18,7 @@ interface WordOfTheDayContent {
 }
 
 const fetchWordOfTheDayContent = () =>
-  fetch(`${process.env.REACT_APP_API_URL}/definitions/random-matching`, {
+  fetch(`${import.meta.env.VITE_API_URL}/definitions/random-matching`, {
       mode: 'cors',
       credentials: 'include',
   })
