@@ -1,6 +1,6 @@
-// General utils for managing cookies in Typescript.
-
 import { useEffect, useRef, useState } from 'react';
+
+// General utils for managing cookies in Typescript.
 
 /**
  * This function sets a cookie with a given name and value. This cookie is considered functional and is, then,
@@ -39,10 +39,10 @@ export function setCookie(name: string, value: string, date: Date) {
  */
 export function setCookieWithExpiration(name: string, value: string, expirationTime: number) {
   const date = new Date();
-
+  
   // Set it to expire in expirationTime days
   date.setTime(date.getTime() + (expirationTime * 24 * 60 * 60 * 1000));
-
+  
   // Set it
   document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
 }
@@ -102,10 +102,10 @@ export function getCookie(name: string): string | null {
  */
 export function deleteCookie(name: string) {
   const date = new Date();
-
+  
   // Set it expire in -1 days
   date.setTime(date.getTime() + (-1 * 24 * 60 * 60 * 1000));
-
+  
   // Set it
   document.cookie = name + "=; expires=" + date.toUTCString() + "; path=/";
 }
@@ -133,7 +133,7 @@ export function convertNumerals(number: string, language: string): string {
     '.': ',',
     ',': '،'
   };
-
+  
   const latinNumeralsMap: Record<string, string> = {
     '٠': '0',
     '١': '1',
@@ -148,12 +148,12 @@ export function convertNumerals(number: string, language: string): string {
     ',': '.',
     '،': ','
   };
-
+  
   const isArabicNumerals = /[٠١٢٣٤٥٦٧٨٩،.]/.test(number);
-
+  
   // make language lowercase
   language = language.toLowerCase();
-
+  
   if (language === 'ar' && !isArabicNumerals) {
     return number.split('').map(char => arabicNumeralsMap[char] || char).join('');
   } else if ((language === 'en' || language === 'fr') && isArabicNumerals) {
@@ -251,7 +251,7 @@ export interface NominatimAddress {
   [key: string]: string | undefined; // ISO3166-2-lvl_
 }
 
-var options = {
+const options = {
   enableHighAccuracy: true,
   timeout: 5000,
   maximumAge: 0,
@@ -265,19 +265,19 @@ var options = {
  * @returns {Promise<NominatimAddress>} - The user's location details.
  */
 async function success(pos: GeolocationPosition): Promise<NominatimAddress> {
-  var crd = pos.coords;
+  const crd = pos.coords;
   // Get the user's country based on their latitude and longitude
   const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${crd.latitude}&lon=${crd.longitude}`);
   const data = await response.json();
   const address: NominatimAddress = data.address;
-
+  
   // Log the ISO3166-2-lvl keys and values
   // for (const key in address) {
   //   if (key.startsWith('ISO3166-2-lvl')) {
   //     console.log(`Key: ${key}, Value: ${address[key]}`);
   //   }
   // }
-
+  
   // console.log('Your current position is:');
   //console.log(`Latitude : ${crd.latitude}`);
   //console.log(`Longitude: ${crd.longitude}`);
@@ -425,7 +425,7 @@ interface Country {
  * @returns undefined - If the country code is not found.
  */
 export async function getCountryName(countryCode: string | undefined): Promise<string> {
-  let countries: { [key: string]: string } = {};
+  const countries: { [key: string]: string } = {};
   
   try {
     // Fetch and parse the CSV file
@@ -460,8 +460,7 @@ export async function getCountryName(countryCode: string | undefined): Promise<s
  * @returns undefined - If the country name is not found.
  */
 export async function getCountryCode(countryName: string | undefined): Promise<string> {
-  let countries: { [key: string]: string } = {};
-  
+  const countries: { [key: string]: string } = {};
   try {
     // Fetch and parse the CSV file
     const response = await fetch('/countries.csv');
@@ -481,7 +480,8 @@ export async function getCountryCode(countryName: string | undefined): Promise<s
     if (!countryName) {
       return '';
     }
-    return countries[countryName] || '';
+    const trimmedCountryName = countryName.trim();
+    return countries[trimmedCountryName] || '';
   } catch (error) {
     console.error('Failed to fetch country code:', error);
     return '';

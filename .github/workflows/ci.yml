@@ -71,7 +71,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    # Only deploy if the build and test jobs are successful and the push is to the main branch
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && needs.build.outcome == 'success' && needs.test.outcome == 'success'
     steps:
       - uses: actions/checkout@v4
 
