@@ -1,5 +1,5 @@
 //@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+//in use: @import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 /**
  * SCSS Variables Section
@@ -8,7 +8,7 @@
  * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
  * These variables are used to maintain a consistent design language and ease future design updates.
  */
-:export {
+:root {
   --primary-color: #ffffff;
   --secondary-color: #dd8500;
   --tertiary-color: #000000;
