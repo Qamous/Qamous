@@ -22,7 +22,7 @@ The Qamous Frontend is the client-side component of the Qamous application, a pl
     - Create a `.env` file in the root directory.
     - Define the following environment variables:
       ```
-      REACT_APP_API_URL=<your-backend-api-url>
+      VITE_API_URL=<your-backend-api-url>
       ```
 5. Start the server: `npm start`
 

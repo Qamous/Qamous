@@ -46,7 +46,7 @@ const AdvancedSearch: React.FC = () => {
   const fetchResults = async (country: string) => {
     try {
       const encodedCountryCode = await getCountryCode(country);
-      const url = `${process.env.REACT_APP_API_URL}/word/search/iso=${encodedCountryCode}`;
+      const url = `${import.meta.env.VITE_API_URL}/word/search/iso=${encodedCountryCode}`;
       const response = await fetch(url, {
         method: 'GET',
         headers: {

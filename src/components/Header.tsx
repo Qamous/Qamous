@@ -7,10 +7,11 @@ import { NavLink } from "react-router-dom";
 import './Header.scss';
 import { US, EG } from 'country-flag-icons/react/3x2'
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-import styles from '../assets/Styles.scss';
+import * as styles from '../assets/Styles.module.scss';
 import { setFunctionalCookie, getFunctionalCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
+import qamousLogo from '../assets/qamous-logo-transparent.png';
 
 const Header: React.FC = () => {
     const { i18n, t } = useTranslation();
@@ -311,13 +312,13 @@ const Header: React.FC = () => {
           </div>
           <div className="header">
               <div className="header-left-side">
-                  <NavLink to="/">
-                      <img
-                        src={require('../assets/qamous-logo-transparent.png')}
+                <NavLink to="/">
+                    <img
+                        src={qamousLogo}
                         alt={t('common_terms.qamous')}
                         loading="lazy"
-                      /> {/* TODO: do more research on lazy loading for a faster experience */}
-                  </NavLink>
+                    /> {/* TODO: do more research on lazy loading for a faster experience */}
+                </NavLink>
                   <ToolbarItems
                     language={currentLang}
                     isDarkMode={isDarkMode}

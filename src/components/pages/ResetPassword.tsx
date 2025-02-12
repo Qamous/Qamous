@@ -17,7 +17,7 @@ const ResetPassword = () => {
     event.preventDefault();
     
     // Call the reset-password API with the token and the new password
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/users/reset-password/` + token, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/users/reset-password/` + token, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -2,14 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Welcome to Qamous, a platform for learning colloquial / slang Arabic words and phrases. Our goal is to provide a comprehensive resource for learners of Arabic dialects, including the Egyptian, Levantine, Gulf, and many more dialects."
     />
-    <meta property="og:image" content="%PUBLIC_URL%/preview.png">
+    <meta property="og:image" content="/preview.png">
     <meta property="og:site_name" content="Qamous">
     <meta property="og:title" content="Qamous">
     <meta
@@ -17,7 +17,7 @@
       content="Welcome to Qamous, a platform for learning colloquial Arabic words and phrases. Our goal is to provide a comprehensive resource for learners of Arabic dialects, including the Egyptian, Levantine, Gulf, and many more dialects."
     />
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:image" content="%PUBLIC_URL%/preview.png">
+    <meta property="twitter:image" content="/preview.png">
     <meta property="twitter:title" content="Qamous">
     <meta
       property="twitter:description"
@@ -29,7 +29,7 @@
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -38,6 +38,8 @@
       Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
+
+      THIS IS NO LONGER RELEVANT SINCE WE SWITCHED TO VITE
     -->
     <title>Qamous</title>
 
@@ -51,6 +53,7 @@
       }
     </script>
     <!-- YAMLI CODE END -->
+    <script type="module" src="/src/index.jsx"></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

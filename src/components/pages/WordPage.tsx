@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import AdSense from 'react-adsense';
 
 const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
-  const res = await fetch(`${process.env.REACT_APP_API_URL}/definitions/word/${wordId}`);
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/definitions/word/${wordId}`);
   if (!res.ok) {
     throw new Error('Network response was not ok');
   }
