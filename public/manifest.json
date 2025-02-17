@@ -1,15 +1,35 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Qamous",
+  "name": "Qamous - Dictionary",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "250x250",
       "type": "image/x-icon"
+    },
+    {
+      "src": "favicon-2.ico",
+      "sizes": "200x200",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "favicon-3.ico",
+      "sizes": "150x150",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "../src/assets/qamous-logo-transparent.png",
+      "sizes": "2000x707",
+      "type": "image/png"
+    },
+    {
+      "src": "../src/assets/qamous-logo-no-background.svg",
+      "sizes": "1500x530",
+      "type": "image/svg"
     }
   ],
   "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "display": "fullscreen",
+  "theme_color": "#dd8500",
+  "background_color": "#292929"
 }
