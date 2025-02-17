@@ -171,6 +171,18 @@
         color: styles.$quaternary-color;
       }
     }
+
+    &-view-button {
+      border-color: styles.$primary-color;
+      background-color: styles.$quaternary-color;
+      color: white;
+
+      &:hover, &:active {
+        background-color: styles.$primary-color;
+        border-color: styles.$primary-color;
+        color: styles.$quaternary-color;
+      }
+    }
   }
 }
 

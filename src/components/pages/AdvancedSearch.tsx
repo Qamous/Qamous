@@ -178,6 +178,7 @@ const AdvancedSearch: React.FC = () => {
                 isDisliked={result.isDisliked}
                 isReported={result.isReported}
                 countryCode={result.countryCode}
+                isAdvancedSearch={true}
               />
             ))}
         </div>
