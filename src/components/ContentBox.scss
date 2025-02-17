@@ -3,6 +3,12 @@
 .content-box {
   background-color: styles.$quaternary-color;
   width: 100%;
+  border-radius: 8px;
+
+  // border-radius: 0 for max-width: 1200px
+  @media (max-width: 1200px) {
+    border-radius: 0;
+  }
 
   &-title {
     padding: 0 25px 0 25px;

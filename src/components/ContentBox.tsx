@@ -78,11 +78,19 @@ const ContentBox: React.FC<HomeContentProps> = ({
     setShowInvalidInputDialog(false);
   };
   
-  const handleMutationError = (error: Response) => {
-    console.error('There has been a problem with your fetch operation:', error);
-    if (error.status === 401 || error.status === 403) {
-      setMustLoginSnackbarOpen(true);
-      navigate('/login');
+  const handleMutationError = async (error: any) => {
+    if (error instanceof Response) {
+      if (error.status === 401 || error.status === 403) {
+        setMustLoginSnackbarOpen(true);
+        navigate('/login');
+        return; // Early return after navigation
+      }
+      // Handle other response errors if needed
+      const errorData = await error.json();
+      console.error('API Error:', errorData);
+    } else {
+      // Handle non-Response errors
+      console.error('Mutation Error:', error);
     }
   };
   
@@ -112,31 +120,80 @@ const ContentBox: React.FC<HomeContentProps> = ({
     onError: handleMutationError,
   });
   
-  const handleLikeClick = () => {
-    if (clickCount < 5) {
-      setClickCount(prevCount => prevCount + 1);
-      if (dislikeClicked && !likeClicked) handleDislikeClick();
-      setLikeClicked(!likeClicked);
-      likeMutation.mutate();
-    } else if (clickCount >= 5) {
+  // 1 API call to switch between like and dislike
+  const switchReactionMutation = useMutation(
+    (toReaction: 'like' | 'dislike') =>
+      fetch(`${process.env.REACT_APP_API_URL}/reactions/${definitionId}/switch-reaction`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ toReaction }),
+        credentials: 'include'
+      }).then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      }), {
+      onError: handleMutationError,
+    }
+  );
+  
+  const handleLikeClick = async () => {
+    setClickCount(prevCount => prevCount + 1);
+    
+    if (clickCount >= 10) {
       setExcessiveClickSnackbarOpen(false);
       setTimeout(() => {
         setExcessiveClickSnackbarOpen(true);
       }, 100);
+      setClickCount(0);
+    } else {
+      try {
+        if (dislikeClicked) {
+          // Only use switch-reaction when changing from dislike to like
+          await switchReactionMutation.mutateAsync('like');
+          setDislikeClicked(false);
+          setLikeClicked(true);
+        } else {
+          // Use original like/unlike for all other cases
+          await likeMutation.mutateAsync();
+          setLikeClicked(!likeClicked);
+        }
+      } catch (error) {
+        // Error handling is done in the useMutation onError callback
+        return;
+      }
     }
   };
   
-  const handleDislikeClick = () => {
-    if (clickCount < 5) {
-      setClickCount(prevCount => prevCount + 1);
-      if (likeClicked && !dislikeClicked) handleLikeClick();
-      setDislikeClicked(!dislikeClicked);
-      dislikeMutation.mutate();
-    } else if (clickCount >= 5) {
+  const handleDislikeClick = async () => {
+    setClickCount(prevCount => prevCount + 1);
+  
+    if (clickCount >= 10) {
       setExcessiveClickSnackbarOpen(false);
       setTimeout(() => {
         setExcessiveClickSnackbarOpen(true);
       }, 100);
+      setClickCount(0);
+    }
+    else {
+      try {
+        if (likeClicked) {
+          // Only use switch-reaction when changing from like to dislike
+          await switchReactionMutation.mutateAsync('dislike');
+          setLikeClicked(false);
+          setDislikeClicked(true);
+        } else {
+          // Use original dislike/undislike for all other cases
+          await dislikeMutation.mutateAsync();
+          setDislikeClicked(!dislikeClicked);
+        }
+      } catch (error) {
+        // Error handling is done in the useMutation onError callback
+        return;
+      }
     }
   };
   
