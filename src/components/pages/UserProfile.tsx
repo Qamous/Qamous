@@ -79,7 +79,7 @@ const UserProfile = () => {
       });
   
   const fetchUserData = (userId: number) =>
-    fetch(`${process.env.VITE_API_URL}/users/me/points`, {
+    fetch(`${import.meta.env.VITE_API_URL}/users/me/points`, {
         credentials: 'include',
       })
       .then(response => response.json())

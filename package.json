@@ -53,7 +53,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "set PORT=3001 && vite",
+    "start": "vite",
     "build": "tsc && vite build",
     "test": "jest --config jest.config.js",
     "serve": "vite preview"

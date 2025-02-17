@@ -113,7 +113,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   // 1 API call to switch between like and dislike
   const switchReactionMutation = useMutation(
     (toReaction: 'like' | 'dislike') =>
-      fetch(`${process.env.REACT_APP_API_URL}/reactions/${definitionId}/switch-reaction`, {
+      fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/switch-reaction`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
