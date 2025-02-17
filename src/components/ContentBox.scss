@@ -184,6 +184,22 @@
       }
     }
   }
+
+  &-example {
+    padding: 0 25px 15px 25px;
+    font-style: italic;
+    color: styles.$secondary-color;
+    border-left: 3px solid styles.$secondary-color;
+    margin: 0 25px 15px 25px;
+
+    &::before {
+      content: "Example:";
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-style: normal;
+    }
+  }
 }
 
 .tooltip {

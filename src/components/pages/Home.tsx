@@ -24,7 +24,8 @@ interface HomeContent {
   countryCode: string
   isLiked: number,
   isDisliked: number,
-  isReported: number
+  isReported: number,
+  example: string
 }
 
 interface JsonContent {
@@ -107,6 +108,7 @@ const Home: React.FC = () => {
             isLiked={false}
             isDisliked={false}
             isReported={false}
+            example={""}
           />
           <div className={'loading-ring'}>
             <div></div>
@@ -137,6 +139,7 @@ const Home: React.FC = () => {
             isLiked={false}
             isDisliked={false}
             isReported={false}
+            example={""}
           />
         </div>
         <Snackbar
@@ -185,6 +188,7 @@ const Home: React.FC = () => {
             isLiked={false}
             isDisliked={false}
             isReported={false}
+            example={""}
           />
           <div className="feed-posts-ad-space">
             <AdSense.Google
@@ -219,6 +223,7 @@ const Home: React.FC = () => {
                     isLiked={item.isLiked !== 0}
                     isDisliked={item.isDisliked !== 0}
                     isReported={item.isReported !== 0}
+                    example={item.example}
                   />
                   {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
                     <AdSense.Google

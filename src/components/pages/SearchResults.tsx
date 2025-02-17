@@ -16,6 +16,7 @@ interface SearchResult {
   isLiked: boolean;
   isDisliked: boolean;
   isReported: boolean;
+  example: string;
 }
 
 interface JsonContent {
@@ -148,6 +149,7 @@ const SearchResults: React.FC = () => {
                 isDisliked={false}
                 isReported={false}
                 definitionHuh={false}
+                example={""}
               />
               <div className="feed-posts-ad-space">
                 <AdSense.Google
@@ -202,6 +204,7 @@ const SearchResults: React.FC = () => {
               isLiked={result.isLiked}
               isDisliked={result.isDisliked}
               isReported={result.isReported}
+              example={result.example}
             />
           ))
         }

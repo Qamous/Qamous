@@ -27,6 +27,7 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
     isDisliked: item.dislikeCount > 0,
     isReported: item.reportCount > 0,
     countryCode: item.countryCode,
+    example: item.example
   }));
 };
 
@@ -128,6 +129,7 @@ const WordPage = () => {
               isLiked={content.isLiked}
               isDisliked={content.isDisliked}
               isReported={content.isReported}
+              example={content.example}
             />
             {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
               <AdSense.Google

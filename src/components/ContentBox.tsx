@@ -27,6 +27,7 @@ export interface HomeContentProps {
   isReported: boolean,
   countryCode?: string,
   definitionHuh?: boolean,
+  example: string,
   isAdvancedSearch?: boolean,
   // likeCount: number,
   // dislikeCount: number,
@@ -39,7 +40,7 @@ interface ButtonText {
   share: string,
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example }) => {
   const { t } = useTranslation();
   const buttonText = t('content_box_buttons', { returnObjects: true }) as ButtonText;
   
@@ -484,6 +485,11 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
       {definitionHuh !== false && (
         <div className={'content-box-description'}>
           <p>{item.definition}</p>
+        </div>
+      )}
+      {example && example != "" && (
+        <div className="content-box-example">
+          {example}
         </div>
       )}
       {index !== 0 && (
