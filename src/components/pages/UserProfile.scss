@@ -34,7 +34,7 @@
   width: 55%;
 
   // center within .content
-  margin: 25px auto 25px auto;
+  margin: 25px auto;
   padding: 32px;
   background-color: styles.$quaternary-color;
   //padding: 5px 15px 15px 15px;
@@ -435,9 +435,10 @@
 
 @media (max-width: 1200px) {
   .profile {
-    width: 100%;
+    width: calc(100% - 10px); // TODO: Bad solution for the width, but it works for now
     margin: 0 auto; // makes the animation smoother (centered)
-    padding: 0;
+    padding: 5px;
+    border-radius: 0;
 
     h1 {
       font-size: 40px;
