@@ -32,3 +32,6 @@ src/firebaseConfig.js
 # Vercel and IDE-specific
 /.vercel/
 /.idea/
+
+# Local Netlify folder
+.netlify
