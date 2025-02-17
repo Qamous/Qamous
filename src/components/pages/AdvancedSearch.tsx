@@ -160,6 +160,7 @@ const AdvancedSearch: React.FC = () => {
               isLiked={false}
               isDisliked={false}
               isReported={false}
+              example={""}
             />
           )}
           {results.filter(result => i18n.language === 'ar' ? result.isArabic === 1 : result.isArabic === 0)
@@ -179,6 +180,7 @@ const AdvancedSearch: React.FC = () => {
                 isReported={result.isReported}
                 countryCode={result.countryCode}
                 isAdvancedSearch={true}
+                example={""} // TODO: Add example to the results
               />
             ))}
         </div>

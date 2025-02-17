@@ -97,7 +97,8 @@ const mockProps = {
   isLiked: false,
   isDisliked: false,
   isReported: false,
-  countryCode: 'US'
+  countryCode: 'US',
+  example: ""
 };
 
 const renderContentBox = async () => {
