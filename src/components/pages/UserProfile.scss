@@ -29,20 +29,23 @@
     margin: 5px auto;
   }
 }
+
 .profile {
   width: 55%;
 
   // center within .content
-  margin: 25px auto 25px auto;
+  margin: 25px auto;
+  padding: 32px;
   background-color: styles.$quaternary-color;
   //padding: 5px 15px 15px 15px;
   transition: margin 0.4s, width 0.4s;
+  border-radius: 8px;
 
   display: flex;
   flex-direction: column;
 
   &-title {
-    margin: 10px 0 0;
+    margin: 0;
     width: 100%;
     text-align: center;
     font-weight: 400;
@@ -150,7 +153,7 @@
   }
 
   &-post {
-    margin: 20px 10px 10px;
+    margin: 20px 0 10px;
 
     hr {
       border: 0;
@@ -277,6 +280,38 @@
     margin: 5px 5px 10px;
   }
 
+  &-points-breakdown {
+    background-color: rgba(221, 133, 0, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+
+    .points-total {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: styles.$secondary-color;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .points-details {
+      color: styles.$primary-color-75;
+      margin: 10px 0;
+
+      div {
+        margin: 5px 0;
+        font-size: 0.9em;
+        text-align: center;
+      }
+
+      .points-info {
+        font-size: 0.8em;
+        color: styles.$primary-color-50;
+        font-style: italic;
+      }
+    }
+  }
+
   /*
   &-card {
     margin: 20px 0 0 0;
@@ -382,10 +417,28 @@
   */
 }
 
+.user-rank {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: styles.$secondary-color;
+  padding-top: 10px;
+  border-top: 1px solid styles.$primary-color-40;
+
+  .rank-info {
+    font-size: 0.8em;
+    color: styles.$primary-color-75;
+    font-weight: normal;
+    margin-top: 5px;
+  }
+}
+
 @media (max-width: 1200px) {
   .profile {
-    width: 100%;
+    width: calc(100% - 10px); // TODO: Bad solution for the width, but it works for now
     margin: 0 auto; // makes the animation smoother (centered)
+    padding: 5px;
+    border-radius: 0;
 
     h1 {
       font-size: 40px;

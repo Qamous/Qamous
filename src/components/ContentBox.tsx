@@ -27,6 +27,7 @@ export interface HomeContentProps {
   isReported: boolean,
   countryCode?: string,
   definitionHuh?: boolean,
+  isAdvancedSearch?: boolean,
   // likeCount: number,
   // dislikeCount: number,
 }
@@ -38,24 +39,13 @@ interface ButtonText {
   share: string,
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({
-                                                  item,
-                                                  index,
-                                                  lang,
-                                                  wordId,
-                                                  definitionId,
-                                                  countryCode,
-                                                  isLiked,
-                                                  isDisliked,
-                                                  isReported,
-                                                  definitionHuh,
-                                                }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch }) => {
   const { t } = useTranslation();
   const buttonText = t('content_box_buttons', { returnObjects: true }) as ButtonText;
   
-  const [likeClicked, setLikeClicked] = useState(isLiked);
-  const [dislikeClicked, setDislikeClicked] = useState(isDisliked);
-  const [reportClicked, setReportClicked] = useState(isReported);
+  const [likeClicked, setLikeClicked] = useState<boolean>(isLiked);
+  const [dislikeClicked, setDislikeClicked] = useState<boolean>(isDisliked);
+  const [reportClicked, setReportClicked] = useState<boolean>(isReported);
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
@@ -78,11 +68,19 @@ const ContentBox: React.FC<HomeContentProps> = ({
     setShowInvalidInputDialog(false);
   };
   
-  const handleMutationError = (error: Response) => {
-    console.error('There has been a problem with your fetch operation:', error);
-    if (error.status === 401 || error.status === 403) {
-      setMustLoginSnackbarOpen(true);
-      navigate('/login');
+  const handleMutationError = async (error: any) => {
+    if (error instanceof Response) {
+      if (error.status === 401 || error.status === 403) {
+        setMustLoginSnackbarOpen(true);
+        navigate('/login');
+        return; // Early return after navigation
+      }
+      // Handle other response errors if needed
+      const errorData = await error.json();
+      console.error('API Error:', errorData);
+    } else {
+      // Handle non-Response errors
+      console.error('Mutation Error:', error);
     }
   };
   
@@ -112,31 +110,80 @@ const ContentBox: React.FC<HomeContentProps> = ({
     onError: handleMutationError,
   });
   
-  const handleLikeClick = () => {
-    if (clickCount < 5) {
-      setClickCount(prevCount => prevCount + 1);
-      if (dislikeClicked && !likeClicked) handleDislikeClick();
-      setLikeClicked(!likeClicked);
-      likeMutation.mutate();
-    } else if (clickCount >= 5) {
+  // 1 API call to switch between like and dislike
+  const switchReactionMutation = useMutation(
+    (toReaction: 'like' | 'dislike') =>
+      fetch(`${process.env.REACT_APP_API_URL}/reactions/${definitionId}/switch-reaction`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ toReaction }),
+        credentials: 'include'
+      }).then(response => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response.json();
+      }), {
+      onError: handleMutationError,
+    }
+  );
+  
+  const handleLikeClick = async () => {
+    setClickCount(prevCount => prevCount + 1);
+    
+    if (clickCount >= 10) {
       setExcessiveClickSnackbarOpen(false);
       setTimeout(() => {
         setExcessiveClickSnackbarOpen(true);
       }, 100);
+      setClickCount(0);
+    } else {
+      try {
+        if (dislikeClicked) {
+          // Only use switch-reaction when changing from dislike to like
+          await switchReactionMutation.mutateAsync('like');
+          setDislikeClicked(false);
+          setLikeClicked(true);
+        } else {
+          // Use original like/unlike for all other cases
+          await likeMutation.mutateAsync();
+          setLikeClicked(!likeClicked);
+        }
+      } catch (error) {
+        // Error handling is done in the useMutation onError callback
+        return;
+      }
     }
   };
   
-  const handleDislikeClick = () => {
-    if (clickCount < 5) {
-      setClickCount(prevCount => prevCount + 1);
-      if (likeClicked && !dislikeClicked) handleLikeClick();
-      setDislikeClicked(!dislikeClicked);
-      dislikeMutation.mutate();
-    } else if (clickCount >= 5) {
+  const handleDislikeClick = async () => {
+    setClickCount(prevCount => prevCount + 1);
+  
+    if (clickCount >= 10) {
       setExcessiveClickSnackbarOpen(false);
       setTimeout(() => {
         setExcessiveClickSnackbarOpen(true);
       }, 100);
+      setClickCount(0);
+    }
+    else {
+      try {
+        if (likeClicked) {
+          // Only use switch-reaction when changing from like to dislike
+          await switchReactionMutation.mutateAsync('dislike');
+          setLikeClicked(false);
+          setDislikeClicked(true);
+        } else {
+          // Use original dislike/undislike for all other cases
+          await dislikeMutation.mutateAsync();
+          setDislikeClicked(!dislikeClicked);
+        }
+      } catch (error) {
+        // Error handling is done in the useMutation onError callback
+        return;
+      }
     }
   };
   
@@ -441,39 +488,66 @@ const ContentBox: React.FC<HomeContentProps> = ({
       )}
       {index !== 0 && (
         <div className="content-box-buttons">
-          <button
-            className={`content-box-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
-            onClick={handleLikeClick}
-          >
-            {buttonText.like}
-          </button>
-          <button
-            className={`content-box-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
-            onClick={handleDislikeClick}
-          >
-            {buttonText.dislike}
-          </button>
-          <div className="tooltip">
-            <button
-              className={`content-box-buttons-share-button`}
-              onClick={handleShareClick}
-            >
-              {buttonText.share}
-            </button>
-            {showTooltip && (
-              <div className="tooltiptext">
-                <button onClick={handleInstagramShareClick}>Instagram</button>
-                {/*<button onClick={handleFacebookShare}>Facebook</button>*/}
-                <button onClick={handleXShare}>X / Twitter</button>
+          {isAdvancedSearch ? (
+            <>
+              <Link to={`/word/${wordId}`}>
+                <button className="content-box-buttons-view-button">
+                  {t('user_profile.pick_other_definitions')}
+                </button>
+              </Link>
+              <div className="tooltip">
+                <button
+                  className="content-box-buttons-share-button"
+                  onClick={handleShareClick}
+                >
+                  {buttonText.share}
+                </button>
+                {showTooltip && (
+                  <div className="tooltiptext">
+                    <button onClick={handleInstagramShareClick}>Instagram</button>
+                    {/*<button onClick={handleFacebookShare}>Facebook</button>*/}
+                    <button onClick={handleXShare}>X / Twitter</button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <button
-            className={`content-box-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
-            onClick={handleReportClick}
-          >
-            {buttonText.report}
-          </button>
+            </>
+          ) : (
+            <>
+              <button
+                className={`content-box-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
+                onClick={handleLikeClick}
+              >
+                {buttonText.like}
+              </button>
+              <button
+                className={`content-box-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
+                onClick={handleDislikeClick}
+              >
+                {buttonText.dislike}
+              </button>
+              <div className="tooltip">
+                <button
+                  className="content-box-buttons-share-button"
+                  onClick={handleShareClick}
+                >
+                  {buttonText.share}
+                </button>
+                {showTooltip && (
+                  <div className="tooltiptext">
+                    <button onClick={handleInstagramShareClick}>Instagram</button>
+                    {/*<button onClick={handleFacebookShare}>Facebook</button>*/}
+                    <button onClick={handleXShare}>X / Twitter</button>
+                  </div>
+                )}
+              </div>
+              <button
+                className={`content-box-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
+                onClick={handleReportClick}
+              >
+                {buttonText.report}
+              </button>
+            </>
+          )}
         </div>
       )}
       <Snackbar

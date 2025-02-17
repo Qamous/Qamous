@@ -10,11 +10,26 @@ import AdSense from 'react-adsense';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
+interface AdvancedSearchProps {
+  word: string;
+  definition: string;
+  wordId: number;
+  definitionId: number;
+  isArabic: number;
+  isLiked: boolean;
+  isDisliked: boolean;
+  isReported: boolean;
+  arabicWord?: string;
+  francoArabicWord?: string;
+  countryCode: string;
+}
+
+
 const AdvancedSearch: React.FC = () => {
   const { countryName } = useParams<{ countryName: string }>();
   const [countries, setCountries] = useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = useState(countryName || '');
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<AdvancedSearchProps[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const { t } = useTranslation();
@@ -49,6 +64,7 @@ const AdvancedSearch: React.FC = () => {
       const url = `${import.meta.env.VITE_API_URL}/word/search/iso=${encodedCountryCode}`;
       const response = await fetch(url, {
         method: 'GET',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -150,15 +166,19 @@ const AdvancedSearch: React.FC = () => {
             .map((result, index) => (
               <ContentBox
                 key={index}
-                item={{ word: i18n.language === 'ar' ? result.arabicWord : result.francoArabicWord, definition: result.definition }}
+                item={{
+                  word: (i18n.language === 'ar' ? result.arabicWord : result.francoArabicWord) || "",
+                  definition: result.definition
+              }}
                 index={index + 1}
                 lang={i18n.language}
                 wordId={result.wordId}
                 definitionId={result.definitionId}
-                isLiked={false}
-                isDisliked={false}
-                isReported={false}
+                isLiked={result.isLiked}
+                isDisliked={result.isDisliked}
+                isReported={result.isReported}
                 countryCode={result.countryCode}
+                isAdvancedSearch={true}
               />
             ))}
         </div>

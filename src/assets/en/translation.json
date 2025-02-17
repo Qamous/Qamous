@@ -61,7 +61,8 @@
     "share": "Share",
     "report_cancelled": "Invalid input. Report Cancelled.",
     "repeated_report_error": "You are unable to report the same word / definition more than once.",
-    "repeated_reaction_error": "You have reacted too many times. Please wait before clicking again."
+    "repeated_reaction_error": "You have reacted too many times. Please wait before clicking again.",
+    "instagram_download": "The word image has been downloaded. Share it on Instagram and tag us @qamousapp!"
   },
   "common_terms": {
     "qamous": "Qamous",
@@ -150,7 +151,7 @@
   "user_profile": {
     "logout": "Log out",
     "hi": "Hi,",
-    "points": "Points (Earned by adding definitions)",
+    "points": "Total Points",
     "switch_translation": "Switch translation",
     "franco_arabic": "FRANCO-ARABIC",
     "arabic": "ARABIC",

@@ -60,7 +60,7 @@ const UserProfile = () => {
   const [dropdownVisible, setDropdownVisible] = useState<{ [key: number]: boolean }>({});
   const [selectedDefinition, setSelectedDefinition] = useState<{ [key: number]: Definition | null }>({});
   const [currentDefinition, setCurrentDefinition] = useState<Definition | null>(null);
-  const [likesReceived, setLikesReceived] = useState<number>(0);
+  const [pointsReceived, setPointsReceived] = useState<number>(0);
   const userData = location.state.user;
   const name: string = userData.firstName;
   const userId: number = userData.id;
@@ -79,15 +79,17 @@ const UserProfile = () => {
       });
   
   const fetchUserData = (userId: number) =>
-    fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`)
+    fetch(`${process.env.VITE_API_URL}/users/me/points`, {
+        credentials: 'include',
+      })
       .then(response => response.json())
       .then(data => {
-        setLikesReceived(data.likesReceived);
+        setPointsReceived(data.points);
       });
   
   const { data, isLoading, isError } = useQuery(['definitions', userId], () => fetchDefinitions(userId));
   
-  const { data: userLikes, isLoading: isUserLikesLoading, isError: isUserLikesError } = useQuery(['user', userId], () => fetchUserData(userId));
+  const { data: userPoints, isLoading: isUserPointsLoading, isError: isUserPointsError } = useQuery(['user', userId], () => fetchUserData(userId));
   
   const handlePostLanguageClick = (postId: number) => {
     setCurrentLanguage(prevState => ({
@@ -276,6 +278,8 @@ const UserProfile = () => {
     }));
   };
   
+  const userRank = pointsReceived >= 150 ? "Word Master" : pointsReceived >= 100 ? "Contributor" : "Member";
+  
   // Redirect to /profile if the user is on /signup or /login
   useEffect(() => {
     if (location.pathname !== '/profile') {
@@ -376,7 +380,17 @@ const UserProfile = () => {
         !
       </h2>
       <h3 className="profile-subtitle">{username}</h3>
-      <p className="profile-points">{t('user_profile.points')}: {likesReceived}</p>
+      <div className="profile-points-breakdown">
+        <div className="points-total">{t('user_profile.points')}: {pointsReceived}</div>
+        <div className="points-details">
+          <div>Definitions posted: +{definitions.length}</div>
+          <div className="points-info">(+1 for each definition)</div>
+          <div>From likes and dislikes: {pointsReceived - definitions.length}</div>
+          <div className="points-info">(+1 for each like, -1 for each dislike)</div>
+        </div>
+        <div className="user-rank">Rank: {userRank}</div>
+      </div>
+      
       <div className="buttons buttons-between profile-logout">
         <button onClick={handleLogout} className="buttons-button">
           <FontAwesomeIcon icon={faArrowRightFromBracket} />

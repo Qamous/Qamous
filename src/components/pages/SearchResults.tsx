@@ -13,6 +13,9 @@ interface SearchResult {
   isArabic: number;
   wordId: number;
   definitionId: number;
+  isLiked: boolean;
+  isDisliked: boolean;
+  isReported: boolean;
 }
 
 interface JsonContent {
@@ -188,14 +191,17 @@ const SearchResults: React.FC = () => {
           filteredResults.map((result, index) => (
             <ContentBox
               key={index}
-              item={result}
+              item={{
+                word: result.word,
+                definition: result.definition
+              }}
               index={index + 1}
               lang={i18n.language}
               wordId={result.wordId}
               definitionId={result.definitionId}
-              isLiked={false}
-              isDisliked={false}
-              isReported={false}
+              isLiked={result.isLiked}
+              isDisliked={result.isDisliked}
+              isReported={result.isReported}
             />
           ))
         }

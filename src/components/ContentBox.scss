@@ -3,6 +3,12 @@
 .content-box {
   background-color: styles.$quaternary-color;
   width: 100%;
+  border-radius: 8px;
+
+  // border-radius: 0 for max-width: 1200px
+  @media (max-width: 1200px) {
+    border-radius: 0;
+  }
 
   &-title {
     padding: 0 25px 0 25px;
@@ -135,6 +141,7 @@
       &.clicked {
         border-color: black;
         background-color: #101010;
+        color: white;
 
         cursor: not-allowed;
 
@@ -157,6 +164,18 @@
       &:active {
         transform: scale(0.95);
       }
+
+      &:hover, &:active {
+        background-color: styles.$primary-color;
+        border-color: styles.$primary-color;
+        color: styles.$quaternary-color;
+      }
+    }
+
+    &-view-button {
+      border-color: styles.$primary-color;
+      background-color: styles.$quaternary-color;
+      color: white;
 
       &:hover, &:active {
         background-color: styles.$primary-color;
