@@ -80,6 +80,14 @@
     flex: 1;
     overflow-y: auto;
     margin-bottom: 1rem;
+
+    &--rtl {
+      direction: rtl;
+    }
+
+    &--ltr {
+      direction: ltr;
+    }
   }
 
   &-message {
@@ -92,6 +100,16 @@
       background-color: styles.$secondary-color-20;
       margin-left: auto;
       color: styles.$primary-color;
+
+      .rtl & {
+        margin-right: auto;
+        margin-left: initial;
+      }
+
+      .ltr & {
+        margin-left: auto;
+        margin-right: initial;
+      }
     }
 
     &--assistant {

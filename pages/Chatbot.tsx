@@ -35,6 +35,7 @@ const Chatbot: React.FC = () => {
   const [input, setInput] = useState('');
   const [selectedModel, setSelectedModel] = useState<RagRequest['model']>('groq');
   const [preferredLanguage, setPreferredLanguage] = useState<RagRequest['preferredLanguage']>('arabic');
+  const [directionClass, setDirectionClass] = useState<'rtl' | 'ltr'>('rtl'); // Add this state
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
   
@@ -59,6 +60,10 @@ const Chatbot: React.FC = () => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+  
+  useEffect(() => {
+    setDirectionClass(preferredLanguage === 'arabic' ? 'rtl' : 'ltr');
+  }, [preferredLanguage]);
   
   useEffect(() => {
     scrollToBottom();
@@ -111,7 +116,7 @@ const Chatbot: React.FC = () => {
   };
   
   return (
-    <div className="chatbot-container">
+    <div className={`chatbot-container ${directionClass}`}>
       <div className="chatbot-interface">
         <div className="chatbot-header">
           <h2>{t('chatbot.title')}</h2>
@@ -130,7 +135,10 @@ const Chatbot: React.FC = () => {
             <div className="chatbot-header-selector">
               <select
                 value={preferredLanguage}
-                onChange={(e) => setPreferredLanguage(e.target.value as RagRequest['preferredLanguage'])}
+                onChange={(e) => {
+                  const newLang = e.target.value as RagRequest['preferredLanguage'];
+                  setPreferredLanguage(newLang);
+                }}
               >
                 <option value="arabic">{t('chatbot.arabic')}</option>
                 <option value="franco-arabic">{t('chatbot.franco_arabic')}</option>
@@ -139,7 +147,7 @@ const Chatbot: React.FC = () => {
           </div>
         </div>
         
-        <div className="chatbot-messages">
+        <div className={`chatbot-messages chatbot-messages--${directionClass}`}>
           {messages.map((message, index) => (
             <div
               key={index}
@@ -191,7 +199,7 @@ const Chatbot: React.FC = () => {
           <div ref={messagesEndRef} />
         </div>
         
-        <form onSubmit={handleSubmit} className="chatbot-input">
+        <form onSubmit={handleSubmit} className={`chatbot-input chatbot-input--${directionClass}`}>
           <textarea
             id="chatInput"
             value={input}
