@@ -200,26 +200,16 @@ const Chatbot: React.FC = () => {
         </div>
         
         <form onSubmit={handleSubmit} className={`chatbot-input chatbot-input--${directionClass}`}>
-          {preferredLanguage === 'arabic' ? (
-            <textarea
-              id="chatInput"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={t('chatbot.input_placeholder')}
-              rows={2}
-              disabled={ragMutation.isLoading}
-              dir="rtl"
-            />
-          ) : (
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={t('chatbot.input_placeholder')}
-              rows={2}
-              disabled={ragMutation.isLoading}
-              dir="ltr"
-            />
-          )}
+          <textarea
+            key={preferredLanguage}
+            id={preferredLanguage === 'arabic' ? 'chatInput' : ''}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={t('chatbot.input_placeholder')}
+            rows={2}
+            disabled={ragMutation.isLoading}
+            dir={directionClass}
+          />
           <button type="submit" disabled={ragMutation.isLoading}>
             {ragMutation.isLoading ? (
               <div className="loading">
