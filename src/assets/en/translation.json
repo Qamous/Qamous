@@ -4,7 +4,8 @@
     "advanced_search": "Advanced Search",
     "word_of_the_day": "Feeling Lucky",
     "advertise": "Advertise",
-    "blog": "Blog"
+    "blog": "Blog",
+    "chatbot": "Chatbot"
   },
   "sample_advertisements": [
     "Discover the world with our premium travel packages. Book now and save 20%!",
@@ -239,5 +240,16 @@
     "no_results_found": "No results found",
     "error_message": "An error occurred while fetching data. Please try again later.",
     "results_for": "Results for "
+  },
+  "chatbot": {
+    "title": "Qamous Chatbot",
+    "input_placeholder": "Type your message...",
+    "send": "Send",
+    "sending": "Sending...",
+    "sources": "Sources",
+    "definitions": "Definitions",
+    "error_message": "Sorry, an error occurred. Please try again.",
+    "arabic": "Arabic",
+    "franco_arabic": "Franco-Arabic"
   }
 }

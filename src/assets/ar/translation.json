@@ -4,7 +4,8 @@
     "advanced_search": "البحث المتقدم",
     "word_of_the_day": "اختيار عشوائي",
     "advertise": "أعلن معنا",
-    "blog": "المدونات"
+    "blog": "المدونات",
+    "chatbot": "الشاتبوت"
   },
   "sample_advertisements": [
     "اكتشف العالم مع حزم السفر الراقية لدينا. احجز الآن ووفر ٢٠٪!",
@@ -237,5 +238,16 @@
     "no_results_found": "لا توجد نتائج",
     "error_message": "حدث خطأ أثناء البحث",
     "results_for": "نتائج البحث عن "
+  },
+  "chatbot": {
+    "title": "شاتبوت قاموس",
+    "input_placeholder" : "اكتب رسالتك...",
+    "send": "إرسال",
+    "sending": "إرسال...",
+    "sources": "المصادر",
+    "definitions": "التعاريف",
+    "error_message": "حدث خطأ أثناء جلب البيانات. يرجى المحاولة مرة أخرى.",
+    "arabic": "العربية",
+    "franco_arabic": "الفرانكو-عربي"
   }
 }
