@@ -10,8 +10,8 @@ import {
   faThumbsUp, faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useQuery } from 'react-query';
-import CustomDialog from '../CustomDialog';
-import Snackbar from '../Snackbar';
+import CustomDialog from '../src/components/CustomDialog';
+import Snackbar from '../src/components/Snackbar';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 

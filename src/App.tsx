@@ -2,34 +2,35 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import './App.scss';
 import Header from './components/Header';
 import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
-import WordOfTheDay from './components/pages/WordOfTheDay';
-import Home from './components/pages/Home';
+import WordOfTheDay from '../pages/WordOfTheDay';
+import Home from '../pages/Home';
 import translationEN from './assets/en/translation.json';
 import translationAR from './assets/ar/translation.json';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 import { getFunctionalCookie } from './assets/utils';
-import PageUnderConstruction from './components/pages/PageUnderConstruction';
-import LogIn from './components/pages/LogIn';
-import SignUp from './components/pages/SignUp';
-import AddWord from './components/pages/AddWord';
+import PageUnderConstruction from '../pages/PageUnderConstruction';
+import LogIn from '../pages/LogIn';
+import SignUp from '../pages/SignUp';
+import AddWord from '../pages/AddWord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBug } from '@fortawesome/free-solid-svg-icons';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import ForgotPassword from './components/pages/ForgotPassword';
-import ResetPassword from './components/pages/ResetPassword';
-import UserProfile from './components/pages/UserProfile';
-import SearchResults from './components/pages/SearchResults';
-import NotFound from './components/pages/NotFound';
+import ForgotPassword from '../pages/ForgotPassword';
+import ResetPassword from '../pages/ResetPassword';
+import UserProfile from '../pages/UserProfile';
+import SearchResults from '../pages/SearchResults';
+import NotFound from '../pages/NotFound';
 import Snackbar from './components/Snackbar';
-import WordPage from './components/pages/WordPage';
-import About from './components/pages/About';
+import WordPage from '../pages/WordPage';
+import About from '../pages/About';
 import Footer from './components/Footer';
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
-import Blog from './components/pages/Blog';
-import AdvancedSearch from './components/pages/AdvancedSearch';
+import Blog from '../pages/Blog';
+import AdvancedSearch from '../pages/AdvancedSearch';
+import Chatbot from '../pages/Chatbot';
 // Adverts bar: Uncomment the following line to enable the adverts bar
 // import Adverts from './components/Adverts';
 
@@ -243,6 +244,7 @@ const App: React.FC = () => {
             <Route path="/about" element={
               <About />
             } />
+            <Route path="/chatbot" element={<Chatbot />} />
             <Route path="*" element={
               <NotFound />
             } /> {/* Catch-all route */}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './SignUp.scss';
 import { useNavigate } from 'react-router-dom';
-import { findLocationByIP, findLocationByLatLong } from '../../assets/utils';
+import { findLocationByIP, findLocationByLatLong } from '../src/assets/utils';
 import { useMutation } from 'react-query';
-import CustomDialog from '../CustomDialog';
-import OAuthStrategies from '../OAuthStrategies';
+import CustomDialog from '../src/components/CustomDialog';
+import OAuthStrategies from '../src/components/OAuthStrategies';
 import { useTranslation } from 'react-i18next';
 
 type User = {

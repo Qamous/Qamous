@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, QueryClient } from 'react-query';
 import { collection, addDoc, getDocs, Timestamp } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
+import { db } from '../src/firebaseConfig';
 import ReactMarkdown from 'react-markdown';
 import './Blog.scss';
 import { useTranslation } from 'react-i18next';

@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet';
-import ContentBox, { HomeContentProps } from '../ContentBox';
+import ContentBox, { HomeContentProps } from '../src/components/ContentBox';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getCountryName, getDemonyms } from '../../assets/utils';
+import { getCountryName, getDemonyms } from '../src/assets/utils';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import AdSense from 'react-adsense';

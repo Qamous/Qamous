@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './LogIn.scss';
 import { useMutation } from 'react-query';
-import CustomDialog from '../CustomDialog';
+import CustomDialog from '../src/components/CustomDialog';
 import { useTranslation } from 'react-i18next';
 //import OAuthStrategies from '../OAuthStrategies';
 

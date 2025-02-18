@@ -47,7 +47,7 @@ jest.mock('i18next', () => ({
 // Mock useIntersectionObserver hook with proper types
 type SetRefType = (node: Element | null) => void;
 
-jest.mock('../../../assets/utils', () => ({
+jest.mock('../../src/assets/utils', () => ({
   ...jest.requireActual('../../../assets/utils'),
   useIntersectionObserver: () => {
     // Return a noop function for setRef that explicitly returns undefined

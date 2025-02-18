@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
 import './AddWord.scss';
 import { useTranslation } from 'react-i18next';
-import Snackbar from '../Snackbar';
+import Snackbar from '../src/components/Snackbar';
 
 const AddWord = () => {
   const [options, setOptions] = useState<string[]>([]);

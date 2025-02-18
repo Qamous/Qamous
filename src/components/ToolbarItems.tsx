@@ -48,6 +48,14 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                           {t('toolbar_items.advanced_search')}
                       </StyledNavLink>
                   </li>
+                  <li>
+                      <StyledNavLink to="/chatbot"
+                                     language={language}
+                                     isDarkMode={isDarkMode}
+                      >
+                          {t('toolbar_items.chatbot')}
+                      </StyledNavLink>
+                  </li>
               </ul>
           </nav>
       </div>

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
-import ContentBox from '../ContentBox';
+import ContentBox from '../src/components/ContentBox';
 import { useInfiniteQuery } from 'react-query';
-import Snackbar from '../Snackbar';
-import CustomDialog from '../CustomDialog';
+import Snackbar from '../src/components/Snackbar';
+import CustomDialog from '../src/components/CustomDialog';
 import AdSense from 'react-adsense';
 import { Helmet } from 'react-helmet';
-import { getCookie, setCookieWithExpiration, useIntersectionObserver } from '../../assets/utils';
+import { getCookie, setCookieWithExpiration, useIntersectionObserver } from '../src/assets/utils';
 
 interface HomeContent {
   word: string,

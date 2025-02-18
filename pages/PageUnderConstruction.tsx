@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './PageUnderConstruction.scss';
 import { useTranslation } from 'react-i18next';
-import * as styles from '../../assets/Styles.module.scss';
-import { convertNumerals } from '../../assets/utils';
+import * as styles from '../src/assets/Styles.module.scss';
+import { convertNumerals } from '../src/assets/utils';
 
 // This is an interface for the time left object
 // It has four properties: days, hours, minutes, and seconds

@@ -18,7 +18,7 @@ const Header: React.FC = () => {
     const root = document.documentElement;
     const [currentLang, setCurrentLang] = useState(getFunctionalCookie('language') || "en");
     const [languageButtonStyle, setLanguageButtonStyle] = useState({ opacity: 1 });
-    const [isDarkMode, setDarkMode] = useState<boolean>(getFunctionalCookie('darkMode') === 'true' ?? true);
+    const [isDarkMode, setDarkMode] = useState<boolean>(getFunctionalCookie('darkMode') === 'true' || true);
     const [change, setChange] = useState(false);
     
     const handleCountrySwitch = () => {
@@ -273,6 +273,9 @@ const Header: React.FC = () => {
                   </NavLink>
                   <NavLink to="/blog" onClick={handleBurgerClick}>
                       {t('toolbar_items.blog')}
+                  </NavLink>
+                  <NavLink to="/chatbot" onClick={handleBurgerClick}>
+                      {t('toolbar_items.chatbot')}
                   </NavLink>
                   <div className="nav-overlay-content-bottom">
                       <DarkModeSwitch

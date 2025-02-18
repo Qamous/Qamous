@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './WordOfTheDay.scss';
 import { useQuery } from 'react-query';
-import Snackbar from '../Snackbar';
+import Snackbar from '../src/components/Snackbar';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
 

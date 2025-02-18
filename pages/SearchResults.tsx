@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ContentBox from '../ContentBox';
+import ContentBox from '../src/components/ContentBox';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AdSense from 'react-adsense';

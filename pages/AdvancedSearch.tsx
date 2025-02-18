@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import './AdvancedSearch.scss';
-import { getCountryCode } from '../../assets/utils';
-import Snackbar from '../Snackbar';
+import { getCountryCode } from '../src/assets/utils';
+import Snackbar from '../src/components/Snackbar';
 import { useTranslation } from 'react-i18next';
-import ContentBox from '../ContentBox';
+import ContentBox from '../src/components/ContentBox';
 import i18n from 'i18next';
 import AdSense from 'react-adsense';
 import { useParams } from 'react-router-dom';
