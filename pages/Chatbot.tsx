@@ -193,6 +193,7 @@ const Chatbot: React.FC = () => {
         
         <form onSubmit={handleSubmit} className="chat-input">
           <textarea
+            id="chatInput"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={t('chatbot.input_placeholder')}
