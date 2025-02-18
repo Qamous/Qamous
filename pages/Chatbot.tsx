@@ -1,0 +1,217 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from 'react-query';
+import './Chatbot.scss';
+import ReactMarkdown from 'react-markdown';
+
+interface RagRequest {
+  query: string;
+  model: 'groq' | 'gemini' | 'gpt4' | 'mistral';
+  preferredLanguage?: 'arabic' | 'franco-arabic';
+}
+
+interface RagResponse {
+  response: string;
+  sources: string[];
+  definitions?: {
+    word: string;
+    meaning: string;
+    example?: string;
+  }[];
+}
+
+interface ChatMessage {
+  type: 'user' | 'assistant';
+  content: string;
+  sources?: string[];
+  definitions?: RagResponse['definitions'];
+  isNew?: boolean;
+}
+
+
+const Chatbot: React.FC = () => {
+  const { t } = useTranslation();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState('');
+  const [selectedModel, setSelectedModel] = useState<RagRequest['model']>('groq');
+  const [preferredLanguage, setPreferredLanguage] = useState<RagRequest['preferredLanguage']>('arabic');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isTyping, setIsTyping] = useState(false);
+  
+  const ragMutation = useMutation<RagResponse, Error, RagRequest>(
+    async (request) => {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/rag`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      
+      return response.json();
+    }
+  );
+  
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || ragMutation.isLoading) return;
+    
+    const userMessage: ChatMessage = {
+      type: 'user',
+      content: input,
+      isNew: true,
+    };
+    
+    setMessages((prev) => [...prev, userMessage]);
+    setInput('');
+    setIsTyping(true);
+    
+    try {
+      const result = await ragMutation.mutateAsync({
+        query: input,
+        model: selectedModel,
+        preferredLanguage: preferredLanguage,
+      });
+      
+      setIsTyping(false);
+      
+      const assistantMessage: ChatMessage = {
+        type: 'assistant',
+        content: result.response,
+        sources: result.sources,
+        definitions: result.definitions,
+        isNew: true,
+      };
+      
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      setIsTyping(false);
+      // Handle error
+      console.error('Error:', error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: 'assistant',
+          content: t('chatbot.error_message'),
+        },
+      ]);
+    }
+  };
+  
+  return (
+    <div className="chatbot-container">
+      <div className="chat-interface">
+        <div className="chat-header">
+          <h2>{t('chatbot.title')}</h2>
+          <div className="controls">
+            <div className="model-selector">
+              <select
+                value={selectedModel}
+                onChange={(e) => setSelectedModel(e.target.value as RagRequest['model'])}
+              >
+                <option value="groq">Groq</option>
+                <option value="gemini">Gemini</option>
+                <option value="gpt4">GPT-4</option>
+                <option value="mistral">Mistral</option>
+              </select>
+            </div>
+            <div className="language-selector">
+              <select
+                value={preferredLanguage}
+                onChange={(e) => setPreferredLanguage(e.target.value as RagRequest['preferredLanguage'])}
+              >
+                <option value="arabic">{t('chatbot.arabic')}</option>
+                <option value="franco-arabic">{t('chatbot.franco_arabic')}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div className="chat-messages">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`message ${message.type} ${message.isNew ? 'new-message' : ''} chatbot-message`}
+            >
+              <div className="content">
+                {message.type === 'assistant' ? (
+                  <div className="arabic-text"><ReactMarkdown>{message.content}</ReactMarkdown></div>
+                ) : (
+                  message.content
+                )}
+              </div>
+              
+              {message.sources && message.sources.length > 0 && (
+                <div className="sources">
+                  <strong>{t('chatbot.sources')}:</strong>
+                  <ul>
+                    {message.sources.map((source, idx) => (
+                      <li key={idx}>{source}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {message.definitions && message.definitions.length > 0 && (
+                <div className="definitions">
+                  <strong>{t('chatbot.definitions')}:</strong>
+                  {message.definitions.map((def, idx) => (
+                    <div key={idx} className="definition">
+                      <span className="word">{def.word}</span>: {def.meaning}
+                      {def.example && (
+                        <div className="example">{def.example}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            
+            </div>
+          ))}
+          
+          {isTyping && (
+            <div className="chatbot-typing">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+        
+        <form onSubmit={handleSubmit} className="chat-input">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={t('chatbot.input_placeholder')}
+            rows={2}
+            disabled={ragMutation.isLoading}
+          />
+          <button type="submit" disabled={ragMutation.isLoading}>
+            {ragMutation.isLoading ? (
+              <div className="loading">
+                <span>{t('chatbot.sending')}</span>
+              </div>
+            ) : (
+              t('chatbot.send')
+            )}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Chatbot;

@@ -1,0 +1,257 @@
+@use '../src/assets/Styles.module' as styles;
+
+.chatbot-container {
+  background: var(--quaternary-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+
+  // Subtle circuit-board pattern overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.03;
+    background-image: linear-gradient(90deg,
+            var(--primary-color) 1px, transparent 1px),
+    linear-gradient(var(--primary-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+.chatbot-message {
+  background: var(--primary-color-90);
+  border-left: 3px solid var(--secondary-color);
+  padding: 12px 16px;
+  margin: 8px;
+  border-radius: 0 8px 8px 0;
+  transition: all 0.3s ease;
+
+  // Subtle hover effect
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  // Typing animation for AI responses
+  &.ai-message::before {
+    content: '>';
+    color: var(--secondary-color);
+    margin-right: 8px;
+    opacity: 0.7;
+  }
+
+  // Soft glow effect on new messages
+  &.new-message {
+    animation: messageFade 0.5s ease-out;
+  }
+}
+
+@keyframes messageFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chatbot-typing {
+  display: flex;
+  gap: 4px;
+  padding: 8px 16px;
+  opacity: 0.7;
+
+  .dot {
+    width: 4px;
+    height: 4px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
+  }
+}
+
+@keyframes typing {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.chat-interface {
+  background-color: styles.$quaternary-color;
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  // Add the circuit pattern to the chat interface
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.03;
+    background-image: linear-gradient(90deg,
+            var(--primary-color) 1px, transparent 1px),
+    linear-gradient(var(--primary-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none; // Make sure it doesn't interfere with clicking
+  }
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  .controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .model-selector,
+  .language-selector {
+    select {
+      background-color: var(--tertiary-color);
+      color: var(--primary-color);
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--secondary-color);
+      font-family: var(--font-stack);
+
+      &:focus {
+        outline: none;
+        border-color: var(--secondary-color-90);
+      }
+    }
+  }
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+
+  .message {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    max-width: 80%;
+
+    &.user {
+      background-color: styles.$secondary-color-20;
+      margin-left: auto;
+      color: styles.$primary-color;
+    }
+
+    &.assistant {
+      background-color: styles.$tertiary-color;
+      margin-right: auto;
+      color: styles.$primary-color;
+      position: relative;
+      padding-left: 24px;
+
+      &::before {
+        content: '>';
+        position: absolute;
+        left: 8px;
+        color: var(--secondary-color);
+        opacity: 0.7;
+      }
+
+      .arabic-text {
+        font-family: styles.$font-stack-arabic;
+        font-size: 1.1em;
+        line-height: 1.6;
+        direction: rtl;
+        margin: 0.5rem 0;
+      }
+
+      .sources {
+        margin-top: 1rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid styles.$primary-color-40;
+        font-size: 0.9em;
+        color: styles.$primary-color-75;
+      }
+
+      .definitions {
+        margin-top: 1rem;
+
+        .definition {
+          background-color: styles.$quaternary-color;
+          padding: 0.5rem;
+          border-radius: 4px;
+          margin-bottom: 0.5rem;
+
+          .word {
+            color: styles.$secondary-color;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+
+.chat-input {
+  display: flex;
+  gap: 1rem;
+
+  textarea {
+    flex: 1;
+    background-color: styles.$tertiary-color;
+    color: styles.$primary-color;
+    border: 1px solid styles.$secondary-color;
+    border-radius: 6px;
+    padding: 0.75rem;
+    resize: vertical;
+    min-height: 50px;
+    font-family: styles.$font-stack;
+
+    &:focus {
+      outline: none;
+      border-color: styles.$secondary-color-90;
+    }
+  }
+
+  button {
+    background-color: styles.$secondary-color;
+    color: styles.$tertiary-color;
+    border: none;
+    border-radius: 6px;
+    padding: 0 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: styles.$primary-color-75;
+  font-style: italic;
+}
