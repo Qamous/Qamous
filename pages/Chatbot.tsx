@@ -112,11 +112,11 @@ const Chatbot: React.FC = () => {
   
   return (
     <div className="chatbot-container">
-      <div className="chat-interface">
-        <div className="chat-header">
+      <div className="chatbot-interface">
+        <div className="chatbot-header">
           <h2>{t('chatbot.title')}</h2>
-          <div className="controls">
-            <div className="model-selector">
+          <div className="chatbot-header-controls">
+            <div className="chatbot-header-selector">
               <select
                 value={selectedModel}
                 onChange={(e) => setSelectedModel(e.target.value as RagRequest['model'])}
@@ -127,7 +127,7 @@ const Chatbot: React.FC = () => {
                 <option value="mistral">Mistral</option>
               </select>
             </div>
-            <div className="language-selector">
+            <div className="chatbot-header-selector">
               <select
                 value={preferredLanguage}
                 onChange={(e) => setPreferredLanguage(e.target.value as RagRequest['preferredLanguage'])}
@@ -139,7 +139,7 @@ const Chatbot: React.FC = () => {
           </div>
         </div>
         
-        <div className="chat-messages">
+        <div className="chatbot-messages">
           {messages.map((message, index) => (
             <div
               key={index}
@@ -183,15 +183,15 @@ const Chatbot: React.FC = () => {
           
           {isTyping && (
             <div className="chatbot-typing">
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
+              <div className="chatbot-typing-dot"></div>
+              <div className="chatbot-typing-dot"></div>
+              <div className="chatbot-typing-dot"></div>
             </div>
           )}
           <div ref={messagesEndRef} />
         </div>
         
-        <form onSubmit={handleSubmit} className="chat-input">
+        <form onSubmit={handleSubmit} className="chatbot-input">
           <textarea
             id="chatInput"
             value={input}
