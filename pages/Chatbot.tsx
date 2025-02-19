@@ -115,6 +115,18 @@ const Chatbot: React.FC = () => {
     }
   };
   
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      // If Shift or Control is pressed with Enter, allow default behavior (new line)
+      if (e.shiftKey || e.ctrlKey || e.altKey) {
+        return;
+      }
+      // Otherwise prevent default behavior and submit the form
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+  
   return (
     <div className={`chatbot-container ${directionClass}`}>
       <div className="chatbot-interface">
@@ -202,6 +214,7 @@ const Chatbot: React.FC = () => {
             id={preferredLanguage === 'arabic' ? 'chatInput' : ''}
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder={t('chatbot.input_placeholder')}
             rows={2}
             disabled={ragMutation.isLoading}
