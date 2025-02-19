@@ -172,20 +172,19 @@ const Chatbot: React.FC = () => {
                 </div>
               )}
               
-              {message.definitions && message.definitions.length > 0 && (
-                <div className="definitions">
-                  <strong>{t('chatbot.definitions')}:</strong>
-                  {message.definitions.map((def, idx) => (
-                    <div key={idx} className="definition">
-                      <span className="word">{def.word}</span>: {def.meaning}
-                      {def.example && (
-                        <div className="example">{def.example}</div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            
+              {/*{message.definitions && message.definitions.length > 0 && (*/}
+              {/*  <div className="definitions">*/}
+              {/*    <strong>{t('chatbot.definitions')}:</strong>*/}
+              {/*    {message.definitions.map((def, idx) => (*/}
+              {/*      <div key={idx} className="definition">*/}
+              {/*        <span className="word">{def.word}</span>: {def.meaning}*/}
+              {/*        {def.example && (*/}
+              {/*          <div className="example">{def.example}</div>*/}
+              {/*        )}*/}
+              {/*      </div>*/}
+              {/*    ))}*/}
+              {/*  </div>*/}
+              {/*)}*/}
             </div>
           ))}
           
