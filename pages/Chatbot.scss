@@ -95,6 +95,12 @@
     padding: 1rem;
     border-radius: 8px;
     max-width: 80%;
+    transition: box-shadow 0.3s ease-in-out;
+
+    // hover
+    &:hover {
+      box-shadow: 0 3px 11px rgba(0, 0, 0, 0.1);
+    }
 
     &--user {
       background-color: styles.$secondary-color-20;
@@ -170,7 +176,6 @@
       font-family: var(--font-stack);
       resize: none;
       min-height: 2.5rem;
-      overflow-y: auto;
 
       &:focus {
         outline: none;
