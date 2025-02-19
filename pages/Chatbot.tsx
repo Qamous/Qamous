@@ -117,7 +117,7 @@ const Chatbot: React.FC = () => {
   
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
-      // If Shift or Control is pressed with Enter, allow default behavior (new line)
+      // If Shift, Control, or Alt is pressed with Enter, allow default behavior (new line)
       if (e.shiftKey || e.ctrlKey || e.altKey) {
         return;
       }
