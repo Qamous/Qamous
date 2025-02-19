@@ -118,14 +118,6 @@
       color: styles.$primary-color;
       position: relative;
       padding-left: 24px;
-
-      &::before {
-        content: '>';
-        position: absolute;
-        left: 8px;
-        color: var(--secondary-color);
-        opacity: 0.7;
-      }
     }
 
     &-arabic {

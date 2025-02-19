@@ -151,27 +151,25 @@ const Chatbot: React.FC = () => {
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`message ${message.type} ${message.isNew ? 'new-message' : ''} chatbot-message`}
+              className={`chatbot-message chatbot-message--${message.type}`}
             >
-              <div className="content">
-                {message.type === 'assistant' ? (
-                  <div className="arabic-text"><ReactMarkdown>{message.content}</ReactMarkdown></div>
-                ) : (
-                  message.content
-                )}
-              </div>
-              
-              {message.sources && message.sources.length > 0 && (
-                <div className="sources">
-                  <strong>{t('chatbot.sources')}:</strong>
-                  <ul>
-                    {message.sources.map((source, idx) => (
-                      <li key={idx}>{source}</li>
-                    ))}
-                  </ul>
+              {preferredLanguage === 'arabic' && (
+                <div className="chatbot-message-arabic">
+                  {message.content}
                 </div>
               )}
+              {preferredLanguage !== 'arabic' && (
+                <ReactMarkdown>{message.content}</ReactMarkdown>
+              )}
               
+              {message.sources && message.sources.length > 0 && (
+                <div className="chatbot-message-sources">
+                  {message.sources.map((source, idx) => (
+                    <a key={idx} href={source} target="_blank" rel="noopener noreferrer">{source}</a>
+                  ))}
+                </div>
+              )}
+        
               {/*{message.definitions && message.definitions.length > 0 && (*/}
               {/*  <div className="definitions">*/}
               {/*    <strong>{t('chatbot.definitions')}:</strong>*/}
