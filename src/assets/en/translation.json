@@ -251,5 +251,12 @@
     "error_message": "Sorry, an error occurred. Please try again.",
     "arabic": "Arabic",
     "franco_arabic": "Franco-Arabic"
+  },
+  "subscription": {
+    "title": "Subscribe to Qamous Chatbot Pro",
+    "features_title": "Features",
+    "feature_1": "Unlimited access to the Qamous Chatbot",
+    "feature_2": "Access to better models like GPT-4 and Gemini Pro",
+    "feature_3": "Priority support"
   }
 }
