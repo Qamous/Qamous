@@ -178,7 +178,7 @@ const Chatbot: React.FC = () => {
                 <div className="chatbot-message-sources">
                   {message.sources.map((source, idx) => (
                     <>
-                      <a key={idx} href={source} target="_blank" rel="noopener noreferrer">{source}</a>
+                      <a key={idx} href={`//${source}`} target="_blank" rel="noopener noreferrer">{source}</a>
                       <br/>
                     </>
                   ))}
