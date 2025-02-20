@@ -140,8 +140,8 @@ const Chatbot: React.FC = () => {
               >
                 <option value="groq">Groq</option>
                 <option value="gemini">Gemini</option>
-                <option value="gpt4">GPT-4</option>
-                <option value="mistral">Mistral</option>
+                {/*<option value="gpt4">GPT-4</option>*/}
+                {/*<option value="mistral">Mistral</option>*/}
               </select>
             </div>
             <div className="chatbot-header-selector">
