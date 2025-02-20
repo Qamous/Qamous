@@ -1,12 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import './Chatbot.scss';
 import ReactMarkdown from 'react-markdown';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import SubscriptionModal from '../src/components/SubscriptionModal';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
+const modelTiers = {
+  free: ['groq', 'gemini'],
+  premium: ['groq-3', 'gemini-pro', 'gpt4', 'mistral']
+} as const;
+
+type ModelTier = keyof typeof modelTiers;
+type Model = (typeof modelTiers)[ModelTier][number];
 
 interface RagRequest {
   query: string;
-  model: 'groq' | 'gemini' | 'gpt4' | 'mistral';
+  model: Model;
   preferredLanguage?: 'arabic' | 'franco-arabic';
 }
 
@@ -38,6 +51,16 @@ const Chatbot: React.FC = () => {
   const [directionClass, setDirectionClass] = useState<'rtl' | 'ltr'>('rtl'); // Add this state
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'free' | 'premium'>('free');
+  
+  // Query subscription status
+  const { data: subStatus } = useQuery('subscriptionStatus', async () => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/subscriptions/status`);
+    const data = await response.json();
+    setSubscriptionStatus(data.isSubscribed ? 'premium' : 'free');
+    return data;
+  });
   
   const ragMutation = useMutation<RagResponse, Error, RagRequest>(
     async (request) => {
@@ -72,6 +95,12 @@ const Chatbot: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || ragMutation.isLoading) return;
+    
+    const isPremiumModel = modelTiers.premium.includes(selectedModel as any);
+    if (isPremiumModel && subscriptionStatus === 'free') {
+      setShowSubscriptionModal(true);
+      return;
+    }
     
     const userMessage: ChatMessage = {
       type: 'user',
@@ -133,15 +162,31 @@ const Chatbot: React.FC = () => {
         <div className="chatbot-header">
           <h2>{t('chatbot.title')}</h2>
           <div className="chatbot-header-controls">
+            <div className="chatbot-header-subscription">
+              <button
+                className={`subscription-status ${subscriptionStatus}`}
+                onClick={() => setShowSubscriptionModal(true)}
+              >
+                {subscriptionStatus === 'premium' ? '⭐ Premium' : 'Upgrade to Premium'}
+              </button>
+            </div>
             <div className="chatbot-header-selector">
               <select
                 value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value as RagRequest['model'])}
+                onChange={(e) => setSelectedModel(e.target.value as Model)}
               >
-                <option value="groq">Groq</option>
-                <option value="gemini">Gemini</option>
-                {/*<option value="gpt4">GPT-4</option>*/}
-                {/*<option value="mistral">Mistral</option>*/}
+                <optgroup label="Free Models">
+                  {modelTiers.free.map(model => (
+                    <option key={model} value={model}>{model}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Premium Models">
+                  {modelTiers.premium.map(model => (
+                    <option key={model} value={model}>
+                      {model} {subscriptionStatus === 'free' ? '⭐' : ''}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
             </div>
             <div className="chatbot-header-selector">
@@ -233,6 +278,18 @@ const Chatbot: React.FC = () => {
             )}
           </button>
         </form>
+        
+        {showSubscriptionModal && (
+          <Elements stripe={stripePromise}>
+            <SubscriptionModal
+              onClose={() => setShowSubscriptionModal(false)}
+              onSuccess={() => {
+                setSubscriptionStatus('premium');
+                setShowSubscriptionModal(false);
+              }}
+            />
+          </Elements>
+        )}
       </div>
     </div>
   );

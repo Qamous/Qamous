@@ -74,6 +74,38 @@
         }
       }
     }
+
+    &-subscription {
+      margin-right: 1rem;
+
+      .subscription-status {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+
+        &.free {
+          background-color: var(--secondary-color-20);
+          color: var(--secondary-color);
+
+          &:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+          }
+        }
+
+        &.premium {
+          background-color: var(--secondary-color);
+          color: var(--primary-color);
+
+          &:hover {
+            background-color: var(--secondary-color-90);
+          }
+        }
+      }
+    }
   }
 
   &-messages {
