@@ -160,24 +160,25 @@ const Home: React.FC = () => {
           <meta name="keywords"
                 content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
         </Helmet>
-        <div className="feed-ad-space">
-          <AdSense.Google
-            client="ca-pub-4293590491700199"
-            slot="7898075502"
-            style={{
-              display: 'block',
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'var(--tertiary-color)',
-              border: '0',
-              padding: '10px',
-              fontFamily: 'var(--font-stack)',
-              color: 'var(--primary-color)',
-            }}
-            format="auto"
-            responsive="true"
-          />
-        </div>
+        {/* TODO: Ads need to be fixed. Was working on a fix but it was not satisfactory */}
+        {/*<div className="feed-ad-space">*/}
+        {/*  <AdSense.Google*/}
+        {/*    client="ca-pub-4293590491700199"*/}
+        {/*    slot="7898075502"*/}
+        {/*    style={{*/}
+        {/*      display: 'block',*/}
+        {/*      width: '100%',*/}
+        {/*      height: '100%',*/}
+        {/*      backgroundColor: 'var(--tertiary-color)',*/}
+        {/*      border: '0',*/}
+        {/*      padding: '10px',*/}
+        {/*      fontFamily: 'var(--font-stack)',*/}
+        {/*      color: 'var(--primary-color)',*/}
+        {/*    }}*/}
+        {/*    format="auto"*/}
+        {/*    responsive="true"*/}
+        {/*  />*/}
+        {/*</div>*/}
         <div className="feed-posts">
           <ContentBox
             item={sampleHome[0]}
@@ -190,24 +191,24 @@ const Home: React.FC = () => {
             isReported={false}
             example={""}
           />
-          <div className="feed-posts-ad-space">
-            <AdSense.Google
-              client="ca-pub-4293590491700199"
-              slot="6473874271"
-              style={{
-                display: 'block',
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'var(--tertiary-color)',
-                border: '0',
-                padding: '10px',
-                fontFamily: 'var(--font-stack)',
-                color: 'var(--primary-color)',
-              }}
-              format="auto"
-              responsive="true"
-            />
-          </div>
+          {/*<div className="feed-posts-ad-space">*/}
+          {/*  <AdSense.Google*/}
+          {/*    client="ca-pub-4293590491700199"*/}
+          {/*    slot="6473874271"*/}
+          {/*    style={{*/}
+          {/*      display: 'block',*/}
+          {/*      width: '100%',*/}
+          {/*      height: '100%',*/}
+          {/*      backgroundColor: 'var(--tertiary-color)',*/}
+          {/*      border: '0',*/}
+          {/*      padding: '10px',*/}
+          {/*      fontFamily: 'var(--font-stack)',*/}
+          {/*      color: 'var(--primary-color)',*/}
+          {/*    }}*/}
+          {/*    format="auto"*/}
+          {/*    responsive="true"*/}
+          {/*  />*/}
+          {/*</div>*/}
           {data?.pages.map((page, pageIndex) =>
             page
               .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
@@ -225,46 +226,46 @@ const Home: React.FC = () => {
                     isReported={item.isReported !== 0}
                     example={item.example}
                   />
-                  {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
-                    <AdSense.Google
-                      client="ca-pub-4293590491700199"
-                      slot="6473874271"
-                      style={{
-                        display: 'block',
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'var(--tertiary-color)',
-                        border: '0',
-                        padding: '10px',
-                        fontFamily: 'var(--font-stack)',
-                        color: 'var(--primary-color)',
-                      }}
-                      format="auto"
-                      responsive="true"
-                    />
-                  </div>}
+                  {/*{((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">*/}
+                  {/*  <AdSense.Google*/}
+                  {/*    client="ca-pub-4293590491700199"*/}
+                  {/*    slot="6473874271"*/}
+                  {/*    style={{*/}
+                  {/*      display: 'block',*/}
+                  {/*      width: '100%',*/}
+                  {/*      height: '100%',*/}
+                  {/*      backgroundColor: 'var(--tertiary-color)',*/}
+                  {/*      border: '0',*/}
+                  {/*      padding: '10px',*/}
+                  {/*      fontFamily: 'var(--font-stack)',*/}
+                  {/*      color: 'var(--primary-color)',*/}
+                  {/*    }}*/}
+                  {/*    format="auto"*/}
+                  {/*    responsive="true"*/}
+                  {/*  />*/}
+                  {/*</div>}*/}
                 </React.Fragment>
               )),
           )}
         </div>
-        <div className="feed-ad-space">
-          <AdSense.Google
-            client="ca-pub-4293590491700199"
-            slot="1590891296"
-            style={{
-              display: 'block',
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'var(--tertiary-color)',
-              border: '0',
-              padding: '10px',
-              fontFamily: 'var(--font-stack)',
-              color: 'var(--primary-color)',
-            }}
-            format="auto"
-            responsive="true"
-          />
-        </div>
+        {/*<div className="feed-ad-space">*/}
+        {/*  <AdSense.Google*/}
+        {/*    client="ca-pub-4293590491700199"*/}
+        {/*    slot="1590891296"*/}
+        {/*    style={{*/}
+        {/*      display: 'block',*/}
+        {/*      width: '100%',*/}
+        {/*      height: '100%',*/}
+        {/*      backgroundColor: 'var(--tertiary-color)',*/}
+        {/*      border: '0',*/}
+        {/*      padding: '10px',*/}
+        {/*      fontFamily: 'var(--font-stack)',*/}
+        {/*      color: 'var(--primary-color)',*/}
+        {/*    }}*/}
+        {/*    format="auto"*/}
+        {/*    responsive="true"*/}
+        {/*  />*/}
+        {/*</div>*/}
         {showDialog && (
           <CustomDialog
             text={t('common.beta_warning')}
