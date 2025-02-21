@@ -6,9 +6,9 @@ import ContentBox from '../src/components/ContentBox';
 import { useInfiniteQuery } from 'react-query';
 import Snackbar from '../src/components/Snackbar';
 import CustomDialog from '../src/components/CustomDialog';
-import AdSense from 'react-adsense';
 import { Helmet } from 'react-helmet';
-import { getCookie, setCookieWithExpiration, useIntersectionObserver } from '../src/assets/utils';
+import { useIntersectionObserver } from '../src/assets/utils';
+//import AdSense from 'react-adsense';
 
 interface HomeContent {
   word: string,
