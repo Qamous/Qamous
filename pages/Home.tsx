@@ -161,7 +161,7 @@ const Home: React.FC = () => {
                 content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
         </Helmet>
         {/* TODO: Ads need to be fixed. Was working on a fix but it was not satisfactory */}
-        {/*<div className="feed-ad-space">*/}
+        <div className="feed-ad-space">
         {/*  <AdSense.Google*/}
         {/*    client="ca-pub-4293590491700199"*/}
         {/*    slot="7898075502"*/}
@@ -178,7 +178,7 @@ const Home: React.FC = () => {
         {/*    format="auto"*/}
         {/*    responsive="true"*/}
         {/*  />*/}
-        {/*</div>*/}
+        </div>
         <div className="feed-posts">
           <ContentBox
             item={sampleHome[0]}
@@ -248,7 +248,7 @@ const Home: React.FC = () => {
               )),
           )}
         </div>
-        {/*<div className="feed-ad-space">*/}
+        <div className="feed-ad-space">
         {/*  <AdSense.Google*/}
         {/*    client="ca-pub-4293590491700199"*/}
         {/*    slot="1590891296"*/}
@@ -265,7 +265,7 @@ const Home: React.FC = () => {
         {/*    format="auto"*/}
         {/*    responsive="true"*/}
         {/*  />*/}
-        {/*</div>*/}
+        </div>
         {showDialog && (
           <CustomDialog
             text={t('common.beta_warning')}
