@@ -27,7 +27,7 @@ const About: React.FC = () => {
           </p>
         </div>
         <div className="about-hero-img">
-          <img className="about-hero-img-pic" src="./oud.webp" alt="Oud - Traditional Middle Eastern string instrument" />
+          <img className="about-hero-img-pic" src="./Oud.webp" alt="Oud - Traditional Middle Eastern string instrument" />
         </div>
       </div>
       <p>
