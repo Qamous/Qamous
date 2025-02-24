@@ -20,6 +20,8 @@ const Header: React.FC = () => {
     const [languageButtonStyle, setLanguageButtonStyle] = useState({ opacity: 1 });
     const [isDarkMode, setDarkMode] = useState<boolean>(getFunctionalCookie('darkMode') === 'true' || true);
     const [change, setChange] = useState(false);
+    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
     
     const handleCountrySwitch = () => {
         // Toggle between US and EG on click
@@ -243,6 +245,23 @@ const Header: React.FC = () => {
         },
     ];
     
+    useEffect(() => {
+        const controlHeader = () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > lastScrollY) { // scrolling down
+                setIsHeaderVisible(false);
+            } else { // scrolling up
+                setIsHeaderVisible(true);
+            }
+            
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', controlHeader);
+        return () => window.removeEventListener('scroll', controlHeader);
+    }, [lastScrollY]);
+
     return (
       <>
           <Joyride
@@ -313,7 +332,7 @@ const Header: React.FC = () => {
                   </div>
               </div>
           </div>
-          <div className="header">
+          <div className={`header ${!isHeaderVisible ? 'header-hidden' : ''}`}>
               <div className="header-left-side">
                 <NavLink to="/">
                     <img

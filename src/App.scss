@@ -53,6 +53,11 @@ body {
   overflow: hidden;
   flex: 1;
   margin-bottom: 60px; // Add margin to prevent content from being hidden behind the footer
+  margin-top: 90px; // Add margin-top equal to header height
+
+  @media (max-width: 1200px) {
+    margin-top: 65px; // Adjust for smaller header on mobile
+  }
 }
 
 .report {
