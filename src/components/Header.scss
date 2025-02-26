@@ -10,7 +10,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 198;
     right: 0;
     top: 0;
     background-color: styles.$tertiary-color-90;
@@ -89,12 +89,21 @@ $header-shadow: rgba(0, 0, 0, 0.1);
     align-items: center; /* Center the content horizontally */
     justify-content: space-between;
 
-    z-index: 100;
+    z-index: 199;
     //#eae7e7
     //#1e1e1e
     border-bottom: 1px solid styles.$header-border-color;
     box-shadow: 0 -6px 5px 5px $header-shadow;
     transition: height 0.5s ease-in-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+
+    &.header-hidden {
+        transform: translateY(-100%);
+    }
 
     &-left-side {
         display: flex;
@@ -167,7 +176,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             margin: 0;
             height: 25px;
             position: relative;
-            z-index: 1000;
+            z-index: 198;
 
             display: flex;
             flex-direction: row;

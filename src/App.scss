@@ -38,6 +38,7 @@ body {
   flex-direction: column;
   min-height: 100vh; /* Set the height of the app to 100% of the viewport height */
   background-color: styles.$tertiary-color;
+  padding-bottom: 60px; // Add padding to prevent content from being hidden behind the footer
 }
 
 .toolbar-items {
@@ -51,6 +52,12 @@ body {
 .content {
   overflow: hidden;
   flex: 1;
+  margin-bottom: 60px; // Add margin to prevent content from being hidden behind the footer
+  margin-top: 90px; // Add margin-top equal to header height
+
+  @media (max-width: 1200px) {
+    margin-top: 65px; // Adjust for smaller header on mobile
+  }
 }
 
 .report {
@@ -61,7 +68,7 @@ body {
   position: fixed;
   bottom: 15px;
   right: 15px;
-  z-index: 1000;
+  z-index: 198;
   cursor: pointer;
   color: styles.$tertiary-color;
   display: flex;

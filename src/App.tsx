@@ -146,6 +146,7 @@ const App: React.FC = () => {
   const [mustLoginSnackbarOpen, setMustLoginSnackbarOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { wordId, lang } = useParams<{ wordId: string; lang?: string }>();
+  const location = useLocation();
   
   const handleReportClick = () => {
     // If a 'Bug Report Form' window is already open, the form submission will open in that existing window instead of
@@ -163,6 +164,10 @@ const App: React.FC = () => {
       i18n.changeLanguage(lang);
     }
   }, [lang, i18n]);
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   
   // const [passwordCorrect, setPasswordCorrect] = useState(true);
   // if (!passwordCorrect) {
