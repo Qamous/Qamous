@@ -1,3 +1,5 @@
+@use './../assets/Styles.module.scss' as styles;
+
 .theme-toggle {
   cursor: pointer;
   padding: 5px;
@@ -11,6 +13,6 @@
 
   &:hover {
     transform: scale(1.1) rotate(15deg);
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: styles.$icon-background-color;
   }
 }
