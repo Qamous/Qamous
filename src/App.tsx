@@ -179,6 +179,7 @@ const App: React.FC = () => {
       <QueryClientProvider client={queryClient}>
         <SpeedInsights />
         <Analytics />
+        <div className="grain-texture"></div>
         <Header />
         <div className="content">
           <Routes>
