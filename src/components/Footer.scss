@@ -156,6 +156,43 @@
       }
     }
   }
+
+  &-toggle-arrow {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: styles.$primary-color-50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none; /* Hidden by default on mobile */
+    font-size: 1.1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+
+    &:hover {
+      color: styles.$secondary-color;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Show only on larger screens */
+    @media (min-width: 600px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media (max-width: 800px) {
+        font-size: 1rem;
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    &.expanded {
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
   
   // Media queries for better responsiveness
   @media (max-width: 800px) {

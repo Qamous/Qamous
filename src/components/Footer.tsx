@@ -3,13 +3,17 @@ import i18n from 'i18next';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope, faHandHoldingMedical } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp, faEnvelope, faHandHoldingMedical } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Footer: React.FC = () => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +32,13 @@ const Footer: React.FC = () => {
   return (
     <footer className={`footer ${isExpanded ? 'expanded' : ''}`}>
       <div className="footer-content">
+        <div
+          className={`footer-toggle-arrow ${isExpanded ? 'expanded' : ''}`}
+          onClick={toggleExpanded}
+          aria-label={isExpanded ? t('footer.collapse') : t('footer.expand')}
+        >
+          <FontAwesomeIcon icon={faChevronUp} />
+        </div>
         <div className="footer-minimal">
           <p className="footer-copyright" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
             {t('common.copyright')}
