@@ -4,15 +4,27 @@
   cursor: pointer;
   padding: 5px;
   border-radius: 50%;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition: transform 0.5s ease, background-color 0.5s ease;
   width: 25px;
   height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  svg {
+    position: absolute;
+    transition: opacity 0.4s ease-in-out, transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 1;
+  }
 
   &:hover {
-    transform: scale(1.1) rotate(15deg);
+    transform: scale(1.1) rotate(5deg);
     background-color: styles.$icon-background-color;
+  }
+
+  &.animating svg {
+    transform: rotate(360deg);
   }
 }
