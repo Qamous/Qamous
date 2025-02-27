@@ -7,9 +7,8 @@
   transition: transform 0.5s ease, background-color 0.5s ease;
   width: 25px;
   height: 25px;
+  font-size: 24px;
   display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   overflow: hidden;
 
@@ -20,7 +19,7 @@
   }
 
   &:hover {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.1) rotate(10deg);
     background-color: styles.$icon-background-color;
   }
 

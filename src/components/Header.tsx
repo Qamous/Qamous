@@ -334,7 +334,7 @@ const Header: React.FC = () => {
                   </NavLink>
                   <div className="nav-overlay-content-bottom">
                       <ThemeModeToggle
-                        className="header-right-side-mode"
+                        className="nav-overlay-content-bottom-mode"
                         mode={themeMode}
                         onChange={toggleThemeMode}
                       />
