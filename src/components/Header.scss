@@ -221,6 +221,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             height: 25px;
 
             padding: 10px;
+            transition: background-color 0.3s ease;
             background-color: styles.$icon-background-color;
             border-radius: 35%;
 
