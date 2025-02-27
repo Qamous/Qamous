@@ -6,19 +6,19 @@ import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from "react-router-dom";
 import './Header.scss';
 import { US, EG } from 'country-flag-icons/react/3x2'
-import { DarkModeSwitch } from "react-toggle-dark-mode";
 import * as styles from '../assets/Styles.module.scss';
 import { setFunctionalCookie, getFunctionalCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
 import qamousLogo from '../assets/qamous-logo-transparent.png';
+import ThemeModeToggle from './ThemeModeToggle';
 
 const Header: React.FC = () => {
     const { i18n, t } = useTranslation();
     const root = document.documentElement;
     const [currentLang, setCurrentLang] = useState(getFunctionalCookie('language') || "en");
     const [languageButtonStyle, setLanguageButtonStyle] = useState({ opacity: 1 });
-    const [isDarkMode, setDarkMode] = useState<boolean>(getFunctionalCookie('darkMode') === 'true' || true);
+    const [themeMode, setThemeMode] = useState(getFunctionalCookie('themeMode') || 'dark');
     const [change, setChange] = useState(false);
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
@@ -53,28 +53,54 @@ const Header: React.FC = () => {
         setLanguageButtonStyle((prevStyle) => ({ ...prevStyle, opacity: 1 }));
     };
     
-    const setTheme = (isDarkMode: boolean): void => {
-        root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
-        root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
-        root.style.setProperty('--tertiary-color', isDarkMode ? styles.tertiaryColorDark : styles.tertiaryColorLight);
-        root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
-        root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
-        root.style.setProperty('--primary-color-75', isDarkMode ? styles.primaryColorSeventyFiveDark : styles.primaryColorSeventyFiveLight);
-        root.style.setProperty('--primary-color-50', isDarkMode ? styles.primaryColorFiftyDark : styles.primaryColorFiftyLight);
-        root.style.setProperty('--primary-color-40', isDarkMode ? styles.primaryColorFortyDark : styles.primaryColorFortyLight);
-        root.style.setProperty('--secondary-color-90', isDarkMode ? styles.secondaryColorNinetyDark : styles.secondaryColorNinetyLight);
-        root.style.setProperty('--tertiary-color-90', isDarkMode ? styles.tertiaryColorNinetyDark : styles.tertiaryColorNinetyLight);
-        root.style.setProperty('--header-border-color', isDarkMode ? styles.headerBorderColorDark : styles.headerBorderColorLight);
-        root.style.setProperty('--icon-background-color', isDarkMode ? styles.iconBackgroundColorDark : styles.iconBackgroundColorLight);
+    const setTheme = (mode: string): void => {
+      const isDarkMode: boolean = mode === 'dark';
+      const isGrainMode: boolean = mode === 'grain';
+        
+        if (isGrainMode) {
+            // Orange grainy mode colors from styles
+            root.style.setProperty('--primary-color', styles.primaryColorGrain);
+            root.style.setProperty('--secondary-color', styles.secondaryColorGrain);
+            root.style.setProperty('--tertiary-color', styles.tertiaryColorGrain);
+            root.style.setProperty('--quaternary-color', styles.quaternaryColorGrain);
+            root.style.setProperty('--primary-color-90', styles.primaryColorNinetyGrain);
+            root.style.setProperty('--primary-color-75', styles.primaryColorSeventyFiveGrain);
+            root.style.setProperty('--primary-color-50', styles.primaryColorFiftyGrain);
+            root.style.setProperty('--primary-color-40', styles.primaryColorFortyGrain);
+            root.style.setProperty('--secondary-color-90', styles.secondaryColorNinetyGrain);
+            root.style.setProperty('--tertiary-color-90', styles.tertiaryColorNinetyGrain);
+            root.style.setProperty('--header-border-color', styles.headerBorderColorGrain);
+            root.style.setProperty('--icon-background-color', styles.iconBackgroundColorGrain);
+        } else {
+            // Original dark/light mode logic
+            root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
+            root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
+            root.style.setProperty('--tertiary-color', isDarkMode ? styles.tertiaryColorDark : styles.tertiaryColorLight);
+            root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
+            root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
+            root.style.setProperty('--primary-color-75', isDarkMode ? styles.primaryColorSeventyFiveDark : styles.primaryColorSeventyFiveLight);
+            root.style.setProperty('--primary-color-50', isDarkMode ? styles.primaryColorFiftyDark : styles.primaryColorFiftyLight);
+            root.style.setProperty('--primary-color-40', isDarkMode ? styles.primaryColorFortyDark : styles.primaryColorFortyLight);
+            root.style.setProperty('--secondary-color-90', isDarkMode ? styles.secondaryColorNinetyDark : styles.secondaryColorNinetyLight);
+            root.style.setProperty('--tertiary-color-90', isDarkMode ? styles.tertiaryColorNinetyDark : styles.tertiaryColorNinetyLight);
+            root.style.setProperty('--header-border-color', isDarkMode ? styles.headerBorderColorDark : styles.headerBorderColorLight);
+            root.style.setProperty('--icon-background-color', isDarkMode ? styles.iconBackgroundColorDark : styles.iconBackgroundColorLight);
+        }
     };
     
-    const toggleDarkMode = (checked: boolean) => {
-        setDarkMode(checked);
-        setFunctionalCookie('darkMode', checked.toString());
+    const toggleThemeMode = () => {
+        const nextMode = themeMode === 'dark' ? 'light' : themeMode === 'light' ? 'grain' : 'dark';
+        setThemeMode(nextMode);
+        setFunctionalCookie('themeMode', nextMode);
+        document.body.classList.remove('grain-mode');
+        
+        if (nextMode === 'grain') {
+            document.body.classList.add('grain-mode');
+        }
+        
+        setTheme(nextMode);
         if (change) setTimeout(handleBurgerClick, 150);
     };
-    
-    setTheme(isDarkMode);
     
     const overlayNav = useRef<HTMLDivElement>(null);
     const burgerMenuRef = useRef<HTMLDivElement>(null);
@@ -261,6 +287,16 @@ const Header: React.FC = () => {
         window.addEventListener('scroll', controlHeader);
         return () => window.removeEventListener('scroll', controlHeader);
     }, [lastScrollY]);
+    
+    useEffect(() => {
+      const storedMode = getFunctionalCookie('themeMode') || 'dark';
+      setThemeMode(storedMode);
+      setTheme(storedMode);
+      
+      if (storedMode === 'grain') {
+        document.body.classList.add('grain-mode');
+      }
+    }, []);
 
     return (
       <>
@@ -297,13 +333,10 @@ const Header: React.FC = () => {
                       {t('toolbar_items.chatbot')}
                   </NavLink>
                   <div className="nav-overlay-content-bottom">
-                      <DarkModeSwitch
-                        className="nav-overlay-content-bottom-mode"
-                        checked={isDarkMode}
-                        onChange={toggleDarkMode}
-                        moonColor="#bfbfbf"
-                        sunColor="#dd8500"
-                        size={30}
+                      <ThemeModeToggle
+                        className="header-right-side-mode"
+                        mode={themeMode}
+                        onChange={toggleThemeMode}
                       />
                       
                       <div
@@ -343,7 +376,7 @@ const Header: React.FC = () => {
                 </NavLink>
                   <ToolbarItems
                     language={currentLang}
-                    isDarkMode={isDarkMode}
+                    themeMode={themeMode}
                   /> {/* Insert the ToolbarItems component above the SearchBar */}
               </div>
               
@@ -375,12 +408,10 @@ const Header: React.FC = () => {
                       )}
                   </div>
                   
-                  <DarkModeSwitch
+                  <ThemeModeToggle
                     className="header-right-side-mode"
-                    checked={isDarkMode}
-                    onChange={toggleDarkMode}
-                    moonColor="#bfbfbf"
-                    sunColor="#dd8500"
+                    mode={themeMode}
+                    onChange={toggleThemeMode}
                   />
                   
                   <div className="header-right-side-user">
