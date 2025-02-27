@@ -5,12 +5,13 @@ import * as styles from '../assets/Styles.module.scss';
 
 interface StyledNavLinkProps extends NavLinkProps {
   language: string;
-  isDarkMode: boolean;
+  themeMode: string;
 }
 
-const StyledNavLink: React.FC<StyledNavLinkProps> = ({ language, isDarkMode, ...props }) => {
+const StyledNavLink: React.FC<StyledNavLinkProps> = ({ language, themeMode, ...props }) => {
   const letterSpacing = language === 'ar' ? '0' : '0.2em';
   const fontFamily = language === 'ar' ? styles.fontStackArabic : styles.fontStack;
+  const isDarkMode = themeMode === 'dark';
   const shadow = isDarkMode ? '1px 1px 1px rgba(0, 0, 0, 0.25)' : 'none';
   const direction = language === 'ar' ? 'rtl' : 'ltr';
   

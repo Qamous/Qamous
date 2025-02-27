@@ -5,10 +5,10 @@ import StyledNavLink from './StyledNavLink';
 
 interface ToolbarItemsProps {
     language: string
-    isDarkMode: boolean
+    themeMode: string
 }
 
-const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: ToolbarItemsProps) => {
+const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, themeMode }: ToolbarItemsProps) => {
     const { t } = useTranslation();
     
     return (
@@ -18,7 +18,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                   <li>
                       <StyledNavLink to="/"
                                      language={language}
-                                     isDarkMode={isDarkMode}
+                                     themeMode={themeMode}
                       >
                           {t('toolbar_items.home')}
                       </StyledNavLink>
@@ -26,7 +26,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                   <li>
                       <StyledNavLink to="/feeling-lucky"
                                      language={language}
-                                     isDarkMode={isDarkMode}
+                                     themeMode={themeMode}
                       >
                           {t('toolbar_items.word_of_the_day')}
                       </StyledNavLink>
@@ -34,7 +34,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                   <li>
                       <StyledNavLink to="/advanced-search"
                                      language={language}
-                                     isDarkMode={isDarkMode}
+                                     themeMode={themeMode}
                         // className={'toolbar-items-not-built-yet'}
                       >
                           {t('toolbar_items.advanced_search')}
@@ -43,7 +43,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                   <li>
                       <StyledNavLink to="/blog"
                                      language={language}
-                                     isDarkMode={isDarkMode}
+                                     themeMode={themeMode}
                       >
                           {t('toolbar_items.blog')}
                       </StyledNavLink>
@@ -51,7 +51,7 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, isDarkMode }: Too
                   <li>
                       <StyledNavLink to="/chatbot"
                                      language={language}
-                                     isDarkMode={isDarkMode}
+                                     themeMode={themeMode}
                       >
                           {t('toolbar_items.chatbot')}
                       </StyledNavLink>

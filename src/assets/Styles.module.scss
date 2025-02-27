@@ -81,6 +81,20 @@ $icon-background-color-light: rgb(173 173 173 / 44%);
 
 $header-border-color-light: #eae7e7;
 
+// Orange Grainy Mode
+$primary-color-grain: #fff6e9; // Light cream color
+$secondary-color-grain: #dd8500; // Orange
+$tertiary-color-grain: #251800; // Dark brown
+$quaternary-color-grain: #402c00; // Darker brown
+$primary-color-90-grain: rgba(255, 246, 233, 0.9);
+$primary-color-75-grain: rgba(255, 246, 233, 0.75);
+$primary-color-50-grain: rgba(255, 246, 233, 0.5);
+$primary-color-40-grain: rgba(255, 246, 233, 0.4);
+$secondary-color-90-grain: rgba(221, 133, 0, 0.9);
+$tertiary-color-90-grain: rgba(37, 24, 0, 0.9);
+$header-border-color-grain: #53402c;
+$icon-background-color-grain: rgba(78, 59, 32, 0.44);
+
 :export {
   primaryColor: $primary-color;
   secondaryColor: $secondary-color;
@@ -122,6 +136,19 @@ $header-border-color-light: #eae7e7;
   tertiaryColorNinetyDark: $tertiary-color-90-dark;
   headerBorderColorDark: $header-border-color-dark;
   iconBackgroundColorDark: $icon-background-color-dark;
+
+  primaryColorGrain: $primary-color-grain;
+  secondaryColorGrain: $secondary-color-grain;
+  secondaryColorNinetyGrain: $secondary-color-90-grain;
+  tertiaryColorGrain: $tertiary-color-grain;
+  quaternaryColorGrain: $quaternary-color-grain;
+  primaryColorNinetyGrain: $primary-color-90-grain;
+  primaryColorSeventyFiveGrain: $primary-color-75-grain;
+  primaryColorFiftyGrain: $primary-color-50-grain;
+  primaryColorFortyGrain: $primary-color-40-grain;
+  tertiaryColorNinetyGrain: $tertiary-color-90-grain;
+  headerBorderColorGrain: $header-border-color-grain;
+  iconBackgroundColorGrain: $icon-background-color-grain;
 
   fontStack: $font-stack;
   fontStackArabic: $font-stack-arabic;
