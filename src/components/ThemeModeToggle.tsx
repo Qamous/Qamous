@@ -42,7 +42,7 @@ const ThemeModeToggle: React.FC<ThemeModeToggleProps> = ({ mode, onChange, class
     switch (currentIcon) {
       case 'dark': return "#bfbfbf";
       case 'light': return "#dd8500";
-      default: return "#ffffff";
+      default: return "#b59155";
     }
   };
 
