@@ -1,0 +1,163 @@
+//@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+/**
+ * SCSS Variables Section
+ * -----------------------
+ * This section contains all the global SCSS variables used throughout the project.
+ * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
+ * These variables are used to maintain a consistent design language and ease future design updates.
+ */
+:root {
+  --primary-color: #ffffff;
+  --secondary-color: #dd8500;
+  --tertiary-color: #000000;
+  --quaternary-color: #292929;
+  background-color: var(--tertiary-color);
+  --primary-color-90: rgba(255, 255, 255, 0.9);
+  --primary-color-75: rgba(255, 255, 255, 0.75);
+  --primary-color-50: rgba(255, 255, 255, 0.5);
+  --primary-color-40: rgba(255, 255, 255, 0.4);
+  --secondary-color-90: rgba(221, 133, 0, 0.9);
+  --secondary-color-75: rgba(221, 133, 0, 0.75);
+  --secondary-color-20: rgba(221, 133, 0, 0.2);
+  --tertiary-color-90: rgba(0, 0, 0, 0.9);
+  --icon-background-color: rgb(78 78 78 / 44%);
+
+  --font-stack: "Segoe UI", Sans-Serif, serif;
+  --font-stack-arabic: "Rubik", serif;
+  --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
+
+  --header-border-color: #1e1e1e;
+}
+
+$primary-color: var(--primary-color);
+$secondary-color: var(--secondary-color);
+$tertiary-color: var(--tertiary-color);
+$quaternary-color: var(--quaternary-color);
+$primary-color-90: var(--primary-color-90);
+$primary-color-75: var(--primary-color-75);
+$primary-color-50: var(--primary-color-50);
+$primary-color-40: var(--primary-color-40);
+$secondary-color-90: var(--secondary-color-90);
+$secondary-color-75: var(--secondary-color-75);
+$secondary-color-20: var(--secondary-color-20);
+$tertiary-color-90: var(--tertiary-color-90);
+$icon-background-color: var(--icon-background-color);
+
+$font-stack: var(--font-stack);
+$font-stack-arabic: var(--font-stack-arabic);
+$font-stack-arabic-wod: var(--font-stack-arabic-wod);
+
+$header-border-color: var(--header-border-color);
+
+// Dark Mode (default)
+$primary-color-dark: #ffffff;
+$secondary-color-dark: #dd8500;
+$tertiary-color-dark: #000000;
+$quaternary-color-dark: #292929;
+$primary-color-90-dark: rgba(255, 255, 255, 0.9);
+$primary-color-75-dark: rgba(255, 255, 255, 0.75);
+$primary-color-50-dark: rgba(255, 255, 255, 0.5);
+$primary-color-40-dark: rgba(255, 255, 255, 0.4);
+$secondary-color-90-dark: rgba(221, 133, 0, 0.9);
+$tertiary-color-90-dark: rgba(0, 0, 0, 0.9);
+$icon-background-color-dark: rgb(78 78 78 / 44%);
+
+$header-border-color-dark: #1e1e1e;
+
+// Light Mode
+$primary-color-light: #000000;
+$secondary-color-light: #dd8500;
+$tertiary-color-light: #d0d0d0;
+$quaternary-color-light: #f8f8f8;
+$primary-color-90-light: rgba(0, 0, 0, 0.9);
+$primary-color-75-light: rgba(0, 0, 0, 0.75);
+$primary-color-50-light: rgba(0, 0, 0, 0.5);
+$primary-color-40-light: rgba(0, 0, 0, 0.4);
+$secondary-color-90-light: rgba(221, 133, 0, 0.9);
+$tertiary-color-90-light: rgba(208, 208, 208, 0.9);
+$icon-background-color-light: rgb(173 173 173 / 44%);
+
+$header-border-color-light: #eae7e7;
+
+// Orange Grainy Mode
+$primary-color-grain: #fff6e9; // Light cream color
+$secondary-color-grain: #dd8500; // Orange
+$tertiary-color-grain: #251800; // Dark brown
+$quaternary-color-grain: #402c00; // Darker brown
+$primary-color-90-grain: rgba(255, 246, 233, 0.9);
+$primary-color-75-grain: rgba(255, 246, 233, 0.75);
+$primary-color-50-grain: rgba(255, 246, 233, 0.5);
+$primary-color-40-grain: rgba(255, 246, 233, 0.4);
+$secondary-color-90-grain: rgba(221, 133, 0, 0.9);
+$tertiary-color-90-grain: rgba(37, 24, 0, 0.9);
+$header-border-color-grain: #53402c;
+$icon-background-color-grain: rgba(78, 59, 32, 0.44);
+
+:export {
+  primaryColor: $primary-color;
+  secondaryColor: $secondary-color;
+  secondaryColorNinety: $secondary-color-90;
+  secondaryColorSeventyFive: $secondary-color-75;
+  secondaryColorTwenty: $secondary-color-20;
+  tertiaryColor: $tertiary-color;
+  quaternaryColor: $quaternary-color;
+  primaryColorNinety: $primary-color-90;
+  primaryColorSeventyFive: $primary-color-75;
+  primaryColorFifty: $primary-color-50;
+  primaryColorForty: $primary-color-40;
+  tertiaryColorNinety: $tertiary-color-90;
+  headerBorderColor: $header-border-color;
+  iconBackgroundColor: $icon-background-color;
+
+  primaryColorLight: $primary-color-light;
+  secondaryColorLight: $secondary-color-light;
+  secondaryColorNinetyLight: $secondary-color-90-light;
+  tertiaryColorLight: $tertiary-color-light;
+  quaternaryColorLight: $quaternary-color-light;
+  primaryColorNinetyLight: $primary-color-90-light;
+  primaryColorSeventyFiveLight: $primary-color-75-light;
+  primaryColorFiftyLight: $primary-color-50-light;
+  primaryColorFortyLight: $primary-color-40-light;
+  tertiaryColorNinetyLight: $tertiary-color-90-light;
+  headerBorderColorLight: $header-border-color-light;
+  iconBackgroundColorLight: $icon-background-color-light;
+
+  primaryColorDark: $primary-color-dark;
+  secondaryColorDark: $secondary-color-dark;
+  secondaryColorNinetyDark: $secondary-color-90-dark;
+  tertiaryColorDark: $tertiary-color-dark;
+  quaternaryColorDark: $quaternary-color-dark;
+  primaryColorNinetyDark: $primary-color-90-dark;
+  primaryColorSeventyFiveDark: $primary-color-75-dark;
+  primaryColorFiftyDark: $primary-color-50-dark;
+  primaryColorFortyDark: $primary-color-40-dark;
+  tertiaryColorNinetyDark: $tertiary-color-90-dark;
+  headerBorderColorDark: $header-border-color-dark;
+  iconBackgroundColorDark: $icon-background-color-dark;
+
+  primaryColorGrain: $primary-color-grain;
+  secondaryColorGrain: $secondary-color-grain;
+  secondaryColorNinetyGrain: $secondary-color-90-grain;
+  tertiaryColorGrain: $tertiary-color-grain;
+  quaternaryColorGrain: $quaternary-color-grain;
+  primaryColorNinetyGrain: $primary-color-90-grain;
+  primaryColorSeventyFiveGrain: $primary-color-75-grain;
+  primaryColorFiftyGrain: $primary-color-50-grain;
+  primaryColorFortyGrain: $primary-color-40-grain;
+  tertiaryColorNinetyGrain: $tertiary-color-90-grain;
+  headerBorderColorGrain: $header-border-color-grain;
+  iconBackgroundColorGrain: $icon-background-color-grain;
+
+  fontStack: $font-stack;
+  fontStackArabic: $font-stack-arabic;
+  fontStackArabicWod: $font-stack-arabic-wod;
+}
+
+// Common colors
+$white: #ffffff;
+$black: #000000;
+$green: #4CAF50;
+$alert-red: #a90000;
+$dark-grey: #292929;

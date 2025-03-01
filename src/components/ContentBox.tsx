@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './ContentBox.scss';
-import * as styles from '../assets/Styles.module.scss';
+import * as variables from '../assets/Variables.module.scss';
 import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
@@ -246,7 +246,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     
     const wordElement = postRef.current.querySelector('.content-box-title h1') as HTMLElement;
     if (wordElement) wordElement.style.fontSize = `${fontSizeWord}px`;
-    if (wordElement) wordElement.style.color = styles.secondaryColor;
+    if (wordElement) wordElement.style.color = variables.secondaryColor;
     
     const definitionElement = postRef.current.querySelector('.content-box-description p') as HTMLElement;
     if (definitionElement) definitionElement.style.fontSize = `${fontSizeDefinition}px`;

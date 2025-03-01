@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PageUnderConstruction.scss';
 import { useTranslation } from 'react-i18next';
-import * as styles from '../src/assets/Styles.module.scss';
+import * as variables from '../src/assets/Variables.module.scss';
 import { convertNumerals } from '../src/assets/utils';
 
 // This is an interface for the time left object
@@ -68,7 +68,7 @@ const PageUnderConstruction: React.FC = () => {
         return () => clearTimeout(timer);
     });
     
-    const fontFamily = i18n.language === 'ar' ? styles.fontStackArabic : styles.fontStack;
+    const fontFamily = i18n.language === 'ar' ? variables.fontStackArabic : variables.fontStack;
     const direction = i18n.language === 'ar' ? 'rtl' : 'ltr';
     
     return (

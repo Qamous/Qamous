@@ -1,0 +1,418 @@
+@use 'Variables.module' as variables;
+
+/**
+ * Global Styling Section
+ * ----------------------
+ * This section contains the global styles for the application.
+ * It includes the body, headings, paragraphs, links, and form elements.
+ */
+
+* {
+  h1, h2, h3, h4, h5, h6, p, a, span, div, input, textarea, button {
+    font-family: variables.$font-stack;
+    color: variables.$primary-color;
+  }
+}
+
+.not-found {
+  text-align: center;
+  vertical-align: middle;
+  height: 70vh;
+  line-height: 70vh;
+}
+
+/**
+ * Form Styling Section
+ * --------------------
+ * This section contains the styles for the form elements used in the application.
+ * It includes the form container, input fields, and buttons.
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: variables.$font-stack;
+  width: 100%;
+  transition: 0.3s;
+  box-sizing: border-box;
+  gap: 12px;
+
+  &-title {
+    font-size: 44px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: variables.$primary-color;
+    width: 100%;
+  }
+
+  &-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 1000px;
+    width: 80%;
+
+    @media (max-width: 700px) {
+      width: 95%;
+    }
+
+    &-box {
+      padding: 10px;
+      border: 1px solid variables.$primary-color;
+      background-color: variables.$primary-color;
+      color: variables.$tertiary-color;
+      border-radius: 4px;
+      font-family: variables.$font-stack;
+      font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
+
+      &::selection {
+        background-color: variables.$primary-color;
+        color: variables.$tertiary-color;
+      }
+
+      &:focus {
+        background-color: variables.$tertiary-color;
+        color: variables.$primary-color;
+      }
+
+      &:hover {
+        background-color: variables.$primary-color-90;
+        color: variables.$tertiary-color;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    &-error {
+      color: variables.$alert-red;
+      margin-top: 5px;
+    }
+  }
+
+  &-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    //overflow: hidden;
+    //white-space: nowrap;
+    flex-wrap: wrap;
+
+    &-button {
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: 600;
+      margin: 5px;
+      width: clamp(125px, 200px, 250px);
+      padding: 12px 24px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      transition: 0.3s ease-in-out;
+      font-size: 20px;
+      align-self: center;
+
+      color: variables.$primary-color;
+      background-color: variables.$secondary-color;
+      border: 1px solid variables.$secondary-color;
+
+      &:hover {
+        //background-color: #4CAF50;
+        background-color: variables.$secondary-color;
+        color: variables.$quaternary-color;
+        cursor: pointer;
+        border-radius: 8px;
+        box-shadow: 0 0 10px variables.$secondary-color;
+      }
+
+      &-secondary {
+        background-color: variables.$quaternary-color;
+        color: variables.$secondary-color;
+      }
+    }
+  }
+
+  &-forgot {
+    color: variables.$primary-color-75;
+    margin: 5px 0;
+    cursor: pointer;
+
+    font-size: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, font-size 1s ease-out;
+
+    &.show {
+      opacity: 1;
+      font-size: 16px;
+      height: 23px;
+    }
+  }
+
+  &-oauth {
+    margin: 20px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      font-size: 16px;
+      font-family: variables.$font-stack;
+      color: variables.$primary-color-75;
+    }
+  }
+
+  &-left {
+    margin: 10px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 600px;
+    width: 55%;
+    min-width: 300px;
+
+    img {
+      width: 80%;
+      max-width: 300px;
+      margin: 10px 0;
+      align-self: center;
+      border-radius: 5px;
+      box-shadow: rgba(0, 0, 0, 0.08) 0 3px 6px, rgba(0, 0, 0, 0.10) 0 3px 6px;
+    }
+
+    h1, h2, h3, h4, h5, h6, p {
+      margin: 0 0 5px 0;
+      line-height: 1.4;
+      width: 95%;
+    }
+
+    &-input {
+      width: 100%;
+    }
+  }
+}
+
+/**
+ * Loading Ring Animation
+ * ----------------------
+ * This section contains the keyframes for the loading ring animation.
+ * It is used to display a loading spinner while the application fetches data.
+ */
+
+.loading-ring {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100px;
+
+  div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    // The use of currentColor here is pretty cool! border: 8px solid currentColor;
+    border: 8px solid variables.$primary-color-90;
+    border-radius: 50%;
+    animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: variables.$primary-color-90 transparent transparent transparent;
+
+    &:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+  }
+}
+
+@keyframes loading-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/**
+ * Button Styling Section
+ * ----------------------
+ * This section contains the styles for the buttons used in the application.
+ * It includes a disabled state.
+ */
+.buttons {
+  display: flex;
+  flex-direction: row;
+  user-select: none;
+
+  &-between {
+    justify-content: space-between;
+  }
+
+  &-evenly {
+    justify-content: space-evenly;
+  }
+
+  &-button {
+    padding: 5px 10px;
+    margin: auto;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid variables.$primary-color-90;
+    background: transparent;
+    transition: 0.4s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    * {
+      margin: 0;
+      padding: 0;
+      color: variables.$primary-color-90;
+    }
+
+    &:hover {
+      background: variables.$primary-color-90;
+      color: variables.$tertiary-color;
+      * {
+        color: variables.$tertiary-color;
+      }
+    }
+
+    &:active {
+      box-shadow: 0 0 12px 0 rgba(225, 225, 225, 1);
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:disabled {
+      background-color: variables.$primary-color-40;
+      cursor: not-allowed;
+      &:hover {
+        background-color: variables.$primary-color-40;
+        color: variables.$primary-color-90;
+        * {
+          color: variables.$primary-color-90;
+        }
+      }
+      &:focus {
+        background-color: variables.$primary-color-40;
+        color: variables.$primary-color-90;
+        * {
+          color: variables.$primary-color-90;
+        }
+      }
+    }
+
+    &.primary {
+      background-color: variables.$secondary-color;
+      color: variables.$primary-color;
+      border: 1px solid variables.$secondary-color;
+
+      &:hover {
+        background-color: variables.$secondary-color-20;
+        color: variables.$primary-color;
+      }
+    }
+
+    &.secondary {
+      background-color: transparent;
+      color: variables.$secondary-color;
+      border: 1px solid variables.$secondary-color;
+
+      &:hover {
+        background-color: variables.$secondary-color;
+        color: variables.$primary-color;
+      }
+    }
+
+    &.danger {
+      background-color: variables.$alert-red;
+      color: variables.$primary-color;
+      border: 1px solid variables.$alert-red;
+
+      &:hover {
+        background-color: #470000FF;
+        color: variables.$primary-color;
+      }
+    }
+  }
+}
+
+/**
+ * Feed Styling Section
+ * --------------------
+ * This section contains the styles for the feed section used in the application.
+ */
+.feed {
+  display: flex;
+  justify-content: space-between; /* Ensure space between the ad spaces */
+  align-items: stretch; /* Make children take the same height */
+
+  &-posts {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Ensure space between the ad spaces */
+    padding: 25px;
+    margin: 0;
+    min-height: 0;
+    overflow: auto;
+    text-align: justify;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    color: variables.$primary-color;
+    transition: padding 0.3s ease-in-out, gap 0.3s ease-in-out;
+
+    @media (max-width: 1200px) {
+      gap: 1px;
+      padding: 0 0 2px 0;
+    }
+
+    &-ad-space {
+      width: 100%;
+      height: 25vh;
+      display: none; //for now
+
+      @media (min-width: 1200px) {
+        display: none;
+      }
+    }
+  }
+
+  &-loading {
+    &-hidden {
+      display: none;
+    }
+  }
+
+  &-ad-space {
+    width: 25%;
+    display: none;
+
+    @media (min-width: 1200px) {
+      display: block;
+      flex: 0 0 25%; /* Ensure the ad space takes 25% width */
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}

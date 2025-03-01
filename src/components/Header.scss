@@ -1,4 +1,4 @@
-@use '../assets/Styles.module.scss' as styles;
+@use '../assets/Variables.module' as styles;
 $header-shadow: rgba(0, 0, 0, 0.1);
 
 .react-joyride__tooltip {

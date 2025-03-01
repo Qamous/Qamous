@@ -6,7 +6,7 @@ import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from "react-router-dom";
 import './Header.scss';
 import { US, EG } from 'country-flag-icons/react/3x2'
-import * as styles from '../assets/Styles.module.scss';
+import * as variables from '../assets/Variables.module.scss';
 import { setFunctionalCookie, getFunctionalCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
@@ -58,33 +58,33 @@ const Header: React.FC = () => {
       const isGrainMode: boolean = mode === 'grain';
         
         if (isGrainMode) {
-            // Orange grainy mode colors from styles
-            root.style.setProperty('--primary-color', styles.primaryColorGrain);
-            root.style.setProperty('--secondary-color', styles.secondaryColorGrain);
-            root.style.setProperty('--tertiary-color', styles.tertiaryColorGrain);
-            root.style.setProperty('--quaternary-color', styles.quaternaryColorGrain);
-            root.style.setProperty('--primary-color-90', styles.primaryColorNinetyGrain);
-            root.style.setProperty('--primary-color-75', styles.primaryColorSeventyFiveGrain);
-            root.style.setProperty('--primary-color-50', styles.primaryColorFiftyGrain);
-            root.style.setProperty('--primary-color-40', styles.primaryColorFortyGrain);
-            root.style.setProperty('--secondary-color-90', styles.secondaryColorNinetyGrain);
-            root.style.setProperty('--tertiary-color-90', styles.tertiaryColorNinetyGrain);
-            root.style.setProperty('--header-border-color', styles.headerBorderColorGrain);
-            root.style.setProperty('--icon-background-color', styles.iconBackgroundColorGrain);
+            // Orange grainy mode colors from variables
+            root.style.setProperty('--primary-color', variables.primaryColorGrain);
+            root.style.setProperty('--secondary-color', variables.secondaryColorGrain);
+            root.style.setProperty('--tertiary-color', variables.tertiaryColorGrain);
+            root.style.setProperty('--quaternary-color', variables.quaternaryColorGrain);
+            root.style.setProperty('--primary-color-90', variables.primaryColorNinetyGrain);
+            root.style.setProperty('--primary-color-75', variables.primaryColorSeventyFiveGrain);
+            root.style.setProperty('--primary-color-50', variables.primaryColorFiftyGrain);
+            root.style.setProperty('--primary-color-40', variables.primaryColorFortyGrain);
+            root.style.setProperty('--secondary-color-90', variables.secondaryColorNinetyGrain);
+            root.style.setProperty('--tertiary-color-90', variables.tertiaryColorNinetyGrain);
+            root.style.setProperty('--header-border-color', variables.headerBorderColorGrain);
+            root.style.setProperty('--icon-background-color', variables.iconBackgroundColorGrain);
         } else {
             // Original dark/light mode logic
-            root.style.setProperty('--primary-color', isDarkMode ? styles.primaryColorDark : styles.primaryColorLight);
-            root.style.setProperty('--secondary-color', isDarkMode ? styles.secondaryColorDark : styles.secondaryColorLight);
-            root.style.setProperty('--tertiary-color', isDarkMode ? styles.tertiaryColorDark : styles.tertiaryColorLight);
-            root.style.setProperty('--quaternary-color', isDarkMode ? styles.quaternaryColorDark : styles.quaternaryColorLight);
-            root.style.setProperty('--primary-color-90', isDarkMode ? styles.primaryColorNinetyDark : styles.primaryColorNinetyLight);
-            root.style.setProperty('--primary-color-75', isDarkMode ? styles.primaryColorSeventyFiveDark : styles.primaryColorSeventyFiveLight);
-            root.style.setProperty('--primary-color-50', isDarkMode ? styles.primaryColorFiftyDark : styles.primaryColorFiftyLight);
-            root.style.setProperty('--primary-color-40', isDarkMode ? styles.primaryColorFortyDark : styles.primaryColorFortyLight);
-            root.style.setProperty('--secondary-color-90', isDarkMode ? styles.secondaryColorNinetyDark : styles.secondaryColorNinetyLight);
-            root.style.setProperty('--tertiary-color-90', isDarkMode ? styles.tertiaryColorNinetyDark : styles.tertiaryColorNinetyLight);
-            root.style.setProperty('--header-border-color', isDarkMode ? styles.headerBorderColorDark : styles.headerBorderColorLight);
-            root.style.setProperty('--icon-background-color', isDarkMode ? styles.iconBackgroundColorDark : styles.iconBackgroundColorLight);
+            root.style.setProperty('--primary-color', isDarkMode ? variables.primaryColorDark : variables.primaryColorLight);
+            root.style.setProperty('--secondary-color', isDarkMode ? variables.secondaryColorDark : variables.secondaryColorLight);
+            root.style.setProperty('--tertiary-color', isDarkMode ? variables.tertiaryColorDark : variables.tertiaryColorLight);
+            root.style.setProperty('--quaternary-color', isDarkMode ? variables.quaternaryColorDark : variables.quaternaryColorLight);
+            root.style.setProperty('--primary-color-90', isDarkMode ? variables.primaryColorNinetyDark : variables.primaryColorNinetyLight);
+            root.style.setProperty('--primary-color-75', isDarkMode ? variables.primaryColorSeventyFiveDark : variables.primaryColorSeventyFiveLight);
+            root.style.setProperty('--primary-color-50', isDarkMode ? variables.primaryColorFiftyDark : variables.primaryColorFiftyLight);
+            root.style.setProperty('--primary-color-40', isDarkMode ? variables.primaryColorFortyDark : variables.primaryColorFortyLight);
+            root.style.setProperty('--secondary-color-90', isDarkMode ? variables.secondaryColorNinetyDark : variables.secondaryColorNinetyLight);
+            root.style.setProperty('--tertiary-color-90', isDarkMode ? variables.tertiaryColorNinetyDark : variables.tertiaryColorNinetyLight);
+            root.style.setProperty('--header-border-color', isDarkMode ? variables.headerBorderColorDark : variables.headerBorderColorLight);
+            root.style.setProperty('--icon-background-color', isDarkMode ? variables.iconBackgroundColorDark : variables.iconBackgroundColorLight);
         }
     };
     
