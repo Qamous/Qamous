@@ -1,4 +1,4 @@
-@use '../src/assets/Variables.module' as styles;
+@use '../src/assets/Variables.module' as variables;
 
 .blog {
   max-width: 800px;
@@ -8,12 +8,12 @@
   h1 {
     text-align: center;
     margin-bottom: 2rem;
-    color: styles.$primary-color;
+    color: variables.$primary-color;
   }
 
-  // Form styles
+  // Form variables
   form {
-    background: styles.$quaternary-color;
+    background: variables.$quaternary-color;
     padding: 1.5rem;
     border-radius: 12px;
     margin-bottom: 3rem;
@@ -23,13 +23,13 @@
       width: calc(100% - 1.6rem); // Accounting for padding
       padding: 0.8rem;
       margin-bottom: 1rem;
-      border: 1px solid rgba(styles.$primary-color, 0.2);
+      border: 1px solid rgba(variables.$primary-color, 0.2);
       border-radius: 6px;
-      background-color: styles.$tertiary-color;
-      color: styles.$primary-color;
+      background-color: variables.$tertiary-color;
+      color: variables.$primary-color;
 
       &::placeholder {
-        color: rgba(styles.$primary-color, 0.6);
+        color: rgba(variables.$primary-color, 0.6);
       }
     }
 
@@ -41,21 +41,21 @@
 
     button {
       padding: 10px;
-      background-color: styles.$secondary-color;
-      color: styles.$primary-color-dark;
+      background-color: variables.$secondary-color;
+      color: variables.$primary-color-dark;
       border: none;
       cursor: pointer;
       width: 100%;
       border-radius: 6px;
 
       &:disabled {
-        background-color: styles.$primary-color-40;
+        background-color: variables.$primary-color-40;
         cursor: not-allowed;
       }
 
       &.preview-button {
         &.disabled {
-          background-color: styles.$primary-color-40;
+          background-color: variables.$primary-color-40;
           cursor: not-allowed;
         }
       }
@@ -68,7 +68,7 @@
     gap: 2rem;
 
     .post {
-      background: styles.$quaternary-color;
+      background: variables.$quaternary-color;
       border-radius: 12px;
       padding: 2rem;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -78,13 +78,13 @@
         margin-bottom: 1.5rem;
 
         h2 {
-          color: styles.$primary-color;
+          color: variables.$primary-color;
           margin: 0;
           font-size: 1.5rem;
         }
 
         .post-date {
-          color: styles.$secondary-color;
+          color: variables.$secondary-color;
           font-size: 0.9rem;
           font-weight: bold;
           margin-top: 0.5rem;
@@ -94,10 +94,10 @@
 
       // Post content
       .post-content {
-        color: styles.$primary-color;
+        color: variables.$primary-color;
 
         h1, h2, h3, h4, h5, h6 {
-          color: styles.$primary-color;
+          color: variables.$primary-color;
           margin: 1.5rem 0 1rem;
         }
 
@@ -112,16 +112,16 @@
           height: 2px;
           background: linear-gradient(
                           to right,
-                          styles.$primary-color-40,
-                          styles.$primary-color-50,
-                          styles.$primary-color-40
+                          variables.$primary-color-40,
+                          variables.$primary-color-50,
+                          variables.$primary-color-40
           );
           margin: 1.5rem 0;
         }
 
 
         a {
-          color: styles.$secondary-color;
+          color: variables.$secondary-color;
           text-decoration: none;
 
           &:hover {
@@ -130,10 +130,10 @@
         }
 
         blockquote {
-          border-left: 4px solid styles.$secondary-color;
+          border-left: 4px solid variables.$secondary-color;
           margin: 1rem 0;
           padding-left: 1rem;
-          color: rgba(styles.$primary-color, 0.8);
+          color: rgba(variables.$primary-color, 0.8);
         }
       }
     }
@@ -143,14 +143,14 @@
   .login-message {
     text-align: center;
     font-size: 1rem;
-    color: styles.$primary-color;
+    color: variables.$primary-color;
     margin: 0 0 1.5rem 0;
-    border: 1px solid styles.$primary-color-40;
+    border: 1px solid variables.$primary-color-40;
     border-radius: 6px;
   }
 
   .login-link {
-    color: styles.$secondary-color;
+    color: variables.$secondary-color;
     text-decoration: none;
     position: relative;
     transition: color 0.3s;
@@ -158,7 +158,7 @@
     opacity: 1;  // Override opacity from parent
 
     &:hover {
-      color: styles.$secondary-color-75;
+      color: variables.$secondary-color-75;
     }
 
     &::after {
@@ -168,7 +168,7 @@
       height: 2px;
       bottom: -2px;
       left: 0;
-      background-color: styles.$secondary-color;
+      background-color: variables.$secondary-color;
       visibility: hidden;
       transform: scaleX(0);
       transition: all 0.3s ease-in-out;
@@ -222,7 +222,7 @@
     textarea:-moz-placeholder,
     textarea::-moz-placeholder,
     textarea:-ms-input-placeholder {
-      color: rgba(styles.$primary-color, 0.6) !important;
+      color: rgba(variables.$primary-color, 0.6) !important;
     }
   }
 }

@@ -1,4 +1,4 @@
-@use '../src/assets/Variables.module' as styles;
+@use '../src/assets/Variables.module' as variables;
 
 .about {
   padding: 15px;
@@ -10,7 +10,7 @@
     line-height: 1.5;
 
     a {
-      color: styles.$secondary-color-90;
+      color: variables.$secondary-color-90;
       text-decoration: none;
       font-weight: 700;
     }

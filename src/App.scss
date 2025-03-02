@@ -1,8 +1,8 @@
-@use 'assets/Variables.module' as styles;
+@use 'assets/Variables.module' as variables;
 
 ::selection {
-  background: styles.$primary-color;
-  color: styles.$tertiary-color;
+  background: variables.$primary-color;
+  color: variables.$tertiary-color;
 }
 
 * {
@@ -18,14 +18,14 @@
 //}
 //
 //::-webkit-scrollbar-thumb {
-//  background-color: styles.$primary-color-75;
+//  background-color: variables.$primary-color-75;
 //  border-radius: 20px;
 //  border: 6px solid transparent;
 //  background-clip: content-box;
 //}
 //
 //::-webkit-scrollbar-thumb:hover {
-//  background-color: styles.$primary-color;
+//  background-color: variables.$primary-color;
 //}
 
 body {
@@ -37,7 +37,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* Set the height of the app to 100% of the viewport height */
-  background-color: styles.$tertiary-color;
+  background-color: variables.$tertiary-color;
   padding-bottom: 60px; // Add padding to prevent content from being hidden behind the footer
 }
 
@@ -46,7 +46,7 @@ body {
 }
 
 .search-bar {
-  /* Add styles for the SearchBar component if necessary */
+  /* Add variables for the SearchBar component if necessary */
 }
 
 .content {
@@ -64,13 +64,13 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 5px;
-  background-color: styles.$primary-color-75;
+  background-color: variables.$primary-color-75;
   position: fixed;
   bottom: 15px;
   right: 15px;
   z-index: 198;
   cursor: pointer;
-  color: styles.$tertiary-color;
+  color: variables.$tertiary-color;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,7 +80,7 @@ body {
   }
 
   &:hover {
-    background-color: styles.$primary-color;
+    background-color: variables.$primary-color;
   }
 }
 

@@ -1,4 +1,4 @@
-@use '../src/assets/Variables.module' as styles;
+@use '../src/assets/Variables.module' as variables;
 
 .chatbot {
   &-container {
@@ -23,7 +23,7 @@
   }
 
   &-interface {
-    background-color: styles.$quaternary-color;
+    background-color: variables.$quaternary-color;
     border-radius: 12px;
     padding: 1.5rem;
     min-height: 70vh;
@@ -103,9 +103,9 @@
     }
 
     &--user {
-      background-color: styles.$secondary-color-20;
+      background-color: variables.$secondary-color-20;
       margin-left: auto;
-      color: styles.$primary-color;
+      color: variables.$primary-color;
 
       .rtl & {
         margin-right: auto;
@@ -119,15 +119,15 @@
     }
 
     &--assistant {
-      background-color: styles.$tertiary-color;
+      background-color: variables.$tertiary-color;
       margin-right: auto;
-      color: styles.$primary-color;
+      color: variables.$primary-color;
       position: relative;
       padding-left: 24px;
     }
 
     &-arabic {
-      font-family: styles.$font-stack-arabic;
+      font-family: variables.$font-stack-arabic;
       font-size: 1.1em;
       line-height: 1.6;
       direction: rtl;
@@ -137,9 +137,9 @@
     &-sources {
       margin-top: 1rem;
       padding-top: 0.5rem;
-      border-top: 1px solid styles.$primary-color-40;
+      border-top: 1px solid variables.$primary-color-40;
       font-size: 0.9em;
-      color: styles.$primary-color-75;
+      color: variables.$primary-color-75;
     }
   }
 

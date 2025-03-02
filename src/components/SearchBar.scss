@@ -1,4 +1,4 @@
-@use "../assets/Variables.module" as styles;
+@use "../assets/Variables.module" as variables;
 @use "sass:math";
 
 $font-size: 20px;
@@ -17,11 +17,11 @@ $close-trans-time: 150ms;
   padding: 15px;
   margin: -7px 10px 0 0;
   font-size: $font-size;
-  border: solid $frame-thickness styles.$secondary-color;
+  border: solid $frame-thickness variables.$secondary-color;
   display: inline-block;
   position: relative;
   border-radius: $size;
-  background-color: styles.$quaternary-color;
+  background-color: variables.$quaternary-color;
   cursor: pointer;
 
   &-bar {
@@ -41,7 +41,7 @@ $close-trans-time: 150ms;
 }
 
 .search-box {
-  font-family: styles.$font-stack;
+  font-family: variables.$font-stack;
 }
 
 @media (min-width: 1201px) {
@@ -70,16 +70,16 @@ $close-trans-time: 150ms;
     padding: 0;
     margin: 0 7px 0 0;
     font-size: $font-size;
-    border: solid $frame-thickness styles.$secondary-color;
+    border: solid $frame-thickness variables.$secondary-color;
     display: inline-block;
     position: relative;
     border-radius: $size;
 
     input[type="text"] {
       cursor: pointer;
-      background-color: styles.$quaternary-color;
-      color: styles.$primary-color;
-      font-family: styles.$font-stack;
+      background-color: variables.$quaternary-color;
+      color: variables.$primary-color;
+      font-family: variables.$font-stack;
       font-weight: bold;
       width: $size;
       height: $size;
@@ -137,7 +137,7 @@ $close-trans-time: 150ms;
       &:before,
       &:after {
         content: "";
-        background-color: styles.$secondary-color;
+        background-color: variables.$secondary-color;
         width: $frame-thickness;
         height: $handle-height;
         position: absolute;
@@ -195,8 +195,8 @@ $close-trans-time: 150ms;
       font-size: 17px;
       float: left;
       width: 95%;
-      background: styles.$quaternary-color;
-      color: styles.$primary-color;
+      background: variables.$quaternary-color;
+      color: variables.$primary-color;
       border: rgba(255, 255, 255, 0.5) solid 0.5px;
     }
 
@@ -204,15 +204,15 @@ $close-trans-time: 150ms;
       float: left;
       min-width: 20%;
       padding: 15px;
-      color: styles.$primary-color;
-      background: styles.$quaternary-color;
+      color: variables.$primary-color;
+      background: variables.$quaternary-color;
       font-size: 17px;
       border: none;
       cursor: pointer;
       margin-top: 8px;
       &:hover {
-        background: styles.$primary-color-50;
-        color: styles.$tertiary-color;
+        background: variables.$primary-color-50;
+        color: variables.$tertiary-color;
       }
     }
   }

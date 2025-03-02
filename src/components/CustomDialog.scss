@@ -1,4 +1,4 @@
-@use '../assets/Variables.module' as styles;
+@use '../assets/Variables.module' as variables;
 
 @keyframes zoomIn {
   from {
@@ -25,7 +25,7 @@
 
   &-content {
     position: relative;
-    background-color: styles.$quaternary-color;
+    background-color: variables.$quaternary-color;
     padding: 20px;
     border-radius: 10px;
     width: 80%;
@@ -35,7 +35,7 @@
 
     &-input {
       textarea {
-        background-color: styles.$quaternary-color;
+        background-color: variables.$quaternary-color;
         border: 1px solid #ced4da;
         border-radius: 5px;
         resize: none;
@@ -48,7 +48,7 @@
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
-      background-color: styles.$secondary-color;
+      background-color: variables.$secondary-color;
       color: #ffffff;
       cursor: pointer;
     }

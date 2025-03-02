@@ -1,4 +1,4 @@
-@use '../assets/Variables.module' as styles;
+@use '../assets/Variables.module' as variables;
 $header-shadow: rgba(0, 0, 0, 0.1);
 
 .react-joyride__tooltip {
@@ -13,10 +13,10 @@ $header-shadow: rgba(0, 0, 0, 0.1);
     z-index: 198;
     right: 0;
     top: 0;
-    background-color: styles.$tertiary-color-90;
+    background-color: variables.$tertiary-color-90;
     overflow-x: hidden;
     transition: 0.5s ease;
-    font-family: styles.$font-stack;
+    font-family: variables.$font-stack;
     font-weight: 500;
 
     &-content {
@@ -30,7 +30,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             padding: 8px;
             text-decoration: none;
             font-size: 36px;
-            color: styles.$primary-color;
+            color: variables.$primary-color;
             display: block;
             transition: 0.3s;
             opacity: 0.6;
@@ -40,7 +40,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             }
 
             &.active {
-                color: styles.$secondary-color;
+                color: variables.$secondary-color;
                 opacity: 0.85;
             }
         }
@@ -81,7 +81,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
 
 .header {
     /*background-color: #D5D5D5; /* Light gray background color */
-    background-color: styles.$quaternary-color; /* Dark gray background color */
+    background-color: variables.$quaternary-color; /* Dark gray background color */
     height: 90px;
     width: 100%;
     flex-shrink: 0; /* Prevent the header from shrinking when content grows */
@@ -93,7 +93,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
     z-index: 199;
     //#eae7e7
     //#1e1e1e
-    border-bottom: 1px solid styles.$header-border-color;
+    border-bottom: 1px solid variables.$header-border-color;
     box-shadow: 0 -6px 5px 5px $header-shadow;
     transition: height 0.5s ease-in-out;
     position: fixed;
@@ -135,7 +135,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
         gap: 16px;
 
         a {
-            color: styles.$secondary-color;
+            color: variables.$secondary-color;
             font-size: 17px;
             opacity: 1;
 
@@ -144,7 +144,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             }
 
             &.active {
-                color: styles.$primary-color;
+                color: variables.$primary-color;
                 opacity: 0.5;
             }
         }
@@ -162,14 +162,14 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             transition-delay: 0.4s;
 
             padding: 8px;
-            background-color: styles.$secondary-color-20;
+            background-color: variables.$secondary-color-20;
             border-radius: 35%;
         }
 
         &-divider {
             width: 2.5px;
             height: 50px;
-            background-color: styles.$icon-background-color;
+            background-color: variables.$icon-background-color;
         }
 
         &-language {
@@ -183,8 +183,8 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             flex-direction: row;
 
             p {
-                color: styles.$primary-color;
-                font: 100% styles.$font-stack;
+                color: variables.$primary-color;
+                font: 100% variables.$font-stack;
                 padding: 0 0 0 5px;
                 align-self: center;
                 user-select: none;
@@ -223,7 +223,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
 
             padding: 10px;
             transition: background-color 0.3s ease;
-            background-color: styles.$icon-background-color;
+            background-color: variables.$icon-background-color;
             border-radius: 35%;
 
             img {
@@ -252,7 +252,7 @@ $header-shadow: rgba(0, 0, 0, 0.1);
             .bar1, .bar2, .bar3 {
                 width: 35px;
                 height: 5px;
-                background-color: styles.$secondary-color;
+                background-color: variables.$secondary-color;
                 margin: 6px 0;
                 transition: 0.4s;
             }

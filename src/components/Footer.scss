@@ -1,11 +1,11 @@
-@use '../assets/Variables.module' as styles;
+@use '../assets/Variables.module' as variables;
 
 .footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: styles.$quaternary-color;
+  background-color: variables.$quaternary-color;
   transition: all 0.3s ease;
   height: 60px; // Height when collapsed
   z-index: 197;
@@ -44,7 +44,7 @@
   }
 
   &-copyright {
-    color: styles.$primary-color-50;
+    color: variables.$primary-color-50;
     margin: 0;
     text-align: center;
     font-size: 0.9rem;
@@ -58,7 +58,7 @@
     max-width: 100%;
 
     &:hover {
-      color: styles.$primary-color-75;
+      color: variables.$primary-color-75;
     }
 
     &::after {
@@ -68,7 +68,7 @@
       left: 50%;
       width: 0;
       height: 2px;
-      background-color: styles.$secondary-color;
+      background-color: variables.$secondary-color;
       transform: translateX(-50%);
       transition: width 0.3s ease;
     }
@@ -97,19 +97,19 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: linear-gradient(to right, transparent, styles.$primary-color-40, transparent);
+      background: linear-gradient(to right, transparent, variables.$primary-color-40, transparent);
     }
 
     * {
       margin: 0;
       padding: 0;
-      color: styles.$primary-color-75;
+      color: variables.$primary-color-75;
       text-decoration: none;
       transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
 
       &:hover {
-        color: styles.$secondary-color;
+        color: variables.$secondary-color;
         transform: translateY(-3px);
       }
 
@@ -120,7 +120,7 @@
         left: 0;
         width: 0;
         height: 2px;
-        background-color: styles.$secondary-color;
+        background-color: variables.$secondary-color;
         transition: width 0.3s ease;
       }
 
@@ -137,7 +137,7 @@
     grid-column: 3;
 
     a {
-      color: styles.$primary-color-75;
+      color: variables.$primary-color-75;
       font-size: 1.1rem;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       height: 32px;
@@ -149,7 +149,7 @@
       background-color: transparent;
       
       &:hover {
-        color: styles.$secondary-color;
+        color: variables.$secondary-color;
         transform: scale(1.2) rotate(8deg);
         background-color: rgba(255, 255, 255, 0.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -162,7 +162,7 @@
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: styles.$primary-color-50;
+    color: variables.$primary-color-50;
     cursor: pointer;
     transition: all 0.3s ease;
     display: none; /* Hidden by default on mobile */
@@ -172,7 +172,7 @@
     border-radius: 50%;
 
     &:hover {
-      color: styles.$secondary-color;
+      color: variables.$secondary-color;
       background-color: rgba(255, 255, 255, 0.05);
     }
 

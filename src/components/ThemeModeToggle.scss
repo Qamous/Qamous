@@ -1,4 +1,4 @@
-@use '../assets/Variables.module' as styles;
+@use '../assets/Variables.module' as variables;
 
 .theme-toggle {
   cursor: pointer;
@@ -20,7 +20,7 @@
 
   &:hover {
     transform: scale(1.1) rotate(10deg);
-    background-color: styles.$icon-background-color;
+    background-color: variables.$icon-background-color;
   }
 
   &.animating svg {

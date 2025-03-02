@@ -1,4 +1,4 @@
-@use "../src/assets/Variables.module" as styles;
+@use "../src/assets/Variables.module" as variables;
 
 .page-under-construction {
     display: flex;
@@ -7,7 +7,7 @@
     align-items: center;
     height: 70vh;
     text-align: center;
-    color: styles.$primary-color;
+    color: variables.$primary-color;
 
     h1 {
         font-size: 43px;
@@ -18,7 +18,7 @@
         font-size: 24px;
 
         mark {
-            background-color: styles.$secondary-color-90;
+            background-color: variables.$secondary-color-90;
             border-radius: 5px;
             font-weight: bold;
         }

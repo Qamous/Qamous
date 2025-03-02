@@ -1,4 +1,4 @@
-@use '../assets/Variables.module' as styles;
+@use '../assets/Variables.module' as variables;
 
 .toolbar-items {
     nav {
@@ -16,7 +16,7 @@
                 transition: all 0.4s ease;
 
                 a {
-                    color: styles.$primary-color;
+                    color: variables.$primary-color;
                     text-decoration: none;
                     text-transform: uppercase;
                     display: block;
