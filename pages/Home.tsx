@@ -8,7 +8,6 @@ import Snackbar from '../src/components/Snackbar';
 import CustomDialog from '../src/components/CustomDialog';
 import { Helmet } from 'react-helmet';
 import { useIntersectionObserver } from '../src/assets/utils';
-//import AdSenseWrapper from '../src/components/AdSenseWrapper';
 
 interface HomeContent {
   word: string,

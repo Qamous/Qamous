@@ -2,8 +2,12 @@ import './Footer.scss';
 import i18n from 'i18next';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { faChevronUp, faEnvelope, faHandHoldingMedical } from '@fortawesome/free-solid-svg-icons';
+import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
+import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope';
+import { faHandHoldingMedical } from '@fortawesome/free-solid-svg-icons/faHandHoldingMedical';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 

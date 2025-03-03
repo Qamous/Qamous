@@ -1,38 +1,45 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, Suspense, lazy } from 'react';
+const ReactQueryDevtools = import.meta.env.DEV
+  ? lazy(() => import('react-query/devtools').then(mod => ({ default: mod.ReactQueryDevtools })))
+  : () => null;
+const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(mod => ({ default: mod.FontAwesomeIcon })));
+const Header = lazy(() => import('./components/Header'));
+const Snackbar = lazy(() => import('./components/Snackbar'));
+const Footer = lazy(() => import('./components/Footer'));
 import './App.scss';
-import Header from './components/Header';
 import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
-import WordOfTheDay from '../pages/WordOfTheDay';
-import Home from '../pages/Home';
-import translationEN from './assets/en/translation.json';
-import translationAR from './assets/ar/translation.json';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
-import { getFunctionalCookie } from './assets/utils';
-import PageUnderConstruction from '../pages/PageUnderConstruction';
-import LogIn from '../pages/LogIn';
-import SignUp from '../pages/SignUp';
-import AddWord from '../pages/AddWord';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBug } from '@fortawesome/free-solid-svg-icons';
+import { getFunctionalCookie } from './assets/utils';import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
-import ForgotPassword from '../pages/ForgotPassword';
-import ResetPassword from '../pages/ResetPassword';
-import UserProfile from '../pages/UserProfile';
-import SearchResults from '../pages/SearchResults';
-import NotFound from '../pages/NotFound';
-import Snackbar from './components/Snackbar';
-import WordPage from '../pages/WordPage';
-import About from '../pages/About';
-import Footer from './components/Footer';
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
-import Blog from '../pages/Blog';
-import AdvancedSearch from '../pages/AdvancedSearch';
-import Chatbot from '../pages/Chatbot';
+import translationEN from './assets/en/translation.json';
+import translationAR from './assets/ar/translation.json';
 // Adverts bar: Uncomment the following line to enable the adverts bar
 // import Adverts from './components/Adverts';
+
+// Lazy load all page components with dynamic imports
+const Home = lazy(() => import(/* webpackPrefetch: true */ '../pages/Home'));
+const WordOfTheDay = lazy(() => import(/* webpackPreload: true */ '../pages/WordOfTheDay'));
+const LogIn = lazy(() => import(/* webpackPreload: true */ '../pages/LogIn'));
+const SignUp = lazy(() => import(/* webpackPreload: true */ '../pages/SignUp'));
+
+// Secondary routes with dynamic imports
+const AddWord = lazy(() => import('../pages/AddWord'));
+const SearchResults = lazy(() => import('../pages/SearchResults'));
+const WordPage = lazy(() => import('../pages/WordPage'));
+const UserProfile = lazy(() => import('../pages/UserProfile'));
+
+// Less frequently accessed routes with dynamic imports
+const AdvancedSearch = lazy(() => import('../pages/AdvancedSearch'));
+const Blog = lazy(() => import('../pages/Blog'));
+const About = lazy(() => import('../pages/About'));
+const Chatbot = lazy(() => import('../pages/Chatbot'));
+const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('../pages/ResetPassword'));
+const NotFound = lazy(() => import('../pages/NotFound'));
+const PageUnderConstruction = lazy(() => import('../pages/PageUnderConstruction'));
 
 // Set the default language to English unless the user's browser language is Arabic
 let defaultLanguage = 'en';
@@ -141,8 +148,27 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
   return children ? <>{children}</> : null;
 };
 
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="loading-container">
+    <div className="loading-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+);
+
 const App: React.FC = () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 5 * 60 * 1000, // 5 minutes
+      },
+    },
+  });
   const [mustLoginSnackbarOpen, setMustLoginSnackbarOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { wordId, lang } = useParams<{ wordId: string; lang?: string }>();
@@ -182,79 +208,51 @@ const App: React.FC = () => {
         <div className="grain-texture"></div>
         <Header />
         <div className="content">
-          <Routes>
-            <Route path="/" element={
-              <Home />
-            } />
-            <Route path="/advanced-search" element={
-              <AdvancedSearch />
-            } />
-            <Route path="/advanced-search/:countryName" element={
-              <AdvancedSearch />
-            } />
-            {/*<div className="ads">*/}
-            {/*  <Adverts />*/}
-            {/*</div>*/}
-            <Route path="/feeling-lucky" element={
-              <WordOfTheDay />
-            } />
-            <Route path="/advertise" element={
-              <PageUnderConstruction />
-            } />
-            <Route path="/add-definition" element={
-              <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
-                <AddWord />
-              </CheckUserLoggedOut>
-            } />
-            <Route path="/search/:query" element={
-              <SearchResults />
-            } />
-            {/*
-          TODO: Accept WordId or Word in Arabic or Word in Franco-Arabic
-          <Route path="/word/:identifier" element={
-          */}
-            <Route path="/word/:wordId/:lang?" element={
-              <WordPage />
-            } />
-            <Route path="/login" element={
-              <CheckUserLoggedIn>
-                <LogIn />
-              </CheckUserLoggedIn>
-            } />
-            <Route path="/signup" element={
-              <CheckUserLoggedIn>
-                <SignUp />
-              </CheckUserLoggedIn>
-            } />
-            <Route path="/forgot-password" element={
-              <CheckUserLoggedIn>
-                <ForgotPassword />
-              </CheckUserLoggedIn>
-            } />
-            <Route path="/reset-password/:token" element={
-              <ResetPassword />
-            } />
-            <Route path="/profile" element={
-              <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
-                <UserProfile />
-              </CheckUserLoggedOut>
-            } />
-            <Route path="/blog" element={
-              <div className="app">
-                <Blog />
-              </div>
-            } />
-            <Route path="/opportunities" element={
-              <PageUnderConstruction />
-            } />
-            <Route path="/about" element={
-              <About />
-            } />
-            <Route path="/chatbot" element={<Chatbot />} />
-            <Route path="*" element={
-              <NotFound />
-            } /> {/* Catch-all route */}
-          </Routes>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/advanced-search" element={<AdvancedSearch />} />
+              <Route path="/advanced-search/:countryName" element={<AdvancedSearch />} />
+              {/*<div className="ads">*/}
+              {/*  <Adverts />*/}
+              {/*</div>*/}
+              <Route path="/feeling-lucky" element={<WordOfTheDay />} />
+              <Route path="/advertise" element={<PageUnderConstruction />} />
+              <Route path="/add-definition" element={
+                <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
+                  <AddWord />
+                </CheckUserLoggedOut>
+              } />
+              <Route path="/search/:query" element={<SearchResults />} />
+              <Route path="/word/:wordId/:lang?" element={<WordPage />} />
+              <Route path="/login" element={
+                <CheckUserLoggedIn>
+                  <LogIn />
+                </CheckUserLoggedIn>
+              } />
+              <Route path="/signup" element={
+                <CheckUserLoggedIn>
+                  <SignUp />
+                </CheckUserLoggedIn>
+              } />
+              <Route path="/forgot-password" element={
+                <CheckUserLoggedIn>
+                  <ForgotPassword />
+                </CheckUserLoggedIn>
+              } />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
+              <Route path="/profile" element={
+                <CheckUserLoggedOut setMustLoginSnackbarOpen={setMustLoginSnackbarOpen}>
+                  <UserProfile />
+                </CheckUserLoggedOut>
+              } />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/opportunities" element={<PageUnderConstruction />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/chatbot" element={<Chatbot />} />
+              <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
+            </Routes>
+          </Suspense>
         </div>
         <div
           className={'report'}
@@ -271,8 +269,8 @@ const App: React.FC = () => {
           open={mustLoginSnackbarOpen}
           message={t('login.must_login')}
         />
-        {/* TODO: Only in the dev branch */}
-        <ReactQueryDevtools />
+        {/* Only in development mode */}
+        {import.meta.env.DEV && <ReactQueryDevtools />}
       </QueryClientProvider>
     </div>
   );

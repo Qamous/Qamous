@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import './SearchBar.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(module => ({ default: module.FontAwesomeIcon })));
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -62,7 +62,9 @@ const SearchBar: React.FC = () => {
           onClick={closeSearch}
           title="Close Overlay"
         >
-          <FontAwesomeIcon icon={faXmark} />
+          <Suspense fallback={<span>&times;</span>}>
+            <FontAwesomeIcon icon={faXmark} />
+          </Suspense>
         </span>
         <div className="search-overlay-content">
           <form className="search-box" onSubmit={handleSearch}>

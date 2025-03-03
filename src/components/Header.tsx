@@ -1,17 +1,20 @@
-import React, { useRef, useState, useEffect } from 'react';
-import ToolbarItems from "./ToolbarItems";
-import SearchBar from "./SearchBar";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
+import React, { useRef, useState, useEffect, lazy, Suspense } from 'react';
+const SearchBar = lazy(() => import("./SearchBar"));
+const Joyride = lazy(() => import('react-joyride'));
+const ToolbarItems = lazy(() => import("./ToolbarItems"));
+const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(module => ({ default: module.FontAwesomeIcon })));
+const US = lazy(() => import('country-flag-icons/react/3x2').then(module => ({ default: module.US })));
+const EG = lazy(() => import('country-flag-icons/react/3x2').then(module => ({ default: module.EG })));
+const ThemeModeToggle = lazy(() => import('./ThemeModeToggle'));
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { NavLink } from "react-router-dom";
 import './Header.scss';
-import { US, EG } from 'country-flag-icons/react/3x2'
 import * as variables from '../assets/Variables.module.scss';
 import { setFunctionalCookie, getFunctionalCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
-import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
+import { CallBackProps, STATUS, Step } from 'react-joyride';
 import qamousLogo from '../assets/qamous-logo-transparent.png';
-import ThemeModeToggle from './ThemeModeToggle';
 
 const Header: React.FC = () => {
     const { i18n, t } = useTranslation();
@@ -140,7 +143,16 @@ const Header: React.FC = () => {
         setCurrentLang(i18n.language);
     }, [i18n.language]);
     
-    const isPhone = window.innerWidth <= 1200;
+    const [isPhone, setIsPhone] = useState(window.innerWidth <= 1200);
+    
+    useEffect(() => {
+        const handleResize = () => {
+            setIsPhone(window.innerWidth <= 1200);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     
     const handleJoyrideCallback = (data: CallBackProps) => {
         const { status, index, action } = data;
@@ -290,7 +302,7 @@ const Header: React.FC = () => {
     
     useEffect(() => {
       const storedMode = getFunctionalCookie('themeMode') || 'dark';
-      setThemeMode(storedMode);
+      setThemeMode(storedMode)
       setTheme(storedMode);
       
       if (storedMode === 'grain') {
@@ -300,21 +312,25 @@ const Header: React.FC = () => {
 
     return (
       <>
-          <Joyride
-            steps={steps}
-            run={runTour}
-            continuous
-            showSkipButton
-            callback={handleJoyrideCallback}
-            styles={{
-                options: {
-                    primaryColor: '#dd8500',
-                },
-                tooltipContent: {
-                    color: '#000000', // Ensure the tooltip content text color is black (in case of dark mode)
-                },
-            }}
-          />
+          {runTour && (
+            <Suspense fallback={null}>
+              <Joyride
+                steps={steps}
+                run={runTour}
+                continuous
+                showSkipButton
+                callback={handleJoyrideCallback}
+                styles={{
+                    options: {
+                        primaryColor: '#dd8500',
+                    },
+                    tooltipContent: {
+                        color: '#000000', // Ensure the tooltip content text color is black (in case of dark mode)
+                    },
+                }}
+              />
+            </Suspense>
+          )}
           <div ref={overlayNav} className="nav-overlay">
               <div className="nav-overlay-content">
                   <NavLink to="/" onClick={handleBurgerClick}>
@@ -344,15 +360,17 @@ const Header: React.FC = () => {
                         onClick={handleCountrySwitch}
                         style={languageButtonStyle}
                       >
-                          {currentLang === 'en' ? (
-                            <>
-                                <US title="United States" />
-                            </>
-                          ) : (
-                            <>
-                                <EG title="Egypt" />
-                            </>
-                          )}
+                          <Suspense fallback={<div>Loading...</div>}>
+                            {currentLang === 'en' ? (
+                              <>
+                                  <US title="United States" />
+                              </>
+                            ) : (
+                              <>
+                                  <EG title="Egypt" />
+                              </>
+                            )}
+                          </Suspense>
                       </div>
                       
                       <div className="nav-overlay-content-bottom-user">
@@ -381,7 +399,9 @@ const Header: React.FC = () => {
               </div>
               
               <div className="header-right-side">
-                  <SearchBar />
+                  <Suspense fallback={<div className="search-loading"></div>}>
+              <SearchBar />
+            </Suspense>
                   <div className="header-right-side-add">
                       <NavLink to="/add-definition">
                           <FontAwesomeIcon icon={faPlus} size="2x" />
@@ -395,17 +415,19 @@ const Header: React.FC = () => {
                     onMouseLeave={handleNoHover}
                     style={languageButtonStyle}
                   >
-                      {currentLang === 'en' ? (
-                        <>
-                            <US title="United States" />
-                            <p>EN</p>
-                        </>
-                      ) : (
-                        <>
-                            <EG title="Egypt" />
-                            <p>AR</p>
-                        </>
-                      )}
+                      <Suspense fallback={<div>Loading...</div>}>
+                        {currentLang === 'en' ? (
+                          <>
+                              <US title="United States" />
+                              <p>EN</p>
+                          </>
+                        ) : (
+                          <>
+                              <EG title="Egypt" />
+                              <p>AR</p>
+                          </>
+                        )}
+                      </Suspense>
                   </div>
                   
                   <ThemeModeToggle

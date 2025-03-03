@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './UserProfile.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowRight,
-  faArrowRightFromBracket,
-  faFlag,
-  faThumbsDown,
-  faThumbsUp, faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons/faArrowRightFromBracket';
+import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
+import { faThumbsDown } from '@fortawesome/free-solid-svg-icons/faThumbsDown';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons/faThumbsUp';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { useMutation, useQuery } from 'react-query';
 import CustomDialog from '../src/components/CustomDialog';
 import Snackbar from '../src/components/Snackbar';
