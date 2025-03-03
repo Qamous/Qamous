@@ -8,7 +8,7 @@ import Snackbar from '../src/components/Snackbar';
 import CustomDialog from '../src/components/CustomDialog';
 import { Helmet } from 'react-helmet';
 import { useIntersectionObserver } from '../src/assets/utils';
-//import AdSense from 'react-adsense';
+//import AdSenseWrapper from '../src/components/AdSenseWrapper';
 
 interface HomeContent {
   word: string,
@@ -162,9 +162,10 @@ const Home: React.FC = () => {
         </Helmet>
         {/* TODO: Ads need to be fixed. Was working on a fix but it was not satisfactory */}
         <div className="feed-ad-space">
-        {/*  <AdSense.Google*/}
+        {/*  <AdSenseWrapper*/}
         {/*    client="ca-pub-4293590491700199"*/}
         {/*    slot="7898075502"*/}
+        {/*    adKey="home-top"*/}
         {/*    style={{*/}
         {/*      display: 'block',*/}
         {/*      width: '100%',*/}
@@ -192,9 +193,10 @@ const Home: React.FC = () => {
             example={""}
           />
           {/*<div className="feed-posts-ad-space">*/}
-          {/*  <AdSense.Google*/}
+          {/*  <AdSenseWrapper*/}
           {/*    client="ca-pub-4293590491700199"*/}
           {/*    slot="6473874271"*/}
+          {/*    adKey="home-middle"*/}
           {/*    style={{*/}
           {/*      display: 'block',*/}
           {/*      width: '100%',*/}
@@ -227,9 +229,10 @@ const Home: React.FC = () => {
                     example={item.example}
                   />
                   {/*{((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">*/}
-                  {/*  <AdSense.Google*/}
+                  {/*  <AdSenseWrapper*/}
                   {/*    client="ca-pub-4293590491700199"*/}
                   {/*    slot="6473874271"*/}
+                  {/*    adKey={`home-content-${pageIndex}-${index}`}*/}
                   {/*    style={{*/}
                   {/*      display: 'block',*/}
                   {/*      width: '100%',*/}
@@ -249,9 +252,10 @@ const Home: React.FC = () => {
           )}
         </div>
         <div className="feed-ad-space">
-        {/*  <AdSense.Google*/}
+        {/*  <AdSenseWrapper*/}
         {/*    client="ca-pub-4293590491700199"*/}
         {/*    slot="1590891296"*/}
+        {/*    adKey="home-bottom"*/}
         {/*    style={{*/}
         {/*      display: 'block',*/}
         {/*      width: '100%',*/}

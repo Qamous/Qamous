@@ -6,7 +6,7 @@ import Snackbar from '../src/components/Snackbar';
 import { useTranslation } from 'react-i18next';
 import ContentBox from '../src/components/ContentBox';
 import i18n from 'i18next';
-import AdSense from 'react-adsense';
+import AdSenseWrapper from '../src/components/AdSenseWrapper';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -132,9 +132,10 @@ const AdvancedSearch: React.FC = () => {
       )}
       <div className="feed">
         <div className="feed-ad-space">
-          <AdSense.Google
+          <AdSenseWrapper
             client='ca-pub-4293590491700199'
             slot='7898075502'
+            adKey='advanced-search-top'
             style={{
               display: 'block',
               width: '100%',
@@ -185,9 +186,10 @@ const AdvancedSearch: React.FC = () => {
             ))}
         </div>
         <div className="feed-ad-space">
-          <AdSense.Google
+          <AdSenseWrapper
             client='ca-pub-4293590491700199'
             slot='1590891296'
+            adKey='advanced-search-bottom'
             style={{
               display: 'block',
               width: '100%',

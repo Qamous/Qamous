@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { getCountryName, getDemonyms } from '../src/assets/utils';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import AdSense from 'react-adsense';
+import AdSenseWrapper from '../src/components/AdSenseWrapper';
 
 const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/definitions/word/${wordId}`);
@@ -93,9 +93,10 @@ const WordPage = () => {
                   content={`${countryName}, ${demonyms}, Arabic to English, English to Arabic, definition, slang, dialect`} />}
       </Helmet>
       <div className="feed-ad-space">
-        <AdSense.Google
+        <AdSenseWrapper
           client="ca-pub-4293590491700199"
           slot='7898075502'
+          adKey='word-page-top'
           style={{
             display: 'block',
             width: '100%',
@@ -132,9 +133,10 @@ const WordPage = () => {
               example={content.example}
             />
             {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
-              <AdSense.Google
+              <AdSenseWrapper
                 client='ca-pub-4293590491700199'
                 slot='6473874271'
+                adKey={`word-page-middle-${index}`}
                 style={{
                   display: 'block',
                   width: '100%',
@@ -153,9 +155,10 @@ const WordPage = () => {
         ))}
       </div>
       <div className="feed-ad-space">
-        <AdSense.Google
+        <AdSenseWrapper
           client='ca-pub-4293590491700199'
           slot='1590891296'
+          adKey='word-page-bottom'
           style={{
             display: 'block',
             width: '100%',
