@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import i18n from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
 import { getFunctionalCookie } from '../assets/utils';
 import translationEN from '../assets/en/translation.json';
 import translationAR from '../assets/ar/translation.json';
@@ -69,9 +68,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n}>
-        <BrowserRouter>
-          {children}
-        </BrowserRouter>
+        {children}
       </I18nextProvider>
       {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
     </QueryClientProvider>

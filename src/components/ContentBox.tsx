@@ -7,7 +7,8 @@ import { useMutation } from '@tanstack/react-query';
 import ReactCountryFlag from 'react-country-flag';
 import CustomDialog from './CustomDialog';
 import i18n from 'i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { getCountryName } from '../assets/utils';
 import * as htmlToImage from 'html-to-image';
 import logo from '../assets/qamous-logo-transparent.png';
@@ -43,6 +44,7 @@ interface ButtonText {
 const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example }) => {
   const { t } = useTranslation();
   const buttonText = t('content_box_buttons', { returnObjects: true }) as ButtonText;
+  const router = useRouter();
   
   const [likeClicked, setLikeClicked] = useState<boolean>(isLiked);
   const [dislikeClicked, setDislikeClicked] = useState<boolean>(isDisliked);
@@ -57,7 +59,6 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   const [countryName, setCountryName] = useState<string>('');
   const [showTooltip, setShowTooltip] = useState(false);
   const [instagramSnackbarOpen, setInstagramSnackbarOpen] = useState(false);
-  const navigate = useNavigate();
   
   useEffect(() => {
     if (countryCode) {
@@ -73,7 +74,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     if (error instanceof Response) {
       if (error.status === 401 || error.status === 403) {
         setMustLoginSnackbarOpen(true);
-        navigate('/login');
+        router.push('/login');
         return; // Early return after navigation
       }
       // Handle other response errors if needed
@@ -247,7 +248,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     
     const wordElement = postRef.current.querySelector('.content-box-title h1') as HTMLElement;
     if (wordElement) wordElement.style.fontSize = `${fontSizeWord}px`;
-    if (wordElement) wordElement.style.color = variables.secondaryColor;
+    if (wordElement) wordElement.style.color = 'var(--secondary-color)';
     
     const definitionElement = postRef.current.querySelector('.content-box-description p') as HTMLElement;
     if (definitionElement) definitionElement.style.fontSize = `${fontSizeDefinition}px`;
@@ -367,7 +368,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     mutationFn: reportWord,
     onError: (error) => {
       console.error('There has been a problem with your fetch operation:', error);
-      navigate('/login');
+      router.push('/login');
     },
   });
   
@@ -375,7 +376,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     mutationFn: reportDefinition,
     onError: (error) => {
       console.error('There has been a problem with your fetch operation:', error);
-      navigate('/login');
+      router.push('/login');
     },
   });
   
@@ -468,11 +469,11 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
         />
       )}
       <div className={'content-box-title'}>
-        {(wordId && (
-          <Link to={`/word/${wordId}`} key={index + 1}>
+        {wordId ? (
+          <Link href={`/word/${wordId}`} key={index + 1}>
             <h1>{item.word}</h1>
           </Link>
-        )) || (
+        ) : (
           <h1>{item.word}</h1>
         )}
         
@@ -499,7 +500,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
         <div className="content-box-buttons">
           {isAdvancedSearch ? (
             <>
-              <Link to={`/word/${wordId}`}>
+              <Link href={`/word/${wordId}`}>
                 <button className="content-box-buttons-view-button">
                   {t('user_profile.pick_other_definitions')}
                 </button>

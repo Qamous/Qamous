@@ -294,42 +294,6 @@
   opacity: 1; /* Fade in */
   transform: translateX(-50%) translateY(-10px); /* Move up slightly */
 }
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[9].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[9].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[9].use[5]!./src/assets/Variables.module.scss ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-@import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
-/**
- * SCSS Variables Section
- * -----------------------
- * This section contains all the global SCSS variables used throughout the project.
- * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
- * These variables are used to maintain a consistent design language and ease future design updates.
- */
-.Variables_variables__FN_4j {
-  /* CSS variables for Next.js CSS modules - must be attached to a class */
-  --primary-color: #ffffff;
-  --secondary-color: #dd8500;
-  --tertiary-color: #000000;
-  --quaternary-color: #292929;
-  --primary-color-90: rgba(255, 255, 255, 0.9);
-  --primary-color-75: rgba(255, 255, 255, 0.75);
-  --primary-color-50: rgba(255, 255, 255, 0.5);
-  --primary-color-40: rgba(255, 255, 255, 0.4);
-  --secondary-color-90: rgba(221, 133, 0, 0.9);
-  --secondary-color-75: rgba(221, 133, 0, 0.75);
-  --secondary-color-20: rgba(221, 133, 0, 0.2);
-  --tertiary-color-90: rgba(0, 0, 0, 0.9);
-  --icon-background-color: rgb(78 78 78 / 44%);
-  --font-stack: "Segoe UI", Sans-Serif, serif;
-  --font-stack-arabic: "Rubik", serif;
-  --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
-  --header-border-color: #1e1e1e;
-}
-
-/* Variables are applied via the .variables class */
-.Variables_variables__FN_4j {
-  background-color: var(--tertiary-color);
-}
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[13].use[5]!./src/components/CustomDialog.scss ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
