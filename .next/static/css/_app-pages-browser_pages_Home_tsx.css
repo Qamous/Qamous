@@ -1,0 +1,533 @@
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[13].use[5]!./src/components/ContentBox.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+@import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+/**
+ * SCSS Variables Section
+ * -----------------------
+ * This section contains all the global SCSS variables used throughout the project.
+ * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
+ * These variables are used to maintain a consistent design language and ease future design updates.
+ */
+.variables {
+  /* CSS variables for Next.js CSS modules - must be attached to a class */
+  --primary-color: #ffffff;
+  --secondary-color: #dd8500;
+  --tertiary-color: #000000;
+  --quaternary-color: #292929;
+  --primary-color-90: rgba(255, 255, 255, 0.9);
+  --primary-color-75: rgba(255, 255, 255, 0.75);
+  --primary-color-50: rgba(255, 255, 255, 0.5);
+  --primary-color-40: rgba(255, 255, 255, 0.4);
+  --secondary-color-90: rgba(221, 133, 0, 0.9);
+  --secondary-color-75: rgba(221, 133, 0, 0.75);
+  --secondary-color-20: rgba(221, 133, 0, 0.2);
+  --tertiary-color-90: rgba(0, 0, 0, 0.9);
+  --icon-background-color: rgb(78 78 78 / 44%);
+  --font-stack: "Segoe UI", Sans-Serif, serif;
+  --font-stack-arabic: "Rubik", serif;
+  --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
+  --header-border-color: #1e1e1e;
+}
+
+/* Variables are applied via the .variables class */
+.variables {
+  background-color: var(--tertiary-color);
+}
+
+:export {
+  primaryColor: var(--primary-color);
+  secondaryColor: var(--secondary-color);
+  secondaryColorNinety: var(--secondary-color-90);
+  secondaryColorSeventyFive: var(--secondary-color-75);
+  secondaryColorTwenty: var(--secondary-color-20);
+  tertiaryColor: var(--tertiary-color);
+  quaternaryColor: var(--quaternary-color);
+  primaryColorNinety: var(--primary-color-90);
+  primaryColorSeventyFive: var(--primary-color-75);
+  primaryColorFifty: var(--primary-color-50);
+  primaryColorForty: var(--primary-color-40);
+  tertiaryColorNinety: var(--tertiary-color-90);
+  headerBorderColor: var(--header-border-color);
+  iconBackgroundColor: var(--icon-background-color);
+  primaryColorLight: #000000;
+  secondaryColorLight: #dd8500;
+  secondaryColorNinetyLight: rgba(221, 133, 0, 0.9);
+  tertiaryColorLight: #d0d0d0;
+  quaternaryColorLight: #f8f8f8;
+  primaryColorNinetyLight: rgba(0, 0, 0, 0.9);
+  primaryColorSeventyFiveLight: rgba(0, 0, 0, 0.75);
+  primaryColorFiftyLight: rgba(0, 0, 0, 0.5);
+  primaryColorFortyLight: rgba(0, 0, 0, 0.4);
+  tertiaryColorNinetyLight: rgba(208, 208, 208, 0.9);
+  headerBorderColorLight: #eae7e7;
+  iconBackgroundColorLight: rgba(173, 173, 173, 0.44);
+  primaryColorDark: #ffffff;
+  secondaryColorDark: #dd8500;
+  secondaryColorNinetyDark: rgba(221, 133, 0, 0.9);
+  tertiaryColorDark: #000000;
+  quaternaryColorDark: #292929;
+  primaryColorNinetyDark: rgba(255, 255, 255, 0.9);
+  primaryColorSeventyFiveDark: rgba(255, 255, 255, 0.75);
+  primaryColorFiftyDark: rgba(255, 255, 255, 0.5);
+  primaryColorFortyDark: rgba(255, 255, 255, 0.4);
+  tertiaryColorNinetyDark: rgba(0, 0, 0, 0.9);
+  headerBorderColorDark: #1e1e1e;
+  iconBackgroundColorDark: rgba(78, 78, 78, 0.44);
+  primaryColorGrain: #fff6e9;
+  secondaryColorGrain: #dd8500;
+  secondaryColorNinetyGrain: rgba(221, 133, 0, 0.9);
+  tertiaryColorGrain: #251800;
+  quaternaryColorGrain: #402c00;
+  primaryColorNinetyGrain: rgba(255, 246, 233, 0.9);
+  primaryColorSeventyFiveGrain: rgba(255, 246, 233, 0.75);
+  primaryColorFiftyGrain: rgba(255, 246, 233, 0.5);
+  primaryColorFortyGrain: rgba(255, 246, 233, 0.4);
+  tertiaryColorNinetyGrain: rgba(37, 24, 0, 0.9);
+  headerBorderColorGrain: #53402c;
+  iconBackgroundColorGrain: rgba(78, 59, 32, 0.44);
+  fontStack: var(--font-stack);
+  fontStackArabic: var(--font-stack-arabic);
+  fontStackArabicWod: var(--font-stack-arabic-wod);
+}
+
+.content-box {
+  background-color: var(--quaternary-color);
+  width: 100%;
+  border-radius: 8px;
+}
+@media (max-width: 1200px) {
+  .content-box {
+    border-radius: 0;
+  }
+}
+.content-box-title {
+  padding: 0 25px 0 25px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.content-box-title h1 {
+  font-size: 34px;
+}
+.content-box-title a {
+  text-decoration: none;
+}
+.content-box-title img {
+  margin: 5px 0 0 0;
+}
+.content-box-description {
+  padding: 0 25px 15px 25px;
+  font-size: 16px;
+}
+.content-box-first {
+  background-color: var(--primary-color-90);
+}
+.content-box-first * {
+  color: var(--quaternary-color);
+}
+.content-box-first ::selection {
+  background: var(--quaternary-color);
+  color: var(--primary-color);
+}
+.content-box-ar {
+  direction: rtl;
+  font: 100% var(--font-stack-arabic);
+}
+.content-box-latin {
+  direction: ltr;
+  font: 100% var(--font-stack);
+}
+.content-box-buttons {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+.content-box-buttons button {
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 2px;
+  color: var(--primary-color);
+  -webkit-user-select: none;
+          user-select: none;
+}
+.content-box-buttons button:active {
+  transform: scale(0.95);
+}
+.content-box-buttons button:hover {
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+}
+.content-box-buttons-like-button {
+  border-color: #4CAF50; /* Green */
+  background-color: var(--quaternary-color);
+  color: white;
+}
+.content-box-buttons-like-button:hover, .content-box-buttons-like-button:active {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+.content-box-buttons-like-button.clicked {
+  border-color: #2b622d;
+  background-color: #4CAF50;
+}
+.content-box-buttons-dislike-button {
+  border-color: #f44336; /* Red */
+  background-color: var(--quaternary-color);
+  color: white;
+}
+.content-box-buttons-dislike-button:hover, .content-box-buttons-dislike-button:active {
+  background-color: #f44336;
+  border-color: #f44336;
+}
+.content-box-buttons-dislike-button.clicked {
+  border-color: #9b2b22;
+  background-color: #f44336;
+}
+.content-box-buttons-report-button {
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  color: white;
+  border-color: var(--secondary-color);
+  background-color: var(--quaternary-color);
+}
+.content-box-buttons-report-button:active {
+  transform: scale(0.95);
+}
+.content-box-buttons-report-button:hover, .content-box-buttons-report-button:active {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+.content-box-buttons-report-button.clicked {
+  border-color: black;
+  background-color: #101010;
+  color: white;
+  cursor: not-allowed;
+}
+.content-box-buttons-report-button.clicked:active {
+  transform: none;
+}
+.content-box-buttons-share-button {
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  border-color: var(--primary-color-75);
+  background-color: var(--quaternary-color);
+  color: white;
+}
+.content-box-buttons-share-button:active {
+  transform: scale(0.95);
+}
+.content-box-buttons-share-button:hover, .content-box-buttons-share-button:active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--quaternary-color);
+}
+.content-box-buttons-view-button {
+  border-color: var(--primary-color);
+  background-color: var(--quaternary-color);
+  color: white;
+}
+.content-box-buttons-view-button:hover, .content-box-buttons-view-button:active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--quaternary-color);
+}
+.content-box-example {
+  padding: 0 25px 15px 25px;
+  font-style: italic;
+  color: var(--secondary-color);
+  border-left: 3px solid var(--secondary-color);
+  margin: 0 25px 15px 25px;
+}
+.content-box-example::before {
+  content: "Example:";
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-style: normal;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: calc(100% - 9px); /* Position it above the button */
+  left: 50%;
+  transform: translateX(-50%); /* Center the tooltip */
+  opacity: 0; /* Start fully transparent */
+  transition: opacity 0.3s, transform 0.3s; /* Animate opacity and position */
+}
+
+.tooltip .tooltiptext button {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext button:hover {
+  text-decoration: underline;
+}
+
+.tooltip:hover .tooltiptext,
+.tooltip .tooltiptext:hover {
+  visibility: visible;
+  opacity: 1; /* Fade in */
+  transform: translateX(-50%) translateY(-10px); /* Move up slightly */
+}
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[9].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[9].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[9].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[9].use[5]!./src/assets/Variables.module.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+@import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+/**
+ * SCSS Variables Section
+ * -----------------------
+ * This section contains all the global SCSS variables used throughout the project.
+ * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
+ * These variables are used to maintain a consistent design language and ease future design updates.
+ */
+.Variables_variables__FN_4j {
+  /* CSS variables for Next.js CSS modules - must be attached to a class */
+  --primary-color: #ffffff;
+  --secondary-color: #dd8500;
+  --tertiary-color: #000000;
+  --quaternary-color: #292929;
+  --primary-color-90: rgba(255, 255, 255, 0.9);
+  --primary-color-75: rgba(255, 255, 255, 0.75);
+  --primary-color-50: rgba(255, 255, 255, 0.5);
+  --primary-color-40: rgba(255, 255, 255, 0.4);
+  --secondary-color-90: rgba(221, 133, 0, 0.9);
+  --secondary-color-75: rgba(221, 133, 0, 0.75);
+  --secondary-color-20: rgba(221, 133, 0, 0.2);
+  --tertiary-color-90: rgba(0, 0, 0, 0.9);
+  --icon-background-color: rgb(78 78 78 / 44%);
+  --font-stack: "Segoe UI", Sans-Serif, serif;
+  --font-stack-arabic: "Rubik", serif;
+  --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
+  --header-border-color: #1e1e1e;
+}
+
+/* Variables are applied via the .variables class */
+.Variables_variables__FN_4j {
+  background-color: var(--tertiary-color);
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[13].use[5]!./src/components/CustomDialog.scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+@import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+/**
+ * SCSS Variables Section
+ * -----------------------
+ * This section contains all the global SCSS variables used throughout the project.
+ * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
+ * These variables are used to maintain a consistent design language and ease future design updates.
+ */
+.variables {
+  /* CSS variables for Next.js CSS modules - must be attached to a class */
+  --primary-color: #ffffff;
+  --secondary-color: #dd8500;
+  --tertiary-color: #000000;
+  --quaternary-color: #292929;
+  --primary-color-90: rgba(255, 255, 255, 0.9);
+  --primary-color-75: rgba(255, 255, 255, 0.75);
+  --primary-color-50: rgba(255, 255, 255, 0.5);
+  --primary-color-40: rgba(255, 255, 255, 0.4);
+  --secondary-color-90: rgba(221, 133, 0, 0.9);
+  --secondary-color-75: rgba(221, 133, 0, 0.75);
+  --secondary-color-20: rgba(221, 133, 0, 0.2);
+  --tertiary-color-90: rgba(0, 0, 0, 0.9);
+  --icon-background-color: rgb(78 78 78 / 44%);
+  --font-stack: "Segoe UI", Sans-Serif, serif;
+  --font-stack-arabic: "Rubik", serif;
+  --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
+  --header-border-color: #1e1e1e;
+}
+
+/* Variables are applied via the .variables class */
+.variables {
+  background-color: var(--tertiary-color);
+}
+
+:export {
+  primaryColor: var(--primary-color);
+  secondaryColor: var(--secondary-color);
+  secondaryColorNinety: var(--secondary-color-90);
+  secondaryColorSeventyFive: var(--secondary-color-75);
+  secondaryColorTwenty: var(--secondary-color-20);
+  tertiaryColor: var(--tertiary-color);
+  quaternaryColor: var(--quaternary-color);
+  primaryColorNinety: var(--primary-color-90);
+  primaryColorSeventyFive: var(--primary-color-75);
+  primaryColorFifty: var(--primary-color-50);
+  primaryColorForty: var(--primary-color-40);
+  tertiaryColorNinety: var(--tertiary-color-90);
+  headerBorderColor: var(--header-border-color);
+  iconBackgroundColor: var(--icon-background-color);
+  primaryColorLight: #000000;
+  secondaryColorLight: #dd8500;
+  secondaryColorNinetyLight: rgba(221, 133, 0, 0.9);
+  tertiaryColorLight: #d0d0d0;
+  quaternaryColorLight: #f8f8f8;
+  primaryColorNinetyLight: rgba(0, 0, 0, 0.9);
+  primaryColorSeventyFiveLight: rgba(0, 0, 0, 0.75);
+  primaryColorFiftyLight: rgba(0, 0, 0, 0.5);
+  primaryColorFortyLight: rgba(0, 0, 0, 0.4);
+  tertiaryColorNinetyLight: rgba(208, 208, 208, 0.9);
+  headerBorderColorLight: #eae7e7;
+  iconBackgroundColorLight: rgba(173, 173, 173, 0.44);
+  primaryColorDark: #ffffff;
+  secondaryColorDark: #dd8500;
+  secondaryColorNinetyDark: rgba(221, 133, 0, 0.9);
+  tertiaryColorDark: #000000;
+  quaternaryColorDark: #292929;
+  primaryColorNinetyDark: rgba(255, 255, 255, 0.9);
+  primaryColorSeventyFiveDark: rgba(255, 255, 255, 0.75);
+  primaryColorFiftyDark: rgba(255, 255, 255, 0.5);
+  primaryColorFortyDark: rgba(255, 255, 255, 0.4);
+  tertiaryColorNinetyDark: rgba(0, 0, 0, 0.9);
+  headerBorderColorDark: #1e1e1e;
+  iconBackgroundColorDark: rgba(78, 78, 78, 0.44);
+  primaryColorGrain: #fff6e9;
+  secondaryColorGrain: #dd8500;
+  secondaryColorNinetyGrain: rgba(221, 133, 0, 0.9);
+  tertiaryColorGrain: #251800;
+  quaternaryColorGrain: #402c00;
+  primaryColorNinetyGrain: rgba(255, 246, 233, 0.9);
+  primaryColorSeventyFiveGrain: rgba(255, 246, 233, 0.75);
+  primaryColorFiftyGrain: rgba(255, 246, 233, 0.5);
+  primaryColorFortyGrain: rgba(255, 246, 233, 0.4);
+  tertiaryColorNinetyGrain: rgba(37, 24, 0, 0.9);
+  headerBorderColorGrain: #53402c;
+  iconBackgroundColorGrain: rgba(78, 59, 32, 0.44);
+  fontStack: var(--font-stack);
+  fontStackArabic: var(--font-stack-arabic);
+  fontStackArabicWod: var(--font-stack-arabic-wod);
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.custom-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 198;
+}
+.custom-dialog-content {
+  position: relative;
+  background-color: var(--quaternary-color);
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  animation: zoomIn 0.3s ease-out;
+}
+.custom-dialog-content-input textarea {
+  background-color: var(--quaternary-color);
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  resize: none;
+  width: 100%;
+}
+.custom-dialog-content button {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: #ffffff;
+  cursor: pointer;
+}
+.custom-dialog-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 0.75em;
+  cursor: pointer;
+}
+.custom-dialog-rtl {
+  direction: rtl;
+}
+.custom-dialog-ltr {
+  direction: ltr;
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[13].use[5]!./pages/Home.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[13].use[5]!./src/components/Snackbar.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+.snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 199; /* Increased z-index to be higher than footer's z-index of 197 */
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+}
+.snackbar.show {
+  visibility: visible;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s forwards;
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+}

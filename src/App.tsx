@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState, Suspense, lazy } from 'react';
-const ReactQueryDevtools = import.meta.env.DEV
+const ReactQueryDevtools = process.env.NODE_ENV === 'development'
   ? lazy(() => import('react-query/devtools').then(mod => ({ default: mod.ReactQueryDevtools })))
   : () => null;
 const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(mod => ({ default: mod.FontAwesomeIcon })));
@@ -77,7 +77,7 @@ const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   const navigate = useNavigate();
   
   const checkUserStatus = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/session`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/session`, {
       credentials: 'include', // Include credentials in the request
     });
     if (response.ok) {
@@ -113,7 +113,7 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
   const navigate = useNavigate();
   
   const checkUserStatus = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/session`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/session`, {
       credentials: 'include',
     });
     if (response.ok) {
@@ -270,7 +270,7 @@ const App: React.FC = () => {
           message={t('login.must_login')}
         />
         {/* Only in development mode */}
-        {import.meta.env.DEV && <ReactQueryDevtools />}
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
       </QueryClientProvider>
     </div>
   );

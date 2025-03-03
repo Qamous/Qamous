@@ -1,0 +1,24 @@
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+exports.id = "vendor-chunks/scroll";
+exports.ids = ["vendor-chunks/scroll"];
+exports.modules = {
+
+/***/ "(ssr)/./node_modules/scroll/index.js":
+/*!**************************************!*\
+  !*** ./node_modules/scroll/index.js ***!
+  \**************************************/
+/***/ ((module) => {
+
+eval("var E_NOSCROLL = new Error('Element already at target scroll position')\nvar E_CANCELLED = new Error('Scroll cancelled')\nvar min = Math.min\nvar ms = Date.now\n\nmodule.exports = {\n  left: make('scrollLeft'),\n  top: make('scrollTop')\n}\n\nfunction make (prop) {\n  return function scroll (el, to, opts, cb) {\n    opts = opts || {}\n\n    if (typeof opts == 'function') cb = opts, opts = {}\n    if (typeof cb != 'function') cb = noop\n\n    var start = ms()\n    var from = el[prop]\n    var ease = opts.ease || inOutSine\n    var duration = !isNaN(opts.duration) ? +opts.duration : 350\n    var cancelled = false\n\n    return from === to ?\n      cb(E_NOSCROLL, el[prop]) :\n      requestAnimationFrame(animate), cancel\n\n    function cancel () {\n      cancelled = true\n    }\n\n    function animate (timestamp) {\n      if (cancelled) return cb(E_CANCELLED, el[prop])\n\n      var now = ms()\n      var time = min(1, ((now - start) / duration))\n      var eased = ease(time)\n\n      el[prop] = (eased * (to - from)) + from\n\n      time < 1 ?\n        requestAnimationFrame(animate) :\n        requestAnimationFrame(function () {\n          cb(null, el[prop])\n        })\n    }\n  }\n}\n\nfunction inOutSine (n) {\n  return 0.5 * (1 - Math.cos(Math.PI * n))\n}\n\nfunction noop () {}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvc2Nyb2xsL2luZGV4LmpzIiwibWFwcGluZ3MiOiJBQUFBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLFNBQVM7QUFDVDtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vdXJiYW4tZGljdGlvbmFyeS1hci8uL25vZGVfbW9kdWxlcy9zY3JvbGwvaW5kZXguanM/ZjA4MyJdLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgRV9OT1NDUk9MTCA9IG5ldyBFcnJvcignRWxlbWVudCBhbHJlYWR5IGF0IHRhcmdldCBzY3JvbGwgcG9zaXRpb24nKVxudmFyIEVfQ0FOQ0VMTEVEID0gbmV3IEVycm9yKCdTY3JvbGwgY2FuY2VsbGVkJylcbnZhciBtaW4gPSBNYXRoLm1pblxudmFyIG1zID0gRGF0ZS5ub3dcblxubW9kdWxlLmV4cG9ydHMgPSB7XG4gIGxlZnQ6IG1ha2UoJ3Njcm9sbExlZnQnKSxcbiAgdG9wOiBtYWtlKCdzY3JvbGxUb3AnKVxufVxuXG5mdW5jdGlvbiBtYWtlIChwcm9wKSB7XG4gIHJldHVybiBmdW5jdGlvbiBzY3JvbGwgKGVsLCB0bywgb3B0cywgY2IpIHtcbiAgICBvcHRzID0gb3B0cyB8fCB7fVxuXG4gICAgaWYgKHR5cGVvZiBvcHRzID09ICdmdW5jdGlvbicpIGNiID0gb3B0cywgb3B0cyA9IHt9XG4gICAgaWYgKHR5cGVvZiBjYiAhPSAnZnVuY3Rpb24nKSBjYiA9IG5vb3BcblxuICAgIHZhciBzdGFydCA9IG1zKClcbiAgICB2YXIgZnJvbSA9IGVsW3Byb3BdXG4gICAgdmFyIGVhc2UgPSBvcHRzLmVhc2UgfHwgaW5PdXRTaW5lXG4gICAgdmFyIGR1cmF0aW9uID0gIWlzTmFOKG9wdHMuZHVyYXRpb24pID8gK29wdHMuZHVyYXRpb24gOiAzNTBcbiAgICB2YXIgY2FuY2VsbGVkID0gZmFsc2VcblxuICAgIHJldHVybiBmcm9tID09PSB0byA/XG4gICAgICBjYihFX05PU0NST0xMLCBlbFtwcm9wXSkgOlxuICAgICAgcmVxdWVzdEFuaW1hdGlvbkZyYW1lKGFuaW1hdGUpLCBjYW5jZWxcblxuICAgIGZ1bmN0aW9uIGNhbmNlbCAoKSB7XG4gICAgICBjYW5jZWxsZWQgPSB0cnVlXG4gICAgfVxuXG4gICAgZnVuY3Rpb24gYW5pbWF0ZSAodGltZXN0YW1wKSB7XG4gICAgICBpZiAoY2FuY2VsbGVkKSByZXR1cm4gY2IoRV9DQU5DRUxMRUQsIGVsW3Byb3BdKVxuXG4gICAgICB2YXIgbm93ID0gbXMoKVxuICAgICAgdmFyIHRpbWUgPSBtaW4oMSwgKChub3cgLSBzdGFydCkgLyBkdXJhdGlvbikpXG4gICAgICB2YXIgZWFzZWQgPSBlYXNlKHRpbWUpXG5cbiAgICAgIGVsW3Byb3BdID0gKGVhc2VkICogKHRvIC0gZnJvbSkpICsgZnJvbVxuXG4gICAgICB0aW1lIDwgMSA/XG4gICAgICAgIHJlcXVlc3RBbmltYXRpb25GcmFtZShhbmltYXRlKSA6XG4gICAgICAgIHJlcXVlc3RBbmltYXRpb25GcmFtZShmdW5jdGlvbiAoKSB7XG4gICAgICAgICAgY2IobnVsbCwgZWxbcHJvcF0pXG4gICAgICAgIH0pXG4gICAgfVxuICB9XG59XG5cbmZ1bmN0aW9uIGluT3V0U2luZSAobikge1xuICByZXR1cm4gMC41ICogKDEgLSBNYXRoLmNvcyhNYXRoLlBJICogbikpXG59XG5cbmZ1bmN0aW9uIG5vb3AgKCkge31cbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/scroll/index.js\n");
+
+/***/ })
+
+};
+;

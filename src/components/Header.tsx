@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useState, useEffect, lazy, Suspense } from 'react';
 const SearchBar = lazy(() => import("./SearchBar"));
 const Joyride = lazy(() => import('react-joyride'));
@@ -387,7 +389,7 @@ const Header: React.FC = () => {
               <div className="header-left-side">
                 <NavLink to="/">
                     <img
-                        src={qamousLogo}
+                        src={qamousLogo.toString()}
                         alt={t('common_terms.qamous')}
                         loading="lazy"
                     /> {/* TODO: do more research on lazy loading for a faster experience */}

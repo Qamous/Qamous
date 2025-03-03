@@ -3,7 +3,7 @@ import './ContentBox.scss';
 import * as variables from '../assets/Variables.module.scss';
 import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import ReactCountryFlag from 'react-country-flag';
 import CustomDialog from './CustomDialog';
 import i18n from 'i18next';
@@ -85,51 +85,52 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     }
   };
   
-  const likeMutation = useMutation(() =>
-    fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
-      method: 'POST',
-      credentials: 'include',
-    }).then(response => {
+  const likeMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
+        method: 'POST',
+        credentials: 'include',
+      });
       if (!response.ok) {
         throw response;
       }
       return response.json();
-    }), {
+    },
     onError: handleMutationError,
   });
   
-  const dislikeMutation = useMutation(() =>
-    fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
-      method: 'POST',
-      credentials: 'include',
-    }).then(response => {
+  const dislikeMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
+        method: 'POST',
+        credentials: 'include',
+      });
       if (!response.ok) {
         throw response;
       }
       return response.json();
-    }), {
+    },
     onError: handleMutationError,
   });
   
   // 1 API call to switch between like and dislike
-  const switchReactionMutation = useMutation(
-    (toReaction: 'like' | 'dislike') =>
-      fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/switch-reaction`, {
+  const switchReactionMutation = useMutation({
+    mutationFn: async (toReaction: 'like' | 'dislike') => {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/switch-reaction`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ toReaction }),
         credentials: 'include'
-      }).then(response => {
-        if (!response.ok) {
-          throw response;
-        }
-        return response.json();
-      }), {
-      onError: handleMutationError,
-    }
-  );
+      });
+      if (!response.ok) {
+        throw response;
+      }
+      return response.json();
+    },
+    onError: handleMutationError,
+  });
   
   const handleLikeClick = async () => {
     setClickCount(prevCount => prevCount + 1);
@@ -253,7 +254,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     
     // Add the logo to the bottom left of the square
     const logoElement = document.createElement('img');
-    logoElement.src = logo;
+    logoElement.src = logo.toString();
     logoElement.style.display = 'block';
     logoElement.style.position = 'relative';
     logoElement.style.width = '100px';
@@ -362,14 +363,16 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     setShowTooltip(!showTooltip);
   };
   
-  const reportWordMutation = useMutation(reportWord, {
+  const reportWordMutation = useMutation({
+    mutationFn: reportWord,
     onError: (error) => {
       console.error('There has been a problem with your fetch operation:', error);
       navigate('/login');
     },
   });
   
-  const reportDefinitionMutation = useMutation(reportDefinition, {
+  const reportDefinitionMutation = useMutation({
+    mutationFn: reportDefinition,
     onError: (error) => {
       console.error('There has been a problem with your fetch operation:', error);
       navigate('/login');
