@@ -14,8 +14,8 @@
   "src\\app\\page.tsx -> ../../pages/Home": {
     "id": "src\\app\\page.tsx -> ../../pages/Home",
     "files": [
-      "static/css/_app-pages-browser_pages_Home_tsx.css",
-      "static/chunks/_app-pages-browser_pages_Home_tsx.js"
+      "static/chunks/_app-pages-browser_pages_Home_tsx.js",
+      "static/css/_app-pages-browser_pages_Home_tsx.css"
     ]
   },
   "src\\components\\Header.tsx -> ./SearchBar": {

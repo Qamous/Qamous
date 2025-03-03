@@ -379,7 +379,6 @@ const Header: React.FC = () => {
                           <Link href="/login" onClick={handleBurgerClick}>
                               <i className="fa-solid fa-user"></i>
                               <FontAwesomeIcon icon={faUser} size="sm"/>
-                              {/*<img src={userImage} alt={t('common_terms.user')} />*/}
                           </Link>
                       </div>
                   </div>

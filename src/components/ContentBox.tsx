@@ -500,11 +500,17 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
         <div className="content-box-buttons">
           {isAdvancedSearch ? (
             <>
-              <Link href={`/word/${wordId}`}>
+              {wordId ? (
+                <Link href={`/word/${wordId}`}>
+                  <button className="content-box-buttons-view-button">
+                    {t('user_profile.pick_other_definitions')}
+                  </button>
+                </Link>
+              ) : (
                 <button className="content-box-buttons-view-button">
                   {t('user_profile.pick_other_definitions')}
                 </button>
-              </Link>
+              )}
               <div className="tooltip">
                 <button
                   className="content-box-buttons-share-button"
