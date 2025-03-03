@@ -3,7 +3,7 @@ import './Home.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import ContentBox from '../src/components/ContentBox';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import Snackbar from '../src/components/Snackbar';
 import CustomDialog from '../src/components/CustomDialog';
 import { Helmet } from 'react-helmet';
@@ -33,7 +33,7 @@ interface JsonContent {
 }
 
 const fetchHomeContent: (page: number, limit: number) => Promise<HomeContent[]> = (page = 1, limit = 10) =>
-  fetch(`${import.meta.env.VITE_API_URL}/definitions/most-liked?page=${page}&limit=${limit}`, {
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/definitions/most-liked?page=${page}&limit=${limit}`, {
     mode: 'cors',
     credentials: 'include',
   }).then(response => response.json());
@@ -51,7 +51,9 @@ const Home: React.FC = () => {
     isError,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<HomeContent[]>('homeContent', ({ pageParam = 1 }) => fetchHomeContent(pageParam, 10), {
+  } = useInfiniteQuery({
+    queryKey: ['homeContent'],
+    queryFn: ({ pageParam = 1 }) => fetchHomeContent(pageParam, 10),
     getNextPageParam: (lastPage, pages) => lastPage.length === 10 ? pages.length + 1 : undefined,
     refetchOnWindowFocus: false,
   });

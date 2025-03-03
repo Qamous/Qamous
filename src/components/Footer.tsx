@@ -1,6 +1,8 @@
+'use client';
+
 import './Footer.scss';
 import i18n from 'i18next';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
 import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
@@ -48,34 +50,34 @@ const Footer: React.FC = () => {
             {t('common.copyright')}
           </p>
           <div className="footer-socials">
-            <NavLink to="https://www.facebook.com/QamousAR/">
+            <Link href="https://www.facebook.com/QamousAR/">
               <FontAwesomeIcon icon={faFacebookF} />
-            </NavLink>
-            <NavLink to="https://www.instagram.com/QamousAR/">
+            </Link>
+            <Link href="https://www.instagram.com/QamousAR/">
               <FontAwesomeIcon icon={faInstagram} />
-            </NavLink>
-            <NavLink to="https://github.com/Qamous">
+            </Link>
+            <Link href="https://github.com/Qamous">
               <FontAwesomeIcon icon={faGithub} />
-            </NavLink>
-            <NavLink to="mailto:QamousAR@gmail.com">
+            </Link>
+            <Link href="mailto:QamousAR@gmail.com">
               <FontAwesomeIcon icon={faEnvelope} />
-            </NavLink>
-            <NavLink to="/about#buttons">
+            </Link>
+            <Link href="/about#buttons">
               <FontAwesomeIcon icon={faHandHoldingMedical} />
-            </NavLink>
+            </Link>
           </div>
         </div>
         <div className="footer-expanded">
           <div className="footer-links">
-            <NavLink to="//francoarabic.com" target="_blank">
+            <Link href="//francoarabic.com" target="_blank">
               {t('footer.franco_arabic_basics')}
-            </NavLink>
-            <NavLink to="/about">
+            </Link>
+            <Link href="/about">
               {t('footer.about')}
-            </NavLink>
-            <NavLink to="/advertise">
+            </Link>
+            <Link href="/advertise">
               {t('footer.advertise')}
-            </NavLink>
+            </Link>
           </div>
         </div>
       </div>

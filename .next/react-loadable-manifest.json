@@ -1,0 +1,60 @@
+{
+  "node_modules\\@tanstack\\query-devtools\\build\\dev.js -> ./DevtoolsComponent/E3YREIG7.js": {
+    "id": "node_modules\\@tanstack\\query-devtools\\build\\dev.js -> ./DevtoolsComponent/E3YREIG7.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_tanstack_query-devtools_build_DevtoolsComponent_E3YREIG7_js.js"
+    ]
+  },
+  "node_modules\\@tanstack\\query-devtools\\build\\dev.js -> ./DevtoolsPanelComponent/LFXA4CB4.js": {
+    "id": "node_modules\\@tanstack\\query-devtools\\build\\dev.js -> ./DevtoolsPanelComponent/LFXA4CB4.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_tanstack_query-devtools_build_DevtoolsPanelComponent_LFXA4CB4_js.js"
+    ]
+  },
+  "src\\app\\page.tsx -> ../../pages/Home": {
+    "id": "src\\app\\page.tsx -> ../../pages/Home",
+    "files": [
+      "static/chunks/_app-pages-browser_pages_Home_tsx.js",
+      "static/css/_app-pages-browser_pages_Home_tsx.css"
+    ]
+  },
+  "src\\components\\Header.tsx -> ./SearchBar": {
+    "id": "src\\components\\Header.tsx -> ./SearchBar",
+    "files": [
+      "static/css/_app-pages-browser_src_components_SearchBar_tsx.css",
+      "static/chunks/_app-pages-browser_src_components_SearchBar_tsx.js"
+    ]
+  },
+  "src\\components\\Header.tsx -> ./ThemeModeToggle": {
+    "id": "src\\components\\Header.tsx -> ./ThemeModeToggle",
+    "files": [
+      "static/css/_app-pages-browser_src_components_ThemeModeToggle_tsx.css",
+      "static/chunks/_app-pages-browser_src_components_ThemeModeToggle_tsx.js"
+    ]
+  },
+  "src\\components\\Header.tsx -> ./ToolbarItems": {
+    "id": "src\\components\\Header.tsx -> ./ToolbarItems",
+    "files": [
+      "static/css/_app-pages-browser_src_components_ToolbarItems_tsx.css",
+      "static/chunks/_app-pages-browser_src_components_ToolbarItems_tsx.js"
+    ]
+  },
+  "src\\components\\Header.tsx -> @fortawesome/react-fontawesome": {
+    "id": "src\\components\\Header.tsx -> @fortawesome/react-fontawesome",
+    "files": []
+  },
+  "src\\components\\Header.tsx -> country-flag-icons/react/3x2": {
+    "id": "src\\components\\Header.tsx -> country-flag-icons/react/3x2",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_country-flag-icons_react_3x2_index_js.js"
+    ]
+  },
+  "src\\components\\Header.tsx -> react-joyride": {
+    "id": "src\\components\\Header.tsx -> react-joyride",
+    "files": []
+  },
+  "src\\components\\SearchBar.tsx -> @fortawesome/react-fontawesome": {
+    "id": "src\\components\\SearchBar.tsx -> @fortawesome/react-fontawesome",
+    "files": []
+  }
+}

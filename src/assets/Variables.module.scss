@@ -8,12 +8,12 @@
  * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
  * These variables are used to maintain a consistent design language and ease future design updates.
  */
-:root {
+.variables {
+  /* CSS variables for Next.js CSS modules - must be attached to a class */
   --primary-color: #ffffff;
   --secondary-color: #dd8500;
   --tertiary-color: #000000;
   --quaternary-color: #292929;
-  background-color: var(--tertiary-color);
   --primary-color-90: rgba(255, 255, 255, 0.9);
   --primary-color-75: rgba(255, 255, 255, 0.75);
   --primary-color-50: rgba(255, 255, 255, 0.5);
@@ -29,6 +29,11 @@
   --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
 
   --header-border-color: #1e1e1e;
+}
+
+/* Variables are applied via the .variables class */
+.variables {
+  background-color: var(--tertiary-color);
 }
 
 $primary-color: var(--primary-color);

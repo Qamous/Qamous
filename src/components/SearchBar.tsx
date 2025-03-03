@@ -1,14 +1,16 @@
+'use client';
+
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import './SearchBar.scss';
 const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(module => ({ default: module.FontAwesomeIcon })));
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 const SearchBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { t } = useTranslation();
   
   const closeSearch = () => {
@@ -29,7 +31,7 @@ const SearchBar: React.FC = () => {
   
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
-    navigate(`/search/${searchQuery}`);
+    router.push(`/search/${searchQuery}`);
     // Reset the search field after navigating
     setSearchQuery('');
     // Close the search bar after navigating
@@ -73,9 +75,9 @@ const SearchBar: React.FC = () => {
               placeholder=" "
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsInputFocused(true)} // Set input focus state
-              onBlur={() => setIsInputFocused(false)} // Reset input focus state
-              onClick={(e) => e.stopPropagation()} // Prevent closing when input is clicked
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
+              onClick={(e) => e.stopPropagation()}
             />
             <button type="reset" className="search-box-reset"></button>
             <button

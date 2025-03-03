@@ -1,14 +1,17 @@
-import React from 'react';
-import { NavLink, NavLinkProps } from 'react-router-dom';
+'use client';
+
+import Link, { LinkProps } from 'next/link';
 import './StyledNavLink.scss';
 import * as variables from '../assets/Variables.module.scss';
 
-interface StyledNavLinkProps extends NavLinkProps {
+interface StyledNavLinkProps extends LinkProps {
   language: string;
   themeMode: string;
+  className?: string;
+  children?: React.ReactNode;
 }
 
-const StyledNavLink: React.FC<StyledNavLinkProps> = ({ language, themeMode, ...props }) => {
+const StyledNavLink: React.FC<StyledNavLinkProps> = ({ language, themeMode, className, children, ...props }) => {
   const letterSpacing = language === 'ar' ? '0' : '0.2em';
   const fontFamily = language === 'ar' ? variables.fontStackArabic : variables.fontStack;
   const isDarkMode = themeMode === 'dark';
@@ -16,7 +19,9 @@ const StyledNavLink: React.FC<StyledNavLinkProps> = ({ language, themeMode, ...p
   const direction = language === 'ar' ? 'rtl' : 'ltr';
   
   return (
-    <NavLink {...props} style={{ letterSpacing: letterSpacing, fontFamily: fontFamily, textShadow: shadow, direction: direction }} />
+    <Link {...props} className={className} style={{ letterSpacing, fontFamily, textShadow: shadow, direction }}>
+      {children}
+    </Link>
   );
 };
 
