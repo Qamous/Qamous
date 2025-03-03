@@ -16,7 +16,9 @@ export default defineConfig({
   build: {
     target: ["es2022", "safari15"],
     cssTarget: "safari15",
-    polyfillModulePreload: false,
+    modulePreload: {
+      polyfill: false
+    },
     outDir: "build",
     minify: 'esbuild',
     sourcemap: true,
@@ -46,10 +48,16 @@ export default defineConfig({
   },
   css: {
     devSourcemap: false,
+    preprocessorOptions: {
+      scss: {
+        charset: false,
+        api: "modern-compiler"
+      }
+    },
     modules: {
       localsConvention: 'camelCase',
       generateScopedName: '[name]__[local]__[hash:base64:5]'
-    },
+    }
   },
   plugins: [
     react(),
