@@ -46,9 +46,6 @@ export default defineConfig({
   },
   css: {
     devSourcemap: false,
-    postcss: {
-      plugins: [require('postcss-critical-split')]
-    },
     modules: {
       localsConvention: 'camelCase',
       generateScopedName: '[name]__[local]__[hash:base64:5]'

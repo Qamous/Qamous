@@ -93,6 +93,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^5.1.0",
     "identity-obj-proxy": "^3.0.0",
+    "postcss-critical-split": "^2.5.3",
     "sass": "^1.84.0",
     "ts-jest": "^29.2.5"
   },
