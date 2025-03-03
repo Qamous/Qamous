@@ -221,11 +221,11 @@ const AddWord = () => {
           multiple={false}
           required={false}
           onChange={onCountrySelect}
+          value={selectedCountries[0] || ""}
         >
           <option value="">{t('add_word.country_selection')}</option>
           {options.map((option, index) => (
-            <option key={index} value={option}
-                    selected={selectedCountries.includes(option)}>{option}</option>
+            <option key={index} value={option}>{option}</option>
           ))}
         </select>
         <label className="container-input-error"></label>
