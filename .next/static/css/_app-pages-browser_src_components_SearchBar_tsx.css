@@ -1,0 +1,268 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[14].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[14].oneOf[13].use[5]!./src/components/SearchBar.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+@import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Reem+Kufi+Fun:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
+/**
+ * SCSS Variables Section
+ * -----------------------
+ * This section contains all the global SCSS variables used throughout the project.
+ * It includes color definitions, font stacks, and mode-specific (light/dark) variables.
+ * These variables are used to maintain a consistent design language and ease future design updates.
+ */
+.variables {
+  /* CSS variables for Next.js CSS modules - must be attached to a class */
+  --primary-color: #ffffff;
+  --secondary-color: #dd8500;
+  --tertiary-color: #000000;
+  --quaternary-color: #292929;
+  --primary-color-90: rgba(255, 255, 255, 0.9);
+  --primary-color-75: rgba(255, 255, 255, 0.75);
+  --primary-color-50: rgba(255, 255, 255, 0.5);
+  --primary-color-40: rgba(255, 255, 255, 0.4);
+  --secondary-color-90: rgba(221, 133, 0, 0.9);
+  --secondary-color-75: rgba(221, 133, 0, 0.75);
+  --secondary-color-20: rgba(221, 133, 0, 0.2);
+  --tertiary-color-90: rgba(0, 0, 0, 0.9);
+  --icon-background-color: rgb(78 78 78 / 44%);
+  --font-stack: "Segoe UI", Sans-Serif, serif;
+  --font-stack-arabic: "Rubik", serif;
+  --font-stack-arabic-wod: "Amiri Quran", "Reem Kufi Fun", Noto Naskh Arabic;
+  --header-border-color: #1e1e1e;
+}
+
+/* Variables are applied via the .variables class */
+.variables {
+  background-color: var(--tertiary-color);
+}
+
+:export {
+  primaryColor: var(--primary-color);
+  secondaryColor: var(--secondary-color);
+  secondaryColorNinety: var(--secondary-color-90);
+  secondaryColorSeventyFive: var(--secondary-color-75);
+  secondaryColorTwenty: var(--secondary-color-20);
+  tertiaryColor: var(--tertiary-color);
+  quaternaryColor: var(--quaternary-color);
+  primaryColorNinety: var(--primary-color-90);
+  primaryColorSeventyFive: var(--primary-color-75);
+  primaryColorFifty: var(--primary-color-50);
+  primaryColorForty: var(--primary-color-40);
+  tertiaryColorNinety: var(--tertiary-color-90);
+  headerBorderColor: var(--header-border-color);
+  iconBackgroundColor: var(--icon-background-color);
+  primaryColorLight: #000000;
+  secondaryColorLight: #dd8500;
+  secondaryColorNinetyLight: rgba(221, 133, 0, 0.9);
+  tertiaryColorLight: #d0d0d0;
+  quaternaryColorLight: #f8f8f8;
+  primaryColorNinetyLight: rgba(0, 0, 0, 0.9);
+  primaryColorSeventyFiveLight: rgba(0, 0, 0, 0.75);
+  primaryColorFiftyLight: rgba(0, 0, 0, 0.5);
+  primaryColorFortyLight: rgba(0, 0, 0, 0.4);
+  tertiaryColorNinetyLight: rgba(208, 208, 208, 0.9);
+  headerBorderColorLight: #eae7e7;
+  iconBackgroundColorLight: rgba(173, 173, 173, 0.44);
+  primaryColorDark: #ffffff;
+  secondaryColorDark: #dd8500;
+  secondaryColorNinetyDark: rgba(221, 133, 0, 0.9);
+  tertiaryColorDark: #000000;
+  quaternaryColorDark: #292929;
+  primaryColorNinetyDark: rgba(255, 255, 255, 0.9);
+  primaryColorSeventyFiveDark: rgba(255, 255, 255, 0.75);
+  primaryColorFiftyDark: rgba(255, 255, 255, 0.5);
+  primaryColorFortyDark: rgba(255, 255, 255, 0.4);
+  tertiaryColorNinetyDark: rgba(0, 0, 0, 0.9);
+  headerBorderColorDark: #1e1e1e;
+  iconBackgroundColorDark: rgba(78, 78, 78, 0.44);
+  primaryColorGrain: #fff6e9;
+  secondaryColorGrain: #dd8500;
+  secondaryColorNinetyGrain: rgba(221, 133, 0, 0.9);
+  tertiaryColorGrain: #251800;
+  quaternaryColorGrain: #402c00;
+  primaryColorNinetyGrain: rgba(255, 246, 233, 0.9);
+  primaryColorSeventyFiveGrain: rgba(255, 246, 233, 0.75);
+  primaryColorFiftyGrain: rgba(255, 246, 233, 0.5);
+  primaryColorFortyGrain: rgba(255, 246, 233, 0.4);
+  tertiaryColorNinetyGrain: rgba(37, 24, 0, 0.9);
+  headerBorderColorGrain: #53402c;
+  iconBackgroundColorGrain: rgba(78, 59, 32, 0.44);
+  fontStack: var(--font-stack);
+  fontStackArabic: var(--font-stack-arabic);
+  fontStackArabicWod: var(--font-stack-arabic-wod);
+}
+
+.search-button {
+  padding: 15px;
+  margin: -7px 10px 0 0;
+  font-size: 20px;
+  border: solid 0.2em var(--secondary-color);
+  display: inline-block;
+  position: relative;
+  border-radius: 2.5em;
+  background-color: var(--quaternary-color);
+  cursor: pointer;
+}
+.search-button-bar {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  top: 0.35em;
+  left: 0.85em;
+  transform: rotate(-45deg) translateY(2.3em);
+  content: "";
+  background-color: var(--secondary-color);
+  width: 0.2em;
+  height: 1.4em;
+  position: absolute;
+}
+
+.search-box {
+  font-family: var(--font-stack);
+}
+
+@media (min-width: 1201px) {
+  .search-overlay-closebtn {
+    display: none;
+  }
+  .search-button {
+    display: none;
+  }
+  .search-box-submit {
+    display: none;
+  }
+  .openBtn {
+    display: none;
+  }
+  .search-overlay {
+    display: block;
+    margin-top: -7px;
+  }
+  .search-box {
+    padding: 0;
+    margin: 0 7px 0 0;
+    font-size: 20px;
+    border: solid 0.2em var(--secondary-color);
+    display: inline-block;
+    position: relative;
+    border-radius: 2.5em;
+  }
+  .search-box input[type=text] {
+    cursor: pointer;
+    background-color: var(--quaternary-color);
+    color: var(--primary-color);
+    font-family: var(--font-stack);
+    font-weight: bold;
+    width: 2.5em;
+    height: 2.5em;
+    padding: 0.3em 2.1em 0.3em 0.4em;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 2.5em;
+    transition: width 800ms cubic-bezier(0.68, -0.55, 0.27, 1.55) 150ms;
+  }
+  .search-box input[type=text]:focus {
+    cursor: text;
+    outline: none;
+  }
+  .search-box input[type=text]:focus, .search-box input[type=text]:not(:placeholder-shown) {
+    width: 18em;
+    transition: width 800ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+  .search-box input[type=text]:focus + button[type=reset], .search-box input[type=text]:not(:placeholder-shown) + button[type=reset] {
+    transform: rotate(-45deg) translateY(0);
+    transition: transform 150ms ease-out 800ms;
+  }
+  .search-box input[type=text]:focus + button[type=reset]:after, .search-box input[type=text]:not(:placeholder-shown) + button[type=reset]:after {
+    opacity: 1;
+    transition: top 150ms ease-out 950ms, right 150ms ease-out 950ms, opacity 150ms ease 950ms;
+  }
+  .search-box button[type=reset] {
+    cursor: pointer;
+    background-color: transparent;
+    width: 1.4em;
+    height: 1.4em;
+    border: 0;
+    padding: 0;
+    outline: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0.55em;
+    right: 0.55em;
+    transform: rotate(-45deg) translateY(2.3em);
+    transition: transform 150ms ease-out 150ms;
+  }
+  .search-box button[type=reset]:before, .search-box button[type=reset]:after {
+    content: "";
+    background-color: var(--secondary-color);
+    width: 0.2em;
+    height: 1.4em;
+    position: absolute;
+  }
+  .search-box button[type=reset]:after {
+    transform: rotate(90deg);
+    opacity: 0;
+    transition: transform 150ms ease-out, opacity 150ms ease-out;
+  }
+}
+@media (max-width: 1200px) {
+  .search-box-reset {
+    display: none;
+  }
+  .search-overlay {
+    height: 100%;
+    width: 100%;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+  .search-overlay-closebtn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+  }
+  .search-overlay-closebtn:hover {
+    color: #ccc;
+  }
+  .search-overlay-content {
+    position: relative;
+    top: 46%;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+  }
+  .search-overlay input[type=text] {
+    padding: 15px;
+    font-size: 17px;
+    float: left;
+    width: 95%;
+    background: var(--quaternary-color);
+    color: var(--primary-color);
+    border: rgba(255, 255, 255, 0.5) solid 0.5px;
+  }
+  .search-overlay button {
+    float: left;
+    min-width: 20%;
+    padding: 15px;
+    color: var(--primary-color);
+    background: var(--quaternary-color);
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .search-overlay button:hover {
+    background: var(--primary-color-50);
+    color: var(--tertiary-color);
+  }
+}

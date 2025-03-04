@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useState, useEffect, lazy, Suspense } from 'react';
 const SearchBar = lazy(() => import("./SearchBar"));
 const Joyride = lazy(() => import('react-joyride'));
@@ -8,7 +10,7 @@ const EG = lazy(() => import('country-flag-icons/react/3x2').then(module => ({ d
 const ThemeModeToggle = lazy(() => import('./ThemeModeToggle'));
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
 import './Header.scss';
 import * as variables from '../assets/Variables.module.scss';
 import { setFunctionalCookie, getFunctionalCookie } from '../assets/utils';
@@ -333,21 +335,21 @@ const Header: React.FC = () => {
           )}
           <div ref={overlayNav} className="nav-overlay">
               <div className="nav-overlay-content">
-                  <NavLink to="/" onClick={handleBurgerClick}>
+                  <Link href="/" onClick={handleBurgerClick}>
                       {t('toolbar_items.home')}
-                  </NavLink>
-                  <NavLink to="/advanced-search" onClick={handleBurgerClick}>
+                  </Link>
+                  <Link href="/advanced-search" onClick={handleBurgerClick}>
                       {t('toolbar_items.advanced_search')}
-                  </NavLink>
-                  <NavLink to="/feeling-lucky" onClick={handleBurgerClick}>
+                  </Link>
+                  <Link href="/feeling-lucky" onClick={handleBurgerClick}>
                       {t('toolbar_items.word_of_the_day')}
-                  </NavLink>
-                  <NavLink to="/blog" onClick={handleBurgerClick}>
+                  </Link>
+                  <Link href="/blog" onClick={handleBurgerClick}>
                       {t('toolbar_items.blog')}
-                  </NavLink>
-                  <NavLink to="/chatbot" onClick={handleBurgerClick}>
+                  </Link>
+                  <Link href="/chatbot" onClick={handleBurgerClick}>
                       {t('toolbar_items.chatbot')}
-                  </NavLink>
+                  </Link>
                   <div className="nav-overlay-content-bottom">
                       <ThemeModeToggle
                         className="nav-overlay-content-bottom-mode"
@@ -374,24 +376,23 @@ const Header: React.FC = () => {
                       </div>
                       
                       <div className="nav-overlay-content-bottom-user">
-                          <NavLink to="/login" onClick={handleBurgerClick}>
+                          <Link href="/login" onClick={handleBurgerClick}>
                               <i className="fa-solid fa-user"></i>
                               <FontAwesomeIcon icon={faUser} size="sm"/>
-                              {/*<img src={userImage} alt={t('common_terms.user')} />*/}
-                          </NavLink>
+                          </Link>
                       </div>
                   </div>
               </div>
           </div>
           <div className={`header ${!isHeaderVisible ? 'header-hidden' : ''}`}>
               <div className="header-left-side">
-                <NavLink to="/">
+                <Link href="/">
                     <img
-                        src={qamousLogo}
+                        src={qamousLogo.toString()}
                         alt={t('common_terms.qamous')}
                         loading="lazy"
                     /> {/* TODO: do more research on lazy loading for a faster experience */}
-                </NavLink>
+                </Link>
                   <ToolbarItems
                     language={currentLang}
                     themeMode={themeMode}
@@ -403,9 +404,9 @@ const Header: React.FC = () => {
               <SearchBar />
             </Suspense>
                   <div className="header-right-side-add">
-                      <NavLink to="/add-definition">
+                      <Link href="/add-definition">
                           <FontAwesomeIcon icon={faPlus} size="2x" />
-                      </NavLink>
+                      </Link>
                   </div>
                   <div className="header-right-side-divider"></div>
                   <div
@@ -437,11 +438,11 @@ const Header: React.FC = () => {
                   />
                   
                   <div className="header-right-side-user">
-                      <NavLink to="/login">
+                      <Link href="/login">
                           <i className="fa-solid fa-user"></i>
                           <FontAwesomeIcon icon={faUser} size="xl" />
                           {/*<img src={userImage} alt={t('common_terms.user')} />*/}
-                      </NavLink>
+                      </Link>
                   </div>
                   
                   {/* Burger menu */}
