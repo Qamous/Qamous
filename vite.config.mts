@@ -36,7 +36,7 @@ export default defineConfig({
           'i18n-core': ['i18next'],
           'i18n-react': ['react-i18next'],
           'utils': ['html-to-image', 'papaparse'],
-          'icons': ['@fortawesome/react-fontawesome/index.es.js', '@fortawesome/fontawesome-svg-core'],
+          'icons': ['@fortawesome/react-fontawesome/index.es.js'],
           'flags': ['country-flag-icons/react/3x2/US', 'country-flag-icons/react/3x2/EG']
         },
         assetFileNames: 'assets/[name].[hash].[ext]',
