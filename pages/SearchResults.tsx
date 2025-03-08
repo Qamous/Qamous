@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import AdSense from 'react-adsense';
 import { useQuery } from 'react-query';
 import { Helmet } from 'react-helmet';
+import LoadingSpinner from '../src/components/LoadingSpinner';
 
 interface SearchResult {
   word: string;
@@ -78,14 +79,7 @@ const SearchResults: React.FC = () => {
   }, [language, allResults]);
   
   if (isLoading) {
-    return (
-      <div className="loading-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
   
   if (error) {

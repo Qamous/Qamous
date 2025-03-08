@@ -8,6 +8,7 @@ import Snackbar from '../src/components/Snackbar';
 import CustomDialog from '../src/components/CustomDialog';
 import { Helmet } from 'react-helmet';
 import { useIntersectionObserver } from '../src/assets/utils';
+import LoadingSpinner from '../src/components/LoadingSpinner';
 
 interface HomeContent {
   word: string,
@@ -109,12 +110,7 @@ const Home: React.FC = () => {
             isReported={false}
             example={""}
           />
-          <div className={'loading-ring'}>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
+          <LoadingSpinner />
         </div>
       </div>
     );
@@ -279,12 +275,7 @@ const Home: React.FC = () => {
         )}
       </div>
       <div ref={useIntersectionObserverElement} className={`feed-loading${!hasNextPage ? '-hidden' : ''}`}>
-        <div className={"loading-ring"}>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+        <LoadingSpinner />
       </div>
     </>
   );

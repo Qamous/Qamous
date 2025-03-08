@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import Snackbar from '../src/components/Snackbar';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
+import LoadingSpinner from '../src/components/LoadingSpinner';
 
 interface WordOfTheDayContent {
     wordId: number,
@@ -55,12 +56,7 @@ const WordOfTheDay: React.FC = () => {
     if (isLoading) {
         return (
           <div className={'word-of-day'}>
-              <div className={'loading-ring'}>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-              </div>
+              <LoadingSpinner />
           </div>
         );
     }

@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 
 //import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
+import LoadingSpinner from '../src/components/LoadingSpinner';
 
 interface Word {
   id: number;
@@ -304,12 +305,7 @@ const UserProfile = () => {
     return (
       <div className="profile">
         <h2 className="profile-title">Hello!</h2>
-        <div className={'loading-ring'}>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+        <LoadingSpinner />
       </div>
     );
   }

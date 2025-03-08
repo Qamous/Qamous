@@ -6,6 +6,7 @@ import { getCountryName, getDemonyms } from '../src/assets/utils';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import AdSenseWrapper from '../src/components/AdSenseWrapper';
+import LoadingSpinner from '../src/components/LoadingSpinner';
 
 const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/definitions/word/${wordId}`);
@@ -60,14 +61,7 @@ const WordPage = () => {
     fetchCountryNameAndDemonyms();
   }, [homeContent]);
   
-  if (isLoading) return (
-    <div className="loading-ring">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  );
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error fetching data</div>;
   
   // Filter the homeContent based on the current language

@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import './Blog.scss';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
+import LoadingSpinner from '../src/components/LoadingSpinner';
 
 interface Post {
   id: string;
@@ -120,12 +121,7 @@ const Blog = () => {
       </Helmet>
       <h1>{t('blog.title')}</h1>
       {authLoading ? (
-        <div className={'loading-ring'}>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+        <LoadingSpinner />
       ) : authData ? (
         <form onSubmit={handlePostSubmit}>
           <input
@@ -184,12 +180,7 @@ const Blog = () => {
       )}
       <div className="posts">
         {postsLoading ? (
-          <div className="loading-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
+          <LoadingSpinner />
         ) : (
           posts?.map((post) => (
             <article key={post.id} className="post">
