@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="/favicon.ico" as="image" />
+    <link rel="preload" href="/src/assets/qamous-logo-transparent.png" as="image" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
@@ -44,6 +46,48 @@
       THIS IS NO LONGER RELEVANT SINCE WE SWITCHED TO VITE
     -->
     <title>Qamous</title>
+    
+    <!-- Inline loading spinner styles for immediate display -->
+    <style>
+      .initial-loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        background-color: #292929;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+      }
+      .initial-loading-ring {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .initial-loading-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #dd8500;
+        border-radius: 50%;
+        animation: initial-loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #dd8500 transparent transparent transparent;
+      }
+      .initial-loading-ring div:nth-child(1) { animation-delay: -0.45s; }
+      .initial-loading-ring div:nth-child(2) { animation-delay: -0.3s; }
+      .initial-loading-ring div:nth-child(3) { animation-delay: -0.15s; }
+      @keyframes initial-loading-ring {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .hidden { display: none; }
+    </style>
 
     <!-- YAMLI CODE START -->
     <script type="text/javascript" src="https://api.yamli.com/js/yamli_api.js"></script>
@@ -60,9 +104,40 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4293590491700199" crossorigin="anonymous"></script>
     <!-- GOOGLE ADSENSE CODE END -->
     <script type="module" src="/src/index.jsx"></script>
+    
+    <!-- Script to handle the initial loading state -->
+    <script>
+      // Show loading spinner immediately
+      document.addEventListener('DOMContentLoaded', function() {
+        const initialLoader = document.getElementById('initial-loader');
+        
+        // Hide the loader when content is loaded
+        window.addEventListener('load', function() {
+          if (initialLoader) {
+            initialLoader.classList.add('hidden');
+          }
+        });
+        
+        // Fallback to hide loader after 5 seconds in case of slow loading
+        setTimeout(function() {
+          if (initialLoader) {
+            initialLoader.classList.add('hidden');
+          }
+        }, 5000);
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- Initial loading spinner that shows immediately -->
+    <div id="initial-loader" class="initial-loading-container">
+      <div class="initial-loading-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
     <div id="root"></div>
   </body>
 </html>

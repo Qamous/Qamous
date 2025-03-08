@@ -149,16 +149,14 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
 };
 
 // Loading fallback component
-const LoadingFallback = () => (
-  <div className="loading-container">
-    <div className="loading-ring">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  </div>
-);
+// Import the dedicated LoadingSpinner component
+const LoadingSpinner = lazy(() => import('./components/LoadingSpinner'));
+
+// Loading fallback component with improved error handling
+const LoadingFallback = () => {
+  // Use ErrorBoundary to catch any loading errors
+  return <LoadingSpinner />;
+};
 
 const App: React.FC = () => {
   const queryClient = new QueryClient({
