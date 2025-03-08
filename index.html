@@ -48,11 +48,11 @@
     <!-- YAMLI CODE START -->
     <script type="text/javascript" src="https://api.yamli.com/js/yamli_api.js"></script>
     <script type="text/javascript">
-      if (typeof(Yamli) == "object" && Yamli.init( { uiLanguage: "en" , startMode: "onOrUserDefault" } ))
+      if (typeof(Yamli) == "object" && Yamli.init( { uiLanguage: "en" , startMode: "onOrUserDefault", forceHTTPS: true } ))
       {
-        Yamli.yamlify( "arabicWord", { settingsPlacement: "inside" } );
-        Yamli.yamlify( "arabicDefinition", { settingsPlacement: "inside" } );
-        Yamli.yamlify( "chatInput", { settingsPlacement: "inside" } );
+        Yamli.yamlify( "arabicWord", { settingsPlacement: "inside", forceHTTPS: true } );
+        Yamli.yamlify( "arabicDefinition", { settingsPlacement: "inside", forceHTTPS: true } );
+        Yamli.yamlify( "chatInput", { settingsPlacement: "inside", forceHTTPS: true } );
       }
     </script>
     <!-- YAMLI CODE END -->
