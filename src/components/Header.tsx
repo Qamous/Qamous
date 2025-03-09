@@ -287,13 +287,16 @@ const Header: React.FC = () => {
         const controlHeader = () => {
             const currentScrollY = window.scrollY;
             
-            if (currentScrollY > lastScrollY) { // scrolling down
+            // Always show header when at the top of the page (fixes iOS elastic scroll issue)
+            if (currentScrollY <= 0) {
+                setIsHeaderVisible(true);
+            } else if (currentScrollY > lastScrollY) { // scrolling down
                 setIsHeaderVisible(false);
             } else { // scrolling up
                 setIsHeaderVisible(true);
             }
             
-            setLastScrollY(currentScrollY);
+            setLastScrollY(currentScrollY);            
         };
 
         window.addEventListener('scroll', controlHeader);
