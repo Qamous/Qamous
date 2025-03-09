@@ -52,11 +52,23 @@ body {
 .content {
   overflow: hidden;
   flex: 1;
-  margin-bottom: 60px; // Add margin to prevent content from being hidden behind the footer
+  margin-bottom: 60px; // Base margin for collapsed footer
   margin-top: 90px; // Add margin-top equal to header height
 
   @media (max-width: 1200px) {
     margin-top: 65px; // Adjust for smaller header on mobile
+  }
+  
+  @media (max-width: 800px) {
+    margin-bottom: 160px; // Increased margin for expanded footer on tablets
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 140px; // Adjusted margin for expanded footer on mobile phones
+  }
+  
+  @media (max-width: 360px) {
+    margin-bottom: 130px; // Adjusted margin for expanded footer on very small devices
   }
 }
 
