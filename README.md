@@ -5,7 +5,7 @@ Qamous (قاموس) is a comprehensive platform for exploring and contributing t
 
 **Looking for the Back-End? Find it [here](https://github.com/anthonyyoussef01/Qamous-Backend).**
 
-![Performance](readme-files/performance.png)
+![Performance](readme-files/old-performance.png)
 
 ## Key Features
 - **Multilingual Support**: Full support for English and Arabic interfaces with RTL/LTR handling
