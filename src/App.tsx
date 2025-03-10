@@ -16,6 +16,8 @@ import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
 import translationEN from './assets/en/translation.json';
 import translationAR from './assets/ar/translation.json';
+// Import the ads loader utility
+import { initAds } from './utils/deferAdsLoader';
 // Adverts bar: Uncomment the following line to enable the adverts bar
 // import Adverts from './components/Adverts';
 
@@ -192,6 +194,12 @@ const App: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+  
+  // Initialize deferred ad loading
+  useEffect(() => {
+    // Initialize ads with deferred loading
+    initAds();
+  }, []);
   
   // const [passwordCorrect, setPasswordCorrect] = useState(true);
   // if (!passwordCorrect) {
