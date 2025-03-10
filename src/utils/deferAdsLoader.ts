@@ -2,14 +2,34 @@
  * Utility to defer loading of Google AdSense scripts until after the page content has loaded
  */
 
-const loadAdScript = () => {
+/**
+ * Options for initializing deferred ads
+ */
+interface DeferredAdsOptions {
+  /**
+   * Optional delay in milliseconds before loading ads
+   * @default 0
+   */
+  delay?: number;
+  
+  /**
+   * Whether to wait for user interaction before loading ads
+   * @default false
+   */
+  waitForInteraction?: boolean;
+}
+
+/**
+ * Loads the AdSense script if it hasn't been loaded already
+ */
+const loadAdScript = (): void => {
   // Check if the script is already loaded
   if (document.querySelector('script[src*="adsbygoogle.js"]')) {
     return;
   }
 
   // Create the AdSense script element
-  const adScript = document.createElement('script');
+  const adScript: HTMLScriptElement = document.createElement('script');
   adScript.async = true;
   adScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4293590491700199';
   adScript.crossOrigin = 'anonymous';
@@ -17,20 +37,18 @@ const loadAdScript = () => {
   // Append the script to the document
   document.head.appendChild(adScript);
   
-  console.log('AdSense script loaded deferred');
+  //console.log('AdSense script loaded deferred');
 };
 
 /**
  * Initialize the deferred loading of ads
- * @param {Object} options - Configuration options
- * @param {number} options.delay - Optional delay in milliseconds before loading ads
- * @param {boolean} options.waitForInteraction - Whether to wait for user interaction before loading ads
+ * @param options - Configuration options
  */
-export const initDeferredAds = (options = {}) => {
+export const initDeferredAds = (options: DeferredAdsOptions = {}): void => {
   const { delay = 0, waitForInteraction = false } = options;
   
   // Function to load ads after specified conditions
-  const loadAds = () => {
+  const loadAds = (): void => {
     if (delay > 0) {
       setTimeout(loadAdScript, delay);
     } else {
@@ -47,9 +65,9 @@ export const initDeferredAds = (options = {}) => {
 
   // Additionally load ads on user interaction if specified
   if (waitForInteraction) {
-    const interactionEvents = ['click', 'scroll', 'keydown', 'mousemove', 'touchstart'];
+    const interactionEvents: string[] = ['click', 'scroll', 'keydown', 'mousemove', 'touchstart'];
     
-    const handleInteraction = () => {
+    const handleInteraction = (): void => {
       loadAdScript();
       // Remove all event listeners after first interaction
       interactionEvents.forEach(event => {
@@ -67,7 +85,7 @@ export const initDeferredAds = (options = {}) => {
  * Initialize AdSense ads with default settings
  * This is a convenience function to use in the main application
  */
-export const initAds = () => {
+export const initAds = (): void => {
   initDeferredAds({
     delay: 1000, // 1 second delay after page load
     waitForInteraction: true
