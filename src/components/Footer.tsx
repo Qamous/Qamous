@@ -23,14 +23,32 @@ const Footer: React.FC = () => {
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
       
-      // Check if user has scrolled to bottom
-      setIsExpanded(documentHeight - (scrollTop + windowHeight) < 10);
+      // Check if user has scrolled to bottom with a slightly larger threshold
+      // and ensure we're checking against the viewport height
+      const isAtBottom = documentHeight - (scrollTop + windowHeight) < 20;
+      
+      if (isAtBottom) {
+        setIsExpanded(true);
+      } else if (documentHeight - (scrollTop + windowHeight) > 100) {
+        // Only collapse when scrolled significantly away from bottom
+        setIsExpanded(false);
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Initial check when component mounts
+    handleScroll();
+    
+    // Passive event listener for better performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Also listen for resize events as they can change document height
+    window.addEventListener('resize', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
   
   return (

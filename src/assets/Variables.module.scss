@@ -54,6 +54,12 @@ $header-border-color: var(--header-border-color);
 // Footer dimensions
 $footer-height-collapsed: 60px;
 $footer-height-expanded: 140px;
+$footer-minimal-height: 60px;
+$footer-expanded-content-height: 80px;
+$footer-height-expanded-mobile: 130px;
+$footer-height-expanded-small: 120px;
+$footer-height-expanded-tiny: 110px;
+$footer-expanded-content-height-small: 60px;
 $content-footer-margin: $footer-height-expanded;
 
 // Dark Mode (default)
