@@ -51,6 +51,11 @@ $font-stack-arabic-wod: var(--font-stack-arabic-wod);
 
 $header-border-color: var(--header-border-color);
 
+// Footer dimensions
+$footer-height-collapsed: 60px;
+$footer-height-expanded: 140px;
+$content-footer-margin: $footer-height-expanded;
+
 // Dark Mode (default)
 $primary-color-dark: #ffffff;
 $secondary-color-dark: #dd8500;
@@ -153,6 +158,10 @@ $icon-background-color-grain: rgba(78, 59, 32, 0.44);
   fontStack: $font-stack;
   fontStackArabic: $font-stack-arabic;
   fontStackArabicWod: $font-stack-arabic-wod;
+
+  footerHeightCollapsed: $footer-height-collapsed;
+  footerHeightExpanded: $footer-height-expanded;
+  contentFooterMargin: $content-footer-margin;
 }
 
 // Common colors

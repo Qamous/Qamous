@@ -38,7 +38,6 @@ body {
   flex-direction: column;
   min-height: 100vh; /* Set the height of the app to 100% of the viewport height */
   background-color: variables.$tertiary-color;
-  padding-bottom: 70px; // Increased padding to prevent content from being hidden behind the footer
 }
 
 .toolbar-items {
@@ -52,23 +51,11 @@ body {
 .content {
   overflow: hidden;
   flex: 1;
-  margin-bottom: 80px; // Increased base margin for collapsed footer
-  margin-top: 90px; // Add margin-top equal to header height
+  margin-bottom: variables.$content-footer-margin; // Add margin to the bottom of the content area to accommodate the footer
+  margin-top: 90px; // Margin-top equal to header height
 
   @media (max-width: 1200px) {
     margin-top: 65px; // Adjust for smaller header on mobile
-  }
-  
-  @media (max-width: 800px) {
-    margin-bottom: 150px; // Adjusted margin for expanded footer on tablets
-  }
-  
-  @media (max-width: 480px) {
-    margin-bottom: 160px; // Adjusted margin for expanded footer on mobile phones
-  }
-  
-  @media (max-width: 360px) {
-    margin-bottom: 170px; // Adjusted margin for expanded footer on very small devices
   }
 }
 

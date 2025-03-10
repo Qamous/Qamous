@@ -7,14 +7,14 @@
   right: 0;
   background-color: variables.$quaternary-color;
   transition: all 0.3s ease;
-  height: 60px; // Height when collapsed
+  height: variables.$footer-height-collapsed; // Height when collapsed
   z-index: 197;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 
   &.expanded {
-    height: 140px; // Increased height when expanded
+    height: variables.$footer-height-expanded; // Increased height when expanded
   }
 
   &-content {
