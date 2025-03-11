@@ -1,85 +1,12 @@
 @import '../assets/Variables.module';
 
-// Common styles
-.search-icon, .search-icon-mobile {
+// Common search icon styles
+.search-icon {
   color: $secondary-color;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 35%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-
-  &:hover {
-    opacity: 0.8;
-  }
 }
 
-// Desktop styles
-.search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  transition: all 0.3s ease;
-
-  &.expanded {
-    width: 300px;
-  }
-}
-
-.search-form {
-  display: flex;
-  width: 100%;
-  position: relative;
-  align-items: center;
-}
-
-.search-input {
-  width: 100%;
-  padding: 8px 40px 8px 12px;
-  border-radius: 8px;
-  border: 2px solid $secondary-color;
-  background-color: $quaternary-color;
-  color: $primary-color;
-  font-family: $font-stack;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: $secondary-color-90;
-  }
-}
-
-.search-button {
-  position: absolute;
-  right: 30px;
-  background: none;
-  border: none;
-  color: $secondary-color;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-
-  &:hover {
-    scale: 125%;
-  }
-}
-
-.search-close {
-  position: absolute;
-  right: 5px;
-  color: $secondary-color;
-  cursor: pointer;
-  padding: 5px;
-  transition: all 0.3s ease-in-out;
-
-  &:hover {
-    scale: 125%;
-  }
-}
-
-// Mobile styles
+// Search overlay styles
 .search-overlay {
   position: fixed;
   top: 0;
@@ -111,16 +38,20 @@
   background-color: $quaternary-color;
   transform: translateY(-50px);
   transition: transform 0.3s ease;
-  margin-top: 65px; // Adjusted to account for header height
+
+  margin-top: 65px;
+  @media (min-width: 1300px) {
+    margin-top: 90px; // Adjusted to account for header height on larger screens
+  }
 }
 
-.search-form-mobile {
+.search-form {
   display: flex;
   position: relative;
   align-items: center;
 }
 
-.search-input-mobile {
+.search-input {
   width: 100%;
   padding: 12px 80px 12px 15px;
   border-radius: 8px;
@@ -136,7 +67,7 @@
   }
 }
 
-.search-button-mobile {
+.search-button {
   position: absolute;
   right: 45px;
   background: none;
@@ -151,7 +82,7 @@
   }
 }
 
-.search-close-mobile {
+.search-close {
   position: absolute;
   right: 15px;
   font-size: 1.2rem;
