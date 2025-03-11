@@ -1,8 +1,8 @@
-@import '../assets/Variables.module';
+@use '../assets/Variables.module' as variables;
 
 // Common search icon styles
 .search-icon {
-  color: $secondary-color;
+  color: variables.$secondary-color;
   cursor: pointer;
 }
 
@@ -13,7 +13,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: $tertiary-color-90;
+  background-color: variables.$tertiary-color-90;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -35,7 +35,7 @@
 .search-overlay-content {
   width: 100%;
   padding: 20px;
-  background-color: $quaternary-color;
+  background-color: variables.$quaternary-color;
   transform: translateY(-50px);
   transition: transform 0.3s ease;
 
@@ -55,15 +55,15 @@
   width: 100%;
   padding: 12px 80px 12px 15px;
   border-radius: 8px;
-  border: 2px solid $secondary-color;
-  background-color: $quaternary-color;
-  color: $primary-color;
-  font-family: $font-stack;
+  border: 2px solid variables.$secondary-color;
+  background-color: variables.$quaternary-color;
+  color: variables.$primary-color;
+  font-family: variables.$font-stack;
   font-size: 1.2rem;
 
   &:focus {
     outline: none;
-    border-color: $secondary-color-90;
+    border-color: variables.$secondary-color-90;
   }
 }
 
@@ -73,7 +73,7 @@
   background: none;
   border: none;
   font-size: 1.2rem;
-  color: $secondary-color;
+  color: variables.$secondary-color;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 
@@ -86,7 +86,7 @@
   position: absolute;
   right: 15px;
   font-size: 1.2rem;
-  color: $secondary-color;
+  color: variables.$secondary-color;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 

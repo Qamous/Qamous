@@ -26,14 +26,34 @@ interface JsonContent {
 }
 
 const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/word/search/kwd=` + query, {
-    mode: 'cors',
-    credentials: 'include',
-  });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
+  const apiUrl = `${import.meta.env.VITE_API_URL}/word/search/kwd=${query}`;
+  
+  try {
+    console.log('Fetching from:', apiUrl);
+    
+    const response = await fetch(apiUrl, {
+      mode: 'cors',
+      credentials: 'include',
+    });
+    
+    // Check if the response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      console.error('Received non-JSON response:', text);
+      console.error('Content type:', contentType);
+      throw new Error('API returned non-JSON response');
+    }
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return response.json();
+  } catch (err) {
+    console.error('Search request failed:', err);
+    throw err;
   }
-  return response.json();
 };
 
 const SearchResults: React.FC = () => {
