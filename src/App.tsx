@@ -3,6 +3,7 @@ const ReactQueryDevtools = import.meta.env.DEV
   ? lazy(() => import('react-query/devtools').then(mod => ({ default: mod.ReactQueryDevtools })))
   : () => null;
 const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(mod => ({ default: mod.FontAwesomeIcon })));
+const FullScreenToggle = lazy(() => import('./components/FullScreenToggle'));
 const Header = lazy(() => import('./components/Header'));
 const Snackbar = lazy(() => import('./components/Snackbar'));
 const Footer = lazy(() => import('./components/Footer'));
@@ -270,6 +271,9 @@ const App: React.FC = () => {
             className={'home-report-icon'}
           />
         </div>
+        <Suspense fallback={null}>
+          <FullScreenToggle />
+        </Suspense>
         <Footer />
         <Snackbar
           open={mustLoginSnackbarOpen}

@@ -1,0 +1,38 @@
+.fullscreen-toggle {
+  position: fixed;
+  bottom: 70px; /* Position above the footer */
+  right: 15px;
+  background-color: var(--tertiary-color);
+  color: var(--primary-color);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+  
+  &:hover, &:active {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  
+  .fullscreen-icon {
+    color: var(--primary-color);
+  }
+}
+
+/* Add a slight animation when toggling */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.fullscreen-toggle:active .fullscreen-icon {
+  animation: pulse 0.3s ease;
+}
