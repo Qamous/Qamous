@@ -403,8 +403,8 @@ const Header: React.FC = () => {
               
               <div className="header-right-side">
                   <Suspense fallback={<div className="search-loading"></div>}>
-              <SearchBar />
-            </Suspense>
+                      <SearchBar />
+                  </Suspense>
                   <div className="header-right-side-add">
                       <NavLink to="/add-definition">
                           <FontAwesomeIcon icon={faPlus} size="2x" />

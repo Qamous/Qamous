@@ -1,279 +1,165 @@
-@use "../assets/Variables.module" as variables;
-@use "sass:math";
-@import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
+@import '../assets/Variables.module';
 
-$font-size: 20px;
-$frame-color: #000000;
-$size: 2.5em;
-$open-width: 18em;
-$open-padding: 0.3em 2.1em 0.3em 0.4em;
-$frame-thickness: 0.2em;
-$handle-height: 1.4em;
-$open-trans-time: 800ms;
-$close-trans-time: 150ms;
+// Common styles
+.search-icon, .search-icon-mobile {
+  color: $secondary-color;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 35%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 
-// Global transitions for search elements
-.search-button,
-.search-box,
-.search-overlay {
-  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease,
-  width 0.35s ease, height 0.35s ease, position 0.35s ease;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Desktop styles
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+
+  &.expanded {
+    width: 300px;
+  }
+}
+
+.search-form {
+  display: flex;
+  width: 100%;
+  position: relative;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 40px 8px 12px;
+  border-radius: 8px;
+  border: 2px solid $secondary-color;
+  background-color: $quaternary-color;
+  color: $primary-color;
+  font-family: $font-stack;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $secondary-color-90;
+  }
 }
 
 .search-button {
-  padding: 15px;
-  margin: -7px 10px 0 0;
-  font-size: $font-size;
-  border: solid $frame-thickness variables.$secondary-color;
-  display: inline-block;
-  position: relative;
-  border-radius: $size;
+  position: absolute;
+  right: 30px;
+  background: none;
+  border: none;
+  color: $secondary-color;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 
-  &-bar {
-    cursor: pointer;
-    border: 0;
-    padding: 0;
-    outline: 0;
-    top: 0.30em;
-    left: 0.80em;
-    transform: rotate(-45deg) translateY(2.3em);
-    content: "";
-    background-color: var(--secondary-color);
-    width: calc($frame-thickness * 1.5);
-    height: 1.4em;
-    position: absolute;
+  &:hover {
+    scale: 125%;
   }
 }
 
-.search-box {
-  font-family: variables.$font-stack;
+.search-close {
+  position: absolute;
+  right: 5px;
+  color: $secondary-color;
+  cursor: pointer;
+  padding: 5px;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    scale: 125%;
+  }
 }
 
-@media (min-width: 1201px) {
-  //.search-overlay-closebtn {
-  //  display: none;
-  //}
+// Mobile styles
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $tertiary-color-90;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 
-  .search-button {
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-  }
-
-  .search-box-submit {
-    display: none;
-  }
-
-  .openBtn {
-    display: none;
-  }
-
-  .search-overlay {
+  &.open {
     opacity: 1;
-    display: block;
-    margin-top: -7px;
-  }
+    visibility: visible;
 
-  .search-box {
-    padding: 0;
-    margin: 0 7px 0 0;
-    font-size: $font-size;
-    border: solid $frame-thickness variables.$secondary-color;
-    display: inline-block;
-    position: relative;
-    border-radius: $size;
-
-    input[type="text"] {
-      cursor: pointer;
-      background-color: variables.$quaternary-color;
-      color: variables.$primary-color;
-      font-family: variables.$font-stack;
-      font-weight: bold;
-      width: $size;
-      height: $size;
-      padding: $open-padding;
-      border: none;
-      box-sizing: border-box;
-      border-radius: $size;
-      transition: width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55)
-        $close-trans-time;
-
-      &:focus {
-        cursor: text;
-        outline: none;
-      }
-
-      &:focus,
-      &:not(:placeholder-shown) {
-        width: $open-width;
-        transition: width $open-trans-time cubic-bezier(0.68, -0.55, 0.27, 1.55);
-
-        + button[type="reset"] {
-          transform: rotate(-45deg) translateY(0);
-          transition: transform $close-trans-time ease-out $open-trans-time;
-        }
-
-        + button[type="reset"]:after {
-          opacity: 1;
-          transition: top $close-trans-time ease-out
-              ($open-trans-time + $close-trans-time),
-            right $close-trans-time ease-out
-              ($open-trans-time + $close-trans-time),
-            opacity $close-trans-time ease
-              ($open-trans-time + $close-trans-time);
-        }
-      }
-    }
-
-    button[type="reset"] {
-      cursor: pointer;
-      background-color: transparent;
-      width: $handle-height;
-      height: $handle-height;
-      border: 0;
-      padding: 0;
-      outline: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: math.div($size, 2) - math.div($handle-height, 2);
-      right: math.div($size, 2) - math.div($handle-height, 2);
-      transform: rotate(-45deg) translateY($size - $frame-thickness);
-      transition: transform $close-trans-time ease-out $close-trans-time;
-
-      &:before,
-      &:after {
-        content: "";
-        background-color: variables.$secondary-color;
-        width: calc($frame-thickness * 1.5);
-        height: $handle-height;
-        position: absolute;
-      }
-
-      &:after {
-        transform: rotate(90deg);
-        opacity: 0;
-        transition: transform $close-trans-time ease-out,
-          opacity $close-trans-time ease-out;
-      }
+    .search-overlay-content {
+      transform: translateY(0);
     }
   }
 }
 
-@media (max-width: 1200px) {
-  .search-box-reset {
-    display: none;
+.search-overlay-content {
+  width: 100%;
+  padding: 20px;
+  background-color: $quaternary-color;
+  transform: translateY(-50px);
+  transition: transform 0.3s ease;
+  margin-top: 65px; // Adjusted to account for header height
+}
+
+.search-form-mobile {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.search-input-mobile {
+  width: 100%;
+  padding: 12px 80px 12px 15px;
+  border-radius: 8px;
+  border: 2px solid $secondary-color;
+  background-color: $quaternary-color;
+  color: $primary-color;
+  font-family: $font-stack;
+  font-size: 1.2rem;
+
+  &:focus {
+    outline: none;
+    border-color: $secondary-color-90;
   }
+}
 
-  .search-button {
-    opacity: 1;
-    position: relative;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    
-    &:hover {
-      transform: scale(1.05);
-    }
-    
-    &:active {
-      transform: scale(0.95);
-    }
+.search-button-mobile {
+  position: absolute;
+  right: 45px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: $secondary-color;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    scale: 125%;
   }
+}
 
-  .search-overlay {
-    visibility: hidden;
-    opacity: 0;
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    background-color: variables.$quaternary-color;
-    transition: none;
-    box-shadow: 0 -6px 5px 5px rgba(0, 0, 0, 0.1);
+.search-close-mobile {
+  position: absolute;
+  right: 15px;
+  font-size: 1.2rem;
+  color: $secondary-color;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 
-    &-content {
-      height: 100%;
-      text-align: center;
-      margin: auto;
-      opacity: 0;
-      transform: translateY(-100%);
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      display: flex;
-    }
-
-    .search-box {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-    }
-
-    input[type="text"] {
-      padding: 10px 15px;
-      font-size: 16px;
-      width: calc(100% - 150px); /* Leave space for the button */
-      background: variables.$quaternary-color;
-      color: variables.$primary-color;
-      border: variables.$secondary-color solid 2px;
-      border-radius: 8px;
-      transition: box-shadow 0.3s ease;
-      
-      &:focus {
-        box-shadow: 0 0 5px variables.$primary-color-50;
-        outline: none;
-      }
-    }
-
-    button[type="submit"] {
-      width: 70px;
-      padding: 10px;
-      color: variables.$primary-color;
-      background: variables.$quaternary-color;
-      font-size: 16px;
-      cursor: pointer;
-      border: variables.$secondary-color solid 2px;
-      border-radius: 8px;
-      transition: background 0.3s ease, color 0.3s ease;
-      
-      &:hover {
-        background: variables.$secondary-color;
-        color: variables.$quaternary-color;
-      }
-      
-      &:active {
-        transform: scale(0.95);
-      }
-    }
-
-    &-closebtn {
-      font-size: 18px;
-      cursor: pointer;
-      color: variables.$primary-color;
-      transition: opacity 0.3s ease, color 0.3s ease;
-
-      &:hover {
-        color: variables.$secondary-color;
-      }
-    }
-    
-    &.show {
-      visibility: visible;
-      opacity: 1;
-
-      /* Apply transition only when showing */
-      transition: opacity 0.3s ease-in-out;
-      
-      //.search-overlay-closebtn {
-      //  opacity: 1;
-      //}
-      
-      .search-overlay-content {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+  &:hover {
+    scale: 125%;
   }
 }

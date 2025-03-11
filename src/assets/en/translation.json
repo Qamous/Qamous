@@ -251,5 +251,8 @@
     "error_message": "Sorry, an error occurred. Please try again.",
     "arabic": "Arabic",
     "franco_arabic": "Franco-Arabic"
+  },
+  "search": {
+    "placeholder": "Search for a word or phrase..."
   }
 }

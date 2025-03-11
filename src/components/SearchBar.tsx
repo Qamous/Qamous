@@ -1,123 +1,138 @@
-import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
-import './SearchBar.scss';
-const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome/index.js').then(module => ({ default: module.FontAwesomeIcon })));
-import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import './SearchBar.scss';
 
 const SearchBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const searchOverlayRef = useRef<HTMLDivElement>(null);
-  
-  const closeSearch = () => {
-    if (!isInputFocused) {
-      const overlay = document.getElementById("myOverlay");
-      if (overlay) {
-        overlay.classList.remove("show");
-        setTimeout(() => {
-          overlay.style.display = "none";
-        }, 300); // Match the transition duration
-      }
-    }
-  };
-  
-  const openSearch = () => {
-    const overlay = document.getElementById("myOverlay");
-    if (overlay) {
-      overlay.style.display = "block";
-      // Trigger reflow to ensure the transition works
-      overlay.offsetHeight;
-      overlay.classList.add("show");
-    }
-  };
-  
-  const handleSearch = (event: React.FormEvent) => {
-    event.preventDefault();
-    navigate(`/search/${searchQuery}`);
-    // Reset the search field after navigating
-    setSearchQuery('');
-    // Close the search bar after navigating
-    closeSearch();
-  };
-  
-  // Handle clicks outside the search overlay
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1300);
+
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      // Only handle clicks when the overlay is shown and in mobile view
-      const overlay = document.getElementById("myOverlay");
-      if (overlay && overlay.classList.contains("show") && window.innerWidth <= 1200) {
-        // Check if the click was outside the search overlay content
-        if (searchOverlayRef.current && !searchOverlayRef.current.contains(event.target as Node)) {
-          closeSearch();
-        }
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1300);
+      if (window.innerWidth > 1300) {
+        setIsOverlayOpen(false);
       }
     };
 
-    // Add event listener
-    document.addEventListener('mousedown', handleClickOutside);
-    
-    // Cleanup
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isInputFocused]);
-  
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 1200) {
-        openSearch();
-      } else {
-        closeSearch();
-      }
-    };
-    
     window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [isInputFocused]);
-  
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search/${searchQuery}`);
+      setSearchQuery('');
+      setIsExpanded(false);
+      setIsOverlayOpen(false);
+    }
+  };
+
+  const handleIconClick = () => {
+    if (isMobile) {
+      setIsOverlayOpen(true);
+      setTimeout(() => {
+        if (searchInputRef.current) searchInputRef.current.focus();
+      }, 300);
+    } else {
+      setIsExpanded(true);
+      setTimeout(() => {
+        if (searchInputRef.current) searchInputRef.current.focus();
+      }, 300);
+    }
+  };
+
+  const handleClose = () => {
+    setIsExpanded(false);
+    setIsOverlayOpen(false);
+    setSearchQuery('');
+  };
+
+  const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (
+      event.target === event.currentTarget &&
+      isOverlayOpen
+    ) {
+      handleClose();
+    }
+  };
+
+  // Desktop search bar
+  const desktopSearchBar = (
+    <div className={`search-container ${isExpanded ? 'expanded' : ''}`}>
+      {!isExpanded ? (
+        <div className="search-icon" onClick={handleIconClick}>
+          <FontAwesomeIcon icon={faSearch} size="2x"/>
+        </div>
+      ) : (
+        <form onSubmit={handleSearch} className="search-form">
+          <input
+            ref={searchInputRef}
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t('search.placeholder')}
+            className="search-input"
+          />
+          <button type="submit" className="search-button">
+            <FontAwesomeIcon icon={faSearch}/>
+          </button>
+          <div className="search-close" onClick={handleClose}>
+            <FontAwesomeIcon icon={faTimes} />
+          </div>
+        </form>
+      )}
+    </div>
+  );
+
+  // Mobile search overlay
+  const mobileSearchOverlay = (
+    <div
+      className={`search-overlay ${isOverlayOpen ? 'open' : ''}`}
+      onClick={handleClickOutside}
+    >
+      <div className="search-overlay-content">
+        <form onSubmit={handleSearch} className="search-form-mobile">
+          <input
+            ref={searchInputRef}
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t('search.placeholder')}
+            className="search-input-mobile"
+          />
+          <button type="submit" className="search-button-mobile">
+            <FontAwesomeIcon icon={faSearch} />
+          </button>
+          <div className="search-close-mobile" onClick={handleClose}>
+            <FontAwesomeIcon icon={faTimes} />
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+
+  // Search icon for mobile view
+  const mobileSearchIcon = (
+    <div className="search-icon-mobile" onClick={handleIconClick}>
+      <FontAwesomeIcon icon={faSearch} size="2x"/>
+    </div>
+  );
+
   return (
     <>
-      <div className="search-button" onClick={openSearch}>
-        <button className="search-button-bar"></button>
-      </div>
-      <div id="myOverlay" className="search-overlay">
-        <div className="search-overlay-content" ref={searchOverlayRef}>
-          <form className="search-box" onSubmit={handleSearch}>
-            <input
-              type="text"
-              placeholder=" "
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsInputFocused(true)} // Set input focus state
-              onBlur={() => setIsInputFocused(false)} // Reset input focus state
-              onClick={(e) => e.stopPropagation()} // Prevent closing when input is clicked
-            />
-            <button type="reset" className="search-box-reset"></button>
-            <button
-              type="submit"
-              className="search-box-submit"
-            >
-              {t('common.search')}
-            </button>
-            <span
-              className="search-overlay-closebtn"
-              onClick={closeSearch}
-              title="Close Overlay"
-            >
-              <Suspense fallback={<span>&times;</span>}>
-                <FontAwesomeIcon icon={faXmark} />
-              </Suspense>
-            </span>
-          </form>
-        </div>
-      </div>
+      {isMobile ? mobileSearchIcon : desktopSearchBar}
+      {mobileSearchOverlay}
     </>
   );
-}
+};
 
 export default SearchBar;
