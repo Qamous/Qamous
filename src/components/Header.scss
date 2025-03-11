@@ -275,14 +275,14 @@ $header-shadow: rgba(0, 0, 0, 0.1);
 }
 
 /* Hide the burger menu on screens wider than 1200px */
-@media (min-width: 1201px) {
+@media (min-width: 1301px) {
     .header-right-side-burger {
         display: none;
     }
 }
 
 /* Hide existing menu on screens narrower than 1201px */
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
     .toolbar-items {
         display: none;
     }
@@ -303,10 +303,6 @@ $header-shadow: rgba(0, 0, 0, 0.1);
                 display: none;
             }
         }
-    }
-
-    .search-box {
-        margin: 0 15px 0 0;
     }
 
     @media (max-height: 600px) {

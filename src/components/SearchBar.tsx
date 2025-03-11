@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import './SearchBar.scss';
 const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome/index.js').then(module => ({ default: module.FontAwesomeIcon })));
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
@@ -10,12 +10,16 @@ const SearchBar: React.FC = () => {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const searchOverlayRef = useRef<HTMLDivElement>(null);
   
   const closeSearch = () => {
     if (!isInputFocused) {
       const overlay = document.getElementById("myOverlay");
       if (overlay) {
-        overlay.style.display = "none";
+        overlay.classList.remove("show");
+        setTimeout(() => {
+          overlay.style.display = "none";
+        }, 300); // Match the transition duration
       }
     }
   };
@@ -24,6 +28,9 @@ const SearchBar: React.FC = () => {
     const overlay = document.getElementById("myOverlay");
     if (overlay) {
       overlay.style.display = "block";
+      // Trigger reflow to ensure the transition works
+      overlay.offsetHeight;
+      overlay.classList.add("show");
     }
   };
   
@@ -35,6 +42,28 @@ const SearchBar: React.FC = () => {
     // Close the search bar after navigating
     closeSearch();
   };
+  
+  // Handle clicks outside the search overlay
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Only handle clicks when the overlay is shown and in mobile view
+      const overlay = document.getElementById("myOverlay");
+      if (overlay && overlay.classList.contains("show") && window.innerWidth <= 1200) {
+        // Check if the click was outside the search overlay content
+        if (searchOverlayRef.current && !searchOverlayRef.current.contains(event.target as Node)) {
+          closeSearch();
+        }
+      }
+    };
+
+    // Add event listener
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    // Cleanup
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isInputFocused]);
   
   useEffect(() => {
     const handleResize = () => {
@@ -57,16 +86,7 @@ const SearchBar: React.FC = () => {
         <button className="search-button-bar"></button>
       </div>
       <div id="myOverlay" className="search-overlay">
-        <span
-          className="search-overlay-closebtn"
-          onClick={closeSearch}
-          title="Close Overlay"
-        >
-          <Suspense fallback={<span>&times;</span>}>
-            <FontAwesomeIcon icon={faXmark} />
-          </Suspense>
-        </span>
-        <div className="search-overlay-content">
+        <div className="search-overlay-content" ref={searchOverlayRef}>
           <form className="search-box" onSubmit={handleSearch}>
             <input
               type="text"
@@ -84,6 +104,15 @@ const SearchBar: React.FC = () => {
             >
               {t('common.search')}
             </button>
+            <span
+              className="search-overlay-closebtn"
+              onClick={closeSearch}
+              title="Close Overlay"
+            >
+              <Suspense fallback={<span>&times;</span>}>
+                <FontAwesomeIcon icon={faXmark} />
+              </Suspense>
+            </span>
           </form>
         </div>
       </div>
