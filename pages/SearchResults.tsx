@@ -7,6 +7,7 @@ import AdSense from 'react-adsense';
 import { useQuery } from 'react-query';
 import { Helmet } from 'react-helmet';
 import LoadingSpinner from '../src/components/LoadingSpinner';
+import AdSenseWrapper from '../src/components/AdSenseWrapper';
 
 interface SearchResult {
   word: string;
@@ -132,9 +133,10 @@ const SearchResults: React.FC = () => {
         <meta name="keywords" content={`search results, ${query}, Arabic to English, English to Arabic, definitions, translations, slang, dialect`} />
       </Helmet>
       <div className="feed-ad-space">
-        <AdSense.Google
+        <AdSenseWrapper
           client='ca-pub-4293590491700199'
           slot='7898075502'
+          adKey='search-results-top'
           style={{
             display: 'block',
             width: '100%',
@@ -166,9 +168,10 @@ const SearchResults: React.FC = () => {
                 example={""}
               />
               <div className="feed-posts-ad-space">
-                <AdSense.Google
+                <AdSenseWrapper
                   client="ca-pub-4293590491700199"
                   slot="6473874271"
+                  adKey="search-results-middle"
                   style={{
                     display: 'block',
                     width: '100%',
@@ -224,9 +227,10 @@ const SearchResults: React.FC = () => {
         }
       </div>
       <div className="feed-ad-space">
-        <AdSense.Google
+        <AdSenseWrapper
           client='ca-pub-4293590491700199'
           slot='1590891296'
+          adKey='search-results-bottom'
           style={{
             display: 'block',
             width: '100%',

@@ -8,6 +8,9 @@ export default defineConfig({
   base: "./",
   server: {
     port: 3001,
+    headers: {
+      'Content-Type': 'application/javascript',
+    },
     strictPort: true,
     hmr: {
       overlay: true
