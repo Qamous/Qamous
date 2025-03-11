@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import './SearchBar.scss';
-const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(module => ({ default: module.FontAwesomeIcon })));
+const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome/index.js').then(module => ({ default: module.FontAwesomeIcon })));
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
