@@ -1,3 +1,4 @@
+import { API_URL, apiJson } from "../src/api";
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import './AdvancedSearch.scss';
@@ -39,7 +40,7 @@ const AdvancedSearch: React.FC = () => {
   }, [countryName]);
   
   useEffect(() => {
-    Papa.parse('countries.csv', {
+    Papa.parse('/countries.csv', {
       download: true,
       header: true,
       complete: function (results: { data: { ' CountryName': string }[] }) {
@@ -61,7 +62,7 @@ const AdvancedSearch: React.FC = () => {
   const fetchResults = async (country: string) => {
     try {
       const encodedCountryCode = await getCountryCode(country);
-      const url = `${import.meta.env.VITE_API_URL}/word/search/iso=${encodedCountryCode}`;
+      const url = `${API_URL}/word/search/iso=${encodedCountryCode}`;
       const response = await fetch(url, {
         method: 'GET',
         credentials: 'include',
@@ -69,7 +70,7 @@ const AdvancedSearch: React.FC = () => {
           'Content-Type': 'application/json',
         },
       });
-      const data = await response.json();
+      const data = await apiJson<AdvancedSearchProps[]>(response);
       setResults(Array.isArray(data) ? data : []);
       if (data.length === 0) {
         setSnackbarOpen(false);

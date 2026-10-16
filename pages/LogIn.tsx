@@ -1,12 +1,14 @@
+import { API_URL } from "../src/api";
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './LogIn.scss';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import CustomDialog from '../src/components/CustomDialog';
 import { useTranslation } from 'react-i18next';
 //import OAuthStrategies from '../OAuthStrategies';
 
 const Login: React.FC = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +30,7 @@ const Login: React.FC = () => {
   const mutation = useMutation((data: {
     username: string;
     password: string;
-  }) => fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+  }) => fetch(`${API_URL}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -45,6 +47,7 @@ const Login: React.FC = () => {
     return response.json();
   }), {
     onSuccess: () => {
+      queryClient.clear();
       setSuccessMessage(t('login.success_message'));
       setShowSuccessDialog(true);
     },

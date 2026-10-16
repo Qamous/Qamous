@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './UserProfile.scss';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { API_URL, apiJson } from '../src/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons/faArrowRightFromBracket';
@@ -8,7 +9,7 @@ import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
 import { faThumbsDown } from '@fortawesome/free-solid-svg-icons/faThumbsDown';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons/faThumbsUp';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import CustomDialog from '../src/components/CustomDialog';
 import Snackbar from '../src/components/Snackbar';
 import { useTranslation } from 'react-i18next';
@@ -41,7 +42,21 @@ interface Definition {
   word: Word;
 }
 
+interface ProfileUser { id: number; firstName: string; username: string; }
+
 const UserProfile = () => {
+  const { data, isLoading, error } = useQuery<ProfileUser | null, Error>('profileSession', async () => {
+    const result = await apiJson<{ session?: { passport?: { user?: ProfileUser } } }>(await fetch(`${API_URL}/auth/session`, { credentials: 'include' }));
+    return result.session?.passport?.user || null;
+  }, { retry: false, cacheTime: 0, staleTime: 0 });
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <p role="alert">{error.message}</p>;
+  if (!data) return <Navigate to="/login" replace />;
+  return <UserProfileContent userData={data} />;
+};
+
+const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const location = useLocation();
   const [editedText, setEditedText] = useState('');
@@ -61,15 +76,14 @@ const UserProfile = () => {
   const [selectedDefinition, setSelectedDefinition] = useState<{ [key: number]: Definition | null }>({});
   const [currentDefinition, setCurrentDefinition] = useState<Definition | null>(null);
   const [pointsReceived, setPointsReceived] = useState<number>(0);
-  const userData = location.state.user;
   const name: string = userData.firstName;
   const userId: number = userData.id;
   const username: string = userData.username;
   const { t } = useTranslation();
   
   const fetchDefinitions = (userId: number) =>
-    fetch(`${import.meta.env.VITE_API_URL}/definitions/user/${userId}`)
-      .then(response => response.json())
+    fetch(`${API_URL}/definitions/user/${userId}`)
+      .then(response => apiJson<Definition[]>(response))
       .then(data => {
         setDefinitions(data);
         
@@ -79,10 +93,10 @@ const UserProfile = () => {
       });
   
   const fetchUserData = (userId: number) =>
-    fetch(`${import.meta.env.VITE_API_URL}/users/me/points`, {
+    fetch(`${API_URL}/users/me/points`, {
         credentials: 'include',
       })
-      .then(response => response.json())
+      .then(response => apiJson<{points:number}>(response))
       .then(data => {
         setPointsReceived(data.points);
       });
@@ -99,7 +113,7 @@ const UserProfile = () => {
   };
   
   const logoutMutation = useMutation(() =>
-      fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+      fetch(`${API_URL}/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,6 +122,7 @@ const UserProfile = () => {
       }),
     {
       onSuccess: () => {
+        queryClient.clear();
         // Redirect to login page after successful logout
         navigate('/login');
       },
@@ -142,16 +157,11 @@ const UserProfile = () => {
     if (submittingPostId !== null) {
       const updatedDefinition = definitions.find(def => def.id === submittingPostId);
       if (updatedDefinition) {
-        definitions.forEach(def => {
-          if (def.id === submittingPostId) {
-            def.definition = editedText;
-          }
-        });
         const updatedDefinitionWithWordId = {
           ...updatedDefinition,
           definition: editedText,
         };
-        fetch(`${import.meta.env.VITE_API_URL}/definitions/${submittingPostId}`, {
+        fetch(`${API_URL}/definitions/${submittingPostId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -188,7 +198,7 @@ const UserProfile = () => {
   };
   
   const handleDeleteAccountSubmit = (): void => {
-    fetch(`${import.meta.env.VITE_API_URL}/users/` + userId, {
+    fetch(`${API_URL}/users/` + userId, {
       method: 'DELETE',
       credentials: 'include',
     })
@@ -309,6 +319,7 @@ const UserProfile = () => {
       </div>
     );
   }
+  if (isError || isUserPointsError) return <p role="alert">Temporarily unavailable. Please try again later. / الخدمة غير متاحة مؤقتاً</p>;
   return (
     <div className="profile">
       {isDialogOpen && (
@@ -418,13 +429,8 @@ const UserProfile = () => {
           // If there is no Franco-Arabic definition, show the Arabic definition
           if (!currentDefinition) {
             currentDefinition = wordDefinitionsData.find((def: Definition) => def.isArabic);
-            if (currentDefinition) {
-              setCurrentLanguage(prevState => ({
-                ...prevState,
-                [word.id]: 'ARABIC',
-              }));
-            }
           }
+          const displayArabic = !!currentDefinition?.isArabic;
           
           const otherDefinitions = wordDefinitionsData.filter(def => def.id !== currentDefinition?.id && def.isArabic === currentDefinition?.isArabic);
           
@@ -432,7 +438,7 @@ const UserProfile = () => {
             <div className="profile-post" key={word.id}>
               <div className="profile-post-language">
                 <p className="profile-post-language-left">
-                  {currentLanguage[word.id] === 'ARABIC' ?
+                  {displayArabic ?
                     t('user_profile.arabic') :
                     t('user_profile.franco_arabic')}
                 </p>
@@ -449,8 +455,8 @@ const UserProfile = () => {
                   </div>
                 )}
               </div>
-              <h2 dir={currentLanguage[word.id] === 'ARABIC' ? 'rtl' : 'ltr'}>
-                {currentLanguage[word.id] === 'ARABIC' ? word.arabicWord : word.francoArabicWord}
+              <h2 dir={displayArabic ? 'rtl' : 'ltr'}>
+                {displayArabic ? word.arabicWord : word.francoArabicWord}
               </h2>
               {editingPostId === currentDefinition?.id ? (
                 <textarea
@@ -458,7 +464,7 @@ const UserProfile = () => {
                   value={editedText}
                   className={`profile-post-inputtext`}
                   rows={4}
-                  dir={currentLanguage === 'ARABIC' ? 'rtl' : 'ltr'}
+                  dir={displayArabic ? 'rtl' : 'ltr'}
                   onChange={(e) => setEditedText(e.target.value)}
                 />
               ) : (

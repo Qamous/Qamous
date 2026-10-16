@@ -1,3 +1,4 @@
+import { API_URL, apiJson } from "../src/api";
 import React, { useEffect, useState } from 'react';
 import './WordOfTheDay.scss';
 import { useQuery } from 'react-query';
@@ -19,15 +20,11 @@ interface WordOfTheDayContent {
 }
 
 const fetchWordOfTheDayContent = () =>
-  fetch(`${import.meta.env.VITE_API_URL}/definitions/random-matching`, {
+  fetch(`${API_URL}/definitions/random-matching`, {
       mode: 'cors',
       credentials: 'include',
   })
-    .then(response => response.json())
-    .then(data => {
-        console.log('API Response:', data);
-        return data;
-    });
+    .then(response => apiJson<WordOfTheDayContent[]>(response));
 
 const WordOfTheDay: React.FC = () => {
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);

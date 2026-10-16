@@ -11,6 +11,7 @@
 
 # Package manager locks
 package-lock.json
+!/package-lock.json
 yarn-debug.log*
 yarn-error.log*
 npm-debug.log*
@@ -35,3 +36,6 @@ src/firebaseConfig.js
 
 # Local Netlify folder
 .netlify
+/.wrangler/
+/.dev.vars*
+/.playwright-mcp/

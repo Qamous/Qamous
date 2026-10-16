@@ -5,12 +5,10 @@ import envCompatible from "vite-plugin-env-compatible";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "./",
+  base: "/",
   server: {
     port: 3001,
-    headers: {
-      'Content-Type': 'application/javascript',
-    },
+    proxy: { '/api': { target: 'http://127.0.0.1:8787', changeOrigin: true, rewrite: path => path.replace(/^\/api/, '') } },
     strictPort: true,
     hmr: {
       overlay: true
@@ -24,16 +22,13 @@ export default defineConfig({
     },
     outDir: "build",
     minify: 'esbuild',
-    sourcemap: true,
+    sourcemap: false,
     reportCompressedSize: false,
     rollupOptions: {
       output: {
         manualChunks: {
           'react-core': ['react', 'react-dom'],
           'react-router': ['react-router-dom'],
-          'firebase-core': ['firebase/app'],
-          'firebase-firestore': ['firebase/firestore'],
-          'firebase-auth': ['firebase/auth'],
           'markdown': ['react-markdown', 'mdast-util-from-markdown', 'hast-util-to-jsx-runtime'],
           'ui-core': ['react-joyride', 'react-query'],
           'i18n-core': ['i18next'],

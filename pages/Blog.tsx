@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, QueryClient } from 'react-query';
-import { collection, addDoc, getDocs, Timestamp } from 'firebase/firestore';
-import { db } from '../src/firebaseConfig';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { API_URL, apiJson } from '../src/api';
 import ReactMarkdown from 'react-markdown';
 import './Blog.scss';
 import { useTranslation } from 'react-i18next';
@@ -16,15 +15,8 @@ interface Post {
   createdAt: { seconds: number; nanoseconds: number };
 }
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
 const Blog = () => {
+  const queryClient = useQueryClient();
   const [postText, setPostText] = useState('');
   const [postTitle, setPostTitle] = useState('');
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -32,7 +24,7 @@ const Blog = () => {
   const isRtl = i18n.language === 'ar';
   
   const { data: authData, isLoading: authLoading } = useQuery('authStatus', async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/session`, { credentials: 'include' });
+    const response = await fetch(`${API_URL}/auth/session`, { credentials: 'include' });
     if (!response.ok) {
       throw new Error('Not logged in');
     }
@@ -46,19 +38,21 @@ const Blog = () => {
   });
   
   const fetchPosts = async (): Promise<Post[]> => {
-    const querySnapshot = await getDocs(collection(db, 'posts'));
-    return querySnapshot.docs
-      .map(doc => ({ id: doc.id, ...doc.data() } as Post))
-      .sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+    return apiJson<Post[]>(await fetch(`${API_URL}/posts`));
   };
   
-  const { data: posts, isLoading: postsLoading } = useQuery('posts', fetchPosts);
+  const { data: posts, isLoading: postsLoading, error: postsError } = useQuery<Post[], Error>('posts', fetchPosts);
   
   const addPostMutation = useMutation(
-    (newPost: Omit<Post, 'id'>) => addDoc(collection(db, 'posts'), newPost),
+    async (newPost: Pick<Post, 'title' | 'content'>) => apiJson<Post>(await fetch(`${API_URL}/posts`, {
+      method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newPost),
+    })),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('posts');
+        setPostText('');
+        setPostTitle('');
+        setIsPreviewing(false);
       },
       onError: (error) => {
         console.error('Error adding post:', error);
@@ -70,13 +64,9 @@ const Blog = () => {
     e.preventDefault();
     if (postText.trim() && postTitle.trim()) {
       addPostMutation.mutate({
-        userId: authData?.user?.id || 0,
         title: postTitle,
         content: postText,
-        createdAt: Timestamp.fromDate(new Date()),
       });
-      setPostText('');
-      setPostTitle('');
     }
   };
   
@@ -157,11 +147,12 @@ const Blog = () => {
             </button>
             <button
               type="submit"
-              disabled={!postTitle.trim() || !postText.trim()}
+              disabled={!postTitle.trim() || !postText.trim() || addPostMutation.isLoading}
             >
               {t('blog.post')}
             </button>
           </div>
+          {addPostMutation.isError && <p role="alert">{(addPostMutation.error as Error).message}</p>}
           <small style={{ textAlign: isRtl ? 'right' : 'left', display: 'block' }}>
             <a
               href="https://www.markdownguide.org/basic-syntax/"
@@ -179,6 +170,7 @@ const Blog = () => {
         </div>
       )}
       <div className="posts">
+        {postsError && <p role="alert">{postsError.message}</p>}
         {postsLoading ? (
           <LoadingSpinner />
         ) : (

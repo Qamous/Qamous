@@ -1,3 +1,4 @@
+import { API_URL, apiJson } from "../src/api";
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ContentBox from '../src/components/ContentBox';
@@ -27,10 +28,9 @@ interface JsonContent {
 }
 
 const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
-  const apiUrl = `${import.meta.env.VITE_API_URL}/word/search/kwd=${query}`;
+  const apiUrl = `${API_URL}/word/search/kwd=${encodeURIComponent(query)}`;
   
   try {
-    console.log('Fetching from:', apiUrl);
     
     const response = await fetch(apiUrl, {
       mode: 'cors',
@@ -40,17 +40,10 @@ const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
     // Check if the response is JSON
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
-      const text = await response.text();
-      console.error('Received non-JSON response:', text);
-      console.error('Content type:', contentType);
       throw new Error('API returned non-JSON response');
     }
     
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    
-    return response.json();
+    return apiJson<SearchResult[]>(response);
   } catch (err) {
     console.error('Search request failed:', err);
     throw err;

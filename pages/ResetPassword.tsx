@@ -1,3 +1,4 @@
+import { API_URL } from "../src/api";
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,7 @@ const ResetPassword = () => {
     event.preventDefault();
     
     // Call the reset-password API with the token and the new password
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/users/reset-password/` + token, {
+    const response = await fetch(`${API_URL}/users/reset-password/` + token, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

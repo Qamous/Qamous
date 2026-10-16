@@ -1,3 +1,4 @@
+import { API_URL } from "./api";
 import React, { ReactNode, useEffect, useState, Suspense, lazy } from 'react';
 const ReactQueryDevtools = import.meta.env.DEV
   ? lazy(() => import('react-query/devtools').then(mod => ({ default: mod.ReactQueryDevtools })))
@@ -13,8 +14,6 @@ import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 import { getFunctionalCookie } from './assets/utils';import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { SpeedInsights } from "@vercel/speed-insights/react"
-import { Analytics } from "@vercel/analytics/react"
 import translationEN from './assets/en/translation.json';
 import translationAR from './assets/ar/translation.json';
 // Import the ads loader utility
@@ -80,7 +79,7 @@ const CheckUserLoggedIn: React.FC<CheckUserStatusProps> = ({ children }) => {
   const navigate = useNavigate();
   
   const checkUserStatus = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/session`, {
+    const response = await fetch(`${API_URL}/auth/session`, {
       credentials: 'include', // Include credentials in the request
     });
     if (response.ok) {
@@ -116,7 +115,7 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
   const navigate = useNavigate();
   
   const checkUserStatus = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/session`, {
+    const response = await fetch(`${API_URL}/auth/session`, {
       credentials: 'include',
     });
     if (response.ok) {
@@ -162,14 +161,14 @@ const LoadingFallback = () => {
 };
 
 const App: React.FC = () => {
-  const queryClient = new QueryClient({
+  const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
         staleTime: 5 * 60 * 1000, // 5 minutes
       },
     },
-  });
+  }));
   const [mustLoginSnackbarOpen, setMustLoginSnackbarOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { wordId, lang } = useParams<{ wordId: string; lang?: string }>();
@@ -210,8 +209,6 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <QueryClientProvider client={queryClient}>
-        <SpeedInsights />
-        <Analytics />
         <div className="grain-texture"></div>
         <Header />
         <div className="content">

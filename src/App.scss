@@ -28,6 +28,11 @@
 //  background-color: variables.$primary-color;
 //}
 
+html, body {
+  // Closed off-canvas navigation must not create horizontal mobile scrolling.
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   padding: 0;

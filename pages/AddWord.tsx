@@ -1,3 +1,4 @@
+import { API_URL } from "../src/api";
 import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
 import './AddWord.scss';
@@ -53,7 +54,7 @@ const AddWord = () => {
     };
     
     try {
-      const wordResponse = await fetch(`${import.meta.env.VITE_API_URL}/word`, {
+      const wordResponse = await fetch(`${API_URL}/word`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +78,7 @@ const AddWord = () => {
           countryName: selectedCountries[0],
         };
         
-        const arabicDefinitionResponse = await fetch(`${import.meta.env.VITE_API_URL}/definitions`, {
+        const arabicDefinitionResponse = await fetch(`${API_URL}/definitions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ const AddWord = () => {
           countryName: selectedCountries[0],
         };
         
-        const englishDefinitionResponse = await fetch(`${import.meta.env.VITE_API_URL}/definitions`, {
+        const englishDefinitionResponse = await fetch(`${API_URL}/definitions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -134,7 +135,7 @@ const AddWord = () => {
   }
   
   useEffect(() => {
-    Papa.parse('countries.csv', {
+    Papa.parse('/countries.csv', {
       download: true,
       header: true,
       complete: function (results: { data: { ' CountryName': string }[] }) {

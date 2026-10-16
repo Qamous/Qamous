@@ -1,3 +1,4 @@
+import { API_URL } from "../src/api";
 import React, { useState } from 'react';
 import './SignUp.scss';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +41,7 @@ const SignUp: React.FC = () => {
   const [dialogMessage, setDialogMessage] = useState('');
   
   const mutation = useMutation((newUser: User) =>
-    fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
+    fetch(`${API_URL}/users/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

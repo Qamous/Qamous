@@ -1,3 +1,4 @@
+import { API_URL } from "../src/api";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
@@ -19,7 +20,7 @@ const ForgotPassword = () => {
   
   const mutation = useMutation(
     (email: string) =>
-      fetch(`${import.meta.env.VITE_API_URL}/users/reset-password`, {
+      fetch(`${API_URL}/users/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

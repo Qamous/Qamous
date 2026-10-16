@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
 import './Chatbot.scss';
 import ReactMarkdown from 'react-markdown';
+import { API_URL, apiJson } from '../src/api';
 
 interface RagRequest {
   query: string;
-  model: 'groq' | 'gemini' | 'gpt4' | 'mistral';
+  model: 'cloudflare';
   preferredLanguage?: 'arabic' | 'franco-arabic';
 }
 
@@ -33,7 +34,7 @@ const Chatbot: React.FC = () => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const [selectedModel, setSelectedModel] = useState<RagRequest['model']>('groq');
+  const [selectedModel, setSelectedModel] = useState<RagRequest['model']>('cloudflare');
   const [preferredLanguage, setPreferredLanguage] = useState<RagRequest['preferredLanguage']>('arabic');
   const [directionClass, setDirectionClass] = useState<'rtl' | 'ltr'>('rtl'); // Add this state
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -41,7 +42,7 @@ const Chatbot: React.FC = () => {
   
   const ragMutation = useMutation<RagResponse, Error, RagRequest>(
     async (request) => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/rag`, {
+      const response = await fetch(`${API_URL}/rag`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,11 +50,7 @@ const Chatbot: React.FC = () => {
         body: JSON.stringify(request),
       });
       
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      
-      return response.json();
+      return apiJson<RagResponse>(response);
     }
   );
   
@@ -109,7 +106,7 @@ const Chatbot: React.FC = () => {
         ...prev,
         {
           type: 'assistant',
-          content: t('chatbot.error_message'),
+          content: error instanceof Error ? error.message : t('chatbot.error_message'),
         },
       ]);
     }
@@ -138,8 +135,7 @@ const Chatbot: React.FC = () => {
                 value={selectedModel}
                 onChange={(e) => setSelectedModel(e.target.value as RagRequest['model'])}
               >
-                <option value="groq">Groq</option>
-                <option value="gemini">Gemini</option>
+                <option value="cloudflare">Cloudflare AI · Free</option>
                 {/*<option value="gpt4">GPT-4</option>*/}
                 {/*<option value="mistral">Mistral</option>*/}
               </select>
@@ -177,10 +173,10 @@ const Chatbot: React.FC = () => {
               {message.sources && message.sources.length > 0 && (
                 <div className="chatbot-message-sources">
                   {message.sources.map((source, idx) => (
-                    <>
-                      <a key={idx} href={`//${source}`} target="_blank" rel="noopener noreferrer">{source}</a>
+                    <React.Fragment key={idx}>
+                      <a href={source.startsWith('https://qamous.org/') ? source : `https://${source.replace(/^https?:\/\//, '')}`} target="_blank" rel="noopener noreferrer">{source}</a>
                       <br/>
-                    </>
+                    </React.Fragment>
                   ))}
                 </div>
               )}

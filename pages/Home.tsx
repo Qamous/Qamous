@@ -1,3 +1,4 @@
+import { API_URL, apiJson } from "../src/api";
 import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
@@ -34,10 +35,10 @@ interface JsonContent {
 }
 
 const fetchHomeContent: (page: number, limit: number) => Promise<HomeContent[]> = (page = 1, limit = 10) =>
-  fetch(`${import.meta.env.VITE_API_URL}/definitions/most-liked?page=${page}&limit=${limit}`, {
+  fetch(`${API_URL}/definitions/most-liked?page=${page}&limit=${limit}`, {
     mode: 'cors',
     credentials: 'include',
-  }).then(response => response.json());
+  }).then(response => apiJson<HomeContent[]>(response));
 
 const Home: React.FC = () => {
   const { t } = useTranslation();

@@ -1,3 +1,4 @@
+import { API_URL } from "../src/api";
 import { Helmet } from 'react-helmet';
 import ContentBox, { HomeContentProps } from '../src/components/ContentBox';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +10,7 @@ import AdSenseWrapper from '../src/components/AdSenseWrapper';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 
 const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/definitions/word/${wordId}`);
+  const res = await fetch(`${API_URL}/definitions/word/${wordId}`);
   if (!res.ok) {
     throw new Error('Network response was not ok');
   }
@@ -24,9 +25,9 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
     lang: item.isArabic ? 'ar' : 'en',
     wordId: item.wordId,
     definitionId: item.id,
-    isLiked: item.likeCount > 0,
-    isDisliked: item.dislikeCount > 0,
-    isReported: item.reportCount > 0,
+    isLiked: !!item.isLiked,
+    isDisliked: !!item.isDisliked,
+    isReported: !!item.isReported,
     countryCode: item.countryCode,
     example: item.example
   }));

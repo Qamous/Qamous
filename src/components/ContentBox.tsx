@@ -1,3 +1,4 @@
+import { API_URL } from "../api";
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './ContentBox.scss';
 import * as variables from '../assets/Variables.module.scss';
@@ -86,7 +87,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   };
   
   const likeMutation = useMutation(() =>
-    fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
+    fetch(`${API_URL}/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
       method: 'POST',
       credentials: 'include',
     }).then(response => {
@@ -99,7 +100,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   });
   
   const dislikeMutation = useMutation(() =>
-    fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
+    fetch(`${API_URL}/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
       method: 'POST',
       credentials: 'include',
     }).then(response => {
@@ -114,7 +115,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   // 1 API call to switch between like and dislike
   const switchReactionMutation = useMutation(
     (toReaction: 'like' | 'dislike') =>
-      fetch(`${import.meta.env.VITE_API_URL}/reactions/${definitionId}/switch-reaction`, {
+      fetch(`${API_URL}/reactions/${definitionId}/switch-reaction`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -189,7 +190,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   };
   
   const reportWord = async ({ reportText }: { reportText: string }) => {
-    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/word-reports`, {
+    const response: Response = await fetch(`${API_URL}/word-reports`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -339,7 +340,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   };
   
   const reportDefinition = async ({ reportText }: { reportText: string }) => {
-    const response: Response = await fetch(`${import.meta.env.VITE_API_URL}/definition-reports`, {
+    const response: Response = await fetch(`${API_URL}/definition-reports`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
