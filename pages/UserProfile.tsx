@@ -82,7 +82,7 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
   const { t } = useTranslation();
   
   const fetchDefinitions = (userId: number) =>
-    fetch(`${API_URL}/definitions/user/${userId}`)
+    fetch(`${API_URL}/definitions/user/${userId}`, {credentials:'include'})
       .then(response => apiJson<Definition[]>(response))
       .then(data => {
         setDefinitions(data);

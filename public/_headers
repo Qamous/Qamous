@@ -1,0 +1,36 @@
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), payment=(), usb=(), geolocation=(self)
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://api.yamli.com https://ajax.googleapis.com https://*.googlesyndication.com https://*.doubleclick.net https://*.googletagservices.com https://*.google.com https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.yamli.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://api.yamli.com https://restcountries.com https://ipapi.co https://nominatim.openstreetmap.org https://*.google.com https://*.googlesyndication.com https://*.doubleclick.net https://*.adtrafficquality.google; frame-src https://api.yamli.com https://*.google.com https://*.googlesyndication.com https://*.doubleclick.net https://*.adtrafficquality.google; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests
+
+/login
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/signup
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/profile
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/add-definition
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/forgot-password
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/reset-password/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/chatbot
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/search/*
+  X-Robots-Tag: noindex, follow
+
+/feeling-lucky
+  X-Robots-Tag: noindex, follow
+
+https://qamous-web.anthonyyoussef01.workers.dev/*
+  X-Robots-Tag: noindex, nofollow, noarchive

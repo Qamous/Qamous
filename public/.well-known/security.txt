@@ -1,0 +1,4 @@
+Contact: mailto:QamousAR@gmail.com
+Expires: 2027-10-01T00:00:00.000Z
+Preferred-Languages: en, ar
+Canonical: https://qamous.org/.well-known/security.txt

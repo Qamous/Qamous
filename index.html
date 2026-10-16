@@ -93,15 +93,8 @@
     </style>
 
     <!-- YAMLI CODE START -->
-    <script type="text/javascript" src="https://api.yamli.com/js/yamli_api.js"></script>
-    <script type="text/javascript">
-      if (typeof(Yamli) == "object" && Yamli.init( { uiLanguage: "en" , startMode: "onOrUserDefault", forceHTTPS: true } ))
-      {
-        Yamli.yamlify( "arabicWord", { settingsPlacement: "inside", forceHTTPS: true } );
-        Yamli.yamlify( "arabicDefinition", { settingsPlacement: "inside", forceHTTPS: true } );
-        Yamli.yamlify( "chatInput", { settingsPlacement: "inside", forceHTTPS: true } );
-      }
-    </script>
+    <script defer src="https://api.yamli.com/js/yamli_api.js"></script>
+    <script defer src="/app-shell.js"></script>
     <!-- YAMLI CODE END -->
     <!-- GOOGLE ADSENSE CODE START -->
     <!-- The AdSense script will be loaded dynamically via deferAdsLoader.js -->
@@ -109,29 +102,9 @@
     <script type="module" src="/src/index.jsx"></script>
     
     <!-- Script to handle the initial loading state -->
-    <script>
-      // Show loading spinner immediately
-      document.addEventListener('DOMContentLoaded', function() {
-        const initialLoader = document.getElementById('initial-loader');
-        
-        // Hide the loader when content is loaded
-        window.addEventListener('load', function() {
-          if (initialLoader) {
-            initialLoader.classList.add('hidden');
-          }
-        });
-        
-        // Fallback to hide loader after 5 seconds in case of slow loading
-        setTimeout(function() {
-          if (initialLoader) {
-            initialLoader.classList.add('hidden');
-          }
-        }, 5000);
-      });
-    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript><style>#initial-loader{display:none}</style>You can browse public dictionary previews without JavaScript. Enable JavaScript for search and contributions.</noscript>
     <!-- Initial loading spinner that shows immediately -->
     <div id="initial-loader" class="initial-loading-container">
       <div class="initial-loading-ring">
