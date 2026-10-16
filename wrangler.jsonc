@@ -4,10 +4,10 @@
   "account_id": "39292a971f28b413619657e9f2c77003",
   "main": "cloudflare/worker.ts",
   "compatibility_date": "2026-10-16",
-  "workers_dev": true,
+  "workers_dev": false,
   "preview_urls": false,
   "routes": [{"pattern":"qamous.org","custom_domain":true}],
-  "assets": {"directory":"build","binding":"ASSETS","not_found_handling":"single-page-application","run_worker_first":["/api/*","/api"]},
+  "assets": {"directory":"build","binding":"ASSETS","not_found_handling":"single-page-application","html_handling":"drop-trailing-slash","run_worker_first":["/api/*","/api"]},
   "services": [{"binding":"API","service":"qamous-api"}],
   "observability": {"enabled":true,"head_sampling_rate":0.05,"logs":{"invocation_logs":false}}
 }

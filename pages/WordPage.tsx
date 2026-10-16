@@ -1,9 +1,8 @@
 import { API_URL } from "../src/api";
 import { Helmet } from 'react-helmet';
 import ContentBox, { HomeContentProps } from '../src/components/ContentBox';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getCountryName, getDemonyms } from '../src/assets/utils';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import AdSenseWrapper from '../src/components/AdSenseWrapper';
@@ -38,8 +37,6 @@ const WordPage = () => {
   const { wordId, lang } = useParams<{ wordId: string, lang?: string }>();
   const wordIdNumber = Number(wordId) || 0;
   const { data: homeContent, isLoading, error } = useQuery(['homeContent', wordIdNumber], () => fetchHomeContent(wordIdNumber));
-  const [countryName, setCountryName] = useState("");
-  const [demonyms, setDemonyms] = useState("");
   
   useEffect(() => {
     if (lang) {
@@ -47,45 +44,27 @@ const WordPage = () => {
     }
   }, [lang, i18n]);
   
-  useEffect(() => {
-    const fetchCountryNameAndDemonyms = async () => {
-      if (homeContent && homeContent[0]) {
-        const name = await getCountryName(homeContent[0].countryCode || "");
-        setCountryName(name || "");
-        if (name) {
-          const demonyms = await getDemonyms(name);
-          setDemonyms(demonyms);
-        }
-      }
-    };
-    
-    fetchCountryNameAndDemonyms();
-  }, [homeContent]);
-  
   if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error fetching data</div>;
   
   // Filter the homeContent based on the current language
   const filteredHomeContent = homeContent?.filter(content => content.lang === (lang || i18n.language));
+  const displayWord=filteredHomeContent?.[0]||homeContent?.[0];
+  const pageTitle=`${displayWord?.item.word||'Word'}${displayWord?.item.otherLangWord?' / '+displayWord.item.otherLangWord:''} — ${i18n.language==='ar'?'معنى في قاموس العامية':'Arabic slang meaning | Qamous'}`;
+  const pageDescription=(displayWord?.item.definition||'Explore community Arabic dialect definitions on Qamous.').replace(/\s+/g,' ').slice(0,170);
   
   return (
     <div className='feed'>
       <Helmet>
-        <title>
-          {i18n.language === 'ar'
-            ? `${homeContent?.[0]?.item.word} / ${homeContent?.[0]?.item.otherLangWord} معنى في قاموس العامية للهجات ${countryName}`
-            : `${homeContent?.[0]?.item.word} / ${homeContent?.[0]?.item.otherLangWord} Meaning in ${countryName} Dialect Slang Dictionary`}
-        </title>
-        {i18n.language === 'ar'
-          ? <meta name="description"
-                  content={`تعريف ${homeContent?.[0]?.item.word} في لهجة ${demonyms.split(', ')[0] || 'العربية'} العامية ${demonyms.split(', ').slice(1).join(', ') || 'الترجمة إلى الإنجليزية'}`} />
-          : <meta name="description"
-                  content={`The definition of ${homeContent?.[0]?.item.word} in ${demonyms.split(', ')[0] || 'Arabic'} dialect slang ${demonyms.split(', ').slice(1).join(', ') || 'English translation'}`} />}
-        {i18n.language === 'ar'
-          ? <meta name="keywords"
-                  content={`${homeContent?.[0]?.item.word}, ${demonyms}, عربي إلى إنجليزي, إنجليزي إلى عربي, تعريف, عامية `} />
-          : <meta name="keywords"
-                  content={`${countryName}, ${demonyms}, Arabic to English, English to Arabic, definition, slang, dialect`} />}
+        <meta property="og:title" content={pageTitle}/>
+        <meta property="og:description" content={pageDescription}/>
+        <meta name="twitter:title" content={pageTitle}/>
+        <meta name="twitter:description" content={pageDescription}/>
+        {homeContent?.some(c=>c.lang==='en')&&<link rel="alternate" hrefLang="en" href={`https://qamous.org/word/${wordIdNumber}`}/>}
+        {homeContent?.some(c=>c.lang==='ar')&&<link rel="alternate" hrefLang="ar" href={`https://qamous.org/word/${wordIdNumber}/ar`}/>}
+        {!filteredHomeContent?.length&&<meta name="robots" content="noindex, follow"/>}
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription}/>
       </Helmet>
       <div className="feed-ad-space">
         <AdSenseWrapper
@@ -108,12 +87,7 @@ const WordPage = () => {
       </div>
       <div className="feed-posts">
         {filteredHomeContent && filteredHomeContent.map((content, index) => (
-          <>
-            <Helmet>
-              <meta name="defintion" content={content.item.definition} />
-              <meta name="countryCode" content={content.countryCode} />
-              <meta name="country" content={countryName} />
-            </Helmet>
+          <React.Fragment key={content.definitionId}>
             <ContentBox
               key={index + 1}
               item={content.item}
@@ -146,7 +120,7 @@ const WordPage = () => {
                 responsive='true'
               />
             </div>}
-          </>
+          </React.Fragment>
         ))}
       </div>
       <div className="feed-ad-space">

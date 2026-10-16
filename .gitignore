@@ -39,3 +39,4 @@ src/firebaseConfig.js
 /.wrangler/
 /.dev.vars*
 /.playwright-mcp/
+/.seo-data.json

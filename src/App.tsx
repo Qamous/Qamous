@@ -1,4 +1,5 @@
 import { API_URL } from "./api";
+import SeoMetadata from './components/SeoMetadata';
 import React, { ReactNode, useEffect, useState, Suspense, lazy } from 'react';
 const ReactQueryDevtools = import.meta.env.DEV
   ? lazy(() => import('react-query/devtools').then(mod => ({ default: mod.ReactQueryDevtools })))
@@ -209,6 +210,7 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <QueryClientProvider client={queryClient}>
+        <SeoMetadata />
         <div className="grain-texture"></div>
         <Header />
         <div className="content">
