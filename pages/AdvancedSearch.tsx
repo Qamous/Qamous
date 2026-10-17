@@ -109,7 +109,7 @@ const AdvancedSearch: React.FC = () => {
         </form>
       </header>
       <div className="explore-layout">
-        <aside className={`explore-filters${allDialects ? ' is-expanded' : ''}`} aria-label={t('explore.filters')}>
+        <aside className="explore-filters" aria-label={t('explore.filters')}>
           <h2 className="explore-filter-heading"><FontAwesomeIcon icon={faSliders} aria-hidden="true" />{t('explore.filters')}</h2>
           <button type="button" className="explore-filter-toggle" aria-expanded={filtersOpen} aria-controls="explore-filter-body" onClick={() => setFiltersOpen(open => !open)}>
             <span><FontAwesomeIcon icon={faSliders} aria-hidden="true" />{t('explore.filters')}{filterCount > 0 && <b>{filterCount}</b>}</span>
