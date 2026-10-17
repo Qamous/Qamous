@@ -61,7 +61,8 @@
 .explore-submit svg { color: inherit; font-size: 13px; }
 .explore-submit:hover { background: color-mix(in srgb, var(--secondary-color) 85%, white); }
 .explore-layout { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 36px; padding-top: 28px; align-items: start; }
-.explore-filters { position: sticky; top: 110px; max-height: calc(100dvh - 130px); overflow-y: auto; }
+.explore-filters { position: sticky; top: 110px; align-self: start; }
+.explore-filters.is-expanded { position: static; }
 .explore-filter-heading { display: flex; align-items: center; gap: 10px; font-size: 15px; margin: 0 0 24px; }
 .explore-filter-toggle { display: none; align-items: center; justify-content: space-between; width: 100%; border: 0; padding: 0 0 24px; background: transparent; font-size: 15px !important; font-weight: 700 !important; }
 .explore-filter-toggle > span { display: flex; align-items: center; gap: 10px; }
