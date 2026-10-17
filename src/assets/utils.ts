@@ -149,7 +149,7 @@ export function convertNumerals(number: string, language: string): string {
     '،': ','
   };
   
-  const isArabicNumerals = /[٠١٢٣٤٥٦٧٨٩،.]/.test(number);
+  const isArabicNumerals = /[٠١٢٣٤٥٦٧٨٩،]/.test(number);
   
   // make language lowercase
   language = language.toLowerCase();
