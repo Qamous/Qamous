@@ -9,7 +9,7 @@ import AdSenseWrapper from '../src/components/AdSenseWrapper';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 
 const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
-  const res = await fetch(`${API_URL}/definitions/word/${wordId}`);
+  const res = await fetch(`${API_URL}/definitions/word/${wordId}`, { credentials: 'include' });
   if (!res.ok) {
     throw new Error('Network response was not ok');
   }

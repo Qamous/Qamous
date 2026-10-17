@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './UserProfile.scss';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { API_URL, apiJson } from '../src/api';
@@ -60,14 +60,11 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [editedText, setEditedText] = useState('');
-  const [definitions, setDefinitions] = useState<Definition[]>([]);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [submittingPostId, setSubmittingPostId] = useState<number | null>(null);
   const [isInvalidInput, setIsInvalidInput] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<{ [key: number]: 'ARABIC' | 'FRANCO-ARABIC' }>({});
-  const [uniqueWords, setUniqueWords] = useState<Word[]>([]);
-  const [wordDefinitions, setWordDefinitions] = useState<{ [key: number]: Definition[] }>({});
   const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] = useState(false);
   const [likeSnackbarOpen, setLikeSnackbarOpen] = useState(false);
   const [dislikeSnackbarOpen, setDislikeSnackbarOpen] = useState(false);
@@ -75,35 +72,28 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
   const [dropdownVisible, setDropdownVisible] = useState<{ [key: number]: boolean }>({});
   const [selectedDefinition, setSelectedDefinition] = useState<{ [key: number]: Definition | null }>({});
   const [currentDefinition, setCurrentDefinition] = useState<Definition | null>(null);
-  const [pointsReceived, setPointsReceived] = useState<number>(0);
   const name: string = userData.firstName;
   const userId: number = userData.id;
   const username: string = userData.username;
   const { t } = useTranslation();
   
-  const fetchDefinitions = (userId: number) =>
-    fetch(`${API_URL}/definitions/user/${userId}`, {credentials:'include'})
-      .then(response => apiJson<Definition[]>(response))
-      .then(data => {
-        setDefinitions(data);
-        
-        const [wordDefinitionsData, uniqueWordsData] = rearrangeDefinitions(data);
-        setWordDefinitions(wordDefinitionsData as { [key: number]: Definition[] });
-        setUniqueWords(uniqueWordsData as Word[]);
-      });
-  
-  const fetchUserData = (userId: number) =>
-    fetch(`${API_URL}/users/me/points`, {
-        credentials: 'include',
-      })
-      .then(response => apiJson<{points:number}>(response))
-      .then(data => {
-        setPointsReceived(data.points);
-      });
-  
-  const { data, isLoading, isError } = useQuery(['definitions', userId], () => fetchDefinitions(userId));
-  
-  const { data: userPoints, isLoading: isUserPointsLoading, isError: isUserPointsError } = useQuery(['user', userId], () => fetchUserData(userId));
+  const { data: definitions = [], isLoading, isError } = useQuery<Definition[]>(['definitions', userId], async () =>
+    apiJson<Definition[]>(await fetch(`${API_URL}/definitions/user/${userId}`, { credentials: 'include' })),
+    { staleTime: 0, refetchOnWindowFocus: true });
+  const { data: userPoints, isLoading: isUserPointsLoading, isError: isUserPointsError } = useQuery(
+    ['user', userId], async () => apiJson<{ points: number; definitionPoints?: number; wordBonusPoints?: number; reactionPoints?: number }>(
+      await fetch(`${API_URL}/users/me/points`, { credentials: 'include' })),
+    { staleTime: 0, refetchOnWindowFocus: true });
+  const pointsReceived = userPoints?.points ?? 0;
+  const { wordDefinitions, uniqueWords } = useMemo(() => {
+    const grouped: { [key: number]: Definition[] } = {};
+    const words: { [key: number]: Word } = {};
+    for (const definition of definitions) {
+      (grouped[definition.wordId] ||= []).push(definition);
+      words[definition.wordId] = definition.word;
+    }
+    return { wordDefinitions: grouped, uniqueWords: Object.values(words) };
+  }, [definitions]);
   
   const handlePostLanguageClick = (postId: number) => {
     setCurrentLanguage(prevState => ({
@@ -176,7 +166,7 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
             return response.json();
           })
           .then(data => {
-            setDefinitions(definitions.map(def => {
+            queryClient.setQueryData<Definition[]>(['definitions', userId], definitions.map(def => {
               if (def.id === submittingPostId) {
                 return { ...def, definition: editedText };
               }
@@ -248,27 +238,6 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
     }, 100);
   };
   
-  const rearrangeDefinitions = (definitions: Definition[]) => {
-    const wordDefinitions: { [key: number]: Definition[] } = {};
-    const uniqueWords: { [key: number]: Word } = {};
-    
-    definitions.forEach((definition) => {
-      const wordId = definition.word.id;
-      
-      if (!wordDefinitions[wordId]) {
-        wordDefinitions[wordId] = [];
-      }
-      
-      if (!uniqueWords[wordId]) {
-        uniqueWords[wordId] = definition.word;
-      }
-      
-      wordDefinitions[wordId].push(definition);
-    });
-    
-    return [wordDefinitions, Object.values(uniqueWords)];
-  };
-  
   const handleDropdownToggle = (wordId: number) => {
     setDropdownVisible(prevState => ({
       ...prevState,
@@ -311,7 +280,7 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
     };
   }, []);
   
-  if (isLoading) {
+  if (isLoading || isUserPointsLoading) {
     return (
       <div className="profile">
         <h2 className="profile-title">Hello!</h2>
@@ -389,12 +358,12 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
       <div className="profile-points-breakdown">
         <div className="points-total">{t('user_profile.points')}: {pointsReceived}</div>
         <div className="points-details">
-          <div>Definitions posted: +{definitions.length}</div>
-          <div className="points-info">(+1 for each definition)</div>
-          <div>From likes and dislikes: {pointsReceived - definitions.length}</div>
-          <div className="points-info">(+1 for each like, -1 for each dislike)</div>
+          <div>{t('user_profile.definition_points')}: +{userPoints?.definitionPoints ?? definitions.length}</div>
+          <div>{t('user_profile.word_bonus_points')}: +{userPoints?.wordBonusPoints ?? 0}</div>
+          <div>{t('user_profile.reaction_points')}: {userPoints?.reactionPoints ?? definitions.reduce((sum, definition) => sum + definition.likeCount - definition.dislikeCount, 0)}</div>
+          <div className="points-info">{t('user_profile.points_explanation')}</div>
         </div>
-        <div className="user-rank">Rank: {userRank}</div>
+        <div className="user-rank">{t('user_profile.rank')}: {userRank}</div>
       </div>
       
       <div className="buttons buttons-between profile-logout">

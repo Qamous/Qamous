@@ -1,4 +1,5 @@
-import { API_URL } from "../api";
+import { API_URL, ApiError } from "../api";
+import { useDefinitionReaction } from '../hooks/useDefinitionReaction';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './ContentBox.scss';
 import * as variables from '../assets/Variables.module.scss';
@@ -45,12 +46,10 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   const { t } = useTranslation();
   const buttonText = t('content_box_buttons', { returnObjects: true }) as ButtonText;
   
-  const [likeClicked, setLikeClicked] = useState<boolean>(isLiked);
-  const [dislikeClicked, setDislikeClicked] = useState<boolean>(isDisliked);
+  const reaction = useDefinitionReaction(definitionId, isLiked, isDisliked);
+  const { isLiked: likeClicked, isDisliked: dislikeClicked } = reaction;
   const [reportClicked, setReportClicked] = useState<boolean>(isReported);
   const [reportSnackbarOpen, setReportSnackbarOpen] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
-  const [excessiveClickSnackbarOpen, setExcessiveClickSnackbarOpen] = useState(false);
   const [mustLoginSnackbarOpen, setMustLoginSnackbarOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [reportType, setReportType] = useState<string | null>(null);
@@ -59,6 +58,9 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   const [showTooltip, setShowTooltip] = useState(false);
   const [instagramSnackbarOpen, setInstagramSnackbarOpen] = useState(false);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (reaction.error instanceof ApiError && reaction.error.status === 401) navigate('/login');
+  }, [reaction.error, navigate]);
   
   useEffect(() => {
     if (countryCode) {
@@ -86,108 +88,8 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     }
   };
   
-  const likeMutation = useMutation(() =>
-    fetch(`${API_URL}/reactions/${definitionId}/${likeClicked ? 'unlike' : 'like'}`, {
-      method: 'POST',
-      credentials: 'include',
-    }).then(response => {
-      if (!response.ok) {
-        throw response;
-      }
-      return response.json();
-    }), {
-    onError: handleMutationError,
-  });
-  
-  const dislikeMutation = useMutation(() =>
-    fetch(`${API_URL}/reactions/${definitionId}/${dislikeClicked ? 'undislike' : 'dislike'}`, {
-      method: 'POST',
-      credentials: 'include',
-    }).then(response => {
-      if (!response.ok) {
-        throw response;
-      }
-      return response.json();
-    }), {
-    onError: handleMutationError,
-  });
-  
-  // 1 API call to switch between like and dislike
-  const switchReactionMutation = useMutation(
-    (toReaction: 'like' | 'dislike') =>
-      fetch(`${API_URL}/reactions/${definitionId}/switch-reaction`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ toReaction }),
-        credentials: 'include'
-      }).then(response => {
-        if (!response.ok) {
-          throw response;
-        }
-        return response.json();
-      }), {
-      onError: handleMutationError,
-    }
-  );
-  
-  const handleLikeClick = async () => {
-    setClickCount(prevCount => prevCount + 1);
-    
-    if (clickCount >= 10) {
-      setExcessiveClickSnackbarOpen(false);
-      setTimeout(() => {
-        setExcessiveClickSnackbarOpen(true);
-      }, 100);
-      setClickCount(0);
-    } else {
-      try {
-        if (dislikeClicked) {
-          // Only use switch-reaction when changing from dislike to like
-          await switchReactionMutation.mutateAsync('like');
-          setDislikeClicked(false);
-          setLikeClicked(true);
-        } else {
-          // Use original like/unlike for all other cases
-          await likeMutation.mutateAsync();
-          setLikeClicked(!likeClicked);
-        }
-      } catch (error) {
-        // Error handling is done in the useMutation onError callback
-        return;
-      }
-    }
-  };
-  
-  const handleDislikeClick = async () => {
-    setClickCount(prevCount => prevCount + 1);
-  
-    if (clickCount >= 10) {
-      setExcessiveClickSnackbarOpen(false);
-      setTimeout(() => {
-        setExcessiveClickSnackbarOpen(true);
-      }, 100);
-      setClickCount(0);
-    }
-    else {
-      try {
-        if (likeClicked) {
-          // Only use switch-reaction when changing from like to dislike
-          await switchReactionMutation.mutateAsync('dislike');
-          setLikeClicked(false);
-          setDislikeClicked(true);
-        } else {
-          // Use original dislike/undislike for all other cases
-          await dislikeMutation.mutateAsync();
-          setDislikeClicked(!dislikeClicked);
-        }
-      } catch (error) {
-        // Error handling is done in the useMutation onError callback
-        return;
-      }
-    }
-  };
+  const handleLikeClick = () => reaction.vote('like');
+  const handleDislikeClick = () => reaction.vote('dislike');
   
   const reportWord = async ({ reportText }: { reportText: string }) => {
     const response: Response = await fetch(`${API_URL}/word-reports`, {
@@ -405,18 +307,8 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   };
   
   useEffect(() => {
-    if (clickCount >= 5) {
-      setTimeout(() => {
-        setClickCount(0);
-      }, 60000); // Reset after 1 minute
-    }
-  }, [clickCount]);
-  
-  useEffect(() => {
-    setLikeClicked(isLiked);
-    setDislikeClicked(isDisliked);
     setReportClicked(isReported);
-  }, [isLiked, isDisliked, isReported]);
+  }, [isReported, definitionId]);
   
   return (
     <div className={'content-box' +
@@ -522,12 +414,16 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
             <>
               <button
                 className={`content-box-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
+                aria-pressed={likeClicked}
+                disabled={reaction.pending}
                 onClick={handleLikeClick}
               >
                 {buttonText.like}
               </button>
               <button
                 className={`content-box-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
+                aria-pressed={dislikeClicked}
+                disabled={reaction.pending}
                 onClick={handleDislikeClick}
               >
                 {buttonText.dislike}
@@ -557,13 +453,10 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
           )}
         </div>
       )}
+      <Snackbar open={!!reaction.error} message={reaction.error?.message || ''} />
       <Snackbar
         open={reportSnackbarOpen}
         message={t('content_box_buttons.repeated_report_error')}
-      />
-      <Snackbar
-        open={excessiveClickSnackbarOpen}
-        message={t('content_box_buttons.repeated_reaction_error')}
       />
       <Snackbar
         open={mustLoginSnackbarOpen}

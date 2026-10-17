@@ -211,7 +211,7 @@ const Home: React.FC = () => {
             page
               .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
               .map((item, index) => (
-                <React.Fragment key={`${pageIndex}-${index}`}>
+                <React.Fragment key={item.definitionId}>
                   <ContentBox
                     item={item}
                     index={index + 1}
@@ -219,8 +219,8 @@ const Home: React.FC = () => {
                     definitionId={item.definitionId}
                     wordId={item.wordId}
                     countryCode={item.countryCode}
-                    isLiked={item.isLiked !== 0}
-                    isDisliked={item.isDisliked !== 0}
+                    isLiked={Boolean(item.isLiked)}
+                    isDisliked={Boolean(item.isDisliked)}
                     isReported={item.isReported !== 0}
                     example={item.example}
                   />
