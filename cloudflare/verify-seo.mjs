@@ -27,5 +27,11 @@ for(const [path,canonicalPath] of [['/search/seo-check','/search'],['/reset-pass
 await inspect('/word/2/en?preserve=1',308,(_body,response)=>assert.equal(response.headers.get('location'),new URL('/word/2?preserve=1',base).toString()));
 await inspect('/api/auth/health',200,body=>assert.equal(JSON.parse(body).status,'OK'),{'Sec-Fetch-Mode':'navigate'});
 await inspect('/robots.txt',200,body=>{assert.ok(body.includes('User-agent: GPTBot'));assert.ok(body.includes('Allow: /api/definitions/word/'));});
-await inspect('/sitemap.xml',200,body=>{assert.ok(body.includes('https://qamous.org/advanced-search/Egypt'));assert.ok(!body.includes('/reset-password'));});
+await inspect('/sitemap.xml',200,body=>{
+  const urls=[...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match=>new URL(match[1].replace(/&amp;/g,'&')));
+  assert.ok(urls.length>0);
+  assert.ok(urls.every(url=>url.origin==='https://qamous.org'&&!url.username&&!url.password));
+  assert.ok(urls.some(url=>url.pathname==='/advanced-search/Egypt'));
+  assert.ok(urls.every(url=>!url.pathname.startsWith('/reset-password')));
+});
 console.log(JSON.stringify({verifiedAt:new Date().toISOString(),base,passed:true,checks:checks.length,dialectGuides:countries.length,productionWrites:false}));
