@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -15,7 +15,7 @@ const SearchBar: React.FC = () => {
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search/${searchQuery}`);
+      navigate(`/search/${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
       setIsOverlayOpen(false);
     }
@@ -66,6 +66,9 @@ const SearchBar: React.FC = () => {
               <FontAwesomeIcon icon={faTimes} />
             </div>
           </form>
+          <Link className="search-advanced-link" to={`/advanced-search${searchQuery.trim() ? `?q=${encodeURIComponent(searchQuery.trim())}` : ''}`} onClick={handleClose}>
+            {t('advanced_search.title')} <span aria-hidden="true">↗</span>
+          </Link>
         </div>
       </div>
     </>

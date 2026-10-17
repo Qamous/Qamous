@@ -51,6 +51,20 @@
   align-items: center;
 }
 
+.search-advanced-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  color: variables.$secondary-color;
+  font-size: 14px;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+  span { color: inherit; }
+}
+
 .search-input {
   width: 100%;
   padding: 12px 80px 12px 15px;
