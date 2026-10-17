@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import AdSenseWrapper from '../src/components/AdSenseWrapper';
 import LoadingSpinner from '../src/components/LoadingSpinner';
+import RelatedWords from '../src/components/RelatedWords';
 
 const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
   const res = await fetch(`${API_URL}/definitions/word/${wordId}`, { credentials: 'include' });
@@ -122,6 +123,7 @@ const WordPage = () => {
             </div>}
           </React.Fragment>
         ))}
+        <RelatedWords countryCode={displayWord?.countryCode} wordId={wordIdNumber} lang={lang||i18n.language}/>
       </div>
       <div className="feed-ad-space">
         <AdSenseWrapper

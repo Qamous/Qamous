@@ -45,6 +45,13 @@ beforeEach(() => {
 });
 
 describe('advanced search', () => {
+  it('provides a dialect guide, featured word links and cross-dialect navigation', async () => {
+    await mount('/advanced-search/Egypt');
+    expect(await screen.findByRole('heading', {level:1,name:/Egyptian Arabic slang dictionary/})).toBeInTheDocument();
+    expect(await screen.findByRole('link',{name:'Ma3lish'})).toHaveAttribute('href','/word/2');
+    expect(screen.getByRole('link',{name:'Lebanese Arabic slang dictionary'})).toHaveAttribute('href','/advanced-search/Lebanon');
+    expect(screen.getByText(/Start with everyday expressions/)).toBeInTheDocument();
+  });
   it('renders home cards with examples, normal actions and numeric reaction flags normalized', async () => {
     await mount();
     expect(await screen.findByText(result.example)).toBeInTheDocument();

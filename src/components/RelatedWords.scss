@@ -1,0 +1,6 @@
+.related-words { padding: 20px 0; margin-top: 16px; border-top: 1px solid var(--primary-color-40); }
+.related-words h2 { margin: 0 0 14px; font-size: 18px; }
+.related-words > div { display: flex; flex-wrap: wrap; gap: 10px; }
+.related-words a { padding: 9px 12px; border: 1px solid var(--primary-color-40); border-radius: 6px; color: var(--primary-color); font-size: 14px; overflow-wrap: anywhere; text-decoration: none; }
+.related-words a:hover { color: var(--secondary-color); border-color: var(--secondary-color); }
+.related-words a:focus-visible { outline: 2px solid var(--secondary-color); outline-offset: 3px; }

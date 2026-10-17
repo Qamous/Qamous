@@ -51,6 +51,12 @@
   transform: rotate(-5deg);
 }
 .explore-hero > .explore-search { grid-column: 1 / -1; }
+.dialect-intro { grid-column: 1 / -1; max-width: 72ch; margin: 0; line-height: 1.8; color: var(--explore-muted); }
+.dialect-guide { padding: 22px 0; border-bottom: 1px solid var(--explore-line); }
+.dialect-guide h2 { font-size: 16px; margin: 0 0 14px; }
+.dialect-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.dialect-links a { display: inline-block; border: 1px solid var(--explore-line); border-radius: 6px; padding: 9px 12px; font-size: 13px; color: var(--primary-color); text-decoration: none; overflow-wrap: anywhere; }
+.dialect-links a:hover { border-color: var(--secondary-color); color: var(--secondary-color); }
 .explore-search { position: relative; display: flex; align-items: center; gap: 16px; background: var(--quaternary-color); border: 1px solid var(--explore-line); border-radius: 10px; padding: 8px; padding-inline-start: 20px; }
 .explore-search:focus-within { border-color: var(--secondary-color); }
 .explore-search > svg { color: var(--secondary-color); font-size: 20px; flex-shrink: 0; }

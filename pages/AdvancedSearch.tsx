@@ -8,6 +8,7 @@ import { faArrowRight, faBookOpen, faCheck, faChevronDown, faSearch, faSliders, 
 import ReactCountryFlag from 'react-country-flag';
 import { API_URL, apiJson } from '../src/api';
 import ContentBox from '../src/components/ContentBox';
+import { dialectIntro, dialectTitle } from '../src/seo/dialects';
 import './AdvancedSearch.scss';
 
 interface Country { countryCode: string; countryName: string }
@@ -90,16 +91,22 @@ const AdvancedSearch: React.FC = () => {
   const visibleCountries = allDialects ? countries : countries.filter((country, index) => index < 6 || countryCodes.includes(country.countryCode));
   const results = data?.results || [];
   const maxPage = Math.ceil((data?.total || 0) / 12);
+  const guide = legacyCountry && !params.toString() ? legacyCountry : undefined;
+  const guideTitle = guide ? dialectTitle(guide.countryCode, guide.countryName, isArabic) : '';
+  const guideIntro = guide ? dialectIntro(guide.countryCode, guide.countryName, isArabic) : '';
+  const featured = results.filter((word, index, list) => list.findIndex(other => other.wordId === word.wordId) === index).slice(0, 6);
 
   return (
     <main className="explore" dir={isArabic ? 'rtl' : 'ltr'}>
       <Helmet>
-        <title>{`${query ? `${query} · ` : ''}${t('explore.title')} | Qamous`}</title>
-        <meta name="description" content={t('explore.subtitle')} />
+        <title>{`${guideTitle || `${query ? `${query} · ` : ''}${t('explore.title')}`} | Qamous`}</title>
+        <meta name="description" content={guideIntro || t('explore.subtitle')} />
+        {unknownCountry && <meta name="robots" content="noindex, follow" />}
       </Helmet>
       <header className="explore-hero">
-        <h1>{t('explore.title')}<span className="explore-period">.</span></h1>
+        <h1>{guideTitle || t('explore.title')}<span className="explore-period">.</span></h1>
         <span className="explore-watermark" aria-hidden="true">كلمة</span>
+        {guide && <p className="dialect-intro">{guideIntro}</p>}
         <form className="explore-search" role="search" onSubmit={submit}>
           <FontAwesomeIcon icon={faSearch} aria-hidden="true" />
           <label className="explore-sr-only" htmlFor="explore-query">{t('explore.search_label')}</label>
@@ -108,6 +115,12 @@ const AdvancedSearch: React.FC = () => {
           <button className="explore-submit" type="submit">{t('common.search')}<FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></button>
         </form>
       </header>
+      {guide && featured.length > 0 && <section className="dialect-guide" aria-label={isArabic ? 'كلمات مختارة' : 'Featured words'}>
+        <h2>{isArabic ? 'ابدأ بهذه الكلمات' : 'Start with these words'}</h2>
+        <nav className="dialect-links" aria-label={isArabic ? 'روابط الكلمات' : 'Word links'}>
+          {featured.map(word => <Link key={word.wordId} to={`/word/${word.wordId}${word.isArabic ? '/ar' : ''}`}>{word.word}</Link>)}
+        </nav>
+      </section>}
       <div className="explore-layout">
         <aside className="explore-filters" aria-label={t('explore.filters')}>
           <h2 className="explore-filter-heading"><FontAwesomeIcon icon={faSliders} aria-hidden="true" />{t('explore.filters')}</h2>
@@ -197,6 +210,13 @@ const AdvancedSearch: React.FC = () => {
           </nav>}
         </section>
       </div>
+      {!query && <nav className="dialect-guide" aria-label={isArabic ? 'تصفح اللهجات' : 'Browse dialect guides'}>
+        <h2>{isArabic ? 'تصفح اللهجات' : 'Browse dialect guides'}</h2>
+        <div className="dialect-links">{countries.filter(country => country.countryCode !== guide?.countryCode).map(country =>
+          <Link key={country.countryCode} to={`/advanced-search/${encodeURIComponent(country.countryName)}`}>
+            {dialectTitle(country.countryCode, country.countryName, isArabic)}
+          </Link>)}</div>
+      </nav>}
     </main>
   );
 };

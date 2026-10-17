@@ -1,6 +1,6 @@
 # Cloudflare frontend operations
 
-Use Node 22.12+ and `npm ci`. `npm run build` creates the normal React/Vite build;
+Use Node 22.18+ and `npm ci`. `npm run build` creates the normal React/Vite build;
 `npx vitest run` runs the UI/policy tests. `npm audit` checks all dependencies.
 
 Production release: `npm run deploy:cloudflare`, with the sibling `qamous-backend`
@@ -31,3 +31,27 @@ guaranteed. Rebuild after important content/moderation changes to refresh SEO sn
 
 Private-data rollback and full security verification are documented in the backend's
 `cloudflare/README.md` and `cloudflare/SECURITY.md`. AWS must not be reactivated for rollback.
+
+## Explicit page routing and dialect guides
+
+The build generates self-canonical HTML for the blog, about page, discovery page and
+country guides, plus the existing word pages and noindex shells for known app routes.
+Countries with spaces use real directory names and encoded public URLs. Country guides
+and word previews contain ordinary vocabulary/cross-dialect links, not a bulk dataset file.
+Public-only export fields include country membership; user/ownership data remain excluded.
+The interactive guides retain the search/filter/voting experience and support Arabic/English.
+
+Assets remain first: valid static pages do not need a Worker invocation. Missing assets
+reach the Worker (`not_found_handling: none`, `assets_navigation_has_no_effect`) instead
+of silently receiving the homepage. Unknown routes return a noindex 404; known search
+and reset deep links receive their noindex shell. English word aliases redirect to the
+canonical URL. Words added since the build are checked against the existing public API,
+with bounded response handling; API quotas/outages yield 503, not a misleading permanent 404.
+Reset tokens and search text are not copied into fallback canonical URLs.
+
+Run `npx tsc -p cloudflare/tsconfig.json` separately from the browser typecheck to avoid
+mixing Workers and DOM globals. `npx vitest run` includes route/generation/guide tests.
+With both local Workers running, `node cloudflare/verify-seo.mjs http://127.0.0.1:8788`
+checks real asset routing, navigation, country metadata and deep links. After release run
+`node cloudflare/verify-seo.mjs` for read-only production verification. No Google Search
+Console setup, individual blog URLs or changes to community definitions are included here.
