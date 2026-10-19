@@ -104,6 +104,7 @@ const WordPage = () => {
               isDisliked={content.isDisliked}
               isReported={content.isReported}
               example={content.example}
+              arabicExample={content.arabicExample}
             />
             {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
               <AdSenseWrapper
