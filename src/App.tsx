@@ -30,6 +30,7 @@ const SignUp = lazy(() => import(/* webpackPreload: true */ '../pages/SignUp'));
 
 // Secondary routes with dynamic imports
 const AddWord = lazy(() => import('../pages/AddWord'));
+const ContributionPreview = import.meta.env.DEV ? lazy(() => import('../pages/ContributionPreview')) : () => null;
 const SearchResults = lazy(() => import('../pages/SearchResults'));
 const WordPage = lazy(() => import('../pages/WordPage'));
 const UserProfile = lazy(() => import('../pages/UserProfile'));
@@ -218,6 +219,7 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/advanced-search" element={<AdvancedSearch />} />
+              {import.meta.env.DEV && <Route path="/add-definition-preview" element={<ContributionPreview />} />}
               <Route path="/advanced-search/:countryName" element={<AdvancedSearch />} />
               {/*<div className="ads">*/}
               {/*  <Adverts />*/}

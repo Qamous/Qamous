@@ -55,6 +55,9 @@
       "example": "Wana awga3 demaghi leh? Faaaaakes"
     }
   ],
+  "content_box": {
+    "example": "Example:"
+  },
   "content_box_buttons": {
     "like": "Like",
     "dislike": "Dislike",

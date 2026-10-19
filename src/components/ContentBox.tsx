@@ -1,50 +1,29 @@
 import { API_URL, ApiError } from "../api";
 import { useDefinitionReaction } from '../hooks/useDefinitionReaction';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import './ContentBox.scss';
+import ContentBoxView, { ContentBoxActions, type ContentBoxContent } from './ContentBoxView';
 import * as variables from '../assets/Variables.module.scss';
 import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
-import ReactCountryFlag from 'react-country-flag';
 import CustomDialog from './CustomDialog';
 import i18n from 'i18next';
-import { Link, useNavigate } from 'react-router-dom';
-import { getCountryName } from '../assets/utils';
+import { useNavigate } from 'react-router-dom';
 import * as htmlToImage from 'html-to-image';
 import logo from '../assets/qamous-logo-transparent.png';
 
-export interface HomeContentProps {
-  item: {
-    word: string,
-    otherLangWord?: string,
-    definition: string
-  },
+export interface HomeContentProps extends ContentBoxContent {
   index: number,
-  lang: string,
   wordId: number,
   definitionId: number,
   isLiked: boolean,
   isDisliked: boolean,
   isReported: boolean,
-  countryCode?: string,
-  definitionHuh?: boolean,
-  example: string,
   isAdvancedSearch?: boolean,
-  // likeCount: number,
-  // dislikeCount: number,
 }
 
-interface ButtonText {
-  like: string,
-  dislike: string,
-  report: string,
-  share: string,
-}
-
-const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example }) => {
   const { t } = useTranslation();
-  const buttonText = t('content_box_buttons', { returnObjects: true }) as ButtonText;
   
   const reaction = useDefinitionReaction(definitionId, isLiked, isDisliked);
   const { isLiked: likeClicked, isDisliked: dislikeClicked } = reaction;
@@ -54,7 +33,6 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   const [showDialog, setShowDialog] = useState(false);
   const [reportType, setReportType] = useState<string | null>(null);
   const [showInvalidInputDialog, setShowInvalidInputDialog] = useState(false);
-  const [countryName, setCountryName] = useState<string>('');
   const [showTooltip, setShowTooltip] = useState(false);
   const [instagramSnackbarOpen, setInstagramSnackbarOpen] = useState(false);
   const navigate = useNavigate();
@@ -62,11 +40,6 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     if (reaction.error instanceof ApiError && reaction.error.status === 401) navigate('/login');
   }, [reaction.error, navigate]);
   
-  useEffect(() => {
-    if (countryCode) {
-      getCountryName(countryCode).then(setCountryName);
-    }
-  }, [countryCode]);
   
   const handleInvalidInputOkClick = () => {
     setShowInvalidInputDialog(false);
@@ -311,10 +284,18 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   }, [isReported, definitionId]);
   
   return (
-    <div className={'content-box' +
-      (index === 0 ? ' content-box-first' : '') +
-      (lang === 'ar' ? ' content-box-ar' : ' content-box-latin')}
-         ref={postRef}>
+    <ContentBoxView
+      ref={postRef}
+      item={item}
+      lang={lang}
+      countryCode={countryCode}
+      countryName={countryName}
+      alternateSpellings={alternateSpellings}
+      definitionHuh={definitionHuh}
+      example={example}
+      wordHref={wordId ? `/word/${wordId}` : undefined}
+      highlighted={index === 0}
+      overlays={<>
       {showDialog && (
         <CustomDialog
           text={
@@ -357,101 +338,24 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
           onClose={handleInvalidInputOkClick}
         />
       )}
-      <div className={'content-box-title'}>
-        {(wordId && (
-          <Link to={`/word/${wordId}`} key={index + 1}>
-            <h1>{item.word}</h1>
-          </Link>
-        )) || (
-          <h1>{item.word}</h1>
-        )}
-        
-        {countryCode &&
-          <ReactCountryFlag
-            countryCode={countryCode}
-            svg
-            style={{ width: '2em', height: '2em' }}
-            title={countryName}
-          />
-        }
-      </div>
-      {definitionHuh !== false && (
-        <div className={'content-box-description'}>
-          <p>{item.definition}</p>
-        </div>
-      )}
-      {example && example != "" && (
-        <div className="content-box-example">
-          {example}
-        </div>
-      )}
+      </>}
+    >
       {index !== 0 && (
-        <div className="content-box-buttons">
-          {isAdvancedSearch ? (
-            <>
-              <Link to={`/word/${wordId}`}>
-                <button className="content-box-buttons-view-button">
-                  {t('user_profile.pick_other_definitions')}
-                </button>
-              </Link>
-              <div className="tooltip">
-                <button
-                  className="content-box-buttons-share-button"
-                  onClick={handleShareClick}
-                >
-                  {buttonText.share}
-                </button>
-                {showTooltip && (
-                  <div className="tooltiptext">
-                    <button onClick={handleInstagramShareClick}>Instagram</button>
-                    {/*<button onClick={handleFacebookShare}>Facebook</button>*/}
-                    <button onClick={handleXShare}>X / Twitter</button>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-            <>
-              <button
-                className={`content-box-buttons-like-button ${likeClicked ? 'clicked' : ''}`}
-                aria-pressed={likeClicked}
-                disabled={reaction.pending}
-                onClick={handleLikeClick}
-              >
-                {buttonText.like}
-              </button>
-              <button
-                className={`content-box-buttons-dislike-button ${dislikeClicked ? 'clicked' : ''}`}
-                aria-pressed={dislikeClicked}
-                disabled={reaction.pending}
-                onClick={handleDislikeClick}
-              >
-                {buttonText.dislike}
-              </button>
-              <div className="tooltip">
-                <button
-                  className="content-box-buttons-share-button"
-                  onClick={handleShareClick}
-                >
-                  {buttonText.share}
-                </button>
-                {showTooltip && (
-                  <div className="tooltiptext">
-                    <button onClick={handleInstagramShareClick}>Instagram</button>
-                    {/*<button onClick={handleFacebookShare}>Facebook</button>*/}
-                    <button onClick={handleXShare}>X / Twitter</button>
-                  </div>
-                )}
-              </div>
-              <button
-                className={`content-box-buttons-report-button ${reportClicked ? 'clicked' : ''}`}
-                onClick={handleReportClick}
-              >
-                {buttonText.report}
-              </button>
-            </>
-          )}
-        </div>
+        <ContentBoxActions
+          isLiked={likeClicked}
+          isDisliked={dislikeClicked}
+          isReported={reportClicked}
+          pending={reaction.pending}
+          viewHref={isAdvancedSearch ? `/word/${wordId}` : undefined}
+          onLike={handleLikeClick}
+          onDislike={handleDislikeClick}
+          onShare={handleShareClick}
+          onReport={handleReportClick}
+          shareMenu={showTooltip && <div className="tooltiptext">
+            <button type="button" onClick={handleInstagramShareClick}>Instagram</button>
+            <button type="button" onClick={handleXShare}>X / Twitter</button>
+          </div>}
+        />
       )}
       <Snackbar open={!!reaction.error} message={reaction.error?.message || ''} />
       <Snackbar
@@ -466,7 +370,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
         open={instagramSnackbarOpen}
         message={t('content_box_buttons.instagram_download')}
       />
-    </div>
+    </ContentBoxView>
   );
 };
 

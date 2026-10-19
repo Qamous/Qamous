@@ -55,6 +55,9 @@
       "example": "و أنا أوجع دماغي ليه؟ فااااكس"
     }
   ],
+  "content_box": {
+    "example": "مثال:"
+  },
   "content_box_buttons": {
     "like": "أعجبني",
     "dislike": "لم يعجبني",
