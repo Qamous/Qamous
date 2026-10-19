@@ -170,6 +170,10 @@
   }
 
   &-toggle-arrow {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    font: inherit;
     position: absolute;
     left: 15px;
     top: 50%;
@@ -202,9 +206,11 @@
     }
 
     &.expanded {
-      transform: translateY(-50%) rotate(180deg);
+      svg { transform: rotate(180deg); }
     }
+    &:focus-visible { outline: 2px solid variables.$secondary-color; outline-offset: 2px; }
   }
+  &-toggle-label { display: none; }
   
   // Media queries for better responsiveness
   @media (max-width: 800px) {
@@ -329,5 +335,30 @@
         height: variables.$footer-height-expanded-tiny;
       }
     }
+  }
+  // Phone layout: one calm summary row, with secondary actions behind More.
+  @media (max-width: 599px) {
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+    max-height: 65dvh;
+    overflow-y: auto;
+    &.expanded { height: auto; }
+    .footer-content { padding: 0 56px env(safe-area-inset-bottom, 0px) 84px; }
+    .footer-minimal { display: grid; grid-template-columns: minmax(0, 1fr); height: auto; min-height: 60px; gap: 0; }
+    .footer-copyright { grid-column: 1; max-width: none; padding: 0; white-space: normal; text-align: start; font-size: .7rem; line-height: 1.4; }
+    .footer-toggle-arrow { display: flex; align-items: center; justify-content: center; gap: 6px; top: 8px; left: 8px; transform: none; width: 68px; height: 44px; border-radius: 8px; color: variables.$primary-color-75; font-size: .75rem; }
+    .footer-toggle-arrow svg { width: 12px; transition: transform .2s ease; }
+    .footer-toggle-label { display: inline; }
+    .footer-socials { display: none; }
+    &.expanded {
+      .footer-copyright { min-height: 60px; display: flex; align-items: center; }
+      .footer-socials { display: flex; grid-column: 1; justify-content: flex-start; flex-wrap: wrap; gap: 4px; margin: 0 0 8px; }
+      .footer-socials a { width: 32px; height: 36px; font-size: 1rem; }
+      .footer-expanded { height: auto; overflow: visible; }
+    }
+    .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; height: auto; padding: 8px 0; font-size: .75rem; justify-items: start; }
+    .footer-links a, .footer-links button { min-height: 36px; display: inline-flex; align-items: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &, .footer-expanded, .footer-toggle-arrow, .footer-toggle-arrow svg { transition: none; }
   }
 }
