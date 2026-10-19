@@ -24,7 +24,7 @@ describe('contribution submission',()=>{
     vi.stubGlobal('fetch',fetch);mount();fill();
     expect(screen.queryByRole('button',{name:'Fill an example'})).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button',{name:'Review word'}));
-    expect(screen.getByText('معلش، هتتعوض.')).toBeInTheDocument();
+    expect(screen.queryByText('معلش، هتتعوض.')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button',{name:'Add word'}));
     expect(await screen.findByRole('alert')).toHaveTextContent('Your draft is still here');
     fireEvent.click(screen.getByRole('button',{name:'Add word'}));

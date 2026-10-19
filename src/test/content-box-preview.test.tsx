@@ -18,6 +18,32 @@ const content = {
 };
 
 describe('feed card previews', () => {
+  it.each([undefined, null, '', '   '])('hides missing Arabic examples (%j) in both feed and review cards', (arabicExample) => {
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    const arabicContent = { ...content, lang: 'ar', arabicExample };
+    const { container } = render(<>
+      <QueryClientProvider client={client}><MemoryRouter>
+        <ContentBox {...arabicContent} index={1} wordId={61} definitionId={106} isLiked={false} isDisliked={false} isReported={false} />
+      </MemoryRouter></QueryClientProvider>
+      <ContentBoxPreview {...arabicContent} />
+    </>);
+    expect(container.querySelectorAll('.content-box')).toHaveLength(2);
+    expect(container.querySelector('.content-box-example')).not.toBeInTheDocument();
+    expect(screen.queryByText(content.example)).not.toBeInTheDocument();
+    client.clear();
+  });
+
+  it.each(['', '   '])('hides the Franco example when absent (%j), even if an Arabic example exists', (example) => {
+    const { container } = render(<ContentBoxPreview {...content} example={example} arabicExample="معلش، هتتعوض." />);
+    expect(container.querySelector('.content-box-example')).not.toBeInTheDocument();
+  });
+
+  it.each([['ar', 'معلش، هتتعوض.', 'rtl'], ['en', content.example, 'ltr']])('shows only the matching example for %s cards', (lang, expectedExample, direction) => {
+    render(<ContentBoxPreview {...content} lang={lang} arabicExample="معلش، هتتعوض." />);
+    expect(screen.getByText(expectedExample)).toHaveAttribute('dir', direction);
+    expect(screen.queryByText(lang === 'ar' ? content.example : 'معلش، هتتعوض.')).not.toBeInTheDocument();
+  });
+
   it('renders without routing or reaction providers and cannot navigate or submit actions', () => {
     const fetch = vi.fn();
     vi.stubGlobal('fetch', fetch);

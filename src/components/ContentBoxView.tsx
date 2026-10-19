@@ -44,8 +44,7 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
   }, [countryCode, countryName]);
   const flagLabel = countryName || (resolvedCountry.code === countryCode ? resolvedCountry.name : '') || countryCode;
   const spellings = alternateSpellings ?? (lang === 'ar' ? arabicSpellings : francoSpellings);
-  const shownExample = lang === 'ar' ? arabicExample || example : example || arabicExample;
-  const exampleIsArabic = lang === 'ar' ? !!arabicExample : !example && !!arabicExample;
+  const shownExample = (lang === 'ar' ? arabicExample : example)?.trim();
 
   return <div className={`content-box${highlighted ? ' content-box-first' : ''}${lang === 'ar' ? ' content-box-ar' : ' content-box-latin'}`} ref={ref}>
     {overlays}
@@ -55,7 +54,7 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
     </div>
     {spellings && spellings.length > 0 && <p className="content-box-spellings">{spellings.join(' · ')}</p>}
     {definitionHuh !== false && <div className="content-box-description"><p>{item.definition}</p></div>}
-    {shownExample && <div className="content-box-example"><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={exampleIsArabic ? 'rtl' : 'ltr'}>{shownExample}</span></div>}
+    {shownExample && <div className="content-box-example"><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={lang === 'ar' ? 'rtl' : 'ltr'}>{shownExample}</span></div>}
     {children}
   </div>;
 });
