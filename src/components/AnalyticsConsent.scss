@@ -1,0 +1,13 @@
+.analytics-preferences {
+  position: fixed; inset-inline-start: 1rem; bottom: 1rem; z-index: 1100;
+  font-size: .85rem; color: #eee;
+  button { cursor: pointer; font: inherit; border-radius: .5rem; border: 1px solid #777; padding: .55rem .85rem; color: #eee; background: #333; }
+  button:focus-visible, a:focus-visible { outline: 3px solid #ffae32; outline-offset: 3px; }
+  button:disabled { cursor: default; opacity: .5; }
+  .analytics-notice { max-width: 24rem; width: calc(100vw - 2rem); padding: 1rem; box-sizing: border-box; background: #292929; border: 1px solid #777; border-radius: .8rem; box-shadow: 0 4px 24px #0006; }
+  p { line-height: 1.5; margin: .6rem 0; }
+  a { display: inline-block; color: #ffae32; margin-top: .6rem; }
+  .analytics-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .analytics-actions button:last-child { background: #dd8500; color: #111; border-color: #dd8500; }
+  .analytics-settings { padding: .3rem .65rem; font-size: .75rem; }
+}
