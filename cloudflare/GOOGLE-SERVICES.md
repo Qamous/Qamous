@@ -9,7 +9,9 @@
 
 ## Tracking and privacy
 
-`AnalyticsConsent` mounts inside the existing router, independently of the application session. Google code loads asynchronously only after optional analytics consent and only on `qamous.org`. The Privacy button allows visitors to withdraw consent; browser DNT/GPC signals also prevent tracking.
+`AnalyticsConsent` mounts inside the existing router, independently of the application session. Google code loads asynchronously only on `qamous.org`, after the region policy resolves. The automatic opt-in prompt is limited to the EEA (EU plus Iceland, Liechtenstein, Norway), UK, and Switzerland. Other known countries use analytics without an automatic prompt unless a prior opt-out or browser privacy signal prevents tracking. The Privacy button stays available everywhere.
+
+`/api/privacy-region` evaluates Cloudflare's trusted `request.cf.country` and returns only `{requiresConsent:boolean}`. It does not forward IP addresses or locations to a geolocation service, does not use client-supplied country headers, and does not query D1. Responses are private/no-store to prevent cross-country cache contamination. Unknown/Tor locations, lookup failures, and timeouts keep opt-in required. No tracking begins while the lookup is pending; previous denials and DNT/GPC are never overridden by the regional default.
 
 The Google tag is configured with `send_page_view: false`; the router explicitly sends one pageview per changed sanitized page location. **Keep enhanced measurement disabled in this stream** to avoid duplicate automatic history events, form tracking, and unfiltered URLs. The existing stream had enhanced measurement disabled when verified on October 19, 2026.
 
@@ -32,10 +34,22 @@ CSP allows Google's tag loader and Analytics collection endpoints without allowi
 
 Reports and indexing can lag. Do not promise immediate rankings, retroactive recovery of uncollected Analytics visits, or that every discovered URL will be indexed.
 
+## Regional release and Search Console follow-through
+
+- Worker version `1d16a487-84fc-426e-8744-3bde5923deb6` deployed the regional policy on October 19, 2026, under the existing Workers Free guard.
+- 39 automated tests cover all EEA country codes, UK/Switzerland, US/Egypt and other outside countries, unknown/Tor locations, untrusted headers, non-cacheable policy responses, pending lookup, existing denial, optional acceptance, and opt-out.
+- Fresh US-browser verification showed no automatic consent prompt, the policy endpoint returning 200, and a pageview accepted by Google with 204. The prior test opt-out was restored afterward. European prompt behavior is covered by automated country-policy and component tests, not a physical European-IP browser session.
+- Read-only production audit passed for **all 122 sitemap URLs**: HTTP 200, HTML content, matching self-canonicals, titles/descriptions, and no noindex directive. The existing 38 SEO checks also passed. Run `node cloudflare/audit-sitemap.mjs` for the full audit; it deliberately paces requests below the anti-harvesting burst limit.
+- Google's live sitemap inspection reported crawl allowed, successful page fetch, and indexing allowed. The stale sitemap-report failure was HTTP 403 from September 26, not a failure of the current live fetch. The current sitemap was resubmitted and Google displayed “Sitemap submitted successfully.” The sitemap itself is a discovery file, not a page that needs an indexing request.
+- Search Console reported no manual actions, no security issues, and no HTTPS issues. Core Web Vitals has insufficient real-user data for both device types; there is no Search Console setting to manufacture field data or guarantee a ranking improvement.
+- Started validation of the 17 “Crawled - currently not indexed” examples (last crawled before the SEO release). Google displayed “Validation Started,” October 19.
+- Google accepted a priority indexing request for `/advanced-search/Egypt`. The homepage and `/advanced-search` were already indexed. Existing English aliases redirect to canonical word URLs; redirect exclusions are expected and should not be forced into the sitemap.
+- Google processing, validation results, and individual indexing decisions remain pending; neither a successful live test nor accepted submission guarantees indexing of every URL.
+
 ## Recheck
 
 1. Open the existing Qamous property, not a similarly named unrelated property.
-2. In a browser without a saved analytics choice, confirm no `gtag/js` or GA4 collection request occurs before acceptance.
+2. For a consent-required or unknown region without a saved choice, confirm no `gtag/js` or GA4 collection request occurs before acceptance. For a known outside region, confirm no automatic prompt, tracking starts after policy resolution, and an existing denial still prevents it.
 3. Accept optional analytics, open a word using an internal link, and check Realtime and the browser network for exactly one pageview per navigation.
 4. Use Privacy → No thanks, navigate again, and confirm collection stops.
 5. Check Search Console → Ownership verification, Sitemaps, and a live URL inspection. Preserve the DNS TXT record and existing Googlebot-compatible robots/security rules.
