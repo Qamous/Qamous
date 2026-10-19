@@ -23,6 +23,17 @@ export function readConsent(): Consent {
   } catch { return null; }
 }
 
+// Country is evaluated by our own edge; no location/IP is sent to a third party.
+// No tracking starts while the policy is unresolved. Errors retain opt-in.
+export async function fetchConsentRequirement(signal: AbortSignal): Promise<boolean> {
+  try {
+    const response = await fetch('/api/privacy-region', {credentials:'omit', cache:'no-store', signal});
+    if (!response.ok) return true;
+    const data: unknown = await response.json();
+    return !(data && typeof data === 'object' && 'requiresConsent' in data && data.requiresConsent === false);
+  } catch { return true; }
+}
+
 // Never send arbitrary paths, query strings, hashes, searches, profile identifiers,
 // reset tokens, or page titles containing user-entered text to Google.
 export function analyticsPage(pathname: string) {

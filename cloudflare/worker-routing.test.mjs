@@ -1,5 +1,5 @@
 import {describe,it,expect,vi,beforeEach} from 'vitest';
-import worker from './worker.ts';
+import worker, {requiresAnalyticsConsent} from './worker.ts';
 
 const rewrites=[];
 class TestRewriter {
@@ -23,6 +23,27 @@ function bindings(rows=[],status=200) {
   return {env:{API:{fetch:api},ASSETS:{fetch:assets}},api,assets};
 }
 beforeEach(()=>{rewrites.length=0;vi.stubGlobal('HTMLRewriter',TestRewriter);});
+
+describe('regional analytics policy',()=>{
+  it('requires opt-in across EEA/UK/Switzerland and unknown locations, not US or Egypt',()=>{
+    for(const country of ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH',undefined,'','XX','T1']) expect(requiresAnalyticsConsent(country)).toBe(true);
+    for(const country of ['US','EG','CA','AU','SA']) expect(requiresAnalyticsConsent(country)).toBe(false);
+  });
+  it('returns only a non-cacheable policy boolean from trusted metadata, not request headers',async()=>{
+    const {env,api}=bindings();
+    const request=new Request('https://qamous.org/api/privacy-region',{headers:{'CF-IPCountry':'US'}});
+    const unknown=await worker.fetch(request,env);
+    expect(await unknown.json()).toEqual({requiresConsent:true});
+    Object.defineProperty(request,'cf',{value:{country:'US'}});
+    const response=await worker.fetch(request,env);
+    expect(await response.json()).toEqual({requiresConsent:false});
+    expect(response.headers.get('Cache-Control')).toContain('no-store');
+    expect(response.headers.get('CDN-Cache-Control')).toBe('no-store');
+    expect(api).not.toHaveBeenCalled();
+    expect((await worker.fetch(new Request(request.url,{method:'POST'}),env)).status).toBe(405);
+    expect((await worker.fetch(new Request(request.url,{method:'HEAD'}),env)).body).toBeNull();
+  });
+});
 describe('asset-first routing with genuine missing-page responses',()=>{
   it('returns 404/noindex for unknown routes and missing words, including navigation and HEAD',async()=>{
     for(const path of ['/missing','/word/999999','/word/not-an-id','/advanced-search/Unknown','/word/999999/fr']) {

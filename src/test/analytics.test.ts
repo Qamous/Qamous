@@ -59,4 +59,15 @@ describe('consent-based Qamous Analytics', () => {
     expect(scripts).not.toMatch(/unsafe-inline|unsafe-eval/);
     expect(policy).toContain('https://*.google-analytics.com');
   });
+  it('defaults to opt-in if regional lookup fails or has an unexpected response', async () => {
+    const {fetchConsentRequirement} = await import('../utils/analytics');
+    for (const body of [{requiresConsent:true}, {}, {requiresConsent:'false'}]) {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify(body))));
+      expect(await fetchConsentRequirement(new AbortController().signal)).toBe(true);
+    }
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
+    expect(await fetchConsentRequirement(new AbortController().signal)).toBe(true);
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({requiresConsent:false}))));
+    expect(await fetchConsentRequirement(new AbortController().signal)).toBe(false);
+  });
 });

@@ -1,4 +1,10 @@
 /// <reference path="./worker-configuration.d.ts" />
+// EEA (EU + Iceland/Liechtenstein/Norway), UK and Switzerland. Unknown/Tor
+// locations fail closed. Only Cloudflare's trusted request metadata is used.
+const consentCountries = new Set('AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE IS LI NO GB CH'.split(' '));
+export function requiresAnalyticsConsent(country: unknown): boolean {
+  return typeof country !== 'string' || !/^[A-Z]{2}$/.test(country) || country === 'XX' || consentCountries.has(country);
+}
 function unavailable() {
   return new Response('Qamous is temporarily unavailable. Please try again later.', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store','Retry-After':'60','X-Content-Type-Options':'nosniff','X-Robots-Tag':'noindex','Content-Security-Policy':"default-src 'none'; frame-ancestors 'none'"}});
 }
@@ -82,6 +88,12 @@ export default {
   async fetch(request:Request,env:Env):Promise<Response> {
     const url=new URL(request.url);
     if(url.hostname==='www.qamous.org') {url.hostname='qamous.org';return Response.redirect(url.toString(),308);}
+    if(url.pathname==='/api/privacy-region') {
+      const headers = {'Cache-Control':'private, no-store','CDN-Cache-Control':'no-store','X-Robots-Tag':'noindex','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; frame-ancestors 'none'"};
+      if(!['GET','HEAD'].includes(request.method)) return new Response(null,{status:405,headers:{...headers,Allow:'GET, HEAD'}});
+      const response = Response.json({requiresConsent:requiresAnalyticsConsent(request.cf?.country)}, {headers});
+      return request.method==='HEAD' ? new Response(null,{headers:response.headers}) : response;
+    }
     if(url.pathname==='/api'||url.pathname.startsWith('/api/')) {
       const target=new URL(request.url);
       // Service bindings select the API Worker; retain the public origin while

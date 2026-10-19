@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {privacySignal, readConsent, setConsent, trackPage} from '../utils/analytics';
+import {fetchConsentRequirement, privacySignal, readConsent, setConsent, trackPage} from '../utils/analytics';
 import './AnalyticsConsent.scss';
 
 export default function AnalyticsConsent() {
@@ -9,8 +9,20 @@ export default function AnalyticsConsent() {
   const {i18n} = useTranslation();
   const ar = i18n.language?.startsWith('ar');
   const [consent, updateConsent] = useState(readConsent);
-  const [open, setOpen] = useState(consent === null);
-  useEffect(() => { trackPage(pathname, consent === 'granted'); }, [pathname, consent]);
+  const [required, setRequired] = useState<boolean | null>(null);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    let active = true;
+    void fetchConsentRequirement(controller.signal).then(value => {
+      if (active) { setRequired(value); setOpen(value && readConsent() === null); }
+    }).finally(() => clearTimeout(timeout));
+    return () => { active = false; clearTimeout(timeout); controller.abort(); };
+  }, []);
+  useEffect(() => {
+    if (required !== null) trackPage(pathname, consent === 'granted' || (consent === null && !required));
+  }, [pathname, consent, required]);
   const choose = (value: 'granted' | 'denied') => {
     setConsent(value);
     updateConsent(value);
