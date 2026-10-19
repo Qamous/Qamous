@@ -9,10 +9,13 @@ describe('responsive footer controls',()=>{
   it('starts collapsed on phones even at the bottom and provides a real expand/collapse button',()=>{
     vi.stubGlobal('innerWidth',390);mount();
     const toggle=screen.getByRole('button',{name:'Expand footer'});
+    expect(toggle).toHaveTextContent('');
+    expect(toggle.querySelector('svg')).not.toBeNull();
     expect(toggle).toHaveAttribute('aria-expanded','false');
     expect(screen.queryByRole('button',{name:'Privacy'})).toBeNull();
     fireEvent.click(toggle);
     expect(screen.getByRole('button',{name:'Collapse footer'})).toHaveAttribute('aria-expanded','true');
+    expect(toggle).toHaveTextContent('');
     expect(screen.getByRole('button',{name:'Privacy'})).toHaveAttribute('tabindex','0');
     fireEvent.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded','false');

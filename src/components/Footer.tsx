@@ -67,7 +67,6 @@ const Footer: React.FC = () => {
           aria-controls="footer-details"
         >
           <FontAwesomeIcon icon={faChevronUp} />
-          <span className="footer-toggle-label">{isExpanded ? (ar ? 'أقل' : 'Less') : (ar ? 'المزيد' : 'More')}</span>
         </button>
         <div className="footer-minimal">
           <p className="footer-copyright" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
