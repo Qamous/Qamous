@@ -49,7 +49,9 @@ export default function AnalyticsConsent() {
     <section className="analytics-notice" aria-label={ar ? 'ملفات تعريف الارتباط الاختيارية' : 'Optional analytics cookies'}>
       <div className="analytics-heading">
         <h2 id="analytics-privacy-title">{ar ? 'إعدادات الخصوصية' : 'Privacy settings'}</h2>
-        <button type="button" aria-label={ar ? 'إغلاق' : 'Close privacy settings'} onClick={() => { interacted.current = true; setOpen(false); }}>×</button>
+        <button type="button" aria-label={ar ? 'إغلاق' : 'Close privacy settings'} onClick={() => { interacted.current = true; setOpen(false); }}>
+          <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="m4 4 12 12M16 4 4 16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" /></svg>
+        </button>
       </div>
       <p>{ar ? 'نستخدم ملفات Google Analytics الاختيارية لفهم زيارات الصفحات. لا نرسل بيانات حسابك أو كلمات بحثك. الاختيار لك، ويمكن تغييره في أي وقت.' : 'Optional Google Analytics cookies help us understand page visits. We don’t send account details or search text. Your choice—you can change it anytime.'}</p>
       {protectedBrowser && <p role="status">{ar ? 'الحماية من التتبع مفعّلة في متصفحك، لذلك ستبقى الإحصاءات معطّلة.' : 'Tracking protection is on in your browser, so analytics stays off.'}</p>}
