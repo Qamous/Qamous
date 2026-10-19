@@ -130,6 +130,18 @@
     }
   }
 
+  &-privacy {
+    font: inherit;
+    font-size: .75rem;
+    opacity: .65;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    min-height: 32px;
+    &:hover, &:focus-visible { opacity: 1; }
+    &:focus-visible { outline: 2px solid variables.$secondary-color; outline-offset: 3px; }
+  }
+
   &-socials {
     display: flex;
     gap: 14px; // Reduced gap for smaller screens
@@ -310,6 +322,7 @@
       
       &-links {
         gap: 10px;
+        row-gap: 0;
       }
       
       &.expanded {

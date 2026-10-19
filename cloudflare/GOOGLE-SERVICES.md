@@ -9,7 +9,7 @@
 
 ## Tracking and privacy
 
-`AnalyticsConsent` mounts inside the existing router, independently of the application session. Google code loads asynchronously only on `qamous.org`, after the region policy resolves. The automatic opt-in prompt is limited to the EEA (EU plus Iceland, Liechtenstein, Norway), UK, and Switzerland. Other known countries use analytics without an automatic prompt unless a prior opt-out or browser privacy signal prevents tracking. The Privacy button stays available everywhere.
+`AnalyticsConsent` mounts inside the existing router, independently of the application session. Google code loads asynchronously only on `qamous.org`, after the region policy resolves. The automatic opt-in prompt is limited to the EEA (EU plus Iceland, Liechtenstein, Norway), UK, and Switzerland. Other known countries use analytics without an automatic prompt unless a prior opt-out or browser privacy signal prevents tracking. A small Privacy text control lives alongside the expanded footer links, not in a floating overlay.
 
 `/api/privacy-region` evaluates Cloudflare's trusted `request.cf.country` and returns only `{requiresConsent:boolean}`. It does not forward IP addresses or locations to a geolocation service, does not use client-supplied country headers, and does not query D1. Responses are private/no-store to prevent cross-country cache contamination. Unknown/Tor locations, lookup failures, and timeouts keep opt-in required. No tracking begins while the lookup is pending; previous denials and DNT/GPC are never overridden by the regional default.
 
@@ -47,6 +47,12 @@ Reports and indexing can lag. Do not promise immediate rankings, retroactive rec
 - Google processing, validation results, and individual indexing decisions remain pending; neither a successful live test nor accepted submission guarantees indexing of every URL.
 
 ## Recheck
+
+### Mobile/desktop privacy follow-up, October 19
+
+Worker `138496af-8327-477a-bc06-621ed62125ca` removes the floating Privacy button that covered mobile copyright and the desktop footer arrow. Preferences now open in a native modal with close/Escape and focus restoration. Browser DNT/GPC shows a clear tracking-protection message and a working Done button rather than a disabled Allow button. A delayed regional lookup cannot reopen a manually dismissed or accepted dialog.
+
+Verified in the live browser at 390px mobile width and 1280px desktop width: no floating control, no copyright overlap, desktop arrow unobstructed and toggling both ways, Allow closes the modal and Google's pageview endpoint returns 204. Restored the test opt-out afterward. All 45 tests, production build, Worker typecheck, and 38 live SEO checks passed. This is browser viewport verification, not a reproduction on the user's physical phone.
 
 1. Open the existing Qamous property, not a similarly named unrelated property.
 2. For a consent-required or unknown region without a saved choice, confirm no `gtag/js` or GA4 collection request occurs before acceptance. For a known outside region, confirm no automatic prompt, tracking starts after policy resolution, and an existing denial still prevents it.

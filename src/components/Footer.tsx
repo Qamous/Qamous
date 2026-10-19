@@ -94,6 +94,9 @@ const Footer: React.FC = () => {
             <NavLink to="/advertise">
               {t('footer.advertise')}
             </NavLink>
+            <button className="footer-privacy" type="button" onClick={() => window.dispatchEvent(new Event('qamous:privacy-open'))}>
+              {i18n.language?.startsWith('ar') ? 'الخصوصية' : 'Privacy'}
+            </button>
           </div>
         </div>
       </div>

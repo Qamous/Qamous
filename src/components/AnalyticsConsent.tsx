@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {fetchConsentRequirement, privacySignal, readConsent, setConsent, trackPage} from '../utils/analytics';
@@ -11,12 +11,28 @@ export default function AnalyticsConsent() {
   const [consent, updateConsent] = useState(readConsent);
   const [required, setRequired] = useState<boolean | null>(null);
   const [open, setOpen] = useState(false);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const interacted = useRef(false);
+  const protectedBrowser = privacySignal();
+  useEffect(() => {
+    const show = () => { interacted.current = true; setOpen(true); };
+    window.addEventListener('qamous:privacy-open', show);
+    return () => window.removeEventListener('qamous:privacy-open', show);
+  }, []);
+  useEffect(() => {
+    // Native modal provides focus containment, Escape and focus restoration on phones.
+    if (open && !dialog.current?.open) dialog.current?.showModal();
+    else if (!open && dialog.current?.open) dialog.current.close();
+  }, [open]);
   useEffect(() => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
     let active = true;
     void fetchConsentRequirement(controller.signal).then(value => {
-      if (active) { setRequired(value); setOpen(value && readConsent() === null); }
+      if (active) {
+        setRequired(value);
+        if (!interacted.current) setOpen(value && readConsent() === null);
+      }
     }).finally(() => clearTimeout(timeout));
     return () => { active = false; clearTimeout(timeout); controller.abort(); };
   }, []);
@@ -24,20 +40,24 @@ export default function AnalyticsConsent() {
     if (required !== null) trackPage(pathname, consent === 'granted' || (consent === null && !required));
   }, [pathname, consent, required]);
   const choose = (value: 'granted' | 'denied') => {
+    interacted.current = true;
     setConsent(value);
     updateConsent(value);
     setOpen(false);
   };
-  return <aside className="analytics-preferences" dir={ar ? 'rtl' : 'ltr'} aria-label={ar ? 'إعدادات الخصوصية' : 'Privacy settings'}>
-    {open ? <section className="analytics-notice" aria-label={ar ? 'ملفات تعريف الارتباط الاختيارية' : 'Optional analytics cookies'}>
-      <strong>{ar ? 'ساعدنا نحسّن قاموس' : 'Help us improve Qamous'}</strong>
+  return <dialog ref={dialog} className="analytics-preferences" dir={ar ? 'rtl' : 'ltr'} aria-labelledby="analytics-privacy-title" onCancel={() => setOpen(false)} onClose={() => setOpen(false)}>
+    <section className="analytics-notice" aria-label={ar ? 'ملفات تعريف الارتباط الاختيارية' : 'Optional analytics cookies'}>
+      <div className="analytics-heading">
+        <h2 id="analytics-privacy-title">{ar ? 'إعدادات الخصوصية' : 'Privacy settings'}</h2>
+        <button type="button" aria-label={ar ? 'إغلاق' : 'Close privacy settings'} onClick={() => { interacted.current = true; setOpen(false); }}>×</button>
+      </div>
       <p>{ar ? 'نستخدم ملفات Google Analytics الاختيارية لفهم زيارات الصفحات. لا نرسل بيانات حسابك أو كلمات بحثك. الاختيار لك، ويمكن تغييره في أي وقت.' : 'Optional Google Analytics cookies help us understand page visits. We don’t send account details or search text. Your choice—you can change it anytime.'}</p>
-      {privacySignal() && <p>{ar ? 'نحترم إشارة عدم التتبع في متصفحك.' : 'Your browser’s do-not-track preference is respected.'}</p>}
+      {protectedBrowser && <p role="status">{ar ? 'الحماية من التتبع مفعّلة في متصفحك، لذلك ستبقى الإحصاءات معطّلة.' : 'Tracking protection is on in your browser, so analytics stays off.'}</p>}
       <div className="analytics-actions">
-        <button type="button" onClick={() => choose('denied')}>{ar ? 'لا، شكرًا' : 'No thanks'}</button>
-        <button type="button" disabled={privacySignal()} onClick={() => choose('granted')}>{ar ? 'السماح بالإحصاءات' : 'Allow analytics'}</button>
+        <button type="button" onClick={() => choose('denied')}>{protectedBrowser ? (ar ? 'تم' : 'Done') : (ar ? 'لا، شكرًا' : 'No thanks')}</button>
+        {!protectedBrowser && <button type="button" onClick={() => choose('granted')}>{ar ? 'السماح بالإحصاءات' : 'Allow analytics'}</button>}
       </div>
       <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">{ar ? 'خصوصية Google' : 'Google privacy'}</a>
-    </section> : <button className="analytics-settings" type="button" onClick={() => setOpen(true)}>{ar ? 'الخصوصية' : 'Privacy'}</button>}
-  </aside>;
+    </section>
+  </dialog>;
 }
