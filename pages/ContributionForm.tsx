@@ -7,13 +7,15 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import Papa from 'papaparse';
+import { Link, useNavigate } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+import { API_URL, ApiError, apiJson } from '../src/api';
 import { ContentBoxPreview } from '../src/components/ContentBoxView';
-import './ContributionPreview.scss';
+import './ContributionForm.scss';
 
-// Local design proposal only. No contribution API writes or persistence.
 type Draft = { arabicWord: string; francoWord: string; arabicDefinition: string; englishDefinition: string; arabicExample: string; francoExample: string; country: string };
+interface ExistingWord { id: number; arabicWord: string; francoArabicWord: string | null }
 const empty: Draft = { arabicWord: '', francoWord: '', arabicDefinition: '', englishDefinition: '', arabicExample: '', francoExample: '', country: '' };
-const previewExistingWord = { arabicWord: 'معلش', francoWord: 'ma3lish' };
 
 function Spellings({ script, values, onChange, ar }: { script: 'arabic' | 'franco'; values: string[]; onChange: (values: string[]) => void; ar: boolean }) {
   const [value, setValue] = useState('');
@@ -43,13 +45,16 @@ function Spellings({ script, values, onChange, ar }: { script: 'arabic' | 'franc
   </div>;
 }
 
-export default function ContributionPreview() {
+export default function ContributionForm() {
   const { i18n } = useTranslation();
   const ar = i18n.language === 'ar';
   const text = (en: string, arabic: string) => ar ? arabic : en;
   const [draft, setDraft] = useState<Draft>(empty);
   const [mode, setMode] = useState<'word' | 'meaning'>('word');
-  const [existing, setExisting] = useState('');
+  const [existing, setExisting] = useState<ExistingWord | null>(null);
+  const [existingQuery, setExistingQuery] = useState('');
+  const [suggestions, setSuggestions] = useState<ExistingWord[]>([]);
+  const [searchState, setSearchState] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [aliases, setAliases] = useState({ arabic: [] as string[], franco: [] as string[] });
   const [spellingsOpen, setSpellingsOpen] = useState(false);
   const [countries, setCountries] = useState<{ name: string; code: string }[]>([]);
@@ -62,10 +67,16 @@ export default function ContributionPreview() {
   const [attempted, setAttempted] = useState(false);
   const [review, setReview] = useState(false);
   const [notice, setNotice] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [needsLogin, setNeedsLogin] = useState(false);
+  const savingRef = useRef(false);
+  const requestRef = useRef({ payload: '', id: '' });
+  const navigate = useNavigate();
+  const client = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const actualWord = mode === 'meaning' ? (existing ? previewExistingWord.arabicWord : '') : draft.arabicWord.trim();
-  const actualFranco = mode === 'meaning' ? (existing ? previewExistingWord.francoWord : '') : draft.francoWord.trim();
+  const actualWord = mode === 'meaning' ? existing?.arabicWord || '' : draft.arabicWord.trim();
+  const actualFranco = mode === 'meaning' ? existing?.francoArabicWord || '' : draft.francoWord.trim();
   const wordValid = !!actualWord && /\p{Script=Arabic}/u.test(actualWord);
   const meaningValid = !!(draft.arabicDefinition.trim() || draft.englishDefinition.trim());
   const field = (name: keyof Draft) => ({ value: draft[name], onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => { setDraft(previous => ({ ...previous, [name]: event.target.value })); setNotice(''); } });
@@ -80,6 +91,48 @@ export default function ContributionPreview() {
     return () => { active = false; };
   }, []);
   useEffect(() => { if (review) headingRef.current?.focus(); }, [review]);
+  useEffect(() => {
+    const controller = new AbortController();
+    const query = existingQuery.trim();
+    if (mode !== 'meaning' || existing || !query) { setSuggestions([]); setSearchState('idle'); return; }
+    setSearchState('loading');
+    setSuggestions([]);
+    const timer = window.setTimeout(() => {
+      void fetch(`${API_URL}/word/suggestions?q=${encodeURIComponent(query)}`, { signal: controller.signal })
+        .then(response => apiJson<ExistingWord[]>(response))
+        .then(rows => { if (!controller.signal.aborted) { setSuggestions(rows); setSearchState('ready'); } })
+        .catch(() => { if (!controller.signal.aborted) setSearchState('error'); });
+    }, 250);
+    return () => { window.clearTimeout(timer); controller.abort(); };
+  }, [existingQuery, existing, mode]);
+  async function submit() {
+    if (savingRef.current) return;
+    const payload = {
+      ...(mode === 'meaning' ? { wordId: existing?.id } : { arabicWord: actualWord, francoArabicWord: actualFranco || null }),
+      arabicDefinition: draft.arabicDefinition.trim() || null, englishDefinition: draft.englishDefinition.trim() || null,
+      arabicExample: draft.arabicExample.trim() || null, francoExample: draft.francoExample.trim() || null,
+      countryCode: countries.find(country => country.name === draft.country)?.code || null,
+      arabicSpellings: mode === 'word' ? aliases.arabic : [], francoSpellings: mode === 'word' ? aliases.franco : [],
+    };
+    const serialized = JSON.stringify(payload);
+    if (requestRef.current.payload !== serialized) requestRef.current = { payload: serialized, id: crypto.randomUUID() };
+    savingRef.current = true; setSaving(true); setNotice(''); setNeedsLogin(false);
+    try {
+      const result = await apiJson<{ wordId: number; definitionIds: number[] }>(await fetch(`${API_URL}/contributions`, {
+        method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, requestId: requestRef.current.id }),
+      }));
+      if (!Number.isSafeInteger(result.wordId) || result.wordId < 1 || !result.definitionIds?.length) throw new Error('Invalid contribution response');
+      await Promise.all(['homeContent', 'searchResults', 'explore', 'definitions', 'user'].map(key => client.invalidateQueries(key, { refetchActive: false })));
+      navigate(`/word/${result.wordId}${ar ? '/ar' : ''}`);
+    } catch (error) {
+      const login = error instanceof ApiError && error.status === 401;
+      setNeedsLogin(login);
+      setNotice(login ? text('Sign in again, then retry. Your draft is still here.', 'سجّل دخولك من جديد وحاول تاني. مساهمتك لسه موجودة.')
+        : error instanceof ApiError && error.status === 400 ? error.message
+        : text('Could not save your contribution. Please try again. Your draft is still here.', 'مش قادرين نحفظ مساهمتك دلوقتي. حاول تاني، مساهمتك لسه موجودة.'));
+    } finally { savingRef.current = false; setSaving(false); }
+  }
   function validate(event: React.FormEvent) {
     event.preventDefault(); setAttempted(true);
     if (!wordValid || !meaningValid) {
@@ -100,12 +153,13 @@ export default function ContributionPreview() {
           lang={language}
           countryCode={countries.find(country => country.name === draft.country)?.code}
           countryName={localizedCountries.find(country => country.name === draft.country)?.label}
-          example={language === 'ar' ? draft.arabicExample : draft.francoExample}
+          example={draft.francoExample}
+          arabicExample={draft.arabicExample}
           alternateSpellings={mode === 'word' ? (language === 'ar' ? aliases.arabic : aliases.franco) : undefined}
         />
       </div>)}</div>
-      <div className="contribute-actions"><button type="button" className="contribute-back" onClick={() => { setReview(false); setNotice(''); }}><FontAwesomeIcon icon={faArrowLeft} />{text('Keep editing', 'متابعة التعديل')}</button><button type="button" className="contribute-primary" onClick={() => setNotice(text('Preview complete. Nothing was submitted or saved.', 'اكتملت المعاينة. لم يتم إرسال أو حفظ أي شيء.'))}>{mode === 'word' ? text('Add word', 'أضف الكلمة') : text('Add meaning', 'أضف المعنى')}<FontAwesomeIcon icon={faCheck} /></button></div>
-      <p role="status" className="contribute-notice">{notice}</p>
+      <div className="contribute-actions"><button type="button" className="contribute-back" disabled={saving} onClick={() => { setReview(false); setNotice(''); }}><FontAwesomeIcon icon={faArrowLeft} />{text('Keep editing', 'متابعة التعديل')}</button><button type="button" className="contribute-primary" disabled={saving} onClick={() => void submit()}>{saving ? text('Adding…', 'بنضيف…') : mode === 'word' ? text('Add word', 'أضف الكلمة') : text('Add meaning', 'أضف المعنى')}<FontAwesomeIcon icon={faCheck} /></button></div>
+      {notice && <p role="alert" className="contribute-notice">{notice}{needsLogin && <> <Link to="/login" target="_blank" rel="noopener">{text('Sign in', 'تسجيل الدخول')}</Link></>}</p>}
     </section> : <>
       <div className="contribute-mode" role="group" aria-label={text('Contribution type', 'نوع المساهمة')}><button type="button" aria-pressed={mode === 'word'} onClick={() => { setMode('word'); setAttempted(false); }}>{text('New word', 'كلمة جديدة')}</button><button type="button" aria-pressed={mode === 'meaning'} onClick={() => { setMode('meaning'); setAttempted(false); }}>{text('Another meaning', 'معنى جديد')}</button></div>
       <form ref={formRef} onSubmit={validate} noValidate>
@@ -116,7 +170,13 @@ export default function ContributionPreview() {
             <div className="contribute-spellings"><button className="contribute-disclosure" type="button" onClick={() => setSpellingsOpen(!spellingsOpen)} aria-expanded={spellingsOpen} aria-controls="alternate-spellings"><FontAwesomeIcon icon={spellingsOpen ? faXmark : faPlus} />{text('Other ways to spell it', 'طرق أخرى لكتابة الكلمة')}{optional}{aliases.arabic.length + aliases.franco.length > 0 && <span>({aliases.arabic.length + aliases.franco.length})</span>}</button>
               <div id="alternate-spellings" hidden={!spellingsOpen}><p className="contribute-hint">{text('Same word, different spelling. Not synonyms or different meanings.', 'نفس الكلمة بتهجئة مختلفة، مش مرادفات أو معاني تانية.')}</p><div className="contribute-grid"><Spellings script="arabic" values={aliases.arabic} onChange={arabic => setAliases(previous => ({ ...previous, arabic }))} ar={ar} /><Spellings script="franco" values={aliases.franco} onChange={franco => setAliases(previous => ({ ...previous, franco }))} ar={ar} /></div></div>
             </div>
-          </> : <div className="contribute-field"><label htmlFor="existing-word">{text('Existing word', 'كلمة موجودة')}{required}</label><select id="existing-word" value={existing} onChange={event => setExisting(event.target.value)} aria-invalid={attempted && !wordValid} aria-describedby="existing-word-hint"><option value="">{text('Select a word…', 'اختر كلمة…')}</option><option value="sample">معلش / ma3lish</option></select><span id="existing-word-hint" className="contribute-hint">{text('Sample word for this preview. The final form will search Qamous.', 'كلمة تجريبية للمعاينة. النموذج النهائي هيبحث في قاموس.')}</span>{attempted && !wordValid && <span role="alert" className="contribute-error">{text('Choose the word you’re defining.', 'اختر الكلمة اللي هتشرح معناها.')}</span>}</div>}
+          </> : <div className="contribute-field"><label htmlFor={existing ? undefined : 'existing-word'}>{text('Existing word', 'كلمة موجودة')}{required}</label>
+            {existing ? <div className="contribute-selected-word"><span dir="auto">{existing.arabicWord} / {existing.francoArabicWord}</span><button type="button" onClick={() => { setExisting(null); setExistingQuery(''); }}>{text('Change word', 'غيّر الكلمة')}</button></div>
+              : <><input id="existing-word" type="search" dir="auto" value={existingQuery} maxLength={200} placeholder={text('Search in Arabic or Franco', 'ابحث بالعربية أو الفرانكو')} onChange={event => setExistingQuery(event.target.value)} aria-invalid={attempted && !wordValid} aria-describedby="existing-word-hint" />
+                <div role="status" className="contribute-hint">{searchState === 'loading' ? text('Searching…', 'بندور…') : searchState === 'error' ? text('Could not search. Please try again.', 'مش قادرين نبحث دلوقتي. حاول تاني.') : searchState === 'ready' && !suggestions.length ? text('No matching words. You can add a new word instead.', 'مفيش كلمات مطابقة. ممكن تضيف كلمة جديدة.') : ''}</div>
+                {suggestions.length > 0 && <ul className="contribute-suggestions" aria-label={text('Matching words', 'الكلمات المطابقة')}>{suggestions.map(word => <li key={word.id}><button type="button" onClick={() => setExisting(word)}><span dir="rtl">{word.arabicWord}</span><span dir="ltr">{word.francoArabicWord}</span></button></li>)}</ul>}
+              </>}
+            <span id="existing-word-hint" className="contribute-hint">{text('Choose the word you want to add a meaning to.', 'اختار الكلمة اللي عايز تضيف لها معنى.')}</span>{attempted && !wordValid && <span role="alert" className="contribute-error">{text('Choose the word you’re defining.', 'اختر الكلمة اللي هتشرح معناها.')}</span>}</div>}
         </section>
         <section className="contribute-section" aria-labelledby="meaning-heading"><div className="contribute-section-heading"><span>02</span><h2 id="meaning-heading">{text('What does it mean?', 'معناها إيه؟')}</h2><span className="contribute-required">{text('At least one required', 'تعريف واحد على الأقل مطلوب')}</span></div>
           <p className="contribute-section-hint">{text('Arabic, English, or both. Keep both definitions about the same meaning.', 'بالعربية أو الإنجليزية أو الاتنين. لو كتبت الاتنين، اشرح نفس المعنى.')}</p>

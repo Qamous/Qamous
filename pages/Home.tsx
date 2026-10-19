@@ -26,7 +26,10 @@ interface HomeContent {
   isLiked: number,
   isDisliked: number,
   isReported: number,
-  example: string
+  example: string;
+  arabicExample?: string | null;
+  arabicSpellings?: string[];
+  francoSpellings?: string[];
 }
 
 interface JsonContent {
@@ -223,6 +226,9 @@ const Home: React.FC = () => {
                     isDisliked={Boolean(item.isDisliked)}
                     isReported={item.isReported !== 0}
                     example={item.example}
+                    arabicExample={item.arabicExample}
+                    arabicSpellings={item.arabicSpellings}
+                    francoSpellings={item.francoSpellings}
                   />
                   {/*{((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">*/}
                   {/*  <AdSenseWrapper*/}

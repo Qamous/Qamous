@@ -17,7 +17,7 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
   const data = await res.json();
   return data.map((item: any) => ({
     item: {
-      word: item.isArabic ? item.word.arabicWord : item.word.francoArabicWord,
+      word: item.isArabic ? item.word.arabicWord : item.word.francoArabicWord || item.word.arabicWord,
       otherLangWord: item.isArabic ? item.word.francoArabicWord : item.word.arabicWord,
       definition: item.definition
     },
@@ -29,7 +29,10 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
     isDisliked: !!item.isDisliked,
     isReported: !!item.isReported,
     countryCode: item.countryCode,
-    example: item.example
+    example: item.example,
+    arabicExample: item.arabicExample,
+    arabicSpellings: item.arabicSpellings,
+    francoSpellings: item.francoSpellings,
   }));
 };
 

@@ -12,6 +12,9 @@ export interface ContentBoxContent {
   countryName?: string;
   definitionHuh?: boolean;
   example: string;
+  arabicExample?: string | null;
+  arabicSpellings?: readonly string[];
+  francoSpellings?: readonly string[];
   alternateSpellings?: readonly string[];
 }
 
@@ -25,7 +28,7 @@ interface ContentBoxViewProps extends ContentBoxContent {
 // All card markup and styling live here, shared by the feed and draft review.
 // Persistence, reactions and sharing belong to the interactive ContentBox.
 const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function ContentBoxView({
-  item, lang, countryCode, countryName, definitionHuh, example, alternateSpellings,
+  item, lang, countryCode, countryName, definitionHuh, example, arabicExample, arabicSpellings, francoSpellings, alternateSpellings,
   wordHref, highlighted = false, overlays, children,
 }, ref) {
   const { t } = useTranslation();
@@ -40,6 +43,9 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
     return () => { active = false; };
   }, [countryCode, countryName]);
   const flagLabel = countryName || (resolvedCountry.code === countryCode ? resolvedCountry.name : '') || countryCode;
+  const spellings = alternateSpellings ?? (lang === 'ar' ? arabicSpellings : francoSpellings);
+  const shownExample = lang === 'ar' ? arabicExample || example : example || arabicExample;
+  const exampleIsArabic = lang === 'ar' ? !!arabicExample : !example && !!arabicExample;
 
   return <div className={`content-box${highlighted ? ' content-box-first' : ''}${lang === 'ar' ? ' content-box-ar' : ' content-box-latin'}`} ref={ref}>
     {overlays}
@@ -47,9 +53,9 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
       {wordHref ? <Link to={wordHref}><h1>{item.word}</h1></Link> : <h1>{item.word}</h1>}
       {countryCode && <ReactCountryFlag countryCode={countryCode} svg style={{ width: '2em', height: '2em' }} title={flagLabel} aria-label={flagLabel} />}
     </div>
-    {alternateSpellings && alternateSpellings.length > 0 && <p className="content-box-spellings">{alternateSpellings.join(' · ')}</p>}
+    {spellings && spellings.length > 0 && <p className="content-box-spellings">{spellings.join(' · ')}</p>}
     {definitionHuh !== false && <div className="content-box-description"><p>{item.definition}</p></div>}
-    {example && <div className="content-box-example"><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span>{example}</div>}
+    {shownExample && <div className="content-box-example"><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={exampleIsArabic ? 'rtl' : 'ltr'}>{shownExample}</span></div>}
     {children}
   </div>;
 });

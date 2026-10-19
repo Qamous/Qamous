@@ -16,6 +16,7 @@ interface DefinitionResult {
   word: string; definition: string; wordId: number; definitionId: number;
   isArabic: number; isLiked: number | boolean; isDisliked: number | boolean;
   isReported: number | boolean; countryCode: string; example: string | null;
+  arabicExample?: string | null; arabicSpellings?: string[]; francoSpellings?: string[];
 }
 interface ExploreResults { results: DefinitionResult[]; total: number; page: number; limit: number }
 
@@ -201,7 +202,8 @@ const AdvancedSearch: React.FC = () => {
               key={result.definitionId} item={{ word: result.word, definition: result.definition }} index={index + 1}
               lang={result.isArabic === 1 ? 'ar' : 'en'} wordId={result.wordId} definitionId={result.definitionId}
               isLiked={Boolean(result.isLiked)} isDisliked={Boolean(result.isDisliked)} isReported={Boolean(result.isReported)}
-              countryCode={result.countryCode} example={result.example || ''} />)}
+              countryCode={result.countryCode} example={result.example || ''} arabicExample={result.arabicExample}
+              arabicSpellings={result.arabicSpellings} francoSpellings={result.francoSpellings} />)}
           </div>
           {maxPage > 1 && <nav className="explore-pagination" aria-label={t('explore.pagination')}>
             <button type="button" disabled={page <= 1 || isFetching} onClick={() => update({ page: String(page - 1) })}>{t('explore.previous')}</button>

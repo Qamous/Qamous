@@ -61,6 +61,11 @@
 .contribute-review-cards { display: grid; gap: 24px; }
 .contribute-review-label { font-size: 12px; margin: 0 0 10px; color: var(--primary-color-75); }
 .contribute-notice { padding-top: 18px; color: var(--secondary-color); font-size: 14px; }
+.contribute-suggestions { list-style: none; padding: 0; margin: 0; }
+.contribute-suggestions button, .contribute-selected-word { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; width: 100%; padding: 14px; border: 1px solid var(--contribute-line); background: var(--quaternary-color); border-radius: 6px; }
+.contribute-suggestions li + li { margin-top: 6px; }
+.contribute-selected-word button { background: transparent; border: 0; padding: 8px; color: var(--secondary-color); }
+.contribute button:disabled { cursor: default; }
 .contribute[dir=rtl] { .contribute-heading h1 { letter-spacing: 0; } .fa-arrow-right, .fa-arrow-left { transform: rotate(180deg); } }
 @media (max-width: 620px) {
   .contribute { width: calc(100% - 36px); margin-top: 20px; }

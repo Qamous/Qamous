@@ -20,6 +20,9 @@ interface SearchResult {
   isDisliked: boolean;
   isReported: boolean;
   example: string;
+  arabicExample?: string | null;
+  arabicSpellings?: string[];
+  francoSpellings?: string[];
 }
 
 interface JsonContent {
@@ -215,6 +218,9 @@ const SearchResults: React.FC = () => {
               isDisliked={result.isDisliked}
               isReported={result.isReported}
               example={result.example}
+              arabicExample={result.arabicExample}
+              arabicSpellings={result.arabicSpellings}
+              francoSpellings={result.francoSpellings}
             />
           ))
         }

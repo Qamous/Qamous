@@ -22,7 +22,7 @@ export interface HomeContentProps extends ContentBoxContent {
   isAdvancedSearch?: boolean,
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example }) => {
   const { t } = useTranslation();
   
   const reaction = useDefinitionReaction(definitionId, isLiked, isDisliked);
@@ -291,6 +291,9 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
       countryCode={countryCode}
       countryName={countryName}
       alternateSpellings={alternateSpellings}
+      arabicSpellings={arabicSpellings}
+      francoSpellings={francoSpellings}
+      arabicExample={arabicExample}
       definitionHuh={definitionHuh}
       example={example}
       wordHref={wordId ? `/word/${wordId}` : undefined}
