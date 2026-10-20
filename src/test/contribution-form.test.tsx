@@ -43,6 +43,10 @@ describe('contribution submission',()=>{
     const fetch=vi.fn().mockResolvedValue(new Response(JSON.stringify({wordId:61,definitionIds:[106]}),{status:201}));vi.stubGlobal('fetch',fetch);mount();
     const input=screen.getByLabelText(/Arabic word/) as HTMLInputElement;
     expect(yamlify).toHaveBeenCalledWith('new-arabic-word',expect.objectContaining({generateOnChangeEvent:true}));
+    expect(yamlify.mock.calls.some(([id])=>id==='vocalized-word')).toBe(false);
+    fireEvent.click(screen.getByRole('button',{name:'Add or edit vowels'}));
+    fireEvent.focus(screen.getByLabelText('Reading with vowels'));
+    expect(yamlify).toHaveBeenCalledWith('vocalized-word',expect.objectContaining({generateOnChangeEvent:true}));
     input.value='كِتاب';fireEvent.change(input);
     fireEvent.change(screen.getByLabelText('English definition'),{target:{value:'book'}});
     fireEvent.click(screen.getByRole('button',{name:'Review word'}));fireEvent.click(screen.getByRole('button',{name:'Keep editing'}));

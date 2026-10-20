@@ -8,13 +8,16 @@ function useYamli<T extends HTMLInputElement|HTMLTextAreaElement>(id:string|unde
   const node=ref.current;if(!node||!id)return;
   let attached=false;
   const changed=()=>callback.current(node.value);
-  function attach(){if(!node||attached||!node.isConnected||!window.Yamli)return;if(window.Yamli.init({uiLanguage:document.documentElement.lang==='ar'?'ar':'en',startMode:'onOrUserDefault',forceHTTPS:true})){
+  function attach(){if(!node||attached||!node.isConnected||!window.Yamli||node.closest('[hidden],details:not([open])'))return;if(window.Yamli.init({uiLanguage:document.documentElement.lang==='ar'?'ar':'en',startMode:'onOrUserDefault',forceHTTPS:true})){
    window.Yamli.yamlify(id!,{settingsPlacement:'inside',forceHTTPS:true,generateOnChangeEvent:true});attached=true;
   }}
   node.addEventListener('change',changed);node.addEventListener('input',changed);
+  // Hidden optional fields attach on focus, so Yamli does not position a
+  // floating control against a collapsed field's zero-sized rectangle.
+  node.addEventListener('focus',attach);
   const script=document.querySelector('script[src="https://api.yamli.com/js/yamli_api.js"]');
   script?.addEventListener('load',attach);attach();
-  return()=>{script?.removeEventListener('load',attach);node.removeEventListener('change',changed);node.removeEventListener('input',changed);if(attached)window.Yamli?.deyamlify?.(id);};
+  return()=>{script?.removeEventListener('load',attach);node.removeEventListener('change',changed);node.removeEventListener('input',changed);node.removeEventListener('focus',attach);if(attached)window.Yamli?.deyamlify?.(id);};
  },[id]);
  return ref;
 }
