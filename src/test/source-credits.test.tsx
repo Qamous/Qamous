@@ -45,13 +45,13 @@ describe('source credits',()=>{
   });
   it('keeps English and Franco examples distinctly labeled',()=>{
     render(<MemoryRouter><ContentBoxPreview {...content} sourceExamples={[
-      {text:'This is a book.',language:'en',script:'Latin',kind:'translation'},
-      {text:'Hada kitab.',language:'ar-Latn',script:'Latin',kind:'usage'},
-      {text:'هذا كتاب.',language:'ar',script:'Arabic',kind:'usage'},
+      {text:'This is a book.',language:'en',script:'Latin',kind:'translation',groupId:'source:1',alignment:'source'},
+      {text:'Hada kitab.',language:'ar-Latn',script:'Latin',kind:'usage',groupId:'source:1',alignment:'source'},
+      {text:'هذا كتاب.',language:'ar',script:'Arabic',kind:'usage',groupId:'source:1',alignment:'source'},
     ]} /></MemoryRouter>);
     expect(screen.getByText('English translation')).toBeInTheDocument();
     expect(screen.getByText('Franco')).toBeInTheDocument();
-    expect(screen.queryByText('هذا كتاب.')).not.toBeInTheDocument();
+    expect(screen.getByText('هذا كتاب.')).not.toBeVisible();
   });
   it('retains license, source link, notice and change statement in exportable credit text',()=>{
     const text=attributionText([credit]);

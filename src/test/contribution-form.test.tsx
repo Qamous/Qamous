@@ -34,9 +34,9 @@ describe('contribution submission',()=>{
     fireEvent.change(screen.getByLabelText('Reading with vowels'),{target:{value:'عِلْم'}});
     fireEvent.change(screen.getByLabelText(/^Franco spelling/),{target:{value:'3ilm'}});
     fireEvent.change(screen.getByLabelText('Transliteration'),{target:{value:'ʕilm'}});fireEvent.change(screen.getByLabelText('IPA'),{target:{value:'/ʕilm/'}});
-    fireEvent.change(screen.getByLabelText(/English example/),{target:{value:'Knowledge is useful.'}});
+    fireEvent.change(screen.getByLabelText(/English translation/),{target:{value:'Knowledge is useful.'}});
     fireEvent.click(screen.getByRole('button',{name:'Review word'}));fireEvent.click(screen.getByRole('button',{name:'Add word'}));await screen.findByText('Saved word page');
-    expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({arabicWord:'علم',arabicForm:'عِلْم',francoArabicWord:'3ilm',transliteration:'ʕilm',ipa:'/ʕilm/',englishExample:'Knowledge is useful.'});
+    expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({arabicWord:'علم',arabicForm:'عِلْم',francoArabicWord:'3ilm',transliteration:'ʕilm',ipa:'/ʕilm/',englishExample:'Knowledge is useful.',exampleAlignment:'parallel'});
   });
   it('saves Yamli conversions from native change events and reattaches after draft review',async()=>{
     const yamlify=vi.fn(),deyamlify=vi.fn();vi.stubGlobal('Yamli',{init:()=>true,yamlify,deyamlify});
@@ -60,7 +60,7 @@ describe('contribution submission',()=>{
     vi.stubGlobal('fetch',fetch);mount();fill();
     expect(screen.queryByRole('button',{name:'Fill an example'})).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button',{name:'Review word'}));
-    expect(screen.queryByText('معلش، هتتعوض.')).not.toBeInTheDocument();
+    expect(screen.getByText('معلش، هتتعوض.')).not.toBeVisible();
     fireEvent.click(screen.getByRole('button',{name:'Add word'}));
     expect(await screen.findByRole('alert')).toHaveTextContent('Your draft is still here');
     fireEvent.click(screen.getByRole('button',{name:'Add word'}));

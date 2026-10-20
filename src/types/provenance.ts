@@ -7,6 +7,8 @@ export interface SourceCredit {
 }
 export interface SourceExample {
   text: string; language: 'ar' | 'en' | 'ar-Latn'; script: 'Arabic' | 'Latin'; kind: string;
+  id?:number|string; groupId?:string; alignment?:string; sourceId?:string; sourceEntryId?:string;
+  generated?:boolean; generationMethod?:string; derivedFromExampleId?:number|string; derivedFromArabic?:string;
 }
 export interface SourcePronunciation {
   scheme: string; value: string; language: string; kind: string;

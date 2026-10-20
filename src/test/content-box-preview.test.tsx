@@ -33,9 +33,11 @@ describe('feed card previews', () => {
     client.clear();
   });
 
-  it.each(['', '   '])('hides the Franco example when absent (%j), even if an Arabic example exists', (example) => {
+  it.each(['', '   '])('marks generated Franco when only an Arabic example exists (%j)', (example) => {
     const { container } = render(<ContentBoxPreview {...content} example={example} arabicExample="معلش، هتتعوض." />);
-    expect(container.querySelector('.content-box-example')).not.toBeInTheDocument();
+    expect(container.querySelector('.content-box-example')).toBeInTheDocument();
+    expect(screen.getByText('Franco (approx.)')).toBeVisible();
+    expect(screen.getByText('معلش، هتتعوض.')).not.toBeVisible();
   });
 
   it.each([['ar', 'معلش، هتتعوض.', 'rtl'], ['en', content.example, 'ltr']])('shows only the matching example for %s cards', (lang, expectedExample, direction) => {

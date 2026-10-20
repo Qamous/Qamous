@@ -8,6 +8,7 @@ import SourceCredits from './SourceCredits';
 import Pronunciation, { OriginalNotation } from './Pronunciation';
 import {stripTashkil} from '../utils/arabic';
 import { attributionText, type ProvenanceContent } from '../types/provenance';
+import ExampleList from './ExampleList';
 
 export interface ContentBoxContent extends ProvenanceContent {
   item: { word: string; otherLangWord?: string; definition: string; arabicWord?:string;francoArabicWord?:string|null };
@@ -38,7 +39,6 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
   item, lang, countryCode, countryName, definitionHuh, example, arabicExample, arabicSpellings, francoSpellings, alternateSpellings,
   wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,definitionLanguage,dialect,
 }, ref) {
-  const { t } = useTranslation();
   const [resolvedCountry, setResolvedCountry] = useState({ code: '', name: '' });
   useEffect(() => {
     let active = true;
@@ -51,13 +51,10 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
   }, [countryCode, countryName]);
   const flagLabel = countryName || (resolvedCountry.code === countryCode ? resolvedCountry.name : '') || countryCode;
   const spellings = alternateSpellings ?? (lang === 'ar' ? arabicSpellings : francoSpellings);
-  const shownExample = (lang === 'ar' ? arabicExample : example)?.trim();
   const displayWord=lang==='ar'?(item.arabicWord||item.word):(item.francoArabicWord||item.word);
   // Release names embedded in a generic Arabic label are provenance, not a
   // dialect. Keep the exact source label in credits rather than on the card.
   const displayDialect=/^Arabic(?:\s*\([^)]*\))?$/i.test(dialect||'')?'':dialect==='Modern Standard Arabic'||dialect==='MSA'?(lang==='ar'?'الفصحى':'Modern Standard Arabic'):dialect;
-  const allExamples=[...(sourceExamples||[])];
-  if(allExamples.length)for(const [text,language,script] of [[arabicExample,'ar','Arabic'],[example,'ar-Latn','Latin']] as const)if(text?.trim()&&!allExamples.some(e=>e.text===text&&e.language===language))allExamples.push({text,language,script,kind:'usage'});
 
   return <div className={`content-box${highlighted ? ' content-box-first' : ''}${lang === 'ar' ? ' content-box-ar' : ' content-box-latin'}`} ref={ref}>
     {overlays}
@@ -69,10 +66,7 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
     {pronunciation ?? <Pronunciation entries={sourcePronunciations} language={lang} />}
     {spellings && spellings.length > 0 && <p className="content-box-spellings">{spellings.join(' · ')}</p>}
     {definitionHuh !== false && <div className="content-box-description">{definitionLanguage&&definitionLanguage!==lang&&<small className="content-box-language">{definitionLanguage==='en'?(lang==='ar'?'معنى بالإنجليزية':'English meaning'):(lang==='ar'?'معنى بالعربية':'Arabic meaning')}</small>}<p lang={definitionLanguage||lang} dir={(definitionLanguage||lang)==='ar'?'rtl':'ltr'}>{item.definition}</p></div>}
-    {allExamples.length ? allExamples.filter(e => lang === 'ar' ? e.language === 'ar'||e.language==='en' : e.language !== 'ar').slice(0, 6).map((e, index) =>
-      <div className="content-box-example" key={e.language + ':' + index}><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={e.script === 'Arabic' ? 'rtl' : 'ltr'} lang={e.language}>
-        <small className="source-example-language">{e.language === 'ar-Latn' ? 'Franco' : e.language === 'en' ? (e.kind==='translation'?(lang==='ar'?'ترجمة إنجليزية':'English translation'):'English') : 'العربية'}</small>{e.text}</span></div>
-    ) : shownExample && <div className="content-box-example"><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={lang === 'ar' ? 'rtl' : 'ltr'}>{shownExample}</span></div>}
+    <ExampleList entries={sourceExamples} arabicExample={arabicExample} example={example} language={lang}/>
     <SourceCredits credits={sourceCredits} language={lang}>{sourceDetails ?? <OriginalNotation entries={sourcePronunciations} language={lang} />}</SourceCredits>
     {attributionText(sourceCredits) && <div className="source-credit-export">{attributionText(sourceCredits)}</div>}
     {children}

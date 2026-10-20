@@ -273,3 +273,10 @@
 }
 .content-box-dialect { margin: -8px 25px 16px; font-size: 11px; color: var(--primary-color-50); }
 .content-box-language { display: block; margin-bottom: 8px; font-size: 11px; color: var(--primary-color-50); }
+.example-translation { margin-top: 12px; font-style: normal; opacity: .85; }
+.example-sentence > span, .example-translation > span { display: inline; }
+.example-original { margin-top: 12px; font-style: normal; font-size: 12px; color: var(--primary-color-75); }
+.example-original summary, .example-more > summary { cursor: pointer; font-size: 11px; }
+.example-original p { margin: 10px 0; font-size: 16px; }
+.example-more { margin: 0 25px 15px; }
+.example-more .content-box-example { margin: 15px 0; }
