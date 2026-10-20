@@ -49,6 +49,7 @@ const Home: React.FC = () => {
     isError,
     fetchNextPage,
     hasNextPage,
+    isFetchingNextPage,
   } = useHomeFeed<HomeContent>(lang);
   
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
@@ -79,10 +80,10 @@ const Home: React.FC = () => {
   });
   
   useEffect(() => {
-    if (isIntersecting && hasNextPage) {
+    if (isIntersecting && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [isIntersecting, fetchNextPage, hasNextPage]);
+  }, [isIntersecting, fetchNextPage, hasNextPage, isFetchingNextPage, data?.pages.length]);
   
   if (isLoading) {
     return (
