@@ -1,10 +1,9 @@
-import { API_URL, apiJson } from "../src/api";
 import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import ContentBox from '../src/components/ContentBox';
-import { useInfiniteQuery } from 'react-query';
+import { useHomeFeed } from '../src/hooks/useHomeFeed';
 import Snackbar from '../src/components/Snackbar';
 import CustomDialog from '../src/components/CustomDialog';
 import { Helmet } from 'react-helmet';
@@ -37,12 +36,6 @@ interface JsonContent {
   definition: string
 }
 
-const fetchHomeContent: (page: number, limit: number) => Promise<HomeContent[]> = (page = 1, limit = 10) =>
-  fetch(`${API_URL}/definitions/most-liked?page=${page}&limit=${limit}`, {
-    mode: 'cors',
-    credentials: 'include',
-  }).then(response => apiJson<HomeContent[]>(response));
-
 const Home: React.FC = () => {
   const { t } = useTranslation();
   const sampleHome = t('sample_home', {
@@ -56,10 +49,7 @@ const Home: React.FC = () => {
     isError,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<HomeContent[]>('homeContent', ({ pageParam = 1 }) => fetchHomeContent(pageParam, 10), {
-    getNextPageParam: (lastPage, pages) => lastPage.length === 10 ? pages.length + 1 : undefined,
-    refetchOnWindowFocus: false,
-  });
+  } = useHomeFeed<HomeContent>(lang);
   
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
