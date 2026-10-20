@@ -58,7 +58,7 @@ const WordPage = () => {
   if (error) return <div>Error fetching data</div>;
   
   // Filter the homeContent based on the current language
-  const shownLanguage=lang||i18n.language;
+  const shownLanguage=i18n.language;
   const filteredHomeContent = homeContent?preferredMeanings(homeContent,shownLanguage):[];
   const displayWord=filteredHomeContent?.[0]||homeContent?.[0];
   const headword=shownLanguage==='ar'?(displayWord?.item.arabicWord||displayWord?.item.word):(displayWord?.item.francoArabicWord||displayWord?.item.word);
@@ -138,7 +138,7 @@ const WordPage = () => {
           </React.Fragment>
         ))}
         {shownLanguage==='ar'&&filteredHomeContent.some(content=>content.lang==='en')&&<p className="word-language-help"><a href={`/add-definition?word=${wordIdNumber}`}>أضف معنى بالعربية</a></p>}
-        <RelatedWords countryCode={displayWord?.countryCode} wordId={wordIdNumber} lang={lang||i18n.language}/>
+        <RelatedWords countryCode={displayWord?.countryCode} wordId={wordIdNumber} lang={shownLanguage}/>
       </div>
       <div className="feed-ad-space">
         <AdSenseWrapper

@@ -5,17 +5,30 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import WordPage from '../../pages/WordPage';
 
+const locale=vi.hoisted(()=>({language:'ar'}));
 vi.mock('react-i18next', () => ({ useTranslation: () => ({
-  i18n: { language: 'ar', changeLanguage: vi.fn() },
+  i18n: { language: locale.language, changeLanguage: vi.fn() },
   t: (key: string) => key === 'content_box_buttons'
     ? { like: 'Like', dislike: 'Dislike', share: 'Share', report: 'Report' } : key,
 }) }));
 vi.mock('../components/AdSenseWrapper', () => ({ default: () => null }));
 vi.mock('../components/RelatedWords', () => ({ default: () => null }));
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {locale.language='ar';vi.unstubAllGlobals();});
 
 describe('word page examples', () => {
+  it('follows the language toggle after opening an Arabic URL',async()=>{
+    const rows=[{id:1,isArabic:true,definition:'أب'},{id:2,isArabic:false,definition:'father'}].map(row=>({...row,meaningForms:[{meaningId:'same-sense'}],wordId:61,word:{arabicWord:'أب',francoArabicWord:'2ab'}}));
+    vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response(JSON.stringify(rows))));
+    const client=new QueryClient({defaultOptions:{queries:{retry:false}}});
+    const tree=()=><QueryClientProvider client={client}><MemoryRouter initialEntries={['/word/61/ar']}><Routes><Route path="/word/:wordId/:lang" element={<WordPage/>}/></Routes></MemoryRouter></QueryClientProvider>;
+    const {rerender}=render(tree());await screen.findByRole('heading',{name:'أب'});
+    expect(screen.queryByText('father')).not.toBeInTheDocument();
+    locale.language='en';rerender(tree());
+    expect(screen.getByText('father')).toBeInTheDocument();
+    expect(screen.getByRole('heading',{name:'2ab'})).toBeInTheDocument();client.clear();
+  });
+
   it('keeps an English-only meaning visible under its Arabic headword and avoids repeating a translated sense',async()=>{
     const rows=[{id:1,isArabic:true,definition:'معرفة',meaningForms:[{meaningId:'sense:1'}]},{id:2,isArabic:false,definition:'covered English meaning',meaningForms:[{meaningId:'sense:1'}]},{id:3,isArabic:false,definition:'flag',meaningForms:[{meaningId:'sense:2'}]}].map(row=>({...row,wordId:61,word:{arabicWord:'علم',francoArabicWord:'3ilm'}}));
     vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response(JSON.stringify(rows))));
