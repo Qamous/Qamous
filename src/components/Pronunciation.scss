@@ -1,8 +1,8 @@
 .pronunciation {
-  margin: -9px 25px 22px;
+  margin: 0 25px 8px;
   color: var(--primary-color-75);
   font: 14px/1.5 var(--font-stack);
-  > summary { display: flex; align-items: center; gap: 10px 16px; flex-wrap: wrap; min-height: 44px; cursor: pointer; list-style: none; border-radius: 5px; }
+  > summary { display: flex; align-items: center; gap: 10px 16px; flex-wrap: wrap; min-height: 36px; cursor: pointer; list-style: none; border-radius: 5px; }
   > summary::-webkit-details-marker { display: none; }
   > summary:focus-visible { outline: 2px solid var(--secondary-color); outline-offset: 5px; }
   &-main { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
@@ -19,6 +19,7 @@
   &-entry:last-child { border-bottom: 0; padding-bottom: 2px; }
   &-format { font-size: 11px; color: var(--primary-color-75); align-self: center; overflow-wrap: anywhere; }
   &-entry-value { font-size: 17px; overflow-wrap: anywhere; color: var(--primary-color); }
+  &-value[lang=ar], &-entry-value[lang=ar] { font-family: var(--font-stack-arabic-vowels); font-size: 22px; line-height: 1.65; }
   &-origin { grid-column: 1/-1; display: flex; flex-wrap: wrap; gap: 4px 9px; font-size: 10px; color: var(--primary-color-50); }
   &-origin a { color: var(--primary-color-75); text-underline-offset: 3px; }
   @media(max-width:480px) {

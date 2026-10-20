@@ -9,7 +9,7 @@ export default function ReadingFields({ar,word,reading,transliteration,ipa,open,
   <summary>{ar?'النطق والتشكيل':'Pronunciation & vowels'} <span className="contribute-optional">{ar?'اختياري':'Optional'}</span></summary>
   <div className="contribute-field"><label htmlFor="vocalized-word">{ar?'الكلمة بالتشكيل':'Reading with vowels'} <span className="contribute-optional">{ar?'اختياري':'Optional'}</span></label>
    <ArabicInput id="vocalized-word" value={reading||word} maxLength={255} placeholder="مثلاً: عِلْم" onValueChange={value=>onChange('arabicForm',value)}/>
-   <span className="contribute-reading-example">{ar?'مثلاً:':'Example:'} <bdi>علم</bdi> <span aria-hidden="true">→</span> <bdi>عِلْم</bdi></span>
+   <span className="contribute-reading-example">{ar?'مثلاً:':'Example:'} <bdi lang="ar" dir="rtl">علم</bdi> <span aria-hidden="true">→</span> <bdi lang="ar" dir="rtl">عِلْم</bdi></span>
   </div>
   <div className="contribute-grid contribute-reading-grid">
    <SymbolInput id="meaning-transliteration" label={ar?'نقل صوتي بحروف لاتينية':'Transliteration'} kind="transliteration" value={transliteration} ar={ar} placeholder="e.g. maʿliš" onChange={value=>onChange('transliteration',value)}/>

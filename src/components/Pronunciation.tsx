@@ -37,7 +37,7 @@ export default function Pronunciation({ entries = [], language = 'en', preferTra
   const secondary = sameEntry.find(e => format(e.scheme) === (format(primary.scheme) === 'transliteration' ? 'pronunciation' : 'transliteration'));
   return <details className="pronunciation" open={expanded || undefined} dir={ar ? 'rtl' : 'ltr'}>
     <summary aria-label={ar?'تفاصيل النطق':'Pronunciation details'}>
-      <span className="pronunciation-main"><span className="pronunciation-label">{label}</span><bdi dir={format(primary.scheme)==='vocalization'?'rtl':'ltr'} className="pronunciation-value">{multiple && format(primary.scheme)==='pronunciation' ? (ar ? `${broadForms.length} صيغ` : `${broadForms.length} variants`) : primary.value}</bdi></span>
+      <span className="pronunciation-main"><span className="pronunciation-label">{label}</span><bdi lang={format(primary.scheme)==='vocalization'?'ar':undefined} dir={format(primary.scheme)==='vocalization'?'rtl':'ltr'} className="pronunciation-value">{multiple && format(primary.scheme)==='pronunciation' ? (ar ? `${broadForms.length} صيغ` : `${broadForms.length} variants`) : primary.value}</bdi></span>
       {secondary && <span className="pronunciation-secondary"><span>{format(secondary.scheme) === 'pronunciation' ? 'IPA' : ar ? 'نقل صوتي' : 'Latin'}</span><bdi dir="ltr">{multiple && format(secondary.scheme)==='pronunciation' ? (ar ? `${broadForms.length} صيغ` : `${broadForms.length} variants`) : secondary.value}</bdi></span>}
       <span className="pronunciation-more" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="m4 6 4 4 4-4" /></svg></span>
     </summary>
@@ -45,7 +45,7 @@ export default function Pronunciation({ entries = [], language = 'en', preferTra
       <p className="pronunciation-panel-title">{ar ? 'تفاصيل النطق' : 'Pronunciation details'}</p>
       {sorted.filter(entry=>format(entry.scheme)!=='notation').map(entry => <div className="pronunciation-entry" key={[entry.sourceId,entry.sourceEntryId,entry.scheme,entry.value].join(':')}>
         <span className="pronunciation-format">{format(entry.scheme)==='vocalization'?(ar?'بالتشكيل':'With vowels'):entry.scheme === 'phonetic' ? (ar ? 'النطق الدقيق · IPA' : 'Phonetic · IPA') : entry.scheme === 'phonemic' ? (ar ? 'النطق · IPA' : 'Phonemic · IPA') : format(entry.scheme) === 'transliteration' ? (ar ? 'نقل صوتي' : 'Transliteration') : entry.scheme}</span>
-        <bdi dir={format(entry.scheme)==='vocalization'?'rtl':'ltr'} className="pronunciation-entry-value">{entry.value}</bdi>
+        <bdi lang={format(entry.scheme)==='vocalization'?'ar':undefined} dir={format(entry.scheme)==='vocalization'?'rtl':'ltr'} className="pronunciation-entry-value">{entry.value}</bdi>
         {(entry.sourceName||entry.dialect)&&<span className="pronunciation-origin">{entry.sourceName&&<a href={entry.sourceUrl} target="_blank" rel="noopener noreferrer">{entry.sourceName}</a>}<span dir="auto">{entry.dialect}</span></span>}
       </div>)}
       <OriginalNotation entries={sorted} language={language} />

@@ -1,5 +1,13 @@
 @use 'assets/Variables.module' as variables;
 
+@font-face {
+  font-family: "Noto Naskh Arabic";
+  src: url('/fonts/noto-naskh-arabic/NotoNaskhArabic-Variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
 ::selection {
   background: variables.$primary-color;
   color: variables.$tertiary-color;

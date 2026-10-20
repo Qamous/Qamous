@@ -74,7 +74,8 @@
 .contribute-advanced { margin-top: 12px; }
 .contribute-reading-grid { margin-top: 22px; align-items: start; }
 .contribute-reading-example { font-size: 12px; color: var(--primary-color-75); }
-.contribute-reading-example bdi { font-family: var(--font-stack-arabic); font-size: 16px; }
+.contribute #vocalized-word { font-family: var(--font-stack-arabic-vowels); font-size: 22px; line-height: 1.65; }
+.contribute-reading-example bdi { font-family: var(--font-stack-arabic-vowels); font-size: 20px; line-height: 1.65; }
 .contribute-symbol-toggle { width: fit-content; display: inline-flex; align-items: center; gap: 10px; border: 0; background: none; padding: 5px 0; font-size: 12px !important; color: var(--primary-color-75) !important; }
 .contribute-symbol-toggle > span { color: var(--secondary-color); font-size: 16px; }
 .contribute-symbols { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; border: 1px solid var(--contribute-line); border-radius: 6px; background: var(--quaternary-color); }

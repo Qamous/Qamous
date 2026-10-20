@@ -8,6 +8,9 @@ describe('source pronunciation proposal',()=>{
     const {container}=render(<Pronunciation entries={[row('Arabic vocalization','عَلَم'),row('IPA','/ʕalam/')]} language="ar"/>);
     expect(container.querySelector('summary')).toHaveTextContent('عَلَم');
     expect(container.querySelector('summary .pronunciation-value')).toHaveAttribute('dir','rtl');
+    expect(container.querySelector('summary .pronunciation-value')).toHaveAttribute('lang','ar');
+    expect(container.querySelector('.pronunciation-entry-value')).toHaveAttribute('dir','ltr');
+    expect(container.querySelector('.pronunciation-entry-value[lang=ar]')).toHaveTextContent('عَلَم');
     expect(screen.getByText('/ʕalam/')).toBeInTheDocument();
     expect(container.querySelectorAll('.pronunciation-entry')).toHaveLength(2);
   });
