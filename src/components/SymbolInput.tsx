@@ -24,7 +24,7 @@ export default function SymbolInput({id,label,kind,value,onChange,ar,placeholder
   };
   return <div className="contribute-field contribute-symbol-field">
     <label htmlFor={id}>{label}<span className="contribute-optional">{ar?'اختياري':'Optional'}</span></label>
-    <input ref={input} id={id} dir="ltr" value={value} maxLength={255} placeholder={placeholder} onChange={event=>onChange(event.target.value)}/>
+    <input ref={input} id={id} dir="ltr" value={value} maxLength={255} spellCheck={false} autoCapitalize="none" autoCorrect="off" placeholder={placeholder} onChange={event=>onChange(event.target.value)}/>
     <button type="button" className="contribute-symbol-toggle" aria-label={ar?`أضف رمز ${label}`:`Insert symbol for ${label}`} aria-expanded={open} aria-controls={id+'-symbols'} onClick={()=>setOpen(previous=>!previous)}>{ar?'أضف رمز':'Insert symbol'} <span aria-hidden="true">{kind==='ipa'?'ʕ ʃ':'ʿ š'}</span></button>
     {open&&<div id={id+'-symbols'} className="contribute-symbols" role="group" aria-label={ar?`الرموز المتاحة: ${label}`:`Available ${label} symbols`} dir="ltr">
       {symbols.map(([symbol,cue])=>{
