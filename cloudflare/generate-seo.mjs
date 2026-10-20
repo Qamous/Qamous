@@ -1,3 +1,4 @@
+import {renderSourceCredits} from './source-credits.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {resolve,dirname,join} from 'node:path';
@@ -14,10 +15,12 @@ export function wordMetadata(word,lang='en') {
   const alternatives=[];
   if(word.descriptionEn) alternatives.push({lang:'en',path:`/word/${word.id}`});
   if(word.descriptionAr) alternatives.push({lang:'ar',path:`/word/${word.id}/ar`});
-  return {path,title,description,alternatives,lang};
+  const sourceCredits=(lang==='ar'&&word.descriptionAr?word.sourceCreditsAr:word.descriptionEn?word.sourceCreditsEn:word.sourceCreditsAr)||[];
+  return {path,title,description,alternatives,lang,sourceCredits};
 }
 export function renderSeoHtml(template,meta) {
   const e=escapeHtml;
+  const sourceCreditHtml=renderSourceCredits(meta.sourceCredits);
   const tags=`<title data-react-helmet="true">${e(meta.title)}</title>
     <meta data-react-helmet="true" name="description" content="${e(meta.description)}">
     <meta data-react-helmet="true" property="og:title" content="${e(meta.title)}">
@@ -34,7 +37,7 @@ export function renderSeoHtml(template,meta) {
   const headClean=template.replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi,'').replace(/<meta\b(?=[^>]*(?:name|property)=["'](?:description|robots|og:(?:title|description|url|image)|twitter:(?:card|title|description|image))["'])[^>]*>/gi,'').replace(/<link\b(?=[^>]*rel=["'](?:canonical|alternate)["'])[^>]*>/gi,'');
   const links=(meta.links||[]).map(link=>`<li><a href="${e(link.href)}">${e(link.label)}</a></li>`).join('');
   const preview=`<noscript><style>#initial-loader{display:none}</style><main lang="${meta.lang||'en'}" dir="${meta.lang==='ar'?'rtl':'ltr'}"><h1>${e(meta.title)}</h1><p>${e(meta.description)}</p>${links?`<nav aria-label="Explore Qamous"><ul>${links}</ul></nav>`:''}<p>Enable JavaScript for the full dictionary, search and contributions.</p><a href="/">Qamous</a> · <a href="/blog">Blog</a></main></noscript>`;
-  return headClean.replace(/<html\b[^>]*lang="[^"]*"[^>]*>/i,`<html lang="${meta.lang||'en'}">`).replace('</head>',tags+'\n  </head>').replace(/<noscript>[\s\S]*?<\/noscript>/i,preview);
+  return headClean.replace(/<html\b[^>]*lang="[^"]*"[^>]*>/i,`<html lang="${meta.lang||'en'}">`).replace('</head>',tags+'\n  </head>').replace(/<noscript>[\s\S]*?<\/noscript>/i,preview.replace('</p>','</p>'+sourceCreditHtml));
 }
 export function sitemap(paths) {
   return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+[...new Set(paths)].map(path=>`  <url><loc>${escapeHtml(absolute(path))}</loc></url>`).join('\n')+'\n</urlset>\n';

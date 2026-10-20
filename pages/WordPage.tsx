@@ -31,6 +31,9 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
     countryCode: item.countryCode,
     example: item.example,
     arabicExample: item.arabicExample,
+    sourceCredits: item.sourceCredits,
+    sourceExamples: item.sourceExamples,
+    sourcePronunciations: item.sourcePronunciations,
     arabicSpellings: item.arabicSpellings,
     francoSpellings: item.francoSpellings,
   }));
@@ -104,7 +107,8 @@ const WordPage = () => {
               isDisliked={content.isDisliked}
               isReported={content.isReported}
               example={content.example}
-              arabicExample={content.arabicExample}
+              arabicExample={content.arabicExample} sourceCredits={content.sourceCredits} sourceExamples={content.sourceExamples} sourcePronunciations={content.sourcePronunciations}
+              arabicSpellings={content.arabicSpellings} francoSpellings={content.francoSpellings}
             />
             {((index + 1) % 4 === 0) && <div className="feed-posts-ad-space">
               <AdSenseWrapper

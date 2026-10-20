@@ -98,6 +98,7 @@ const Footer: React.FC = () => {
             <NavLink to="/about" tabIndex={isExpanded ? 0 : -1}>
               {t('footer.about')}
             </NavLink>
+            <NavLink to="/sources" tabIndex={isExpanded ? 0 : -1}>{ar ? "المصادر" : "Sources"}</NavLink>
             <NavLink to="/advertise" tabIndex={isExpanded ? 0 : -1}>
               {t('footer.advertise')}
             </NavLink>

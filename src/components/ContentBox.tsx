@@ -22,7 +22,7 @@ export interface HomeContentProps extends ContentBoxContent {
   isAdvancedSearch?: boolean,
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example, sourceCredits, sourceExamples, sourcePronunciations }) => {
   const { t } = useTranslation();
   
   const reaction = useDefinitionReaction(definitionId, isLiked, isDisliked);
@@ -107,6 +107,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     if (buttons) buttons.style.display = 'none';
     
     const contentBox = postRef.current as HTMLElement;
+    contentBox.dataset.exporting = 'true';
     const originalWidth = contentBox.style.width;
     const originalHeight = contentBox.style.height;
     
@@ -156,6 +157,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
         console.error('oops, something went wrong!', error);
       })
       .finally(() => {
+        delete contentBox.dataset.exporting;
         // Restore buttons and original dimensions
         if (buttons) buttons.style.display = 'flex';
         contentBox.style.width = originalWidth;
@@ -167,7 +169,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
         if (definitionElement) definitionElement.style.fontSize = '';
         if (logoElement) contentBox.removeChild(logoElement);
       });
-  }, [postRef]);
+  }, [postRef, item.word, sourceCredits]);
   
   const handleFacebookShare = () => {
     const word = 'Example Word'; // Replace with your actual word
@@ -189,7 +191,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   };
   
   const handleXShare = () => {
-    const promoText = `\n\nCheck out Qamous.org for more!`;
+    const promoText = sourceCredits?.some(c => c.attributionRequired) ? '\n\nSource & license: https://qamous.org/sources?definition=' + definitionId : '\n\nCheck out Qamous.org for more!';
     const separator = ': ';
     const maxTweetLength = 280;
     
@@ -286,6 +288,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   return (
     <ContentBoxView
       ref={postRef}
+      sourceCredits={sourceCredits} sourceExamples={sourceExamples} sourcePronunciations={sourcePronunciations}
       item={item}
       lang={lang}
       countryCode={countryCode}

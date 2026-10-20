@@ -1,0 +1,22 @@
+.pronunciation-preview {
+  max-width: 1050px; margin: 44px auto 120px; padding: 0 24px; color: var(--primary-color);
+  &-eyebrow { color: var(--secondary-color); font-size: 10px; font-weight: 600; letter-spacing: .13em; }
+  &-heading h1 { margin: 13px 0 10px; font-size: clamp(30px,4vw,42px); font-weight: 600; letter-spacing: -.04em; }
+  &-heading > p { font-size: 14px; color: var(--primary-color-50); margin: 0; line-height: 1.7; }
+  &-controls { margin: 26px 0 30px; display: flex; align-items: center; flex-wrap: wrap; gap: 14px 22px; font-size: 12px; }
+  &-controls [role="group"] { display: flex; padding: 3px; background: var(--quaternary-color); border-radius: 7px; }
+  &-controls button { font: inherit; border: none; border-radius: 5px; background: transparent; color: var(--primary-color-75); padding: 8px 14px; cursor: pointer; }
+  &-controls button[aria-pressed="true"] { color: #171717; background: #dd8500; }
+  &-controls label { display: flex; align-items: center; gap: 7px; cursor: pointer; color: var(--primary-color-75); }
+  &-controls input { accent-color: #dd8500; }
+  &-controls label span { font-size: 9px; color: var(--secondary-color); border: 1px solid var(--secondary-color-20); padding: 2px 5px; border-radius: 4px; }
+  &-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 26px 24px; align-items: start; }
+  &-grid article { min-width: 0; }
+  &-grid .content-box { border-radius: 8px; overflow: hidden; }
+  &-grid .content-box-title h1 { margin: 22px 0 17px; }
+  &-grid .content-box-description p { margin-top: 0; }
+  &-caption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; font-size: 10px; color: var(--primary-color-50); margin: 0 3px 9px; line-height: 1.5; }
+  &-caption > span:last-child { color: var(--secondary-color); }
+  &-notes { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px 22px; font-size: 11px; color: var(--primary-color-50); }
+  @media(max-width:650px) { margin-top: 30px; padding: 0 15px; &-grid { grid-template-columns: minmax(0,1fr); } &-controls { gap: 14px; } }
+}

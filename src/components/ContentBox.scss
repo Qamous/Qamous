@@ -3,7 +3,10 @@
 .content-box {
   background-color: variables.$quaternary-color;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   border-radius: 8px;
+  text-align: start;
 
   // border-radius: 0 for max-width: 1200px
   @media (max-width: 1200px) {
@@ -17,9 +20,17 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
+
+    > a, > h1 {
+      min-width: 0;
+      flex: 1;
+    }
 
     h1 {
       font-size: 34px;
+      overflow-wrap: anywhere;
+      text-align: start;
     }
 
     a {
@@ -28,6 +39,7 @@
 
     img {
       margin: 5px 0 0 0;
+      flex-shrink: 0;
     }
   }
 
@@ -35,6 +47,10 @@
     padding: 0 25px 15px 25px;
 
     font-size: 16px;
+    text-align: start;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    white-space: pre-wrap;
   }
 
   &-spellings {
@@ -71,6 +87,8 @@
 
   &-buttons {
     display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     justify-content: space-around;
     padding: 10px;
 
@@ -199,6 +217,10 @@
     color: variables.$secondary-color;
     border-left: 3px solid variables.$secondary-color;
     margin: 0 25px 15px 25px;
+    text-align: start;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    white-space: pre-wrap;
 
     &-label {
       display: block;

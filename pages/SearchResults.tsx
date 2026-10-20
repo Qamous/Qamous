@@ -1,3 +1,4 @@
+import type { ProvenanceContent } from '../src/types/provenance';
 import { API_URL, apiJson } from "../src/api";
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -10,7 +11,7 @@ import { Helmet } from 'react-helmet';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 import AdSenseWrapper from '../src/components/AdSenseWrapper';
 
-interface SearchResult {
+interface SearchResult extends ProvenanceContent {
   word: string;
   definition: string;
   isArabic: number;
@@ -218,7 +219,7 @@ const SearchResults: React.FC = () => {
               isDisliked={result.isDisliked}
               isReported={result.isReported}
               example={result.example}
-              arabicExample={result.arabicExample}
+              arabicExample={result.arabicExample} sourceCredits={result.sourceCredits} sourceExamples={result.sourceExamples} sourcePronunciations={result.sourcePronunciations}
               arabicSpellings={result.arabicSpellings}
               francoSpellings={result.francoSpellings}
             />

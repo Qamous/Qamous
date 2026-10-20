@@ -42,6 +42,9 @@ const Chatbot = lazy(() => import('../pages/Chatbot'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('../pages/ResetPassword'));
 const NotFound = lazy(() => import('../pages/NotFound'));
+const SourceLibrary = lazy(() => import('../pages/SourceLibrary'));
+const ImportPreview = import.meta.env.DEV ? lazy(() => import('../pages/ImportPreview')) : NotFound;
+const PronunciationPreview = import.meta.env.DEV ? lazy(() => import('../pages/PronunciationPreview')) : NotFound;
 const PageUnderConstruction = lazy(() => import('../pages/PageUnderConstruction'));
 
 // Set the default language to English unless the user's browser language is Arabic
@@ -199,7 +202,7 @@ const App: React.FC = () => {
   // Initialize deferred ad loading
   useEffect(() => {
     // Initialize ads with deferred loading
-    initAds();
+    if (!import.meta.env.DEV) initAds();
   }, []);
   
   // const [passwordCorrect, setPasswordCorrect] = useState(true);
@@ -256,6 +259,10 @@ const App: React.FC = () => {
               <Route path="/blog" element={<Blog />} />
               <Route path="/opportunities" element={<PageUnderConstruction />} />
               <Route path="/about" element={<About />} />
+              <Route path="/sources" element={<SourceLibrary />} />
+              <Route path="/contributors/:username" element={<SourceLibrary />} />
+              {import.meta.env.DEV && <Route path="/import-preview" element={<ImportPreview />} />}
+              {import.meta.env.DEV && <Route path="/pronunciation-preview" element={<PronunciationPreview />} />}
               <Route path="/chatbot" element={<Chatbot />} />
               <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
             </Routes>

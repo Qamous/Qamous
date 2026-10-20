@@ -4,8 +4,11 @@ import { useTranslation } from 'react-i18next';
 import ReactCountryFlag from 'react-country-flag';
 import { getCountryName } from '../assets/utils';
 import './ContentBox.scss';
+import SourceCredits from './SourceCredits';
+import Pronunciation, { OriginalNotation } from './Pronunciation';
+import { attributionText, type ProvenanceContent } from '../types/provenance';
 
-export interface ContentBoxContent {
+export interface ContentBoxContent extends ProvenanceContent {
   item: { word: string; otherLangWord?: string; definition: string };
   lang: string;
   countryCode?: string;
@@ -16,6 +19,8 @@ export interface ContentBoxContent {
   arabicSpellings?: readonly string[];
   francoSpellings?: readonly string[];
   alternateSpellings?: readonly string[];
+  pronunciation?: React.ReactNode;
+  sourceDetails?: React.ReactNode;
 }
 
 interface ContentBoxViewProps extends ContentBoxContent {
@@ -29,7 +34,7 @@ interface ContentBoxViewProps extends ContentBoxContent {
 // Persistence, reactions and sharing belong to the interactive ContentBox.
 const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function ContentBoxView({
   item, lang, countryCode, countryName, definitionHuh, example, arabicExample, arabicSpellings, francoSpellings, alternateSpellings,
-  wordHref, highlighted = false, overlays, children,
+  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,
 }, ref) {
   const { t } = useTranslation();
   const [resolvedCountry, setResolvedCountry] = useState({ code: '', name: '' });
@@ -52,9 +57,15 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
       {wordHref ? <Link to={wordHref}><h1>{item.word}</h1></Link> : <h1>{item.word}</h1>}
       {countryCode && <ReactCountryFlag countryCode={countryCode} svg style={{ width: '2em', height: '2em' }} title={flagLabel} aria-label={flagLabel} />}
     </div>
+    {pronunciation ?? <Pronunciation entries={sourcePronunciations} language={lang} />}
     {spellings && spellings.length > 0 && <p className="content-box-spellings">{spellings.join(' · ')}</p>}
     {definitionHuh !== false && <div className="content-box-description"><p>{item.definition}</p></div>}
-    {shownExample && <div className="content-box-example"><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={lang === 'ar' ? 'rtl' : 'ltr'}>{shownExample}</span></div>}
+    {sourceExamples?.length ? sourceExamples.filter(e => lang === 'ar' ? e.language === 'ar' : e.language !== 'ar').slice(0, 3).map((e, index) =>
+      <div className="content-box-example" key={e.language + ':' + index}><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={e.script === 'Arabic' ? 'rtl' : 'ltr'} lang={e.language}>
+        <small className="source-example-language">{e.language === 'ar-Latn' ? 'Franco' : e.language === 'en' ? 'English' : 'العربية'}</small>{e.text}</span></div>
+    ) : shownExample && <div className="content-box-example"><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={lang === 'ar' ? 'rtl' : 'ltr'}>{shownExample}</span></div>}
+    <SourceCredits credits={sourceCredits} language={lang}>{sourceDetails ?? <OriginalNotation entries={sourcePronunciations} language={lang} />}</SourceCredits>
+    {attributionText(sourceCredits) && <div className="source-credit-export">{attributionText(sourceCredits)}</div>}
     {children}
   </div>;
 });

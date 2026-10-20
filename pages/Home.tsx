@@ -1,3 +1,4 @@
+import type { ProvenanceContent } from '../src/types/provenance';
 import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +11,7 @@ import { Helmet } from 'react-helmet';
 import { useIntersectionObserver } from '../src/assets/utils';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 
-interface HomeContent {
+interface HomeContent extends ProvenanceContent {
   word: string,
   wordId: number,
   definition: string,
@@ -217,7 +218,7 @@ const Home: React.FC = () => {
                     isDisliked={Boolean(item.isDisliked)}
                     isReported={item.isReported !== 0}
                     example={item.example}
-                    arabicExample={item.arabicExample}
+                    arabicExample={item.arabicExample} sourceCredits={item.sourceCredits} sourceExamples={item.sourceExamples} sourcePronunciations={item.sourcePronunciations}
                     arabicSpellings={item.arabicSpellings}
                     francoSpellings={item.francoSpellings}
                   />

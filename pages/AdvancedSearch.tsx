@@ -1,3 +1,4 @@
+import type { ProvenanceContent } from '../src/types/provenance';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -12,7 +13,7 @@ import { dialectIntro, dialectTitle } from '../src/seo/dialects';
 import './AdvancedSearch.scss';
 
 interface Country { countryCode: string; countryName: string }
-interface DefinitionResult {
+interface DefinitionResult extends ProvenanceContent {
   word: string; definition: string; wordId: number; definitionId: number;
   isArabic: number; isLiked: number | boolean; isDisliked: number | boolean;
   isReported: number | boolean; countryCode: string; example: string | null;
@@ -202,7 +203,7 @@ const AdvancedSearch: React.FC = () => {
               key={result.definitionId} item={{ word: result.word, definition: result.definition }} index={index + 1}
               lang={result.isArabic === 1 ? 'ar' : 'en'} wordId={result.wordId} definitionId={result.definitionId}
               isLiked={Boolean(result.isLiked)} isDisliked={Boolean(result.isDisliked)} isReported={Boolean(result.isReported)}
-              countryCode={result.countryCode} example={result.example || ''} arabicExample={result.arabicExample}
+              countryCode={result.countryCode} example={result.example || ''} arabicExample={result.arabicExample} sourceCredits={result.sourceCredits} sourceExamples={result.sourceExamples} sourcePronunciations={result.sourcePronunciations}
               arabicSpellings={result.arabicSpellings} francoSpellings={result.francoSpellings} />)}
           </div>
           {maxPage > 1 && <nav className="explore-pagination" aria-label={t('explore.pagination')}>

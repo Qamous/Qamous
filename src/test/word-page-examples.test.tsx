@@ -21,6 +21,7 @@ describe('word page examples', () => {
       id: 106, wordId: 61, isArabic: true, definition: 'لا بأس',
       example: 'Ma3lish, hatet3awwad.', arabicExample,
       word: { arabicWord: 'معلش', francoArabicWord: 'ma3lish' },
+      sourcePronunciations: [{scheme:'translit',value:'maʕliš',language:'ar',kind:'transcription',sourceId:'dictionary',sourceName:'Dictionary',sourceUrl:'https://example.org/entry',sourceEntryId:'1',dialect:'Egyptian'}],
     }]))));
     const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     const { container } = render(<QueryClientProvider client={client}>
@@ -30,6 +31,7 @@ describe('word page examples', () => {
     </QueryClientProvider>);
 
     await screen.findByRole('heading', { name: 'معلش' });
+    expect(container.querySelector('.pronunciation > summary')).toHaveTextContent('maʕliš');
     expect(screen.queryByText('Ma3lish, hatet3awwad.')).not.toBeInTheDocument();
     if (arabicExample) {
       expect(screen.getByText(arabicExample)).toHaveAttribute('dir', 'rtl');
