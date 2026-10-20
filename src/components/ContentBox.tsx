@@ -22,7 +22,7 @@ export interface HomeContentProps extends ContentBoxContent {
   isAdvancedSearch?: boolean,
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item:givenItem, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example, sourceCredits, sourceExamples, sourcePronunciations,definitionLanguage,dialect,canonicalWordId }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item:givenItem, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example, sourceCredits, sourceExamples, sourcePronunciations,definitionLanguage,definitionLanguages,dialect,canonicalWordId,showMissingMeaningPrompt }) => {
   const item={...givenItem,word:lang==='ar'?(givenItem.arabicWord||givenItem.word):(givenItem.francoArabicWord||givenItem.word)};
   const { t } = useTranslation();
   
@@ -290,6 +290,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     <ContentBoxView
       ref={postRef}
       sourceCredits={sourceCredits} sourceExamples={sourceExamples} sourcePronunciations={sourcePronunciations} definitionLanguage={definitionLanguage} dialect={dialect}
+      definitionLanguages={definitionLanguages} showMissingMeaningPrompt={showMissingMeaningPrompt} addMeaningHref={wordId?`/add-definition?word=${canonicalWordId||wordId}`:undefined}
       item={item}
       lang={lang}
       countryCode={countryCode}

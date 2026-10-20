@@ -24,6 +24,8 @@ export interface ContentBoxContent extends ProvenanceContent {
   pronunciation?: React.ReactNode;
   sourceDetails?: React.ReactNode;
   definitionLanguage?: string;
+  addMeaningHref?: string;
+  showMissingMeaningPrompt?: boolean;
 }
 
 interface ContentBoxViewProps extends ContentBoxContent {
@@ -37,7 +39,7 @@ interface ContentBoxViewProps extends ContentBoxContent {
 // Persistence, reactions and sharing belong to the interactive ContentBox.
 const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function ContentBoxView({
   item, lang, countryCode, countryName, definitionHuh, example, arabicExample, arabicSpellings, francoSpellings, alternateSpellings,
-  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,definitionLanguage,dialect,
+  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,definitionLanguage,definitionLanguages,dialect,addMeaningHref,showMissingMeaningPrompt=true,
 }, ref) {
   const [resolvedCountry, setResolvedCountry] = useState({ code: '', name: '' });
   useEffect(() => {
@@ -52,6 +54,7 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
   const flagLabel = countryName || (resolvedCountry.code === countryCode ? resolvedCountry.name : '') || countryCode;
   const spellings = alternateSpellings ?? (lang === 'ar' ? arabicSpellings : francoSpellings);
   const displayWord=lang==='ar'?(item.arabicWord||item.word):(item.francoArabicWord||item.word);
+  const missingMeaning=showMissingMeaningPrompt&&definitionLanguage!==lang&&definitionLanguages&&!definitionLanguages.includes(lang);
   // Release names embedded in a generic Arabic label are provenance, not a
   // dialect. Keep the exact source label in credits rather than on the card.
   const displayDialect=/^Arabic(?:\s*\([^)]*\))?$/i.test(dialect||'')?'':dialect==='Modern Standard Arabic'||dialect==='MSA'?(lang==='ar'?'الفصحى':'Modern Standard Arabic'):dialect;
@@ -65,7 +68,14 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
     {!countryCode&&displayDialect&&<p className="content-box-dialect" dir="auto">{displayDialect}</p>}
     {pronunciation ?? <Pronunciation entries={sourcePronunciations} language={lang} />}
     {spellings && spellings.length > 0 && <p className="content-box-spellings">{spellings.join(' · ')}</p>}
-    {definitionHuh !== false && <div className="content-box-description">{definitionLanguage&&definitionLanguage!==lang&&<small className="content-box-language">{definitionLanguage==='en'?(lang==='ar'?'معنى بالإنجليزية':'English meaning'):(lang==='ar'?'معنى بالعربية':'Arabic meaning')}</small>}<p lang={definitionLanguage||lang} dir={(definitionLanguage||lang)==='ar'?'rtl':'ltr'}>{item.definition}</p></div>}
+    {definitionHuh !== false && <div className="content-box-description">
+      {definitionLanguage&&definitionLanguage!==lang&&<div className="content-box-language">
+        <span>{definitionLanguage==='en'?(lang==='ar'?'معنى بالإنجليزية':'English meaning'):(lang==='ar'?'معنى بالعربية':'Arabic meaning')}</span>
+        {missingMeaning&&<span className="content-box-language-missing">{lang==='ar'?'لا يوجد معنى بالعربية بعد':'No English yet'}</span>}
+        {missingMeaning&&addMeaningHref&&<Link className="content-box-add-meaning" to={addMeaningHref}><span aria-hidden="true">+</span> {lang==='ar'?'أضف معنى بالعربية':'Add English'}</Link>}
+      </div>}
+      <p lang={definitionLanguage||lang} dir={(definitionLanguage||lang)==='ar'?'rtl':'ltr'}>{item.definition}</p>
+    </div>}
     <ExampleList entries={sourceExamples} arabicExample={arabicExample} example={example} language={lang}/>
     <SourceCredits credits={sourceCredits} language={lang}>{sourceDetails ?? <OriginalNotation entries={sourcePronunciations} language={lang} />}</SourceCredits>
     {attributionText(sourceCredits) && <div className="source-credit-export">{attributionText(sourceCredits)}</div>}

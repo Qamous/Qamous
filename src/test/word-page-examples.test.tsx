@@ -36,6 +36,7 @@ describe('word page examples', () => {
     render(<QueryClientProvider client={client}><MemoryRouter initialEntries={['/word/61/ar']}><Routes><Route path="/word/:wordId/:lang" element={<WordPage/>}/></Routes></MemoryRouter></QueryClientProvider>);
     expect(await screen.findByText('flag')).toHaveAttribute('dir','ltr');
     expect(screen.getByText('معنى بالإنجليزية')).toBeInTheDocument();expect(screen.queryByText('covered English meaning')).not.toBeInTheDocument();
+    expect(screen.queryByText('لا يوجد معنى بالعربية بعد')).not.toBeInTheDocument();
     expect(screen.getAllByRole('heading',{name:'علم'})).toHaveLength(2);client.clear();
   });
   it.each([null, 'معلش، هتتعوض.'])('preserves the saved Arabic example (%j) through the page and card', async (arabicExample) => {
@@ -60,6 +61,26 @@ describe('word page examples', () => {
     } else {
       expect(container.querySelector('.content-box-example')).not.toBeInTheDocument();
     }
+    client.clear();
+  });
+
+  it.each([
+    {language:'en',isArabic:true,definition:'طعام من اللحم والخل',word:'ssekbaaj',notice:'No English yet',action:'Add English'},
+    {language:'ar',isArabic:false,definition:'flaming, blazing, burning',word:'ح د م',notice:'لا يوجد معنى بالعربية بعد',action:'أضف معنى بالعربية'},
+  ])('labels an untranslated word and offers a compact contribution link in $language',async({language,isArabic,definition,word,notice,action})=>{
+    locale.language=language;
+    const arabicWord=language==='ar'?'ح د م':'سكباج';
+    vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response(JSON.stringify([
+      {id:1,wordId:61,isArabic,definition,word:{arabicWord,francoArabicWord:'ssekbaaj'}},
+      {id:2,wordId:61,isArabic,definition:'A second meaning',word:{arabicWord,francoArabicWord:'ssekbaaj'}},
+    ]))));
+    const client=new QueryClient({defaultOptions:{queries:{retry:false}}});
+    render(<QueryClientProvider client={client}><MemoryRouter initialEntries={['/word/61']}><Routes><Route path="/word/:wordId" element={<WordPage/>}/></Routes></MemoryRouter></QueryClientProvider>);
+    expect(await screen.findByText(definition)).toHaveAttribute('lang',isArabic?'ar':'en');
+    expect(screen.getAllByRole('heading',{name:word})).toHaveLength(2);
+    expect(screen.getAllByText(notice)).toHaveLength(1);
+    expect(screen.getByRole('link',{name:action})).toHaveAttribute('href','/add-definition?word=61');
+    expect(screen.getAllByText(language==='ar'?'معنى بالإنجليزية':'Arabic meaning')).toHaveLength(2);
     client.clear();
   });
 });

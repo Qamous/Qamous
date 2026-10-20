@@ -14,6 +14,7 @@ function setup() {
       return new Response(JSON.stringify({definitionIds: orders[url.searchParams.get('script') as keyof typeof orders]}));
     }
     const ids = url.searchParams.get('ids')!.split(',').map(Number);
+    expect(['ar','franco']).toContain(url.searchParams.get('script'));
     // One entire page was removed after creating the order; pagination continues.
     return new Response(JSON.stringify({ results: ids[0] === 14 ? [] : ids.map(definitionId=>({definitionId})) }));
   }));
@@ -51,11 +52,11 @@ it('fetches separate snapshots for language changes and a fresh one after reload
   expect(hook.result.current.hasNextPage).toBe(false);
   hook.rerender({language:'en'});
   await waitFor(()=>expect(hook.result.current.data?.pages[0]).toHaveLength(10));
-  expect(requests.filter(url=>url.endsWith('script=franco'))).toHaveLength(1);
+  expect(requests.filter(url=>url.includes('/definitions/feed?script=franco'))).toHaveLength(1);
   hook.unmount();client.clear();
   const fresh=renderHook(()=>useHomeFeed('en'),{wrapper});
   await waitFor(()=>expect(fresh.result.current.data?.pages[0]).toHaveLength(10));
-  expect(requests.filter(url=>url.endsWith('script=franco'))).toHaveLength(2);
+  expect(requests.filter(url=>url.includes('/definitions/feed?script=franco'))).toHaveLength(2);
   fresh.unmount();client.clear();
 });
 

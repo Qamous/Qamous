@@ -60,6 +60,7 @@ const WordPage = () => {
   // Filter the homeContent based on the current language
   const shownLanguage=i18n.language;
   const filteredHomeContent = homeContent?preferredMeanings(homeContent,shownLanguage):[];
+  const definitionLanguages=[...new Set(homeContent?.map(content=>content.lang)||[])];
   const displayWord=filteredHomeContent?.[0]||homeContent?.[0];
   const headword=shownLanguage==='ar'?(displayWord?.item.arabicWord||displayWord?.item.word):(displayWord?.item.francoArabicWord||displayWord?.item.word);
   const pageTitle=`${headword||'Word'} — ${shownLanguage==='ar'?'معنى في قاموس العامية':'Arabic slang meaning | Qamous'}`;
@@ -106,6 +107,7 @@ const WordPage = () => {
               item={content.item}
               index={index + 1}
               lang={shownLanguage} definitionLanguage={content.lang} dialect={content.dialect} canonicalWordId={content.canonicalWordId}
+              definitionLanguages={definitionLanguages} showMissingMeaningPrompt={index===0}
               definitionId={content.definitionId}
               wordId={content.wordId}
               countryCode={content.countryCode}
@@ -137,7 +139,6 @@ const WordPage = () => {
             </div>}
           </React.Fragment>
         ))}
-        {shownLanguage==='ar'&&filteredHomeContent.some(content=>content.lang==='en')&&<p className="word-language-help"><a href={`/add-definition?word=${wordIdNumber}`}>أضف معنى بالعربية</a></p>}
         <RelatedWords countryCode={displayWord?.countryCode} wordId={wordIdNumber} lang={shownLanguage}/>
       </div>
       <div className="feed-ad-space">

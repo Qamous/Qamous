@@ -15,6 +15,7 @@ export interface SourcePronunciation {
   sourceId: string; sourceName: string; sourceUrl: string; sourceEntryId: string; dialect: string;
 }
 export interface ProvenanceContent {
+  definitionLanguages?: string[];
   arabicWord?: string;
   francoArabicWord?:string|null;
   sourceCredits?: SourceCredit[];

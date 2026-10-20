@@ -215,6 +215,7 @@ const SearchResults: React.FC = () => {
               }}
               index={index + 1}
               lang={i18n.language} definitionLanguage={result.isArabic?'ar':'en'} countryCode={result.countryCode} dialect={result.dialect} canonicalWordId={result.canonicalWordId}
+              definitionLanguages={result.definitionLanguages}
               wordId={result.wordId}
               definitionId={result.definitionId}
               isLiked={result.isLiked}
