@@ -24,6 +24,7 @@ interface SearchResult extends ProvenanceContent {
   arabicExample?: string | null;
   arabicSpellings?: string[];
   francoSpellings?: string[];
+  countryCode?:string;
 }
 
 interface JsonContent {
@@ -89,9 +90,9 @@ const SearchResults: React.FC = () => {
   
   useEffect(() => {
     if (allResults) {
-      const filteredData = allResults.filter((item) =>
-        i18n.language === 'ar' ? item.isArabic === 1 : item.isArabic === 0,
-      );
+      const preferred=i18n.language==='ar'?1:0;
+      const covered=new Set(allResults.filter(item=>item.isArabic===preferred).map(item=>item.canonicalWordId||item.wordId));
+      const filteredData=allResults.filter(item=>item.isArabic===preferred||!covered.has(item.canonicalWordId||item.wordId));
       setFilteredResults(filteredData);
     }
   }, [language, allResults]);
@@ -210,9 +211,10 @@ const SearchResults: React.FC = () => {
               item={{
                 word: result.word,
                 definition: result.definition
+                ,arabicWord:result.arabicWord,francoArabicWord:result.francoArabicWord
               }}
               index={index + 1}
-              lang={i18n.language}
+              lang={i18n.language} definitionLanguage={result.isArabic?'ar':'en'} countryCode={result.countryCode} dialect={result.dialect} canonicalWordId={result.canonicalWordId}
               wordId={result.wordId}
               definitionId={result.definitionId}
               isLiked={result.isLiked}

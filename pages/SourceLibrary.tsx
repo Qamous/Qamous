@@ -19,11 +19,11 @@ export default function SourceLibrary() {
   return <main className="import-preview source-library">
     <Helmet><title>{username ? '@' + username : ar ? 'المصادر' : 'Sources'} — Qamous</title></Helmet>
     <h1>{username ? '@' + username : ar ? 'المصادر والحقوق' : 'Sources & credits'}</h1>
-    {!username && !definition && <p>Licensed imports retain their source licenses. Original authorship stays with the credited creators; Qamous import accounts manage the entries. Sources without verified reuse rights are marked below.</p>}
+    {!username && !definition && <p>Original authors and source licenses are credited below and with each entry.</p>}
     {isError && <p role="alert">Unable to load these details.</p>}
     {username && data && <>
-      <span className="import-preview-label">Import account</span>
-      <p>{data.disclosure}</p><p>{Number(data.importedDefinitions).toLocaleString()} imported definitions · Login disabled</p>
+      <span className="import-preview-label">{ar?'مجموعة مفردات':'Vocabulary collection'}</span>
+      <p>{ar?'المصادر الأصلية مذكورة مع كل مدخل.':'Original sources are credited with each entry.'}</p><p>{Number(data.definitions??data.importedDefinitions).toLocaleString()} {ar?'تعريف':'definitions'}</p>
       <ul>{data.sources.map((source: any) => <li key={source.id}><Link to={'/sources#' + source.id}>{source.name}</Link></li>)}</ul>
     </>}
     {definition && data && <SourceCredits credits={data.sourceCredits as SourceCredit[]} language={i18n.language} expanded />}

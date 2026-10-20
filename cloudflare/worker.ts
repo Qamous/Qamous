@@ -29,7 +29,7 @@ async function boundedJson(response:Response):Promise<unknown> {
   for(const chunk of chunks) {bytes.set(chunk,offset);offset+=chunk.byteLength;}
   return JSON.parse(new TextDecoder().decode(bytes));
 }
-async function shell(request:Request,env:Env,source:string,path:string,word?:{title:string;description:string;lang:string;sourceCredits?:unknown[]}) {
+async function shell(request:Request,env:Env,source:string,path:string,word?:{title:string;description:string;lang:string;definitionLanguage:string;sourceCredits?:unknown[]}) {
   const asset=await env.ASSETS.fetch(new Request(new URL(source,request.url)));
   if(!asset.ok) return unavailable();
   const canonical='https://qamous.org'+path;
@@ -41,7 +41,7 @@ async function shell(request:Request,env:Env,source:string,path:string,word?:{ti
       .on('title',{element(element){element.setInnerContent(word.title);}})
       .on('meta[name="description"],meta[property="og:description"],meta[name="twitter:description"]',{element(element){element.setAttribute('content',word.description);}})
       .on('meta[property="og:title"],meta[name="twitter:title"]',{element(element){element.setAttribute('content',word.title);}})
-      .on('noscript',{element(element){element.setInnerContent(`<style>#initial-loader{display:none}</style><main lang="${word.lang}" dir="${word.lang==='ar'?'rtl':'ltr'}"><h1>${escapeHtml(word.title)}</h1><p>${escapeHtml(word.description)}</p>${renderSourceCredits(word.sourceCredits)}<a href="/advanced-search">Explore Arabic dialects</a></main>`,{html:true});}});
+      .on('noscript',{element(element){element.setInnerContent(`<style>#initial-loader{display:none}</style><main lang="${word.lang}" dir="${word.lang==='ar'?'rtl':'ltr'}"><h1>${escapeHtml(word.title)}</h1><p lang="${word.definitionLanguage}" dir="${word.definitionLanguage==='ar'?'rtl':'ltr'}">${escapeHtml(word.description)}</p>${renderSourceCredits(word.sourceCredits)}<a href="/advanced-search">Explore Arabic dialects</a></main>`,{html:true});}});
   }
   const response=rewrite.transform(asset);
   const headers=new Headers(response.headers);headers.set('Cache-Control','no-store');
@@ -71,11 +71,10 @@ async function missingPage(request:Request,env:Env):Promise<Response> {
       const data=await boundedJson(upstream);
       if(!Array.isArray(data)) return unavailable();
       const rows=data.filter((row):row is {isArabic:boolean|number;definition:string;sourceCredits?:unknown[];word:{id:number;arabicWord:string;francoArabicWord:string|null}}=>Boolean(row&&typeof row==='object'&&typeof row.definition==='string'&&row.word&&row.word.id===Number(match[1])&&typeof row.word.arabicWord==='string'));
-      const row=rows.find(row=>Boolean(row.isArabic)===(match[2]==='ar'));
-      if(!row&&!match[2]&&rows.some(row=>Boolean(row.isArabic))) {url.pathname='/word/'+match[1]+'/ar';return Response.redirect(url.toString(),308);}
+      const row=rows.find(row=>Boolean(row.isArabic)===(match[2]==='ar'))||rows[0];
       if(row) {
         if(match[2]==='en'||url.pathname!==path) {url.pathname=canonical;return Response.redirect(url.toString(),308);}
-        return shell(request,env,'/',canonical,{title:`${row.word.arabicWord}${row.word.francoArabicWord?' / '+row.word.francoArabicWord:''} | Qamous`,description:row.definition.replace(/\s+/g,' ').slice(0,170),lang:match[2]==='ar'?'ar':'en',sourceCredits:row.sourceCredits});
+        return shell(request,env,'/',canonical,{title:`${row.word.arabicWord}${row.word.francoArabicWord?' / '+row.word.francoArabicWord:''} | Qamous`,description:row.definition.replace(/\s+/g,' ').slice(0,170),lang:match[2]==='ar'?'ar':'en',definitionLanguage:row.isArabic?'ar':'en',sourceCredits:row.sourceCredits});
       }
     } catch {return unavailable();}
   }

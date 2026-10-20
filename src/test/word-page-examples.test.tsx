@@ -16,6 +16,15 @@ vi.mock('../components/RelatedWords', () => ({ default: () => null }));
 afterEach(() => vi.unstubAllGlobals());
 
 describe('word page examples', () => {
+  it('keeps an English-only meaning visible under its Arabic headword and avoids repeating a translated sense',async()=>{
+    const rows=[{id:1,isArabic:true,definition:'معرفة',meaningForms:[{meaningId:'sense:1'}]},{id:2,isArabic:false,definition:'covered English meaning',meaningForms:[{meaningId:'sense:1'}]},{id:3,isArabic:false,definition:'flag',meaningForms:[{meaningId:'sense:2'}]}].map(row=>({...row,wordId:61,word:{arabicWord:'علم',francoArabicWord:'3ilm'}}));
+    vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response(JSON.stringify(rows))));
+    const client=new QueryClient({defaultOptions:{queries:{retry:false}}});
+    render(<QueryClientProvider client={client}><MemoryRouter initialEntries={['/word/61/ar']}><Routes><Route path="/word/:wordId/:lang" element={<WordPage/>}/></Routes></MemoryRouter></QueryClientProvider>);
+    expect(await screen.findByText('flag')).toHaveAttribute('dir','ltr');
+    expect(screen.getByText('معنى بالإنجليزية')).toBeInTheDocument();expect(screen.queryByText('covered English meaning')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('heading',{name:'علم'})).toHaveLength(2);client.clear();
+  });
   it.each([null, 'معلش، هتتعوض.'])('preserves the saved Arabic example (%j) through the page and card', async (arabicExample) => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify([{
       id: 106, wordId: 61, isArabic: true, definition: 'لا بأس',

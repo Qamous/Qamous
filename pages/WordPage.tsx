@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import AdSenseWrapper from '../src/components/AdSenseWrapper';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 import RelatedWords from '../src/components/RelatedWords';
+import {preferredMeanings} from '../src/utils/wordMeanings';
 
 const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
   const res = await fetch(`${API_URL}/definitions/word/${wordId}`, { credentials: 'include' });
@@ -20,6 +21,7 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
       word: item.isArabic ? item.word.arabicWord : item.word.francoArabicWord || item.word.arabicWord,
       otherLangWord: item.isArabic ? item.word.francoArabicWord : item.word.arabicWord,
       definition: item.definition
+      ,arabicWord:item.word.arabicWord,francoArabicWord:item.word.francoArabicWord
     },
     index: item.id,
     lang: item.isArabic ? 'ar' : 'en',
@@ -34,6 +36,7 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
     sourceCredits: item.sourceCredits,
     sourceExamples: item.sourceExamples,
     sourcePronunciations: item.sourcePronunciations,
+    meaningForms:item.meaningForms,canonicalWordId:item.canonicalWordId,dialect:item.dialect,
     arabicSpellings: item.arabicSpellings,
     francoSpellings: item.francoSpellings,
   }));
@@ -55,14 +58,17 @@ const WordPage = () => {
   if (error) return <div>Error fetching data</div>;
   
   // Filter the homeContent based on the current language
-  const filteredHomeContent = homeContent?.filter(content => content.lang === (lang || i18n.language));
+  const shownLanguage=lang||i18n.language;
+  const filteredHomeContent = homeContent?preferredMeanings(homeContent,shownLanguage):[];
   const displayWord=filteredHomeContent?.[0]||homeContent?.[0];
-  const pageTitle=`${displayWord?.item.word||'Word'}${displayWord?.item.otherLangWord?' / '+displayWord.item.otherLangWord:''} — ${i18n.language==='ar'?'معنى في قاموس العامية':'Arabic slang meaning | Qamous'}`;
+  const headword=shownLanguage==='ar'?(displayWord?.item.arabicWord||displayWord?.item.word):(displayWord?.item.francoArabicWord||displayWord?.item.word);
+  const pageTitle=`${headword||'Word'} — ${shownLanguage==='ar'?'معنى في قاموس العامية':'Arabic slang meaning | Qamous'}`;
   const pageDescription=(displayWord?.item.definition||'Explore community Arabic dialect definitions on Qamous.').replace(/\s+/g,' ').slice(0,170);
   
   return (
     <div className='feed'>
       <Helmet>
+        {displayWord?.canonicalWordId&&<link rel="canonical" href={`https://qamous.org/word/${displayWord.canonicalWordId}${shownLanguage==='ar'?'/ar':''}`}/>}
         <meta property="og:title" content={pageTitle}/>
         <meta property="og:description" content={pageDescription}/>
         <meta name="twitter:title" content={pageTitle}/>
@@ -99,7 +105,7 @@ const WordPage = () => {
               key={index + 1}
               item={content.item}
               index={index + 1}
-              lang={lang || i18n.language}
+              lang={shownLanguage} definitionLanguage={content.lang} dialect={content.dialect} canonicalWordId={content.canonicalWordId}
               definitionId={content.definitionId}
               wordId={content.wordId}
               countryCode={content.countryCode}
@@ -131,6 +137,7 @@ const WordPage = () => {
             </div>}
           </React.Fragment>
         ))}
+        {shownLanguage==='ar'&&filteredHomeContent.some(content=>content.lang==='en')&&<p className="word-language-help"><a href={`/add-definition?word=${wordIdNumber}`}>أضف معنى بالعربية</a></p>}
         <RelatedWords countryCode={displayWord?.countryCode} wordId={wordIdNumber} lang={lang||i18n.language}/>
       </div>
       <div className="feed-ad-space">

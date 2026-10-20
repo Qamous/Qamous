@@ -204,13 +204,12 @@ const Home: React.FC = () => {
           {/*</div>*/}
           {data?.pages.map((page, pageIndex) =>
             page
-              .filter(item => item.isArabic === (lang === 'ar' ? 1 : 0))
               .map((item, index) => (
                 <React.Fragment key={item.definitionId}>
                   <ContentBox
                     item={item}
                     index={index + 1}
-                    lang={lang}
+                    lang={lang} definitionLanguage={item.isArabic?'ar':'en'} dialect={item.dialect} canonicalWordId={item.canonicalWordId}
                     definitionId={item.definitionId}
                     wordId={item.wordId}
                     countryCode={item.countryCode}

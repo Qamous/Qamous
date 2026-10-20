@@ -19,7 +19,7 @@ export default function SourceCredits({ credits = [], language = 'en', expanded 
         {credit.dialect && <p>{ar ? 'اللهجة: ' : 'Dialect: '}{credit.dialect}</p>}
         {credit.transliteration && <p>{ar ? 'النقل الصوتي: ' : 'Transliteration: '}{credit.transliteration}</p>}
         {credit.changes.length > 0 && <p>{ar ? 'التغييرات: ' : 'Changes: '}{credit.changes.join(' ')}</p>}
-        <p>{ar ? 'حساب الاستيراد: ' : 'Import account: '}<Link to={'/contributors/' + encodeURIComponent(credit.importer.username)}>@{credit.importer.username}</Link></p>
+        <p>{ar ? 'المجموعة: ' : 'Collection: '}<Link to={'/contributors/' + encodeURIComponent(credit.importer.username)}>@{credit.importer.username}</Link></p>
       </section>)}
       {children}
     </div>

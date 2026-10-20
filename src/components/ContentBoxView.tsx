@@ -6,10 +6,11 @@ import { getCountryName } from '../assets/utils';
 import './ContentBox.scss';
 import SourceCredits from './SourceCredits';
 import Pronunciation, { OriginalNotation } from './Pronunciation';
+import {stripTashkil} from '../utils/arabic';
 import { attributionText, type ProvenanceContent } from '../types/provenance';
 
 export interface ContentBoxContent extends ProvenanceContent {
-  item: { word: string; otherLangWord?: string; definition: string };
+  item: { word: string; otherLangWord?: string; definition: string; arabicWord?:string;francoArabicWord?:string|null };
   lang: string;
   countryCode?: string;
   countryName?: string;
@@ -21,6 +22,7 @@ export interface ContentBoxContent extends ProvenanceContent {
   alternateSpellings?: readonly string[];
   pronunciation?: React.ReactNode;
   sourceDetails?: React.ReactNode;
+  definitionLanguage?: string;
 }
 
 interface ContentBoxViewProps extends ContentBoxContent {
@@ -34,7 +36,7 @@ interface ContentBoxViewProps extends ContentBoxContent {
 // Persistence, reactions and sharing belong to the interactive ContentBox.
 const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function ContentBoxView({
   item, lang, countryCode, countryName, definitionHuh, example, arabicExample, arabicSpellings, francoSpellings, alternateSpellings,
-  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,
+  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,definitionLanguage,dialect,
 }, ref) {
   const { t } = useTranslation();
   const [resolvedCountry, setResolvedCountry] = useState({ code: '', name: '' });
@@ -50,19 +52,23 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
   const flagLabel = countryName || (resolvedCountry.code === countryCode ? resolvedCountry.name : '') || countryCode;
   const spellings = alternateSpellings ?? (lang === 'ar' ? arabicSpellings : francoSpellings);
   const shownExample = (lang === 'ar' ? arabicExample : example)?.trim();
+  const displayWord=lang==='ar'?(item.arabicWord||item.word):(item.francoArabicWord||item.word);
+  const allExamples=[...(sourceExamples||[])];
+  if(allExamples.length)for(const [text,language,script] of [[arabicExample,'ar','Arabic'],[example,'ar-Latn','Latin']] as const)if(text?.trim()&&!allExamples.some(e=>e.text===text&&e.language===language))allExamples.push({text,language,script,kind:'usage'});
 
   return <div className={`content-box${highlighted ? ' content-box-first' : ''}${lang === 'ar' ? ' content-box-ar' : ' content-box-latin'}`} ref={ref}>
     {overlays}
     <div className="content-box-title">
-      {wordHref ? <Link to={wordHref}><h1>{item.word}</h1></Link> : <h1>{item.word}</h1>}
+      {wordHref ? <Link to={wordHref}><h1>{stripTashkil(displayWord)}</h1></Link> : <h1>{stripTashkil(displayWord)}</h1>}
       {countryCode && <ReactCountryFlag countryCode={countryCode} svg style={{ width: '2em', height: '2em' }} title={flagLabel} aria-label={flagLabel} />}
     </div>
+    {!countryCode&&dialect&&<p className="content-box-dialect" dir="auto">{dialect}</p>}
     {pronunciation ?? <Pronunciation entries={sourcePronunciations} language={lang} />}
     {spellings && spellings.length > 0 && <p className="content-box-spellings">{spellings.join(' · ')}</p>}
-    {definitionHuh !== false && <div className="content-box-description"><p>{item.definition}</p></div>}
-    {sourceExamples?.length ? sourceExamples.filter(e => lang === 'ar' ? e.language === 'ar' : e.language !== 'ar').slice(0, 3).map((e, index) =>
+    {definitionHuh !== false && <div className="content-box-description">{definitionLanguage&&definitionLanguage!==lang&&<small className="content-box-language">{definitionLanguage==='en'?(lang==='ar'?'معنى بالإنجليزية':'English meaning'):(lang==='ar'?'معنى بالعربية':'Arabic meaning')}</small>}<p lang={definitionLanguage||lang} dir={(definitionLanguage||lang)==='ar'?'rtl':'ltr'}>{item.definition}</p></div>}
+    {allExamples.length ? allExamples.filter(e => lang === 'ar' ? e.language === 'ar'||e.language==='en' : e.language !== 'ar').slice(0, 6).map((e, index) =>
       <div className="content-box-example" key={e.language + ':' + index}><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={e.script === 'Arabic' ? 'rtl' : 'ltr'} lang={e.language}>
-        <small className="source-example-language">{e.language === 'ar-Latn' ? 'Franco' : e.language === 'en' ? 'English' : 'العربية'}</small>{e.text}</span></div>
+        <small className="source-example-language">{e.language === 'ar-Latn' ? 'Franco' : e.language === 'en' ? (e.kind==='translation'?(lang==='ar'?'ترجمة إنجليزية':'English translation'):'English') : 'العربية'}</small>{e.text}</span></div>
     ) : shownExample && <div className="content-box-example"><span className="content-box-example-label">{t('content_box.example', { lng: lang === 'ar' ? 'ar' : 'en' })}</span><span dir={lang === 'ar' ? 'rtl' : 'ltr'}>{shownExample}</span></div>}
     <SourceCredits credits={sourceCredits} language={lang}>{sourceDetails ?? <OriginalNotation entries={sourcePronunciations} language={lang} />}</SourceCredits>
     {attributionText(sourceCredits) && <div className="source-credit-export">{attributionText(sourceCredits)}</div>}

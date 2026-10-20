@@ -22,7 +22,8 @@ export interface HomeContentProps extends ContentBoxContent {
   isAdvancedSearch?: boolean,
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example, sourceCredits, sourceExamples, sourcePronunciations }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item:givenItem, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example, sourceCredits, sourceExamples, sourcePronunciations,definitionLanguage,dialect,canonicalWordId }) => {
+  const item={...givenItem,word:lang==='ar'?(givenItem.arabicWord||givenItem.word):(givenItem.francoArabicWord||givenItem.word)};
   const { t } = useTranslation();
   
   const reaction = useDefinitionReaction(definitionId, isLiked, isDisliked);
@@ -288,7 +289,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   return (
     <ContentBoxView
       ref={postRef}
-      sourceCredits={sourceCredits} sourceExamples={sourceExamples} sourcePronunciations={sourcePronunciations}
+      sourceCredits={sourceCredits} sourceExamples={sourceExamples} sourcePronunciations={sourcePronunciations} definitionLanguage={definitionLanguage} dialect={dialect}
       item={item}
       lang={lang}
       countryCode={countryCode}
@@ -299,7 +300,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
       arabicExample={arabicExample}
       definitionHuh={definitionHuh}
       example={example}
-      wordHref={wordId ? `/word/${wordId}` : undefined}
+      wordHref={wordId ? `/word/${canonicalWordId||wordId}${lang==='ar'?'/ar':''}` : undefined}
       highlighted={index === 0}
       overlays={<>
       {showDialog && (

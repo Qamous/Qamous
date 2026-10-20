@@ -4,6 +4,13 @@ import { describe,it,expect } from 'vitest';
 import Pronunciation, { OriginalNotation, type SourcePronunciation } from '../components/Pronunciation';
 const row=(scheme:string,value:string):SourcePronunciation=>({scheme,value,kind:'transcription',language:'ar',sourceId:'dictionary',sourceName:'Dictionary',sourceUrl:'https://example.org/word',sourceEntryId:'1',dialect:'Palestinian'});
 describe('source pronunciation proposal',()=>{
+  it('shows the meaning-specific Arabic reading in RTL and retains the separate IPA',()=>{
+    const {container}=render(<Pronunciation entries={[row('Arabic vocalization','عَلَم'),row('IPA','/ʕalam/')]} language="ar"/>);
+    expect(container.querySelector('summary')).toHaveTextContent('عَلَم');
+    expect(container.querySelector('summary .pronunciation-value')).toHaveAttribute('dir','rtl');
+    expect(screen.getByText('/ʕalam/')).toBeInTheDocument();
+    expect(container.querySelectorAll('.pronunciation-entry')).toHaveLength(2);
+  });
   it('keeps transliteration and IPA separately labeled with source details in a disclosure',()=>{
     const {container}=render(<Pronunciation entries={[row('translit','ktāb'),row('phonemic','/ktaːb/')]} />);
     const details=container.querySelector('details')!;

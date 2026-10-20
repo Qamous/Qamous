@@ -66,6 +66,15 @@
 .contribute-suggestions li + li { margin-top: 6px; }
 .contribute-selected-word button { background: transparent; border: 0; padding: 8px; color: var(--secondary-color); }
 .contribute button:disabled { cursor: default; }
+.contribute-inline { padding: 0; border: 0; background: none; color: var(--secondary-color); text-decoration: underline; text-underline-offset: 3px; font-size: inherit; }
+.contribute-reading { margin-top: 22px; }
+.contribute-reading > summary, .contribute-examples > summary, .contribute-advanced > summary { cursor: pointer; width: fit-content; padding: 12px 0; font-size: 13px; color: var(--primary-color-75); }
+.contribute-reading > summary { color: var(--secondary-color); }
+.contribute-reading > .contribute-field { margin-top: 12px; max-width: 430px; }
+.contribute-advanced { margin-top: 12px; }
+.contribute-examples { border-bottom: 1px solid var(--contribute-line); padding: 10px 0; }
+.contribute-examples .contribute-section { border: 0; padding-top: 12px; }
+.contribute-meaning-franco { max-width: 430px; margin-top: 22px; }
 .contribute[dir=rtl] { .contribute-heading h1 { letter-spacing: 0; } .fa-arrow-right, .fa-arrow-left { transform: rotate(180deg); } }
 @media (max-width: 620px) {
   .contribute { width: calc(100% - 36px); margin-top: 20px; }

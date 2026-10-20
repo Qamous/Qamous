@@ -263,6 +263,7 @@ const App: React.FC = () => {
               <Route path="/contributors/:username" element={<SourceLibrary />} />
               {import.meta.env.DEV && <Route path="/import-preview" element={<ImportPreview />} />}
               {import.meta.env.DEV && <Route path="/pronunciation-preview" element={<PronunciationPreview />} />}
+              {import.meta.env.DEV && <Route path="/contribution-preview" element={<AddWord />} />}
               <Route path="/chatbot" element={<Chatbot />} />
               <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
             </Routes>

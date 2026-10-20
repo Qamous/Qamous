@@ -200,8 +200,8 @@ const AdvancedSearch: React.FC = () => {
               <p>{t('explore.empty_hint')}</p><button className="explore-submit" type="button" onClick={reset}>{t('explore.reset')}</button>
               <Link to="/add-definition">{t('explore.add_word')}<FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></Link>
             </div> : results.map((result, index) => <ContentBox
-              key={result.definitionId} item={{ word: result.word, definition: result.definition }} index={index + 1}
-              lang={result.isArabic === 1 ? 'ar' : 'en'} wordId={result.wordId} definitionId={result.definitionId}
+              key={result.definitionId} item={{ word: result.word, definition: result.definition,arabicWord:result.arabicWord,francoArabicWord:result.francoArabicWord }} index={index + 1}
+              lang={script==='ar'?'ar':script==='franco'?'en':i18n.language} definitionLanguage={result.isArabic?'ar':'en'} dialect={result.dialect} canonicalWordId={result.canonicalWordId} wordId={result.wordId} definitionId={result.definitionId}
               isLiked={Boolean(result.isLiked)} isDisliked={Boolean(result.isDisliked)} isReported={Boolean(result.isReported)}
               countryCode={result.countryCode} example={result.example || ''} arabicExample={result.arabicExample} sourceCredits={result.sourceCredits} sourceExamples={result.sourceExamples} sourcePronunciations={result.sourcePronunciations}
               arabicSpellings={result.arabicSpellings} francoSpellings={result.francoSpellings} />)}

@@ -49,7 +49,7 @@ describe('source credits',()=>{
       {text:'Hada kitab.',language:'ar-Latn',script:'Latin',kind:'usage'},
       {text:'هذا كتاب.',language:'ar',script:'Arabic',kind:'usage'},
     ]} /></MemoryRouter>);
-    expect(screen.getByText('English')).toBeInTheDocument();
+    expect(screen.getByText('English translation')).toBeInTheDocument();
     expect(screen.getByText('Franco')).toBeInTheDocument();
     expect(screen.queryByText('هذا كتاب.')).not.toBeInTheDocument();
   });
