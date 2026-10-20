@@ -36,7 +36,7 @@ describe('feed card previews', () => {
   it.each(['', '   '])('marks generated Franco when only an Arabic example exists (%j)', (example) => {
     const { container } = render(<ContentBoxPreview {...content} example={example} arabicExample="معلش، هتتعوض." />);
     expect(container.querySelector('.content-box-example')).toBeInTheDocument();
-    expect(screen.getByText('Franco (approx.)')).toBeVisible();
+    expect(screen.getByText('Franco')).toBeVisible();
     expect(screen.getByText('معلش، هتتعوض.')).not.toBeVisible();
   });
 

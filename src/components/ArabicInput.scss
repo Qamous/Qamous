@@ -1,0 +1,18 @@
+.qamous-yamli-input { padding-left: 44px !important; }
+
+// Keep the recognizable Yamli control, with the same quiet neutral tone as
+// secondary Qamous controls. Vendor positioning stays under Yamli's control.
+#yamliapi_dyn_div .yamliapi_settingsDiv > a.yamliapi_simpleLink > div {
+  filter: grayscale(1);
+  opacity: .65;
+  transition: opacity .15s;
+}
+#yamliapi_dyn_div .yamliapi_settingsDiv > a.yamliapi_simpleLink {
+  cursor: pointer;
+  &::before { content: ''; position: absolute; inset: -5px; min-width: 26px; min-height: 26px; }
+  &:hover > div, &:focus-visible > div { opacity: 1; }
+  &:focus-visible { outline: 2px solid var(--secondary-color); outline-offset: 5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #yamliapi_dyn_div .yamliapi_settingsDiv > a.yamliapi_simpleLink > div { transition: none; }
+}

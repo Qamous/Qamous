@@ -1,4 +1,5 @@
 import React, {useEffect,useRef} from 'react';
+import './ArabicInput.scss';
 type YamliApi={init:(options:Record<string,unknown>)=>boolean;yamlify:(id:string,options:Record<string,unknown>)=>void;deyamlify?:(id:string)=>void};
 declare global {interface Window {Yamli?:YamliApi}}
 function useYamli<T extends HTMLInputElement|HTMLTextAreaElement>(id:string|undefined,onValue:(value:string)=>void) {
@@ -9,7 +10,8 @@ function useYamli<T extends HTMLInputElement|HTMLTextAreaElement>(id:string|unde
   let attached=false;
   const changed=()=>callback.current(node.value);
   function attach(){if(!node||attached||!node.isConnected||!window.Yamli||node.closest('[hidden],details:not([open])'))return;if(window.Yamli.init({uiLanguage:document.documentElement.lang==='ar'?'ar':'en',startMode:'onOrUserDefault',forceHTTPS:true})){
-   window.Yamli.yamlify(id!,{settingsPlacement:'inside',forceHTTPS:true,generateOnChangeEvent:true});attached=true;
+   window.Yamli.yamlify(id!,{settingsPlacement:'inside',settingsXOffset:10,settingsYOffset:node.tagName==='TEXTAREA'?10:0,settingsColor:'var(--primary-color)',settingsLinkColor:'var(--secondary-color)',forceHTTPS:true,generateOnChangeEvent:true});attached=true;
+   node.classList.add('qamous-yamli-input');
   }}
   node.addEventListener('change',changed);node.addEventListener('input',changed);
   // Hidden optional fields attach on focus, so Yamli does not position a
@@ -17,7 +19,7 @@ function useYamli<T extends HTMLInputElement|HTMLTextAreaElement>(id:string|unde
   node.addEventListener('focus',attach);
   const script=document.querySelector('script[src="https://api.yamli.com/js/yamli_api.js"]');
   script?.addEventListener('load',attach);attach();
-  return()=>{script?.removeEventListener('load',attach);node.removeEventListener('change',changed);node.removeEventListener('input',changed);node.removeEventListener('focus',attach);if(attached)window.Yamli?.deyamlify?.(id);};
+  return()=>{script?.removeEventListener('load',attach);node.removeEventListener('change',changed);node.removeEventListener('input',changed);node.removeEventListener('focus',attach);if(attached)window.Yamli?.deyamlify?.(id);node.classList.remove('qamous-yamli-input');};
  },[id]);
  return ref;
 }

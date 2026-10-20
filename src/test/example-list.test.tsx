@@ -6,13 +6,15 @@ import type {SourceExample} from '../types/provenance';
 const original:SourceExample={text:'هذا كتاب.',language:'ar',script:'Arabic',kind:'usage',groupId:'a',alignment:'source'};
 const translation:SourceExample={text:'This is a book.',language:'en',script:'Latin',kind:'translation',groupId:'a',alignment:'source'};
 describe('paired examples',()=>{
- it('shows Arabic-only source examples as approximate Franco followed by their translation',()=>{
+ it('shows Arabic-only source examples as Franco followed by their translation with a quiet original disclosure',()=>{
   const {container}=render(<ExampleList language="en" entries={[original,translation]}/>);
   expect(container.querySelectorAll('.content-box-example')).toHaveLength(1);
-  expect(screen.getByText('Franco (approx.)')).toBeVisible();
+  expect(screen.getByText('Franco')).toBeVisible();
   expect(screen.getByText('English translation')).toBeVisible();
   expect(screen.getByText(translation.text)).toBeVisible();
   expect(screen.getByText(original.text)).not.toBeVisible();
+  expect(screen.getByText('Arabic original')).toBeVisible();
+  expect(screen.queryByText(/approx|automatic|generated/i)).not.toBeInTheDocument();
  });
  it('keeps different source example blocks together and retains source Franco',()=>{
   const franco:SourceExample={text:'Hada kitab.',language:'ar-Latn',script:'Latin',kind:'usage',groupId:'a',alignment:'source'};

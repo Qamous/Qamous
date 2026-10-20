@@ -18,11 +18,34 @@ function fill() {
   fireEvent.change(screen.getByLabelText(/Arabic example/),{target:{value:'معلش، هتتعوض.'}});
 }
 describe('contribution submission',()=>{
+  it('shows optional pronunciation fields together, with a vowel example and symbol helpers',()=>{
+    mount();fireEvent.click(screen.getByRole('button',{name:'Add or edit vowels'}));
+    for(const name of [/^Reading with vowels/,/^Transliteration/,/^IPA/]){
+      const input=screen.getByLabelText(name);expect(input).toBeVisible();expect(input).not.toBeRequired();
+      expect(input.closest('.contribute-field')?.querySelector('label .contribute-optional')).toHaveTextContent('Optional');
+    }
+    expect(screen.getByText('عِلْم')).toBeVisible();
+    expect(screen.queryByText('More pronunciation details')).not.toBeInTheDocument();
+    expect(screen.queryByText(/This reading belongs/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/For a transcription system/)).not.toBeInTheDocument();
+    expect(screen.getByRole('button',{name:'Insert symbol for Transliteration'})).toBeVisible();
+    expect(screen.getByRole('button',{name:'Insert symbol for IPA'})).toBeVisible();
+  });
+  it('identifies and quotes the example that English translates',()=>{
+    mount();
+    fireEvent.change(screen.getByLabelText(/Franco example/),{target:{value:'Ma3lish.'}});
+    let english=screen.getByLabelText(/^English translation of the Franco example/);
+    expect(document.getElementById(english.getAttribute('aria-describedby')!)).toHaveTextContent('Ma3lish.');
+    fireEvent.change(screen.getByLabelText(/Arabic example/),{target:{value:'معلش.'}});
+    english=screen.getByLabelText(/^English translation of the Arabic example/);
+    expect(document.getElementById(english.getAttribute('aria-describedby')!)).toHaveTextContent('معلش.');
+    expect(document.getElementById('english-example-original')).toHaveAttribute('lang','ar');
+  });
   it.each(['علم','عِلْم'])('accepts %s without asking the user to remove or supply vowels',async(word)=>{
     const fetch=vi.fn().mockResolvedValue(new Response(JSON.stringify({wordId:61,definitionIds:[106]}),{status:201}));vi.stubGlobal('fetch',fetch);mount();
     fireEvent.change(screen.getByLabelText(/Arabic word/),{target:{value:word}});
     fireEvent.change(screen.getByLabelText('English definition'),{target:{value:'knowledge'}});
-    expect(screen.getByLabelText('Reading with vowels')).not.toBeVisible();
+    expect(screen.getByLabelText(/^Reading with vowels/)).not.toBeVisible();
     fireEvent.click(screen.getByRole('button',{name:'Review word'}));
     fireEvent.click(screen.getByRole('button',{name:'Add word'}));await screen.findByText('Saved word page');
     const payload=JSON.parse(fetch.mock.calls[0][1].body);expect(payload.arabicWord).toBe(word);expect(payload.arabicForm).toBe(word);
@@ -31,9 +54,9 @@ describe('contribution submission',()=>{
     const fetch=vi.fn().mockResolvedValue(new Response(JSON.stringify({wordId:61,definitionIds:[106]}),{status:201}));vi.stubGlobal('fetch',fetch);mount();
     fireEvent.change(screen.getByLabelText(/Arabic word/),{target:{value:'علم'}});fireEvent.change(screen.getByLabelText('English definition'),{target:{value:'knowledge'}});
     fireEvent.click(screen.getByRole('button',{name:'Add or edit vowels'}));
-    fireEvent.change(screen.getByLabelText('Reading with vowels'),{target:{value:'عِلْم'}});
+    fireEvent.change(screen.getByLabelText(/^Reading with vowels/),{target:{value:'عِلْم'}});
     fireEvent.change(screen.getByLabelText(/^Franco spelling/),{target:{value:'3ilm'}});
-    fireEvent.change(screen.getByLabelText('Transliteration'),{target:{value:'ʕilm'}});fireEvent.change(screen.getByLabelText('IPA'),{target:{value:'/ʕilm/'}});
+    fireEvent.change(screen.getByLabelText(/^Transliteration/),{target:{value:'ʕilm'}});fireEvent.change(screen.getByLabelText(/^IPA/),{target:{value:'/ʕilm/'}});
     fireEvent.change(screen.getByLabelText(/English translation/),{target:{value:'Knowledge is useful.'}});
     fireEvent.click(screen.getByRole('button',{name:'Review word'}));fireEvent.click(screen.getByRole('button',{name:'Add word'}));await screen.findByText('Saved word page');
     expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({arabicWord:'علم',arabicForm:'عِلْم',francoArabicWord:'3ilm',transliteration:'ʕilm',ipa:'/ʕilm/',englishExample:'Knowledge is useful.',exampleAlignment:'parallel'});
@@ -42,10 +65,11 @@ describe('contribution submission',()=>{
     const yamlify=vi.fn(),deyamlify=vi.fn();vi.stubGlobal('Yamli',{init:()=>true,yamlify,deyamlify});
     const fetch=vi.fn().mockResolvedValue(new Response(JSON.stringify({wordId:61,definitionIds:[106]}),{status:201}));vi.stubGlobal('fetch',fetch);mount();
     const input=screen.getByLabelText(/Arabic word/) as HTMLInputElement;
-    expect(yamlify).toHaveBeenCalledWith('new-arabic-word',expect.objectContaining({generateOnChangeEvent:true}));
+    expect(yamlify).toHaveBeenCalledWith('new-arabic-word',expect.objectContaining({generateOnChangeEvent:true,settingsXOffset:10,settingsYOffset:0}));
+    expect(yamlify).toHaveBeenCalledWith('arabic-definition',expect.objectContaining({settingsXOffset:10,settingsYOffset:10}));
     expect(yamlify.mock.calls.some(([id])=>id==='vocalized-word')).toBe(false);
     fireEvent.click(screen.getByRole('button',{name:'Add or edit vowels'}));
-    fireEvent.focus(screen.getByLabelText('Reading with vowels'));
+    fireEvent.focus(screen.getByLabelText(/^Reading with vowels/));
     expect(yamlify).toHaveBeenCalledWith('vocalized-word',expect.objectContaining({generateOnChangeEvent:true}));
     input.value='كِتاب';fireEvent.change(input);
     fireEvent.change(screen.getByLabelText('English definition'),{target:{value:'book'}});

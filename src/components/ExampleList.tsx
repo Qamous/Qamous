@@ -26,9 +26,9 @@ export default function ExampleList({entries=[],arabicExample,example,language}:
   });
   const render=({key,primary,original,translations}:typeof visible[number])=><div className="content-box-example" key={key}>
     <span className="content-box-example-label">{arabic?'مثال:':'Example:'}</span>
-    <div className="example-sentence"><small className="source-example-language">{primary.language==='ar'?'العربية':primary.generated?(arabic?'فرانكو تقريبي':'Franco (approx.)'):'Franco'}</small><span lang={primary.language} dir={primary.script==='Arabic'?'rtl':'ltr'}>{primary.text}</span></div>
+    <div className="example-sentence"><small className="source-example-language">{primary.language==='ar'?'العربية':'Franco'}</small><span lang={primary.language} dir={primary.script==='Arabic'?'rtl':'ltr'}>{primary.text}</span></div>
     {translations.map((row,i)=><div className="example-translation" key={i}><small className="source-example-language">{arabic?'الترجمة الإنجليزية':'English translation'}</small><span lang="en" dir="ltr">{row.text}</span></div>)}
-    {!arabic&&original&&primary!==original&&<details className="example-original"><summary>{primary.generated?'Arabic original · automatic Franco':'Arabic original'}</summary><p lang="ar" dir="rtl">{original.text}</p>{primary.generated&&<small>Written-form approximation; missing vowels and dialect pronunciation are not inferred.</small>}</details>}
+    {!arabic&&original&&primary!==original&&<details className="example-original"><summary>Arabic original</summary><p lang="ar" dir="rtl">{original.text}</p></details>}
   </div>;
   return <>{visible.slice(0,3).map(render)}{visible.length>3&&<details className="example-more"><summary>{arabic?'أمثلة إضافية':'More examples'} ({visible.length-3})</summary>{visible.slice(3).map(render)}</details>}</>;
 }
