@@ -7,7 +7,6 @@ import Snackbar from './Snackbar';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
 import CustomDialog from './CustomDialog';
-import i18n from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import * as htmlToImage from 'html-to-image';
 import logo from '../assets/qamous-logo-transparent.png';
@@ -24,7 +23,7 @@ export interface HomeContentProps extends ContentBoxContent {
 
 const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item:givenItem, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example, sourceCredits, sourceExamples, sourcePronunciations,definitionLanguage,definitionLanguages,dialect,canonicalWordId,showMissingMeaningPrompt,headingLevel }) => {
   const item={...givenItem,word:lang==='ar'?(givenItem.arabicWord||givenItem.word):(givenItem.francoArabicWord||givenItem.word)};
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const reaction = useDefinitionReaction(definitionId, isLiked, isDisliked);
   const { isLiked: likeClicked, isDisliked: dislikeClicked } = reaction;

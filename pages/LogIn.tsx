@@ -117,7 +117,7 @@ const Login: React.FC = () => {
         />
       )}
       
-      <form onSubmit={onLoginClick} className={'container'}>
+      <form method="post" onSubmit={onLoginClick} className={'container'}>
         
         <div className={'container-title'}>
           <div>{t('login.title')}</div>

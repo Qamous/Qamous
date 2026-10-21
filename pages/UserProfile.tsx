@@ -13,7 +13,6 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import CustomDialog from '../src/components/CustomDialog';
 import Snackbar from '../src/components/Snackbar';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
 
 //import { ReactComponent as ArrowForwardIcon } from '../../assets/arrow_forward.svg';
 import LoadingSpinner from '../src/components/LoadingSpinner';
@@ -75,7 +74,7 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
   const name: string = userData.firstName;
   const userId: number = userData.id;
   const username: string = userData.username;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const { data: definitions = [], isLoading, isError } = useQuery<Definition[]>(['definitions', userId], async () =>
     apiJson<Definition[]>(await fetch(`${API_URL}/definitions/user/${userId}`, { credentials: 'include' })),
@@ -376,7 +375,7 @@ const UserProfileContent = ({ userData }: { userData: ProfileUser }) => {
       </div>
       
       {/*The Search bar needs a lil fixing*/}
-      {/*<form className="search" action="">*/}
+      {/*<form method="post" className="search" action="">*/}
       {/*  <button type="submit">Search</button>*/}
       {/*  <input type="search" placeholder="Search your posts..." required />*/}
       {/*</form>*/}

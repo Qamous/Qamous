@@ -4,7 +4,7 @@ import './WordOfTheDay.scss';
 import { useQuery } from 'react-query';
 import Snackbar from '../src/components/Snackbar';
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 
 interface WordOfTheDayContent {

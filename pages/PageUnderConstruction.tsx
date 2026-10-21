@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PageUnderConstruction.scss';
 import { useTranslation } from 'react-i18next';
 import * as variables from '../src/assets/Variables.module.scss';
+import {usePreferences} from '../src/rendering/preferences';
 import { convertNumerals } from '../src/assets/utils';
 
 // This is an interface for the time left object
@@ -20,20 +21,22 @@ interface TimeLeft {
 const PageUnderConstruction: React.FC = () => {
     const { i18n, t } = useTranslation();
     // Get the current date
-    const currentDate: Date = new Date();
+    const {now} = usePreferences();
+    const initialNow = now ?? Date.now();
+    const currentDate: Date = new Date(initialNow);
     
     // Set the completion date (v1.1) to August 1st, 2024
-    let completionDate: Date = new Date(2024, 12, 1);
+    let completionDate: Date = new Date(Date.UTC(2024, 12, 1));
     
     // If the current date is past June 1st, 2024, set the completion date to the first day of the upcoming month
     if (currentDate.getTime() > completionDate.getTime()) {
-        completionDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+        completionDate = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 1));
     }
     
     // Function to calculate the time left until the completion date
-    const calculateTimeLeft = (): TimeLeft => {
+    const calculateTimeLeft = (at = Date.now()): TimeLeft => {
         // Calculate the difference between the completion date and the current time
-        const difference = completionDate.getTime() - new Date().getTime();
+        const difference = completionDate.getTime() - at;
         // Initialize the time left object
         let timeLeft: TimeLeft = {
             days: 0,
@@ -56,7 +59,7 @@ const PageUnderConstruction: React.FC = () => {
     };
     
     // Use the useState hook to store the time left
-    const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
+    const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => calculateTimeLeft(initialNow));
     
     // Use the useEffect hook to update the time left every second
     useEffect(() => {

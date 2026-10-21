@@ -2,12 +2,11 @@ import type { ProvenanceContent } from '../src/types/provenance';
 import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
 import ContentBox from '../src/components/ContentBox';
 import { useHomeFeed } from '../src/hooks/useHomeFeed';
 import Snackbar from '../src/components/Snackbar';
 import CustomDialog from '../src/components/CustomDialog';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import { useIntersectionObserver } from '../src/assets/utils';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 
@@ -38,7 +37,7 @@ interface JsonContent {
 }
 
 const Home: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const sampleHome = t('sample_home', {
     returnObjects: true,
   }) as JsonContent[];

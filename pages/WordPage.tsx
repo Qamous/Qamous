@@ -1,5 +1,5 @@
 import { API_URL } from "../src/api";
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import ContentBox, { HomeContentProps } from '../src/components/ContentBox';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,12 +10,7 @@ import LoadingSpinner from '../src/components/LoadingSpinner';
 import RelatedWords from '../src/components/RelatedWords';
 import {preferredMeanings} from '../src/utils/wordMeanings';
 
-const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
-  const res = await fetch(`${API_URL}/definitions/word/${wordId}`, { credentials: 'include' });
-  if (!res.ok) {
-    throw new Error('Network response was not ok');
-  }
-  const data = await res.json();
+export const mapWordDefinitions = (data: any[]): HomeContentProps[] => {
   return data.map((item: any) => ({
     item: {
       word: item.isArabic ? item.word.arabicWord : item.word.francoArabicWord || item.word.arabicWord,
@@ -40,6 +35,15 @@ const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => 
     arabicSpellings: item.arabicSpellings,
     francoSpellings: item.francoSpellings,
   }));
+};
+
+const fetchHomeContent = async (wordId: number): Promise<HomeContentProps[]> => {
+  const res = await fetch(`${API_URL}/definitions/word/${wordId}`, { credentials: 'include' });
+  if (!res.ok) {
+    throw new Error('Network response was not ok');
+  }
+  const data = await res.json();
+  return mapWordDefinitions(data);
 };
 
 const WordPage = () => {

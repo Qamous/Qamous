@@ -3,11 +3,10 @@ import { API_URL, apiJson } from "../src/api";
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ContentBox from '../src/components/ContentBox';
-import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AdSense from 'react-adsense';
 import { useQuery } from 'react-query';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 import AdSenseWrapper from '../src/components/AdSenseWrapper';
 
@@ -57,7 +56,7 @@ const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
 
 const SearchResults: React.FC = () => {
   const { query } = useParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const searchResults = t('search_results', {
     searchTerm: query,
     returnObjects: true,
@@ -66,7 +65,9 @@ const SearchResults: React.FC = () => {
   
   const { data: allResults, isLoading, error } = useQuery(['searchResults', query], () => fetchSearchResults(query || ''));
   
-  const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
+  const preferred=i18n.language==='ar'?1:0;
+  const covered=new Set((allResults||[]).filter(item=>item.isArabic===preferred).map(item=>item.canonicalWordId||item.wordId));
+  const filteredResults=(allResults||[]).filter(item=>item.isArabic===preferred||!covered.has(item.canonicalWordId||item.wordId));
   const [language, setLanguage] = useState(i18n.language);
   
   useEffect(() => {
@@ -87,15 +88,6 @@ const SearchResults: React.FC = () => {
       i18n.off('languageChanged', handleLanguageChange);
     };
   }, []);
-  
-  useEffect(() => {
-    if (allResults) {
-      const preferred=i18n.language==='ar'?1:0;
-      const covered=new Set(allResults.filter(item=>item.isArabic===preferred).map(item=>item.canonicalWordId||item.wordId));
-      const filteredData=allResults.filter(item=>item.isArabic===preferred||!covered.has(item.canonicalWordId||item.wordId));
-      setFilteredResults(filteredData);
-    }
-  }, [language, allResults]);
   
   if (isLoading) {
     return <LoadingSpinner />;

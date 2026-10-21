@@ -1,11 +1,10 @@
 import React from 'react';
 import './About.scss';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 
 const About: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div className={'about'} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
       <Helmet>
@@ -30,7 +29,7 @@ const About: React.FC = () => {
           <img className="about-hero-img-pic" src="./Oud.webp" alt="Oud - Traditional Middle Eastern string instrument" />
         </div>
       </div>
-      <p>
+      <div className="about-details">
         {t('about.text_3')}
         <a href="https://github.com/Qamous/Qamous"
            target="_blank"
@@ -72,7 +71,7 @@ const About: React.FC = () => {
         </span>
         <br />
         {t('about.text_15')}
-      </p>
+      </div>
       <div id="donation-buttons" className="buttons buttons-evenly">
         <a
           href="https://www.github.com/sponsors/anthonyyoussef01"

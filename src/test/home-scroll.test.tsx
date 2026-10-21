@@ -1,10 +1,10 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from './render';
 import { expect, it, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Home from '../../pages/Home';
 
 vi.mock('i18next',()=>({default:{language:'en'}}));
-vi.mock('react-i18next',()=>({useTranslation:()=>({t:(key:string)=>key==='sample_home'?[{word:'Welcome',definition:'Intro'}]:key})}));
+vi.mock('react-i18next',()=>({useTranslation:()=>({t:(key:string)=>key==='sample_home'?[{word:'Welcome',definition:'Intro'}]:key,i18n:{language:'en'}})}));
 vi.mock('../assets/utils',()=>({useIntersectionObserver:()=>[()=>{},true]}));
 vi.mock('../components/ContentBox',()=>({default:({item}:{item:{word:string}})=><article>{item.word}</article>}));
 

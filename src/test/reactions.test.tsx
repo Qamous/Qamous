@@ -1,12 +1,12 @@
 import React from 'react';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from './render';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { MemoryRouter } from 'react-router-dom';
 import ContentBox from '../components/ContentBox';
 import UserProfile from '../../pages/UserProfile';
 
-vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key === 'content_box_buttons' ? { like: 'Like', dislike: 'Dislike', share: 'Share', report: 'Report' } : key }) }));
+vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key === 'content_box_buttons' ? { like: 'Like', dislike: 'Dislike', share: 'Share', report: 'Report' } : key, i18n:{language:'en'} }) }));
 vi.mock('i18next', () => ({ default: { language: 'en' } }));
 afterEach(() => vi.unstubAllGlobals());
 const confirmed = (isLiked: boolean, isDisliked = false, success = true) => ({ definitionId: 106, isLiked, isDisliked, likeCount: Number(isLiked), dislikeCount: Number(isDisliked), success });

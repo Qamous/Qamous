@@ -23,6 +23,7 @@ jobs:
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npx vitest run
       - run: npm run build
+      - run: npm run test:ssr
       - run: npx tsc -p cloudflare/tsconfig.json
       # Production release remains a local, authenticated Cloudflare deployment.
       # Never reconstruct Firebase secrets or redeploy the retired Vercel app.

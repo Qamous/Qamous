@@ -4,7 +4,7 @@ import { API_URL, apiJson } from '../src/api';
 import ReactMarkdown from 'react-markdown';
 import './Blog.scss';
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 import { blogCopy, blogGuides } from '../src/content/blog-guides';
 import { Link } from 'react-router-dom';
@@ -80,6 +80,7 @@ const Blog = () => {
     // Format for English
     if (i18n.language === 'en') {
       return new Intl.DateTimeFormat('en-US', {
+        timeZone: 'UTC',
         year: 'numeric',
         month: 'short',
         day: '2-digit',
@@ -90,6 +91,7 @@ const Blog = () => {
     // Format for Arabic
     if (i18n.language === 'ar') {
       return new Intl.DateTimeFormat('ar-SA', {
+        timeZone: 'UTC',
         year: 'numeric',
         month: 'short',
         day: '2-digit',
@@ -136,7 +138,7 @@ const Blog = () => {
       {authLoading ? (
         <LoadingSpinner />
       ) : authData ? (
-        <form onSubmit={handlePostSubmit}>
+        <form method="post" onSubmit={handlePostSubmit}>
           <input
             type="text"
             value={postTitle}

@@ -56,6 +56,7 @@ export function setCookieWithExpiration(name: string, value: string, expirationT
  * @returns {null} - If the cookie does not exist.
  */
 export function getFunctionalCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
   const cookies = document.cookie.split(';');
   for (let i = 0; i < cookies.length; i++) {
     const cookie = cookies[i];
@@ -81,6 +82,7 @@ export function getFunctionalCookie(name: string): string | null {
  * @returns {null} - If the cookie does not exist.
  */
 export function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
   const cookies = document.cookie.split(';');
   for (let i = 0; i < cookies.length; i++) {
     const cookie = cookies[i];

@@ -36,7 +36,7 @@ const ResetPassword = () => {
   
   return (
     <div>
-      <form onSubmit={onSubmit} className={'container'}>
+      <form method="post" onSubmit={onSubmit} className={'container'}>
         <div className={'container-left'}>
           <img
             src="/nerdy-dog.jpg"

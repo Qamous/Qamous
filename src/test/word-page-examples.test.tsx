@@ -1,6 +1,6 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from './render';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import WordPage from '../../pages/WordPage';

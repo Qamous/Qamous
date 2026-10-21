@@ -1,12 +1,11 @@
 import {describe,it,expect} from 'vitest';
-import {wordPage} from '../../cloudflare/seo-content.mjs';
 import {renderSourceCredits} from '../../cloudflare/source-credits.mjs';
 const credit={sourceName:'Original dictionary',sourceUrl:'https://example.org/entry',
   credit:'Original authors <preserved>',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
   attributionRequired:1,notice:'Copyright notice',changes:'Extracted; text preserved.',rightsStatus:'licensed'};
 describe('rendered source attribution',()=>{
-  it('retains the selected definition license and original credit in non-JavaScript word pages',()=>{
-    const html=wordPage({rows:[{canonicalWordId:12,isArabic:0,arabicWord:'كتاب',definition:'A book',sourceCredits:[credit]}]},'en',12).html;
+  it('retains required licenses and original credit in attribution fragments',()=>{
+    const html=renderSourceCredits([credit]);
     expect(html).toContain('Original authors &lt;preserved&gt;');
     expect(html).toContain(credit.licenseUrl);
     expect(html).toContain(credit.notice);

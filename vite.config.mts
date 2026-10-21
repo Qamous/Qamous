@@ -4,7 +4,7 @@ import svgrPlugin from "vite-plugin-svgr";
 import envCompatible from "vite-plugin-env-compatible";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({isSsrBuild}) => ({
   base: "/",
   server: {
     port: 3001,
@@ -26,7 +26,7 @@ export default defineConfig({
     reportCompressedSize: false,
     rollupOptions: {
       output: {
-        manualChunks: {
+        manualChunks: isSsrBuild ? undefined : {
           'react-core': ['react', 'react-dom'],
           'react-router': ['react-router-dom'],
           'markdown': ['react-markdown', 'mdast-util-from-markdown', 'hast-util-to-jsx-runtime'],
@@ -67,4 +67,4 @@ export default defineConfig({
     }),
     envCompatible(/* options */),
   ],
-});
+}));
