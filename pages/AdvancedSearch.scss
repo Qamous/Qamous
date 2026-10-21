@@ -50,6 +50,9 @@
   user-select: none;
   transform: rotate(-5deg);
 }
+// Group joined glyphs before fading them. Firefox otherwise brightens their
+// overlapping strokes (Mozilla bug 2007255).
+.explore-watermark > span { color: inherit; font: inherit; isolation: isolate; }
 .explore-hero > .explore-search { grid-column: 1 / -1; }
 .dialect-intro { grid-column: 1 / -1; max-width: 72ch; margin: 0; line-height: 1.8; color: var(--explore-muted); }
 .dialect-guide { padding: 22px 0; border-bottom: 1px solid var(--explore-line); }
