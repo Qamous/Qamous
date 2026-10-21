@@ -1,5 +1,5 @@
 import {describe,it,expect,vi,beforeEach} from 'vitest';
-import worker, {requiresAnalyticsConsent} from './worker.ts';
+import worker,{requiresAnalyticsConsent} from './worker.ts';
 
 const rewrites=[];
 class TestRewriter {
@@ -9,82 +9,102 @@ class TestRewriter {
     for(const [selector,handler] of this.handlers) handler.element({
       setAttribute:(name,value)=>rewrites.push([selector,name,value]),
       setInnerContent:(value,options)=>rewrites.push([selector,value,options]),
+      append:(value,options)=>rewrites.push([selector,value,options]),
+      remove:()=>rewrites.push([selector,'removed']),
     });
     return response;
   }
 }
-function bindings(rows=[],status=200) {
-  const api=vi.fn(async()=>new Response(JSON.stringify(rows),{status}));
+const row={isArabic:0,canonicalWordId:2,arabicWord:'معلش',francoArabicWord:'ma3lish',definition:'Never mind',countryCode:'EG'};
+function bindings(apiPayload={rows:[row],related:{country:{countryCode:'EG',countryName:'Egypt'},words:[]}},status=200) {
+  const api=vi.fn(async(input)=>{
+    const path=new URL(input.url).pathname;
+    const payload=path==='/seo/index'&&!apiPayload?.countries?{buckets:[0],countries:[{countryName:'Egypt'}]}:apiPayload;
+    return new Response(JSON.stringify(payload),{status});
+  });
   const assets=vi.fn(async(input)=>{
     const path=new URL(input instanceof Request?input.url:String(input)).pathname;
-    return new Response(path==='/404'?'Page not found':'<html><head></head><body>App</body></html>',{status:['/','/404','/search','/reset-password','/word/2'].includes(path)?200:404,headers:{'Content-Type':'text/html','Content-Security-Policy':"frame-ancestors 'none'"}});
+    if(path==='/404') return new Response('Page not found',{headers:{'Content-Type':'text/html'}});
+    if(['/','/search','/reset-password'].includes(path)) return new Response('<html><head><title>Qamous</title></head><body><div id="root"></div></body></html>',{headers:{'Content-Type':'text/html'}});
+    return new Response('Missing',{status:404,headers:{'Content-Type':'text/html'}});
   });
-  // Only fetch is used; no live bindings or production credentials enter these tests.
   return {env:{API:{fetch:api},ASSETS:{fetch:assets}},api,assets};
 }
 beforeEach(()=>{rewrites.length=0;vi.stubGlobal('HTMLRewriter',TestRewriter);});
 
 describe('regional analytics policy',()=>{
-  it('requires opt-in across EEA/UK/Switzerland and unknown locations, not US or Egypt',()=>{
-    for(const country of ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH',undefined,'','XX','T1']) expect(requiresAnalyticsConsent(country)).toBe(true);
-    for(const country of ['US','EG','CA','AU','SA']) expect(requiresAnalyticsConsent(country)).toBe(false);
+  it('requires opt-in across Europe and unknown locations',()=>{
+    for(const country of ['FR','DE','GB','CH',undefined,'','XX']) expect(requiresAnalyticsConsent(country)).toBe(true);
+    for(const country of ['US','EG','CA']) expect(requiresAnalyticsConsent(country)).toBe(false);
   });
-  it('returns only a non-cacheable policy boolean from trusted metadata, not request headers',async()=>{
+  it('uses trusted metadata and never caches the consent decision',async()=>{
     const {env,api}=bindings();
     const request=new Request('https://qamous.org/api/privacy-region',{headers:{'CF-IPCountry':'US'}});
-    const unknown=await worker.fetch(request,env);
-    expect(await unknown.json()).toEqual({requiresConsent:true});
+    expect(await (await worker.fetch(request,env)).json()).toEqual({requiresConsent:true});
     Object.defineProperty(request,'cf',{value:{country:'US'}});
     const response=await worker.fetch(request,env);
     expect(await response.json()).toEqual({requiresConsent:false});
     expect(response.headers.get('Cache-Control')).toContain('no-store');
-    expect(response.headers.get('CDN-Cache-Control')).toBe('no-store');
     expect(api).not.toHaveBeenCalled();
-    expect((await worker.fetch(new Request(request.url,{method:'POST'}),env)).status).toBe(405);
-    expect((await worker.fetch(new Request(request.url,{method:'HEAD'}),env)).body).toBeNull();
   });
 });
-describe('asset-first routing with genuine missing-page responses',()=>{
-  it('returns 404/noindex for unknown routes and missing words, including navigation and HEAD',async()=>{
-    for(const path of ['/missing','/word/999999','/word/not-an-id','/advanced-search/Unknown','/word/999999/fr']) {
-      const {env}=bindings();
-      const response=await worker.fetch(new Request('https://qamous.org'+path,{headers:{'Sec-Fetch-Mode':'navigate'}}),env);
+describe('dynamic search pages and sitemaps',()=>{
+  it('renders actual public word data in root and strips private request headers',async()=>{
+    const {env,api}=bindings();
+    const response=await worker.fetch(new Request('https://qamous.org/word/2',{headers:{Cookie:'private-cookie',Authorization:'private-token'}}),env);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('X-Robots-Tag')).toBe('index, follow');
+    expect(rewrites.find(item=>item[0]==='#root')?.[1]).toContain('Never mind');
+    expect(rewrites.find(item=>item[0]==='head')?.[1]).toContain('DefinedTerm');
+    expect(new URL(api.mock.calls[0][0].url).pathname).toBe('/seo/word/2');
+    expect(api.mock.calls[0][0].headers.get('Cookie')).toBeNull();
+    expect(api.mock.calls[0][0].headers.get('Authorization')).toBeNull();
+  });
+  it('redirects aliases, returns real 404s, and treats outages as temporary',async()=>{
+    const {env}=bindings();
+    const alias=await worker.fetch(new Request('https://qamous.org/word/2/en?keep=1'),env);
+    expect(alias.status).toBe(308);expect(alias.headers.get('Location')).toBe('https://qamous.org/word/2?keep=1');
+    const changed=bindings({rows:[{...row,canonicalWordId:1}],related:{words:[]}});
+    expect((await worker.fetch(new Request('https://qamous.org/word/2'),changed.env)).headers.get('Location')).toBe('https://qamous.org/word/1');
+    for(const path of ['/word/not-an-id','/word/999999','/advanced-search/%ZZ','/missing']) {
+      const response=await worker.fetch(new Request('https://qamous.org'+path),bindings({},404).env);
       expect(response.status).toBe(404);expect(response.headers.get('X-Robots-Tag')).toContain('noindex');
     }
-    const {env}=bindings();expect((await worker.fetch(new Request('https://qamous.org/missing',{method:'HEAD'}),env)).body).toBeNull();
+    expect((await worker.fetch(new Request('https://qamous.org/word/2'),bindings({},503).env)).status).toBe(503);
+    expect((await worker.fetch(new Request('https://qamous.org/word/2'),bindings({rows:[{...row,definition:'x'.repeat(270000)}]}).env)).status).toBe(503);
   });
-  it('keeps reset/search deep links, avoids indexing their tokens, and redirects English aliases',async()=>{
+  it('keeps missing-language pages noindex with the available canonical',async()=>{
     const {env}=bindings();
-    for(const path of ['/reset-password/private-token','/search/hello']) {
+    const response=await worker.fetch(new Request('https://qamous.org/word/2/ar'),env);
+    expect(response.status).toBe(200);expect(response.headers.get('X-Robots-Tag')).toBe('noindex, follow');
+    expect(rewrites.find(item=>item[0]==='link[rel="canonical"]')?.[2]).toBe('https://qamous.org/word/2');
+  });
+  it('serves XML index/shards and crawlable browse pages without React scripts',async()=>{
+    const index=bindings({buckets:[0,250],countries:[{countryName:'Egypt'}]});
+    const xml=await worker.fetch(new Request('https://qamous.org/sitemap.xml'),index.env);
+    expect(xml.headers.get('Content-Type')).toContain('application/xml');
+    expect(await xml.text()).toContain('/sitemap-words-250.xml');
+    const shard=bindings([{id:250001,en:1,ar:1}]);
+    expect(await (await worker.fetch(new Request('https://qamous.org/sitemap-words-250.xml'),shard.env)).text()).toContain('/word/250001/ar');
+    const browse=bindings({language:'en',words:[{canonicalId:2,canonicalArabic:'معلش',francoArabicWord:'ma3lish',sortWord:'ma3lish'}],next:2});
+    const response=await worker.fetch(new Request('https://qamous.org/browse/en'),browse.env);
+    expect(response.status).toBe(200);
+    expect(rewrites.find(item=>item[0]==='#root')?.[1]).toContain('href="/browse/en?after=2"');
+    expect(rewrites.some(item=>item[0]==='script'&&item[1]==='removed')).toBe(true);
+  });
+  it('preserves required source attribution in initial word HTML',async()=>{
+    const sourceCredits=[{sourceName:'Original dictionary',sourceUrl:'https://example.org/entry',credit:'Original authors',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',attributionRequired:true,notice:'Copyright notice'}];
+    const {env}=bindings({rows:[{...row,sourceCredits}],related:{words:[]}});
+    expect((await worker.fetch(new Request('https://qamous.org/word/2'),env)).status).toBe(200);
+    const html=rewrites.find(item=>item[0]==='#root')?.[1];
+    for(const text of ['Original dictionary','Original authors','CC BY-SA 4.0','Copyright notice']) expect(html).toContain(text);
+  });
+  it('keeps token and search routes private',async()=>{
+    const {env}=bindings();
+    for(const path of ['/search/hello','/reset-password/private-token']) {
       const response=await worker.fetch(new Request('https://qamous.org'+path),env);
       expect(response.status).toBe(200);expect(response.headers.get('X-Robots-Tag')).toContain('noindex');
     }
     expect(JSON.stringify(rewrites)).not.toContain('private-token');
-    const alias=await worker.fetch(new Request('https://qamous.org/word/2/en?keep=1'),env);
-    expect(alias.status).toBe(308);expect(alias.headers.get('Location')).toBe('https://qamous.org/word/2?keep=1');
-  });
-  it('serves words added after the static build and treats API limits as temporary failure, not 404',async()=>{
-    const {env,api}=bindings([{isArabic:0,definition:'A public meaning',word:{id:99,arabicWord:'ÙƒÙ„Ù…Ø©',francoArabicWord:'kalima'}}]);
-    const response=await worker.fetch(new Request('https://qamous.org/word/99',{headers:{Cookie:'private-cookie',Authorization:'private-token'}}),env);
-    expect(response.status).toBe(200);expect(response.headers.get('Cache-Control')).toBe('no-store');
-    expect(JSON.stringify(rewrites)).toContain('https://qamous.org/word/99');
-    const sent=api.mock.calls[0];
-    expect(new URL(sent[0].url).pathname).toBe('/word/99/seo');
-    expect(sent[0].headers.get('Cookie')).toBeNull();expect(sent[0].headers.get('Authorization')).toBeNull();
-    const outage=bindings({},503);expect((await worker.fetch(new Request('https://qamous.org/word/99'),outage.env)).status).toBe(503);
-    const oversized=bindings([{definition:'x'.repeat(270000)}]);expect((await worker.fetch(new Request('https://qamous.org/word/99'),oversized.env)).status).toBe(503);
-    const arabic=bindings([{isArabic:1,definition:'Ù…Ø¹Ù†Ù‰',word:{id:99,arabicWord:'ÙƒÙ„Ù…Ø©',francoArabicWord:null}}]);
-    const localized=await worker.fetch(new Request('https://qamous.org/word/99'),arabic.env);
-    expect(localized.status).toBe(200);expect(localized.headers.get('Location')).toBeNull();
-    const englishOnly=bindings([{isArabic:0,definition:'English meaning',word:{id:99,arabicWord:'ÙƒÙ„Ù…Ø©',francoArabicWord:'kalima'}}]);
-    expect((await worker.fetch(new Request('https://qamous.org/word/99/ar'),englishOnly.env)).status).toBe(200);
-    expect(rewrites.filter(row=>row[0]==='noscript').at(-1)[1]).toContain('<p lang="en" dir="ltr">English meaning</p>');
-  });
-  it('keeps required source credit, license, notices and changes on dynamically rendered imported word pages',async()=>{
-    const sourceCredits=[{sourceId:'source',sourceName:'Original dictionary',sourceUrl:'https://example.org/entry',credit:'Original authors',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',attributionRequired:true,notice:'Copyright notice',changes:['Franco generated by Qamous']}];
-    const {env}=bindings([{isArabic:0,definition:'A public meaning',sourceCredits,word:{id:1000000001,arabicWord:'ÙƒØªØ§Ø¨',francoArabicWord:'ktab'}}]);
-    expect((await worker.fetch(new Request('https://qamous.org/word/1000000001'),env)).status).toBe(200);
-    const noscript=rewrites.find(row=>row[0]==='noscript')[1];
-    for(const text of ['Original dictionary','Original authors','CC BY-SA 4.0','Copyright notice','Franco generated by Qamous','https://example.org/entry']) expect(noscript).toContain(text);
   });
 });

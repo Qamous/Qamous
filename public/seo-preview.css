@@ -1,0 +1,10 @@
+.seo-initial{box-sizing:border-box;max-width:900px;margin:0 auto;padding:clamp(2rem,6vw,5rem) 1.25rem;color:var(--primary-color,#fff);background:var(--quaternary-color,#292929);font-family:var(--font-stack,"Segoe UI",sans-serif);line-height:1.65}
+.seo-initial h1{font-size:clamp(1.7rem,5vw,2.8rem);line-height:1.2;color:var(--secondary-color,#dd8500);margin:0 0 1rem}
+.seo-initial h2{font-size:1.3rem;margin:2rem 0 .5rem}
+.seo-initial p{margin:.5rem 0 1rem}
+.seo-initial a{color:var(--secondary-color,#dd8500);text-decoration:underline;text-underline-offset:.16em}
+.seo-initial nav ul{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;padding:0;list-style:none}
+.seo-initial ol{padding-inline-start:1.5rem}
+.seo-initial li{margin:.35rem 0}
+.seo-initial [lang="ar"]{direction:rtl}
+@media(max-width:600px){.seo-initial{padding:1.5rem 1rem}}

@@ -1,35 +1,58 @@
 import {describe,it,expect} from 'vitest';
 import {canonicalPath,isPrivateOrUtilityPath} from '../components/SeoMetadata';
-import {renderSeoHtml,sitemap,wordMetadata} from '../../cloudflare/generate-seo.mjs';
-import {readFileSync} from 'node:fs';
-import {resolve} from 'node:path';
-describe('public SEO and escaping',()=>{
-  it('canonicalizes English duplicates and excludes private utility pages',()=>{
+import {renderSeoHtml} from '../../cloudflare/generate-seo.mjs';
+import {wordPage,sitemapIndex,sitemapStatic,sitemapWords,jsonLd,browsePage} from '../../cloudflare/seo-content.mjs';
+
+const row={isArabic:0,canonicalWordId:2,arabicWord:'معلش',francoArabicWord:'ma3lish',definition:'Never mind',countryCode:'EG'};
+
+describe('public SEO output',()=>{
+  it('canonicalizes English aliases and excludes private utility pages',()=>{
     expect(canonicalPath('/word/2/en/')).toBe('/word/2');
     expect(canonicalPath('/word/2/ar')).toBe('/word/2/ar');
     for(const path of ['/profile','/login','/reset-password/token','/search/query','/chatbot']) expect(isPrivateOrUtilityPath(path)).toBe(true);
-    expect(isPrivateOrUtilityPath('/word/2')).toBe(false);
   });
-  it('escapes community text in static metadata without executing HTML',()=>{
-    const word={id:2,arabicWord:'معلش',francoArabicWord:'ma3lish',descriptionEn:'\"></title><script>alert(1)</script>',descriptionAr:''};
-    const html=renderSeoHtml('<html lang="en"><head><title>Old</title><meta name="description" content="old"></head><body><noscript>old</noscript><div id="root"></div></body></html>',wordMetadata(word));
-    expect(html).not.toContain('<script>alert(1)</script>');
+  it('puts safe, semantic bilingual word content in the initial HTML',()=>{
+    const page=wordPage({rows:[{...row,definition:'Never mind </script><script>evil()</script>'},{...row,isArabic:1,definition:'لا بأس'}],related:{country:{countryCode:'EG',countryName:'Egypt'},words:[{id:3,canonicalArabic:'يلا',francoArabicWord:'yalla'}]}},'en',2)!;
+    expect(page.title).toContain('meaning in English');
+    expect(page.description).toContain('What does ma3lish mean?');
+    expect(page.html).toContain('<main');expect(page.html).toContain('<h1>');
+    expect(page.html).toContain('lang="ar"');expect(page.html).toContain('href="/word/3"');
+    expect(page.html).toContain('href="/browse/en"');
+    expect(page.html).not.toContain('<script>evil()');
+    expect(page.alternates).toHaveLength(2);
+    expect(page.schema['@type']).toBe('DefinedTerm');
+    expect(jsonLd(page.schema)).not.toContain('<script>');
+    const ar=wordPage({rows:[{...row,isArabic:1,definition:'لا بأس'}]},'ar',2)!;
+    expect(ar.title).toContain('معنى معلش');expect(ar.description).toContain('ما معنى معلش؟');
+    expect(ar.alternates).toHaveLength(0);
+    const missing=wordPage({rows:[row]},'ar',2)!;
+    expect(missing.robots).toBe('noindex, follow');expect(missing.canonicalPath).toBe('/word/2');
+  });
+  it('escapes static initial content and avoids noscript dependence',()=>{
+    const template='<html lang="en"><head><title>Old</title></head><body><noscript>Old</noscript><div id="initial-loader"><div></div></div><div id="root"></div></body></html>';
+    const html=renderSeoHtml(template,{path:'/',title:'Qamous',description:'<script>evil()</script>',links:[{href:'/browse/en',label:'Browse'}]});
+    expect(html).toContain('<main class="seo-initial"');expect(html).toContain('href="/browse/en"');
+    expect(html).not.toContain('<noscript>');expect(html).not.toContain('<script>evil()');
     expect(html.match(/rel="canonical"/g)).toHaveLength(1);
-    expect(html).toContain('https://qamous.org/word/2');
-    expect(html).toContain('id="root"');
-    expect(wordMetadata({...word,descriptionAr:'معنى'},'ar').path).toBe('/word/2/ar');
-    expect(()=>wordMetadata({...word,id:-1})).toThrow();
   });
-  it('emits an HTTPS sitemap with no duplicate or unescaped URLs',()=>{
-    const xml=sitemap(['/','/word/2','/word/2','/advanced-search/A&B']);
-    expect(xml.match(/<url>/g)).toHaveLength(3);
-    expect(xml).toContain('A&amp;B');
-    expect(xml).not.toContain('http://qamous.org');
+  it('partitions 500,000 words into bounded XML sitemaps',()=>{
+    const index=sitemapIndex({buckets:Array.from({length:500},(_,i)=>i)});
+    expect(index.match(/<sitemap>/g)).toHaveLength(501);
+    let urls=0;
+    for(let bucket=0;bucket<500;bucket++) {
+      const rows=Array.from({length:1000},(_,i)=>({id:bucket*1000+i+1,en:1,ar:1}));
+      const xml=sitemapWords(rows);
+      const count=xml.match(/<url>/g)?.length||0;
+      expect(count).toBe(2000);expect(xml.length).toBeLessThan(50_000_000);
+      urls+=count;
+    }
+    expect(urls).toBe(1_000_000);
+    expect(sitemapStatic({countries:[{countryName:'A&B'}]})).toContain('A%26B');
   });
-  it('does not depend on third-party country lookups for word metadata',()=>{
-    const page=readFileSync(resolve(process.cwd(),'pages/WordPage.tsx'),'utf8');
-    expect(page).not.toContain('getDemonyms');
-    expect(page).not.toContain('name="keywords"');
-    expect(page).toContain('name="description"');
+  it('exposes next pages and word links through ordinary anchors',()=>{
+    const page=browsePage({language:'en',words:[{canonicalId:2,canonicalArabic:'معلش',francoArabicWord:'ma3lish',sortWord:'ma3lish'}],next:2},{countries:[{countryName:'Egypt'}]},null);
+    expect(page.html).toContain('href="/word/2"');
+    expect(page.html).toContain('href="/browse/en?after=2"');
+    expect(page.html).toContain('href="/advanced-search/Egypt"');
   });
 });

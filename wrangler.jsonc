@@ -8,7 +8,7 @@
   "workers_dev": false,
   "preview_urls": false,
   "routes": [{"pattern":"qamous.org","custom_domain":true}],
-  "assets": {"directory":"build","binding":"ASSETS","not_found_handling":"none","html_handling":"drop-trailing-slash","run_worker_first":["/api/*","/api"]},
+  "assets": {"directory":"build","binding":"ASSETS","not_found_handling":"none","html_handling":"drop-trailing-slash","run_worker_first":["/api/*","/api","/word/*","/sitemap*.xml","/browse/*","/advanced-search/*"]},
   "services": [{"binding":"API","service":"qamous-api"}],
   "observability": {"enabled":true,"head_sampling_rate":0.05,"logs":{"invocation_logs":false}}
 }
