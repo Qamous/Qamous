@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
 import './Chatbot.scss';
 import ReactMarkdown from 'react-markdown';
-import { API_URL, apiJson } from '../src/api';
+import { Link } from 'react-router-dom';
+import { API_URL, ApiError, apiJson } from '../src/api';
 
 interface RagRequest {
   query: string;
@@ -56,6 +57,7 @@ const Chatbot: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [verificationToken, setVerificationToken] = useState('');
   const [verificationError, setVerificationError] = useState(false);
+  const [guestLimitReached, setGuestLimitReached] = useState(false);
   const turnstileHostRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
 
@@ -102,6 +104,7 @@ const Chatbot: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(request),
+        credentials: 'include',
       });
       
       return apiJson<RagResponse>(response);
@@ -118,11 +121,11 @@ const Chatbot: React.FC = () => {
   
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, guestLimitReached]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || !verificationToken || ragMutation.isLoading) return;
+    if (!input.trim() || !verificationToken || ragMutation.isLoading || guestLimitReached) return;
     const submittedToken = verificationToken;
     setVerificationToken('');
     
@@ -157,15 +160,17 @@ const Chatbot: React.FC = () => {
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       setIsTyping(false);
-      // Handle error
-      console.error('Error:', error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          type: 'assistant',
-          content: error instanceof Error ? error.message : t('chatbot.error_message'),
-        },
-      ]);
+      if (error instanceof ApiError && error.code === 'GUEST_CHAT_LIMIT') {
+        setGuestLimitReached(true);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: 'assistant',
+            content: error instanceof Error ? error.message : t('chatbot.error_message'),
+          },
+        ]);
+      }
     } finally {
       if (widgetIdRef.current) turnstile()?.reset(widgetIdRef.current);
     }
@@ -263,6 +268,12 @@ const Chatbot: React.FC = () => {
               <div className="chatbot-typing-dot"></div>
             </div>
           )}
+          {guestLimitReached && (
+            <div className="chatbot-guest-limit" role="status">
+              <span>{t('chatbot.guest_limit')}</span>
+              <Link to="/login" state={{returnTo: '/chatbot'}}>{t('chatbot.sign_in_to_continue')}</Link>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
         
@@ -277,10 +288,10 @@ const Chatbot: React.FC = () => {
             onKeyDown={handleKeyDown}
             placeholder={t('chatbot.input_placeholder')}
             rows={2}
-            disabled={ragMutation.isLoading}
+            disabled={ragMutation.isLoading || guestLimitReached}
             dir={directionClass}
           />
-          <button type="submit" disabled={ragMutation.isLoading || !verificationToken}>
+          <button type="submit" disabled={ragMutation.isLoading || !verificationToken || guestLimitReached}>
             {ragMutation.isLoading ? (
               <div className="loading">
                 <span>{t('chatbot.sending')}</span>
