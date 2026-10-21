@@ -74,6 +74,12 @@ const WordPage = () => {
   const pageDescription=(actualLanguage==='ar'?`ما معنى ${arabicWord}؟ `:`What does ${term} mean? `)+[...definition].slice(0,155).join('');
   const canonicalId=displayWord?.canonicalWordId||wordIdNumber;
   const canonical=`https://qamous.org/word/${canonicalId}${actualLanguage==='ar'?'/ar':''}`;
+  const termSchema=displayWord?{
+    '@context':'https://schema.org','@type':'DefinedTerm',name:arabicWord,
+    ...(franco?{alternateName:franco}:{}),description:definition,url:canonical,
+    inDefinedTermSet:{'@type':'DefinedTermSet',name:'Qamous Arabic dialect dictionary',url:'https://qamous.org/'}
+  }:null;
+  const safeSchema=termSchema?JSON.stringify(termSchema).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026'):null;
   
   return (
     <div className='feed'>
@@ -86,7 +92,8 @@ const WordPage = () => {
         <meta name="twitter:description" content={pageDescription}/>
         {definitionLanguages.includes('en')&&definitionLanguages.includes('ar')&&<link rel="alternate" hrefLang="en" href={`https://qamous.org/word/${canonicalId}`}/>}
         {definitionLanguages.includes('en')&&definitionLanguages.includes('ar')&&<link rel="alternate" hrefLang="ar" href={`https://qamous.org/word/${canonicalId}/ar`}/>}
-        {!hasPreferred&&<meta name="robots" content="noindex, follow"/>}
+        <meta name="robots" content={hasPreferred?'index, follow':'noindex, follow'}/>
+        {safeSchema&&<script type="application/ld+json">{safeSchema}</script>}
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription}/>
       </Helmet>

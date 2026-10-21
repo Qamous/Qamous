@@ -59,10 +59,10 @@ async function htmlPage(request:Request,env:Env,meta:any,staticOnly=false) {
     .on('link[rel="canonical"]',{element(e){e.setAttribute('href',canonical);}})
     .on('#root',{element(e){e.setInnerContent(meta.html,{html:true});}})
     .on('head',{element(e){e.append(
-      `<meta name="robots" content="${escapeHtml(meta.robots||'index, follow')}">`
-      +(meta.alternates||[]).map((a:{lang:string;path:string})=>`<link rel="alternate" hreflang="${a.lang}" href="https://qamous.org${a.path}">`).join('')
+      `<meta data-react-helmet="true" name="robots" content="${escapeHtml(meta.robots||'index, follow')}">`
+      +(meta.alternates||[]).map((a:{lang:string;path:string})=>`<link data-react-helmet="true" rel="alternate" hreflang="${a.lang}" href="https://qamous.org${a.path}">`).join('')
       +(meta.next?`<link rel="next" href="https://qamous.org${escapeHtml(meta.next)}">`:'')
-      +(meta.schema?`<script type="application/ld+json">${jsonLd(meta.schema)}</script>`:''),{html:true});}});
+      +(meta.schema?`<script data-react-helmet="true" type="application/ld+json">${jsonLd(meta.schema)}</script>`:''),{html:true});}});
   if(staticOnly) rewrite=rewrite.on('script',{element(e){e.remove();}});
   const rendered=rewrite.transform(asset);
   const headers=new Headers(rendered.headers);

@@ -50,12 +50,15 @@ describe('regional analytics policy',()=>{
 });
 describe('dynamic search pages and sitemaps',()=>{
   it('renders actual public word data in root and strips private request headers',async()=>{
-    const {env,api}=bindings();
+    const {env,api}=bindings({rows:[row,{...row,isArabic:1,definition:'ولا يهمك'}],related:{country:{countryCode:'EG',countryName:'Egypt'},words:[]}});
     const response=await worker.fetch(new Request('https://qamous.org/word/2',{headers:{Cookie:'private-cookie',Authorization:'private-token'}}),env);
     expect(response.status).toBe(200);
     expect(response.headers.get('X-Robots-Tag')).toBe('index, follow');
     expect(rewrites.find(item=>item[0]==='#root')?.[1]).toContain('Never mind');
-    expect(rewrites.find(item=>item[0]==='head')?.[1]).toContain('DefinedTerm');
+    const head=rewrites.find(item=>item[0]==='head')?.[1];
+    expect(head).toContain('DefinedTerm');
+    expect(head).toContain('<link data-react-helmet="true" rel="alternate"');
+    expect(head).toContain('<script data-react-helmet="true" type="application/ld+json">');
     expect(new URL(api.mock.calls[0][0].url).pathname).toBe('/seo/word/2');
     expect(api.mock.calls[0][0].headers.get('Cookie')).toBeNull();
     expect(api.mock.calls[0][0].headers.get('Authorization')).toBeNull();
