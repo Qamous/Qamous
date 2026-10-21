@@ -1,14 +1,12 @@
 import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {join} from 'node:path';
-import {spawn,spawnSync} from 'node:child_process';
+import {spawn} from 'node:child_process';
 import {generateSeo} from './generate-seo.mjs';
 import {verifyFreePlan,ACCOUNT_ID} from '../../qamous-backend/cloudflare/scripts/free-plan-guard.mjs';
 await verifyFreePlan();
 if(process.argv.slice(2).some(arg=>arg!=='--dry-run')) throw new Error('Deployment refused: configuration/account overrides are not allowed');
 const root=fileURLToPath(new URL('..',import.meta.url));
-const seo=spawnSync(process.execPath,[join(root,'../qamous-backend/cloudflare/scripts/export-seo.mjs')],{stdio:'inherit',windowsHide:true});
-if(seo.status!==0) throw new Error('Deployment refused: authorized public SEO export failed');
 await generateSeo(root);
 const config=JSON.parse(await readFile(join(root,'wrangler.jsonc'),'utf8'));
 if(config.account_id!==ACCOUNT_ID||config.name!=='qamous-web'||config.services?.length!==1||config.services[0].service!=='qamous-api') throw new Error('Frontend deployment refused: unapproved account or service');

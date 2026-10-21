@@ -13,11 +13,12 @@ export default function SeoMetadata() {
   const {pathname,search}=useLocation();
   const canonical='https://qamous.org'+canonicalPath(pathname);
   const preview=window.location.hostname.endsWith('.workers.dev');
+  const wordPage=/^\/word\/\d+(?:\/(?:en|ar))?\/?$/.test(pathname);
   return <Helmet>
-    <link rel="canonical" href={canonical}/>
-    <meta property="og:url" content={canonical}/>
+    {!wordPage&&<link rel="canonical" href={canonical}/>}
+    {!wordPage&&<meta property="og:url" content={canonical}/>}
     <meta property="og:image" content="https://qamous.org/preview.png"/>
     <meta name="twitter:image" content="https://qamous.org/preview.png"/>
-    <meta name="robots" content={preview||isPrivateOrUtilityPath(pathname)||(pathname.startsWith('/advanced-search')&&Boolean(search))?'noindex, follow':'index, follow'}/>
+    {!wordPage&&<meta name="robots" content={preview||isPrivateOrUtilityPath(pathname)||(pathname.startsWith('/advanced-search')&&Boolean(search))?'noindex, follow':'index, follow'}/>}
   </Helmet>;
 }
