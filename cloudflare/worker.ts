@@ -29,6 +29,8 @@ async function boundedJson(response:Response):Promise<any> {
 async function seoData(request:Request,env:Env,path:string) {
   const headers=new Headers({'Accept':'application/json'});
   const ip=request.headers.get('CF-Connecting-IP');if(ip) headers.set('CF-Connecting-IP',ip);
+  const internalSecret=(env as Env & {SEO_INTERNAL_SECRET?:string}).SEO_INTERNAL_SECRET;
+  if(typeof internalSecret==='string'&&internalSecret.length>=32) headers.set('X-Qamous-Seo-Internal',internalSecret);
   const response=await env.API.fetch(new Request(new URL(path,request.url),{headers,signal:AbortSignal.timeout(10000)}));
   if(response.status===404) {await response.body?.cancel();throw new SeoNotFound();}
   if(!response.ok) {await response.body?.cancel();throw new Error('SEO data unavailable');}
