@@ -92,6 +92,8 @@ const Footer: React.FC = () => {
         </div>
         <div className="footer-expanded" id="footer-details" aria-hidden={!isExpanded}>
           <div className="footer-links">
+            <NavLink to="/browse/en" tabIndex={isExpanded ? 0 : -1}>{ar ? 'تصفح المعاني بالإنجليزية' : 'Browse English meanings'}</NavLink>
+            <NavLink to="/browse/ar" tabIndex={isExpanded ? 0 : -1}>{ar ? 'تصفح المعاني بالعربية' : 'Browse Arabic meanings'}</NavLink>
             <NavLink to="//francoarabic.com" target="_blank" tabIndex={isExpanded ? 0 : -1}>
               {t('footer.franco_arabic_basics')}
             </NavLink>

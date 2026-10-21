@@ -22,7 +22,7 @@ export interface HomeContentProps extends ContentBoxContent {
   isAdvancedSearch?: boolean,
 }
 
-const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item:givenItem, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example, sourceCredits, sourceExamples, sourcePronunciations,definitionLanguage,definitionLanguages,dialect,canonicalWordId,showMissingMeaningPrompt }) => {
+const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReported, countryCode, countryName, alternateSpellings, arabicSpellings, francoSpellings, arabicExample, item:givenItem, index, lang, wordId, definitionId, definitionHuh, isAdvancedSearch, example, sourceCredits, sourceExamples, sourcePronunciations,definitionLanguage,definitionLanguages,dialect,canonicalWordId,showMissingMeaningPrompt,headingLevel }) => {
   const item={...givenItem,word:lang==='ar'?(givenItem.arabicWord||givenItem.word):(givenItem.francoArabicWord||givenItem.word)};
   const { t } = useTranslation();
   
@@ -302,6 +302,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
       definitionHuh={definitionHuh}
       example={example}
       wordHref={wordId ? `/word/${canonicalWordId||wordId}${lang==='ar'?'/ar':''}` : undefined}
+      headingLevel={headingLevel}
       highlighted={index === 0}
       overlays={<>
       {showDialog && (

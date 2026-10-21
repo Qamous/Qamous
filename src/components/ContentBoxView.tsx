@@ -26,6 +26,7 @@ export interface ContentBoxContent extends ProvenanceContent {
   definitionLanguage?: string;
   addMeaningHref?: string;
   showMissingMeaningPrompt?: boolean;
+  headingLevel?: 1 | 2;
 }
 
 interface ContentBoxViewProps extends ContentBoxContent {
@@ -39,7 +40,7 @@ interface ContentBoxViewProps extends ContentBoxContent {
 // Persistence, reactions and sharing belong to the interactive ContentBox.
 const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function ContentBoxView({
   item, lang, countryCode, countryName, definitionHuh, example, arabicExample, arabicSpellings, francoSpellings, alternateSpellings,
-  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,definitionLanguage,definitionLanguages,dialect,addMeaningHref,showMissingMeaningPrompt=true,
+  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,definitionLanguage,definitionLanguages,dialect,addMeaningHref,showMissingMeaningPrompt=true,headingLevel=1,
 }, ref) {
   const [resolvedCountry, setResolvedCountry] = useState({ code: '', name: '' });
   useEffect(() => {
@@ -62,7 +63,7 @@ const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function 
   return <div className={`content-box${highlighted ? ' content-box-first' : ''}${lang === 'ar' ? ' content-box-ar' : ' content-box-latin'}`} ref={ref}>
     {overlays}
     <div className="content-box-title">
-      {wordHref ? <Link to={wordHref}><h1>{stripTashkil(displayWord)}</h1></Link> : <h1>{stripTashkil(displayWord)}</h1>}
+      {wordHref ? <Link to={wordHref}>{headingLevel===1?<h1>{stripTashkil(displayWord)}</h1>:<h2>{stripTashkil(displayWord)}</h2>}</Link> : headingLevel===1?<h1>{stripTashkil(displayWord)}</h1>:<h2>{stripTashkil(displayWord)}</h2>}
       {countryCode && <ReactCountryFlag countryCode={countryCode} svg style={{ width: '2em', height: '2em' }} title={flagLabel} aria-label={flagLabel} />}
     </div>
     {!countryCode&&displayDialect&&<p className="content-box-dialect" dir="auto">{displayDialect}</p>}

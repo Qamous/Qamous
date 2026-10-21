@@ -2,36 +2,49 @@ import assert from 'node:assert/strict';
 
 const base=process.argv[2]||'https://qamous.org';
 const checks=[];
-async function inspect(path,status,validate,headers={}) {
-  const response=await fetch(new URL(path,base),{redirect:'manual',headers,signal:AbortSignal.timeout(15000)});
-  const body=await response.text();assert.equal(response.status,status,path);
+async function inspect(path,status,validate) {
+  const response=await fetch(new URL(path,base),{redirect:'manual',signal:AbortSignal.timeout(20000)});
+  const body=await response.text();
+  assert.equal(response.status,status,path);
   if(validate) validate(body,response);
-  checks.push({path,status,passed:true});return body;
+  checks.push(path);
+  return body;
 }
-const canonical=(path)=>(body)=>assert.ok(body.includes(`rel="canonical" href="https://qamous.org${path}"`),path+' initial canonical');
-const countries=JSON.parse(await inspect('/api/countries',200));
-for(const path of ['/','/about','/blog','/advanced-search','/word/2','/word/11/ar']) await inspect(path,200,canonical(path));
-for(const country of countries) {
-  const path='/advanced-search/'+encodeURIComponent(country.countryName);
-  await inspect(path,200,(body)=>{canonical(path)(body);assert.ok(/href="\/word\/\d+/.test(body),'crawlable vocabulary links');assert.ok(body.includes('href="/advanced-search/'),'cross-dialect links');}, {'Sec-Fetch-Mode':'navigate'});
-}
-for(const path of ['/word/99999999','/word/not-an-id','/this-page-does-not-exist-seo-check','/advanced-search/Unknown']) {
-  for(const headers of [{},{'Sec-Fetch-Mode':'navigate'}]) await inspect(path,404,(body,response)=>{
-    assert.ok(response.headers.get('x-robots-tag')?.includes('noindex'));
-    assert.ok(body.includes('Page not found'));assert.ok(!body.includes('rel="canonical"'));
-  },headers);
-}
-for(const [path,canonicalPath] of [['/search/seo-check','/search'],['/reset-password/disposable-seo-check','/reset-password']]) {
-  await inspect(path,200,(body,response)=>{canonical(canonicalPath)(body);assert.ok(response.headers.get('x-robots-tag')?.includes('noindex'));assert.ok(!body.includes('disposable-seo-check'));},{'Sec-Fetch-Mode':'navigate'});
-}
-await inspect('/word/2/en?preserve=1',308,(_body,response)=>assert.equal(response.headers.get('location'),new URL('/word/2?preserve=1',base).toString()));
-await inspect('/api/auth/health',200,body=>assert.equal(JSON.parse(body).status,'OK'),{'Sec-Fetch-Mode':'navigate'});
-await inspect('/robots.txt',200,body=>{assert.ok(body.includes('User-agent: GPTBot'));assert.ok(body.includes('Allow: /api/definitions/word/'));});
-await inspect('/sitemap.xml',200,body=>{
-  const urls=[...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match=>new URL(match[1].replace(/&amp;/g,'&')));
-  assert.ok(urls.length>0);
-  assert.ok(urls.every(url=>url.origin==='https://qamous.org'&&!url.username&&!url.password));
-  assert.ok(urls.some(url=>url.pathname==='/advanced-search/Egypt'));
-  assert.ok(urls.every(url=>!url.pathname.startsWith('/reset-password')));
+const locations=xml=>[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match=>new URL(match[1].replace(/&amp;/g,'&')));
+const canonical=(path)=>(body)=>assert.ok(body.includes(`rel="canonical" href="https://qamous.org${path}"`),path+' canonical');
+
+await inspect('/',200,(body)=>{canonical('/')(body);assert.ok(body.includes('href="/browse/en"'));});
+await inspect('/about',200,canonical('/about'));
+await inspect('/blog',200,canonical('/blog'));
+await inspect('/advanced-search',200,canonical('/advanced-search'));
+await inspect('/robots.txt',200,body=>{assert.ok(body.includes('Sitemap: https://qamous.org/sitemap.xml'));assert.ok(body.includes('User-agent: GPTBot'));});
+const index=await inspect('/sitemap.xml',200,(body,response)=>{
+  assert.match(response.headers.get('content-type')||'',/xml/);
+  assert.ok(body.includes('<sitemapindex'));
 });
-console.log(JSON.stringify({verifiedAt:new Date().toISOString(),base,passed:true,checks:checks.length,dialectGuides:countries.length,productionWrites:false}));
+const sitemaps=locations(index);
+assert.ok(sitemaps.some(url=>url.pathname==='/sitemap-static.xml'));
+const staticXml=await inspect('/sitemap-static.xml',200);
+const staticUrls=locations(staticXml);
+assert.ok(staticUrls.some(url=>url.pathname==='/browse/en'));
+assert.ok(staticUrls.some(url=>url.pathname==='/browse/ar'));
+let word;
+for(const shard of sitemaps.filter(url=>/^\/sitemap-words-\d+\.xml$/.test(url.pathname))) {
+  const wordXml=await inspect(shard.pathname,200);
+  word=locations(wordXml).find(url=>/^\/word\/\d+(?:\/ar)?$/.test(url.pathname));
+  if(word) break;
+}
+assert.ok(word,'public word in sitemap shards');
+await inspect(word.pathname,200,(body,response)=>{
+  canonical(word.pathname)(body);
+  assert.ok(body.includes('<h1>'));
+  assert.ok(body.includes('"@type":"DefinedTerm"'));
+  assert.ok(body.includes('class="seo-initial"'));
+  assert.ok(!response.headers.get('x-robots-tag')?.includes('noindex'));
+});
+await inspect('/browse/en',200,(body)=>{canonical('/browse/en')(body);assert.ok(/href="\/word\/\d+/.test(body));});
+await inspect('/browse/ar',200,canonical('/browse/ar'));
+await inspect('/word/not-an-id',404,(_body,response)=>assert.ok(response.headers.get('x-robots-tag')?.includes('noindex')));
+await inspect('/word/999999999999',404,(_body,response)=>assert.ok(response.headers.get('x-robots-tag')?.includes('noindex')));
+await inspect('/api/auth/health',200,body=>assert.equal(JSON.parse(body).status,'OK'));
+console.log(JSON.stringify({verifiedAt:new Date().toISOString(),base,passed:true,checks:checks.length,sitemapCount:sitemaps.length,sampleWord:word.pathname,productionWrites:false}));

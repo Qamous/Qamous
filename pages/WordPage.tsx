@@ -62,21 +62,38 @@ const WordPage = () => {
   const filteredHomeContent = homeContent?preferredMeanings(homeContent,shownLanguage):[];
   const definitionLanguages=[...new Set(homeContent?.map(content=>content.lang)||[])];
   const displayWord=filteredHomeContent?.[0]||homeContent?.[0];
-  const headword=shownLanguage==='ar'?(displayWord?.item.arabicWord||displayWord?.item.word):(displayWord?.item.francoArabicWord||displayWord?.item.word);
-  const pageTitle=`${headword||'Word'} — ${shownLanguage==='ar'?'معنى في قاموس العامية':'Arabic slang meaning | Qamous'}`;
-  const pageDescription=(displayWord?.item.definition||'Explore community Arabic dialect definitions on Qamous.').replace(/\s+/g,' ').slice(0,170);
+  const hasPreferred=definitionLanguages.includes(shownLanguage);
+  const actualLanguage=hasPreferred?shownLanguage:displayWord?.lang||shownLanguage;
+  const arabicWord=displayWord?.item.arabicWord||displayWord?.item.word||'';
+  const franco=displayWord?.item.francoArabicWord||'';
+  const term=franco||arabicWord;
+  const pageTitle=actualLanguage==='ar'
+    ?`معنى ${arabicWord}${franco?` (${franco})`:''} | قاموس Qamous`
+    :`${term}${franco?` (${arabicWord})`:''} meaning in English | Qamous`;
+  const definition=(displayWord?.item.definition||'').replace(/\s+/g,' ').trim();
+  const pageDescription=(actualLanguage==='ar'?`ما معنى ${arabicWord}؟ `:`What does ${term} mean? `)+[...definition].slice(0,155).join('');
+  const canonicalId=displayWord?.canonicalWordId||wordIdNumber;
+  const canonical=`https://qamous.org/word/${canonicalId}${actualLanguage==='ar'?'/ar':''}`;
+  const termSchema=displayWord?{
+    '@context':'https://schema.org','@type':'DefinedTerm',name:arabicWord,
+    ...(franco?{alternateName:franco}:{}),description:definition,url:canonical,
+    inDefinedTermSet:{'@type':'DefinedTermSet',name:'Qamous Arabic dialect dictionary',url:'https://qamous.org/'}
+  }:null;
+  const safeSchema=termSchema?JSON.stringify(termSchema).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026'):null;
   
   return (
     <div className='feed'>
       <Helmet>
-        {displayWord?.canonicalWordId&&<link rel="canonical" href={`https://qamous.org/word/${displayWord.canonicalWordId}${shownLanguage==='ar'?'/ar':''}`}/>}
+        {displayWord&&<link rel="canonical" href={canonical}/>}
+        {displayWord&&<meta property="og:url" content={canonical}/>}
         <meta property="og:title" content={pageTitle}/>
         <meta property="og:description" content={pageDescription}/>
         <meta name="twitter:title" content={pageTitle}/>
         <meta name="twitter:description" content={pageDescription}/>
-        {homeContent?.some(c=>c.lang==='en')&&<link rel="alternate" hrefLang="en" href={`https://qamous.org/word/${wordIdNumber}`}/>}
-        {homeContent?.some(c=>c.lang==='ar')&&<link rel="alternate" hrefLang="ar" href={`https://qamous.org/word/${wordIdNumber}/ar`}/>}
-        {!filteredHomeContent?.length&&<meta name="robots" content="noindex, follow"/>}
+        {definitionLanguages.includes('en')&&definitionLanguages.includes('ar')&&<link rel="alternate" hrefLang="en" href={`https://qamous.org/word/${canonicalId}`}/>}
+        {definitionLanguages.includes('en')&&definitionLanguages.includes('ar')&&<link rel="alternate" hrefLang="ar" href={`https://qamous.org/word/${canonicalId}/ar`}/>}
+        <meta name="robots" content={hasPreferred?'index, follow':'noindex, follow'}/>
+        {safeSchema&&<script type="application/ld+json">{safeSchema}</script>}
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription}/>
       </Helmet>
@@ -108,6 +125,7 @@ const WordPage = () => {
               index={index + 1}
               lang={shownLanguage} definitionLanguage={content.lang} dialect={content.dialect} canonicalWordId={content.canonicalWordId}
               definitionLanguages={definitionLanguages} showMissingMeaningPrompt={index===0}
+              headingLevel={index===0?1:2}
               definitionId={content.definitionId}
               wordId={content.wordId}
               countryCode={content.countryCode}

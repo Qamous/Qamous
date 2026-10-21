@@ -1,51 +1,27 @@
 import {describe,it,expect} from 'vitest';
-import {mkdtemp,readFile,writeFile,mkdir,rm} from 'node:fs/promises';
+import {mkdtemp,mkdir,writeFile,readFile,rm,readdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {generateSeo} from '../../cloudflare/generate-seo.mjs';
 import {blogGuides} from '../content/blog-guides';
 
-describe('generated route metadata and discovery links',()=>{
-  it('generates self-canonical guides/blog, related links, private shells and a noindex 404',async()=>{
+describe('bounded static SEO generation',()=>{
+  it('generates guides, discovery links and private shells without word files or a stale sitemap',async()=>{
     const root=await mkdtemp(join(tmpdir(),'qamous-seo-'));
     try {
       await mkdir(join(root,'build'));
-      await writeFile(join(root,'build/index.html'),'<html lang="en"><head><title>Old</title></head><body><noscript>Old</noscript><div id="root"></div></body></html>');
-      await writeFile(join(root,'.seo-data.json'),JSON.stringify({exportedAt:new Date().toISOString(),countries:[{countryCode:'EG',countryName:'Egypt'},{countryCode:'AE',countryName:'United Arab Emirates'}],words:[
-        {id:2,arabicWord:'معلش',francoArabicWord:'ma3lish',descriptionEn:'Never mind',descriptionAr:'لا بأس',countryCodes:['EG']},
-        {id:3,arabicWord:'يلا',francoArabicWord:'yalla',descriptionEn:'Let us go',descriptionAr:'هيا',countryCodes:['EG','AE']},
-        {id:4,arabicWord:'اختبار',francoArabicWord:null,descriptionEn:'',descriptionAr:'معنى عربي',countryCodes:['EG']},
-      ]}));
+      await writeFile(join(root,'build/index.html'),'<html lang="en"><head><title>Old</title></head><body><noscript>Old</noscript><div id="initial-loader"><div></div></div><div id="root"></div></body></html>');
       await generateSeo(root);
       const read=(path:string)=>readFile(join(root,'build',path),'utf8');
+      const home=await read('index.html');
+      expect(home).toContain('href="/browse/en"');expect(home).toContain('href="/browse/ar"');
       const blog=await read('blog/index.html');
-      expect(blog).toContain('rel="canonical" href="https://qamous.org/blog"');
-      expect(blog).toContain('content="index, follow"');
-      for(const article of blogGuides) {
-        expect(blog).toContain(`<article id="${article.id}">`);
-        expect(blog).toContain(article.en.title);
-        for(const paragraph of article.en.paragraphs) expect(blog).toContain(paragraph);
-      }
-      expect(blog).toContain('href="/advanced-search/Egypt"');
-      expect(await read('sitemap.xml')).toContain('<loc>https://qamous.org/blog</loc>');
-      for(const path of ['index.html','about/index.html','blog/index.html','word/2/index.html','404.html']) {
-        expect(await read(path)).not.toContain('href="/blog"');
-      }
-      const guide=await read('advanced-search/Egypt/index.html');
-      expect(guide).toContain('Egyptian Arabic slang dictionary');
-      expect(guide).toContain('href="https://qamous.org/advanced-search/Egypt"');
-      expect(guide).toContain('href="/word/2"');
-      expect(guide).toContain('href="/word/4/ar"');
-      expect(guide).toContain('href="/advanced-search/United%20Arab%20Emirates"');
-      expect(await read('advanced-search/United Arab Emirates/index.html')).toContain('Emirati Arabic');
-      expect(await read('word/2/index.html')).toContain('href="/word/3"');
-      expect(await read('word/2/ar/index.html')).toContain('href="/word/3/ar"');
-      expect(await read('login/index.html')).toContain('content="noindex, follow"');
+      for(const article of blogGuides) expect(blog).toContain(article.en.title);
+      expect((await read('login/index.html'))).toContain('noindex, follow');
       const missing=await read('404.html');
-      expect(missing).toContain('Page not found');expect(missing).toContain('noindex');expect(missing).not.toContain('rel="canonical"');
-      expect(await read('sitemap.xml')).not.toContain('/login');
-      expect(await read('word/4/ar/index.html')).not.toContain('hreflang="en"');
-      expect(await read('sitemap.xml')).not.toContain('<loc>https://qamous.org/word/4</loc>');
+      expect(missing).toContain('Page not found');expect(missing).not.toContain('rel="canonical"');
+      const names=await readdir(join(root,'build'));
+      expect(names).not.toContain('word');expect(names).not.toContain('sitemap.xml');
     } finally {await rm(root,{recursive:true,force:true});}
   });
 });
