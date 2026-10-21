@@ -55,3 +55,8 @@ With both local Workers running, `node cloudflare/verify-seo.mjs http://127.0.0.
 checks real asset routing, navigation, country metadata and deep links. After release run
 `node cloudflare/verify-seo.mjs` for read-only production verification. No Google Search
 Console setup, individual blog URLs or changes to community definitions are included here.
+
+The `/blog` route remains indexed and listed in the sitemap, with no links from the
+site navigation, footer or no-JavaScript previews. Its bilingual learning guides
+share a content source with the generated English no-JavaScript page
+(`src/content/blog-guides.ts`). Existing community posts remain available below them.

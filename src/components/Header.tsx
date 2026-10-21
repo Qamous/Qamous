@@ -345,9 +345,6 @@ const Header: React.FC = () => {
                   <NavLink to="/feeling-lucky" onClick={handleBurgerClick}>
                       {t('toolbar_items.word_of_the_day')}
                   </NavLink>
-                  <NavLink to="/blog" onClick={handleBurgerClick}>
-                      {t('toolbar_items.blog')}
-                  </NavLink>
                   <NavLink to="/chatbot" onClick={handleBurgerClick}>
                       {t('toolbar_items.chatbot')}
                   </NavLink>

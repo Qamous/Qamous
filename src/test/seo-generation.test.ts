@@ -3,6 +3,7 @@ import {mkdtemp,readFile,writeFile,mkdir,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {generateSeo} from '../../cloudflare/generate-seo.mjs';
+import {blogGuides} from '../content/blog-guides';
 
 describe('generated route metadata and discovery links',()=>{
   it('generates self-canonical guides/blog, related links, private shells and a noindex 404',async()=>{
@@ -19,6 +20,17 @@ describe('generated route metadata and discovery links',()=>{
       const read=(path:string)=>readFile(join(root,'build',path),'utf8');
       const blog=await read('blog/index.html');
       expect(blog).toContain('rel="canonical" href="https://qamous.org/blog"');
+      expect(blog).toContain('content="index, follow"');
+      for(const article of blogGuides) {
+        expect(blog).toContain(`<article id="${article.id}">`);
+        expect(blog).toContain(article.en.title);
+        for(const paragraph of article.en.paragraphs) expect(blog).toContain(paragraph);
+      }
+      expect(blog).toContain('href="/advanced-search/Egypt"');
+      expect(await read('sitemap.xml')).toContain('<loc>https://qamous.org/blog</loc>');
+      for(const path of ['index.html','about/index.html','blog/index.html','word/2/index.html','404.html']) {
+        expect(await read(path)).not.toContain('href="/blog"');
+      }
       const guide=await read('advanced-search/Egypt/index.html');
       expect(guide).toContain('Egyptian Arabic slang dictionary');
       expect(guide).toContain('href="https://qamous.org/advanced-search/Egypt"');

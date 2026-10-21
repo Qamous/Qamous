@@ -6,6 +6,8 @@ import './Blog.scss';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
 import LoadingSpinner from '../src/components/LoadingSpinner';
+import { blogCopy, blogGuides } from '../src/content/blog-guides';
+import { Link } from 'react-router-dom';
 
 interface Post {
   id: string;
@@ -21,7 +23,9 @@ const Blog = () => {
   const [postTitle, setPostTitle] = useState('');
   const [isPreviewing, setIsPreviewing] = useState(false);
   const { t, i18n } = useTranslation();
-  const isRtl = i18n.language === 'ar';
+  const language = i18n.language?.startsWith('ar') ? 'ar' : 'en';
+  const isRtl = language === 'ar';
+  const copy = blogCopy[language];
   
   const { data: authData, isLoading: authLoading } = useQuery('authStatus', async () => {
     const response = await fetch(`${API_URL}/auth/session`, { credentials: 'include' });
@@ -103,13 +107,32 @@ const Blog = () => {
   };
   
   return (
-    <div className="blog">
+    <div className="blog" lang={language} dir={isRtl ? 'rtl' : 'ltr'}>
       <Helmet>
-        <title>Blog - Qamous</title>
-        <meta name="description" content="Read and post on the Qamous blog. Communicate with other Arabic Speakers. Stay updated with the newest trends and insights." />
-        <meta name="keywords" content="Qamous, blog, posts, trends, insights, technology, updates" />
+        <title>{copy.title} | Qamous</title>
+        <meta name="description" content={copy.description} />
+        <meta property="og:title" content={`${copy.title} | Qamous`} />
+        <meta property="og:description" content={copy.description} />
+        <meta name="twitter:title" content={`${copy.title} | Qamous`} />
+        <meta name="twitter:description" content={copy.description} />
       </Helmet>
-      <h1>{t('blog.title')}</h1>
+      <h1>{copy.title}</h1>
+      <p className="blog-intro">{copy.intro}</p>
+      <section className="posts blog-guides" aria-label={copy.title}>
+        {blogGuides.map((guide) => {
+          const article = guide[language];
+          return <article key={guide.id} id={guide.id} className="post">
+            <header className="post-header"><h2>{article.title}</h2></header>
+            <div className="post-content">
+              {article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              <ul className="guide-links">
+                {article.links.map((link) => <li key={link.href}><Link to={link.href}>{link.label}</Link></li>)}
+              </ul>
+            </div>
+          </article>;
+        })}
+      </section>
+      <h2>{copy.community}</h2>
       {authLoading ? (
         <LoadingSpinner />
       ) : authData ? (

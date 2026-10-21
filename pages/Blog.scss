@@ -4,6 +4,30 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  .blog-intro {
+    color: variables.$primary-color-75;
+    text-align: center;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .blog-guides {
+    margin-bottom: 3rem;
+    article { scroll-margin-top: 100px; }
+  }
+
+  .guide-links {
+    padding-inline-start: 1.25rem;
+    li + li { margin-top: .5rem; }
+  }
+
+  @media (max-width: 599px) {
+    padding: 16px;
+    .blog-guides.posts .post { padding: 1.25rem; }
+  }
 
   h1 {
     text-align: center;

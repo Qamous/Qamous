@@ -41,14 +41,6 @@ const ToolbarItems: React.FC<ToolbarItemsProps> = ({ language, themeMode }: Tool
                       </StyledNavLink>
                   </li>
                   <li>
-                      <StyledNavLink to="/blog"
-                                     language={language}
-                                     themeMode={themeMode}
-                      >
-                          {t('toolbar_items.blog')}
-                      </StyledNavLink>
-                  </li>
-                  <li>
                       <StyledNavLink to="/chatbot"
                                      language={language}
                                      themeMode={themeMode}
