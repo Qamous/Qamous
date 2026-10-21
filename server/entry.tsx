@@ -14,6 +14,7 @@ import '../src/index.scss';
 import '../src/assets/Styles.scss';
 
 declare const __CLIENT_MANIFEST__: Record<string,{file:string;css?:string[];imports?:string[]}>;
+declare const __CLIENT_STYLES__: Record<string,string>;
 const files:Record<string,string>={home:'Home',lucky:'WordOfTheDay',login:'LogIn',signup:'SignUp',contribute:'ContributionForm',search:'SearchResults',word:'WordPage',profile:'UserProfile',explore:'AdvancedSearch',blog:'Blog',about:'About',chatbot:'Chatbot',forgot:'ForgotPassword',reset:'ResetPassword',missing:'NotFound',sources:'SourceLibrary',construction:'PageUnderConstruction',browse:'Browse'};
 
 function routeAssets(path:string) {
@@ -27,7 +28,14 @@ function routeAssets(path:string) {
     if(item.file.endsWith('.js')) scripts.add('/'+item.file);
   }
   visit('index.html');visit('pages/'+files[routeModule(path)]+'.tsx');
-  return [...styles].map(href=>`<link rel="stylesheet" href="${href}">`).join('')
+  return [...styles].map(href=>{
+    const css=__CLIENT_STYLES__[href];
+    if(css===undefined) throw new Error('Missing initial stylesheet: '+href);
+    // Firefox may paint before linked CSS arrives. Keep each inline/linked pair
+    // adjacent so the cascade stays identical as downloads finish, and retain
+    // the link for Vite's browser preloader and subsequent client navigation.
+    return `<style data-qamous-stylesheet="${href}">${css}</style><link rel="stylesheet" href="${href}">`;
+  }).join('')
     +[...scripts].map(href=>`<link rel="modulepreload" href="${href}">`).join('');
 }
 

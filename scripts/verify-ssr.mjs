@@ -11,6 +11,14 @@ for(const path of paths) {
   assert.doesNotMatch(page.html,/seo-initial|initial-loader/);
   assert.doesNotMatch(page.html,/<script[^>]*>\s*(?:function|\$RC|\$RS)/);
   assert.equal((page.head.match(/<title\b/g)||[]).length,1);
+  const initialStyles=[...page.assets.matchAll(/<style data-qamous-stylesheet="([^"]+)">([\s\S]*?)<\/style><link rel="stylesheet" href="\1">/g)];
+  assert.ok(initialStyles.length>0,'Every page needs its layout before CSS downloads');
+  assert.equal(initialStyles.length,(page.assets.match(/rel="stylesheet"/g)||[]).length);
+  for(const [,file,css] of initialStyles) {
+    assert.ok(css.length>0,'Empty initial stylesheet: '+file);
+    assert.doesNotMatch(css,/@import\b/i,'Initial layout must not wait for remote styles');
+  }
+  assert.match(initialStyles.map(([, ,css])=>css).join(''),/\.svg-inline--fa\{[^}]*height:1em/);
   assert.ok(!page.theme.includes('undefined'));
   const state=JSON.parse(page.state);
   assert.ok(state.queries);assert.doesNotMatch(page.state,/sessionId|passport|SEO_INTERNAL_SECRET/);
@@ -34,4 +42,4 @@ for(const {page,ar,theme} of concurrent) {
   assert.equal(page.grain,theme==='grain');
 }
 assert.doesNotMatch(serializeState({text:'</script><script>evil()</script>&\u2028'}),/[<>&\u2028]/);
-console.log(JSON.stringify({serverRenderedRoutes:count,concurrentIsolatedRenders:concurrent.length,scriptEscaping:true,sharedLayout:true}));
+console.log(JSON.stringify({serverRenderedRoutes:count,concurrentIsolatedRenders:concurrent.length,scriptEscaping:true,sharedLayout:true,inlineInitialStyles:true}));
