@@ -257,6 +257,8 @@
     "definitions": "Definitions",
     "error_message": "Sorry, an error occurred. Please try again.",
     "verification_error": "Verification is unavailable. Refresh the page to try again.",
+    "guest_limit": "Your guest chats are used up for today.",
+    "sign_in_to_continue": "Sign in to keep chatting",
     "arabic": "Arabic",
     "franco_arabic": "Franco-Arabic"
   },

@@ -161,6 +161,36 @@
     }
   }
 
+  &-guest-limit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px;
+    background: var(--secondary-color-20);
+    color: var(--primary-color);
+
+    a {
+      display: inline-block;
+      padding: 0.6rem 0.9rem;
+      border-radius: 6px;
+      background: var(--secondary-color);
+      color: var(--tertiary-color);
+      font-weight: 600;
+      text-decoration: none;
+
+      &:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+    }
+  }
+
   &-input {
     display: flex;
     flex-wrap: wrap;

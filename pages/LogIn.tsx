@@ -1,6 +1,6 @@
 import { API_URL } from "../src/api";
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import './LogIn.scss';
 import { useMutation, useQueryClient } from 'react-query';
 import CustomDialog from '../src/components/CustomDialog';
@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 const Login: React.FC = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const location = useLocation();
+  const afterLogin = location.state?.returnTo === '/chatbot' ? '/chatbot' : '/';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState('');
@@ -106,11 +108,11 @@ const Login: React.FC = () => {
           okButtonText={t('common.ok')}
           onOkButtonClick={() => {
             setShowSuccessDialog(false);
-            navigate('/');
+            navigate(afterLogin);
           }}
           onClose={() => {
             setShowSuccessDialog(false);
-            navigate('/');
+            navigate(afterLogin);
           }}
         />
       )}
