@@ -6,7 +6,10 @@ describe('browser and crawler security policy',()=>{
     const headers=read('public/_headers');
     const scripts=headers.match(/script-src ([^;]+);/)?.[1];
     expect(scripts).toContain("'self'");
+    expect(scripts).toContain('https://challenges.cloudflare.com');
     expect(scripts).not.toMatch(/unsafe-inline|unsafe-eval/);
+    expect(headers).toMatch(/connect-src [^;]*https:\/\/challenges\.cloudflare\.com/);
+    expect(headers).toMatch(/frame-src [^;]*https:\/\/challenges\.cloudflare\.com/);
     expect(headers).toContain("frame-ancestors 'none'");
     expect(headers).toContain('Referrer-Policy: no-referrer');
     expect(read('index.html')).not.toMatch(/<script\b(?![^>]*\bsrc=)[^>]*>/i);

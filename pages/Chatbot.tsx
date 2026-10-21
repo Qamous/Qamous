@@ -9,7 +9,22 @@ interface RagRequest {
   query: string;
   model: 'cloudflare';
   preferredLanguage?: 'arabic' | 'franco-arabic';
+  turnstileToken: string;
 }
+
+type TurnstileApi = {
+  render: (container: HTMLElement, options: {
+    sitekey: string;
+    action: string;
+    callback: (token: string) => void;
+    'expired-callback': () => void;
+    'error-callback': () => void;
+  }) => string;
+  reset: (widgetId: string) => void;
+  remove: (widgetId: string) => void;
+};
+const turnstile = () => (window as typeof window & {turnstile?: TurnstileApi}).turnstile;
+const turnstileSiteKey = import.meta.env.DEV ? '1x00000000000000000000AA' : '0x4AAAAAAFfPL_h2uX1-Qyc8';
 
 interface RagResponse {
   response: string;
@@ -39,6 +54,45 @@ const Chatbot: React.FC = () => {
   const [directionClass, setDirectionClass] = useState<'rtl' | 'ltr'>('rtl'); // Add this state
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [verificationToken, setVerificationToken] = useState('');
+  const [verificationError, setVerificationError] = useState(false);
+  const turnstileHostRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    const render = () => {
+      const api = turnstile();
+      if (!active || !api || !turnstileHostRef.current || widgetIdRef.current) return;
+      widgetIdRef.current = api.render(turnstileHostRef.current, {
+        sitekey: turnstileSiteKey,
+        action: 'rag',
+        callback: token => { if (active) { setVerificationToken(token); setVerificationError(false); } },
+        'expired-callback': () => { if (active) setVerificationToken(''); },
+        'error-callback': () => { if (active) { setVerificationToken(''); setVerificationError(true); } },
+      });
+    };
+    const fail = () => { if (active) setVerificationError(true); };
+    const existing = document.querySelector<HTMLScriptElement>('script[data-qamous-turnstile]');
+    const script = existing ?? document.createElement('script');
+    script.addEventListener('load', render);
+    script.addEventListener('error', fail);
+    if (!existing) {
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.defer = true;
+      script.dataset.qamousTurnstile = '';
+      document.head.appendChild(script);
+    }
+    render();
+    return () => {
+      active = false;
+      script.removeEventListener('load', render);
+      script.removeEventListener('error', fail);
+      if (widgetIdRef.current) turnstile()?.remove(widgetIdRef.current);
+      widgetIdRef.current = null;
+    };
+  }, []);
   
   const ragMutation = useMutation<RagResponse, Error, RagRequest>(
     async (request) => {
@@ -68,7 +122,9 @@ const Chatbot: React.FC = () => {
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || ragMutation.isLoading) return;
+    if (!input.trim() || !verificationToken || ragMutation.isLoading) return;
+    const submittedToken = verificationToken;
+    setVerificationToken('');
     
     const userMessage: ChatMessage = {
       type: 'user',
@@ -85,6 +141,7 @@ const Chatbot: React.FC = () => {
         query: input,
         model: selectedModel,
         preferredLanguage: preferredLanguage,
+        turnstileToken: submittedToken,
       });
       
       setIsTyping(false);
@@ -109,6 +166,8 @@ const Chatbot: React.FC = () => {
           content: error instanceof Error ? error.message : t('chatbot.error_message'),
         },
       ]);
+    } finally {
+      if (widgetIdRef.current) turnstile()?.reset(widgetIdRef.current);
     }
   };
   
@@ -208,6 +267,8 @@ const Chatbot: React.FC = () => {
         </div>
         
         <form onSubmit={handleSubmit} className={`chatbot-input chatbot-input--${directionClass}`}>
+          <div className="chatbot-input-verification" ref={turnstileHostRef} />
+          {verificationError && <p className="chatbot-input-verification-error" role="alert">{t('chatbot.verification_error')}</p>}
           <textarea
             key={preferredLanguage}
             id={preferredLanguage === 'arabic' ? 'chatInput' : ''}
@@ -219,7 +280,7 @@ const Chatbot: React.FC = () => {
             disabled={ragMutation.isLoading}
             dir={directionClass}
           />
-          <button type="submit" disabled={ragMutation.isLoading}>
+          <button type="submit" disabled={ragMutation.isLoading || !verificationToken}>
             {ragMutation.isLoading ? (
               <div className="loading">
                 <span>{t('chatbot.sending')}</span>
