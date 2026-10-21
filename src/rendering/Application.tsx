@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import './icons';
 import {I18nextProvider} from 'react-i18next';
 import type {i18n} from 'i18next';
 import {HelmetProvider} from 'react-helmet-async';
