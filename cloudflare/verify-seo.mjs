@@ -39,7 +39,9 @@ await inspect(word.pathname,200,(body,response)=>{
   canonical(word.pathname)(body);
   assert.ok(body.includes('<h1>'));
   assert.ok(body.includes('"@type":"DefinedTerm"'));
-  assert.ok(body.includes('class="seo-initial"'));
+  assert.ok(body.includes('data-ssr="true"'));
+  assert.ok(body.includes('id="qamous-state"'));
+  assert.ok(!body.includes('class="seo-initial"'));
   assert.ok(!response.headers.get('x-robots-tag')?.includes('noindex'));
 });
 await inspect('/browse/en',200,(body)=>{canonical('/browse/en')(body);assert.ok(/href="\/word\/\d+/.test(body));});

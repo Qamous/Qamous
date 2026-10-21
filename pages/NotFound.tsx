@@ -1,11 +1,10 @@
 import React from 'react';
 import './NotFound.scss';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 
 const NotFound: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   return (
     <div className={'container'} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>

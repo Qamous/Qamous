@@ -1,5 +1,4 @@
 import './Footer.scss';
-import i18n from 'i18next';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
@@ -12,7 +11,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Footer: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const manuallyToggled = useRef(false);
   const ar = i18n.language?.startsWith('ar');

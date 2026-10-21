@@ -1,14 +1,15 @@
 # Cloudflare frontend operations
 
-Use Node 22.18+ and `npm ci`. `npm run build` creates the normal React/Vite build;
-`npx vitest run` runs the UI/policy tests. `npm audit` checks all dependencies.
+Use Node 22.18+ and `npm ci`. `npm run build` checks the shared application and
+creates browser assets plus the Worker renderer. `npx vitest run` checks UI and
+routing policies; `npm run test:ssr` exercises the compiled production renderer.
+`npm audit` checks dependencies.
 
-Production release: apply backend migration `0008_seo_discovery.sql`, deploy the API,
-then run `npm run deploy:cloudflare` with the sibling `qamous-backend` checkout
-available. Both deploy scripts require fresh, manually verified Workers Free billing
-evidence. The build generates only a small set of static guide and private shell
-pages. Word HTML, browse pages, and XML sitemaps come from public D1 data at request
-time. No user records, credentials, or bulk dictionary JSON are shipped in static assets.
+Production release: run `npm run deploy:cloudflare` with the sibling `qamous-backend`
+checkout available. Deployment requires fresh, manually verified Workers Free billing
+evidence. The existing backend must already include `0008_seo_discovery.sql`; this
+rendering migration needs no new migration or API deployment. No account records,
+credentials, or bulk dictionary export are shipped in static assets.
 
 API access is through the same-origin `/api` service binding. Both workers.dev mirrors are
 disabled; use the approved custom domains. Static assets do not depend
@@ -35,30 +36,60 @@ Private-data rollback and full security verification are documented in the backe
 
 ## Explicit page routing and dialect guides
 
-The build generates self-canonical HTML for the blog, about page and discovery page,
-plus noindex shells for known app routes. The Worker renders word pages and country
-guides in the initial HTML with bounded D1 reads. Countries with spaces use encoded
-public URLs. A dynamic sitemap index points to ID-range word shards of at most 2,000
-language URLs each and a small static sitemap. Keyset `/browse/en` and `/browse/ar`
-pages link every eligible word through ordinary anchors without a large static export.
-The interactive guides retain the search/filter/voting experience and support Arabic/English.
+Every application document uses the same React page tree on the server and browser.
+The Worker loads the page's bounded data through the API service binding, renders
+`Application`, and supplies its query snapshot in escaped, non-executable JSON.
+`hydrateRoot` attaches events to those same DOM nodes. There is no alternate SEO
+preview, loading overlay, or bot-specific page. The same HTML remains readable
+without JavaScript; account actions still require JavaScript.
 
-Assets remain first for static routes. Word, browse, dialect and sitemap routes run the
-Worker before asset lookup; missing assets reach explicit 404 handling instead of
-silently receiving the homepage. Unknown routes return a noindex 404; known search
-and reset deep links receive their noindex shell. English word aliases redirect to the
-canonical URL. Newly imported words use the same route immediately after their database
-transaction commits. API quotas/outages yield 503, not a misleading permanent 404.
-Reset tokens and search text are not copied into fallback canonical URLs.
+Language and theme are resolved per request and used for both renders. English and
+Arabic word/browse URLs take precedence over a saved language. Each request owns
+its i18next instance, query client and metadata context. Server timestamps make
+countdowns deterministic. CSS for the active route and its dependencies is linked
+before first paint, using the browser build manifest. The Worker bundle and browser
+assets must always be deployed together.
+
+Only fixed public data routes are requested while rendering. Public row reads may
+forward the visitor's session cookie to preserve reaction flags. Cookies, tokens,
+sessions and account records are never put in bootstrap JSON. Internal SEO credentials
+are sent only to `/seo/*` through the existing service binding. Responses with cookies
+or authorization, account/search/reset pages, and errors are not shared in cache.
+Anonymous public cache entries distinguish rendering version and preferred language.
+
+Static files bypass the Worker. Application pages, word/dialect/browse routes and XML
+sitemaps reach explicit routing. Unknown pages return a rendered noindex 404; upstream
+outages return 503. English word aliases and canonical IDs retain their redirects.
+A sitemap index points to ID-range word shards of at most 2,000 language URLs each.
+Keyset `/browse/en` and `/browse/ar` pages link every eligible word through ordinary
+anchors. Reset tokens and search text stay out of canonical URLs.
 
 Run `npx tsc -p cloudflare/tsconfig.json` separately from the browser typecheck to avoid
-mixing Workers and DOM globals. `npx vitest run` includes route/generation/guide tests.
+mixing Workers and DOM globals. `npx vitest run` includes routing and guide tests.
 With both local Workers running, `node cloudflare/verify-seo.mjs http://127.0.0.1:8788`
 checks real asset routing, navigation, country metadata and deep links. After release run
 `node cloudflare/verify-seo.mjs` for read-only production verification. No Google Search
 Console setup, individual blog URLs or changes to community definitions are included here.
 
 The `/blog` route remains indexed and listed in the sitemap, with no links from the
-site navigation, footer or no-JavaScript previews. Its bilingual learning guides
-share a content source with the generated English no-JavaScript page
+site navigation or footer. Its bilingual learning guides use the same content on
+the server and browser
 (`src/content/blog-guides.ts`). Existing community posts remain available below them.
+
+## Rendering verification
+
+After `npm run build`, run `npm run test:ssr`. It checks direct rendering across
+24 routes, concurrent English/Arabic/theme isolation, metadata, attribution and
+safe bootstrap serialization. For browser verification start `npm run preview:ssr`;
+it serves two local Workers on port 8795 with authored public fixtures and never
+writes production data. In a named Playwright CLI session open that URL and run:
+
+```
+playwright-cli -s=qamous-ssr run-code --filename scripts/verify-hydration.js
+```
+
+The browser check delays startup scripts and verifies DOM reuse and absence of
+hydration errors across 23 routes at desktop and mobile widths. Private pages may
+redirect to login after hydration. Test live public routes, theme/language toggles,
+search, and Worker outcomes after release. The fixture preview is a verification
+helper, not a public deployment target. `npm start` remains the fast client dev server.

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import { ContentBoxPreview } from '../src/components/ContentBoxView';
 import Pronunciation, { OriginalNotation, type SourcePronunciation } from '../src/components/Pronunciation';
 import type { SourceCredit } from '../src/types/provenance';

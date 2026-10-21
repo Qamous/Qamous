@@ -2,7 +2,7 @@ import {act, fireEvent, render, screen} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import Footer from '../components/Footer';
-vi.mock('react-i18next',()=>({useTranslation:()=>({t:(key:string)=>key})}));
+vi.mock('react-i18next',()=>({useTranslation:()=>({t:(key:string)=>key,i18n:{language:'en'}})}));
 afterEach(()=>vi.unstubAllGlobals());
 const mount=()=>render(<MemoryRouter><Footer /></MemoryRouter>);
 describe('responsive footer controls',()=>{

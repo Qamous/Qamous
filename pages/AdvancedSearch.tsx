@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faBookOpen, faCheck, faChevronDown, faSearch, faSliders, faTimes } from '@fortawesome/free-solid-svg-icons';
 import ReactCountryFlag from 'react-country-flag';
@@ -109,7 +109,7 @@ const AdvancedSearch: React.FC = () => {
         <h1>{guideTitle || t('explore.title')}<span className="explore-period">.</span></h1>
         <span className="explore-watermark" aria-hidden="true">كلمة</span>
         {guide && <p className="dialect-intro">{guideIntro}</p>}
-        <form className="explore-search" role="search" onSubmit={submit}>
+        <form method="post" className="explore-search" role="search" onSubmit={submit}>
           <FontAwesomeIcon icon={faSearch} aria-hidden="true" />
           <label className="explore-sr-only" htmlFor="explore-query">{t('explore.search_label')}</label>
           <input id="explore-query" type="search" dir="auto" value={draft} maxLength={200}

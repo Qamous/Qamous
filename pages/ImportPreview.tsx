@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import { API_URL, apiJson } from '../src/api';
 import { ContentBoxPreview } from '../src/components/ContentBoxView';
 import type { SourceCredit, SourceExample } from '../src/types/provenance';

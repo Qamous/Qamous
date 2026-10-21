@@ -20,14 +20,14 @@
     "react-adsense": "^0.1.0",
     "react-country-flag": "^3.1.0",
     "react-dom": "^18.2.0",
-    "react-helmet": "^6.1.0",
+    "react-helmet-async": "^2.0.5",
     "react-i18next": "^14.0.5",
     "react-joyride": "^2.9.2",
     "react-markdown": "^9.0.1",
     "react-query": "^3.39.3",
     "react-router-dom": "7.18.4",
     "typescript": "5.9.3",
-    "vite": "6.4.3",
+    "vite": "6.4.5",
     "vite-plugin-env-compatible": "^2.0.1",
     "vite-plugin-svgr": "^4.3.0",
     "web-vitals": "^2.1.4"
@@ -35,11 +35,13 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc -p tsconfig.server.json && node scripts/build.mjs",
     "deploy:cloudflare": "npm run build && node cloudflare/deploy.mjs",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test:ssr": "node scripts/verify-ssr.mjs",
+    "preview:ssr": "node scripts/preview-ssr.mjs"
   },
   "eslintConfig": {
     "extends": [
@@ -63,7 +65,6 @@
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
     "@types/papaparse": "^5.3.14",
-    "@types/react-helmet": "^6.1.11",
     "@typescript-eslint/eslint-plugin": "8.71.2",
     "@typescript-eslint/parser": "8.71.2",
     "@vitest/coverage-v8": "5.0.5",

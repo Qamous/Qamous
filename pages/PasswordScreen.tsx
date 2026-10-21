@@ -23,7 +23,7 @@ const PasswordScreen: React.FC<{ onPasswordCorrect: () => void }> = ({ onPasswor
   
   return (
     <div className="password-screen">
-      <form onSubmit={handlePasswordSubmit}>
+      <form method="post" onSubmit={handlePasswordSubmit}>
         <label>
           Enter password: &nbsp;
           <input

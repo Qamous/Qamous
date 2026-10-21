@@ -8,12 +8,13 @@ export default function AnalyticsConsent() {
   const {pathname} = useLocation();
   const {i18n} = useTranslation();
   const ar = i18n.language?.startsWith('ar');
-  const [consent, updateConsent] = useState(readConsent);
+  const [consent, updateConsent] = useState<ReturnType<typeof readConsent>>(null);
   const [required, setRequired] = useState<boolean | null>(null);
   const [open, setOpen] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const interacted = useRef(false);
-  const protectedBrowser = privacySignal();
+  const [protectedBrowser, setProtectedBrowser] = useState(false);
+  useEffect(() => { setProtectedBrowser(privacySignal()); updateConsent(readConsent()); }, []);
   useEffect(() => {
     const show = () => { interacted.current = true; setOpen(true); };
     window.addEventListener('qamous:privacy-open', show);

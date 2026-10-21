@@ -277,7 +277,7 @@ const Chatbot: React.FC = () => {
           <div ref={messagesEndRef} />
         </div>
         
-        <form onSubmit={handleSubmit} className={`chatbot-input chatbot-input--${directionClass}`}>
+        <form method="post" onSubmit={handleSubmit} className={`chatbot-input chatbot-input--${directionClass}`}>
           <div className="chatbot-input-verification" ref={turnstileHostRef} />
           {verificationError && <p className="chatbot-input-verification-error" role="alert">{t('chatbot.verification_error')}</p>}
           <textarea

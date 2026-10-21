@@ -40,3 +40,7 @@ src/firebaseConfig.js
 /.dev.vars*
 /.playwright-mcp/
 /.seo-data.json
+
+/server-build/
+/output/
+/.playwright-cli/

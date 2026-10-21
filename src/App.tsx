@@ -1,78 +1,82 @@
 import { API_URL } from "./api";
 import SeoMetadata from './components/SeoMetadata';
+import {usePreferences} from './rendering/preferences';
 import React, { ReactNode, useEffect, useState, Suspense, lazy } from 'react';
 const ReactQueryDevtools = import.meta.env.DEV
   ? lazy(() => import('react-query/devtools').then(mod => ({ default: mod.ReactQueryDevtools })))
   : () => null;
-const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(mod => ({ default: mod.FontAwesomeIcon })));
-const FullScreenToggle = lazy(() => import('./components/FullScreenToggle'));
-const Header = lazy(() => import('./components/Header'));
-const Snackbar = lazy(() => import('./components/Snackbar'));
-const Footer = lazy(() => import('./components/Footer'));
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import FullScreenToggle from './components/FullScreenToggle';
+import Header from './components/Header';
+import Snackbar from './components/Snackbar';
+import Footer from './components/Footer';
 import './App.scss';
 import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
-import i18n from 'i18next';
-import { initReactI18next, useTranslation } from 'react-i18next';
-import { getFunctionalCookie } from './assets/utils';import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import translationEN from './assets/en/translation.json';
-import translationAR from './assets/ar/translation.json';
+import { useTranslation } from 'react-i18next';
+import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
 // Import the ads loader utility
 import { initAds } from './utils/deferAdsLoader';
 // Adverts bar: Uncomment the following line to enable the adverts bar
 // import Adverts from './components/Adverts';
 
+export const pageModules = {
+  home: () => import('../pages/Home'),
+  lucky: () => import('../pages/WordOfTheDay'),
+  login: () => import('../pages/LogIn'),
+  signup: () => import('../pages/SignUp'),
+  contribute: () => import('../pages/ContributionForm'),
+  search: () => import('../pages/SearchResults'),
+  word: () => import('../pages/WordPage'),
+  profile: () => import('../pages/UserProfile'),
+  explore: () => import('../pages/AdvancedSearch'),
+  blog: () => import('../pages/Blog'),
+  about: () => import('../pages/About'),
+  chatbot: () => import('../pages/Chatbot'),
+  forgot: () => import('../pages/ForgotPassword'),
+  reset: () => import('../pages/ResetPassword'),
+  missing: () => import('../pages/NotFound'),
+  sources: () => import('../pages/SourceLibrary'),
+  construction: () => import('../pages/PageUnderConstruction'),
+  browse: () => import('../pages/Browse'),
+};
+export function routeModule(path: string): keyof typeof pageModules {
+  if (path === '/') return 'home';
+  for (const [prefix, name] of Object.entries({
+    '/word/':'word', '/browse/':'browse', '/advanced-search':'explore', '/search/':'search',
+    '/feeling-lucky':'lucky', '/login':'login', '/signup':'signup', '/profile':'profile',
+    '/add-definition':'contribute', '/blog':'blog', '/about':'about', '/chatbot':'chatbot',
+    '/forgot-password':'forgot', '/reset-password':'reset', '/sources':'sources',
+    '/contributors/':'sources', '/advertise':'construction', '/opportunities':'construction',
+  })) if (path === prefix || path.startsWith(prefix.endsWith('/') ? prefix : prefix + '/')) return name as keyof typeof pageModules;
+  return 'missing';
+}
+export const preloadRoute = (path: string) => pageModules[routeModule(path)]();
+const Browse = lazy(pageModules.browse);
+
 // Lazy load all page components with dynamic imports
-const Home = lazy(() => import(/* webpackPrefetch: true */ '../pages/Home'));
-const WordOfTheDay = lazy(() => import(/* webpackPreload: true */ '../pages/WordOfTheDay'));
-const LogIn = lazy(() => import(/* webpackPreload: true */ '../pages/LogIn'));
-const SignUp = lazy(() => import(/* webpackPreload: true */ '../pages/SignUp'));
+const Home = lazy(pageModules.home);
+const WordOfTheDay = lazy(pageModules.lucky);
+const LogIn = lazy(pageModules.login);
+const SignUp = lazy(pageModules.signup);
 
 // Secondary routes with dynamic imports
-const AddWord = lazy(() => import('../pages/ContributionForm'));
-const SearchResults = lazy(() => import('../pages/SearchResults'));
-const WordPage = lazy(() => import('../pages/WordPage'));
-const UserProfile = lazy(() => import('../pages/UserProfile'));
+const AddWord = lazy(pageModules.contribute);
+const SearchResults = lazy(pageModules.search);
+const WordPage = lazy(pageModules.word);
+const UserProfile = lazy(pageModules.profile);
 
 // Less frequently accessed routes with dynamic imports
-const AdvancedSearch = lazy(() => import('../pages/AdvancedSearch'));
-const Blog = lazy(() => import('../pages/Blog'));
-const About = lazy(() => import('../pages/About'));
-const Chatbot = lazy(() => import('../pages/Chatbot'));
-const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
-const ResetPassword = lazy(() => import('../pages/ResetPassword'));
-const NotFound = lazy(() => import('../pages/NotFound'));
-const SourceLibrary = lazy(() => import('../pages/SourceLibrary'));
+const AdvancedSearch = lazy(pageModules.explore);
+const Blog = lazy(pageModules.blog);
+const About = lazy(pageModules.about);
+const Chatbot = lazy(pageModules.chatbot);
+const ForgotPassword = lazy(pageModules.forgot);
+const ResetPassword = lazy(pageModules.reset);
+const NotFound = lazy(pageModules.missing);
+const SourceLibrary = lazy(pageModules.sources);
 const ImportPreview = import.meta.env.DEV ? lazy(() => import('../pages/ImportPreview')) : NotFound;
 const PronunciationPreview = import.meta.env.DEV ? lazy(() => import('../pages/PronunciationPreview')) : NotFound;
-const PageUnderConstruction = lazy(() => import('../pages/PageUnderConstruction'));
-
-// Set the default language to English unless the user's browser language is Arabic
-let defaultLanguage = 'en';
-const navigatorLang = navigator.language.split('-')[0];
-if (navigator.language && navigatorLang === 'ar') {
-  defaultLanguage = navigatorLang;
-}
-
-const resources = {
-  en: {
-    translation: translationEN,
-    direction: 'ltr',
-  },
-  ar: {
-    translation: translationAR,
-    direction: 'rtl',
-  },
-};
-
-i18n.use(initReactI18next).init({
-  resources,
-  lng: getFunctionalCookie('language') || defaultLanguage,
-  fallbackLng: 'en',
-  interpolation: {
-    escapeValue: false,
-  },
-});
+const PageUnderConstruction = lazy(pageModules.construction);
 
 interface CheckUserStatusProps {
   children: ReactNode;
@@ -156,7 +160,7 @@ const CheckUserLoggedOut: React.FC<CheckUserStatusProps & {
 
 // Loading fallback component
 // Import the dedicated LoadingSpinner component
-const LoadingSpinner = lazy(() => import('./components/LoadingSpinner'));
+import LoadingSpinner from './components/LoadingSpinner';
 
 // Loading fallback component with improved error handling
 const LoadingFallback = () => {
@@ -165,18 +169,11 @@ const LoadingFallback = () => {
 };
 
 const App: React.FC = () => {
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        staleTime: 5 * 60 * 1000, // 5 minutes
-      },
-    },
-  }));
   const [mustLoginSnackbarOpen, setMustLoginSnackbarOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { wordId, lang } = useParams<{ wordId: string; lang?: string }>();
   const location = useLocation();
+  const {notFoundPath} = usePreferences();
   
   const handleReportClick = () => {
     // If a 'Bug Report Form' window is already open, the form submission will open in that existing window instead of
@@ -212,14 +209,14 @@ const App: React.FC = () => {
   
   return (
     <div className="app">
-      <QueryClientProvider client={queryClient}>
         <SeoMetadata />
         <div className="grain-texture"></div>
         <Header />
         <div className="content">
           <Suspense fallback={<LoadingFallback />}>
-            <Routes>
+            {notFoundPath===location.pathname ? <NotFound/> : <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/browse/:language" element={<Browse />} />
               <Route path="/advanced-search" element={<AdvancedSearch />} />
               {import.meta.env.DEV && <Route path="/add-definition-preview" element={<AddWord />} />}
               <Route path="/advanced-search/:countryName" element={<AdvancedSearch />} />
@@ -266,7 +263,7 @@ const App: React.FC = () => {
               {import.meta.env.DEV && <Route path="/contribution-preview" element={<AddWord />} />}
               <Route path="/chatbot" element={<Chatbot />} />
               <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
-            </Routes>
+            </Routes>}
           </Suspense>
         </div>
         <div
@@ -289,7 +286,6 @@ const App: React.FC = () => {
         />
         {/* Only in development mode */}
         {import.meta.env.DEV && <ReactQueryDevtools />}
-      </QueryClientProvider>
     </div>
   );
 };

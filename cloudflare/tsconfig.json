@@ -1,8 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ESNext", "lib": ["ESNext"], "module": "ESNext",
-    "moduleResolution": "Bundler", "strict": true, "skipLibCheck": true,
-    "noEmit": true, "types": []
+    "target": "ESNext",
+    "lib": [
+      "ESNext"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": []
   },
-  "include": ["worker.ts", "worker-configuration.d.ts"]
+  "include": [
+    "worker.ts",
+    "worker-configuration.d.ts",
+    "ssr.d.ts"
+  ]
 }

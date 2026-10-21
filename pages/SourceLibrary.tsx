@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet';
+import Helmet from '../src/components/PageMetadata';
 import { API_URL, apiJson } from '../src/api';
 import SourceCredits from '../src/components/SourceCredits';
 import type { SourceCredit } from '../src/types/provenance';
@@ -23,7 +23,7 @@ export default function SourceLibrary() {
     {isError && <p role="alert">Unable to load these details.</p>}
     {username && data && <>
       <span className="import-preview-label">{ar?'مجموعة مفردات':'Vocabulary collection'}</span>
-      <p>{ar?'المصادر الأصلية مذكورة مع كل مدخل.':'Original sources are credited with each entry.'}</p><p>{Number(data.definitions??data.importedDefinitions).toLocaleString()} {ar?'تعريف':'definitions'}</p>
+      <p>{ar?'المصادر الأصلية مذكورة مع كل مدخل.':'Original sources are credited with each entry.'}</p><p>{Number(data.definitions??data.importedDefinitions).toLocaleString(ar?'ar-EG':'en-US')} {ar?'تعريف':'definitions'}</p>
       <ul>{data.sources.map((source: any) => <li key={source.id}><Link to={'/sources#' + source.id}>{source.name}</Link></li>)}</ul>
     </>}
     {definition && data && <SourceCredits credits={data.sourceCredits as SourceCredit[]} language={i18n.language} expanded />}

@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect, lazy, Suspense } from 'react';
-const SearchBar = lazy(() => import("./SearchBar"));
+import SearchBar from './SearchBar';
 const Joyride = lazy(() => import('react-joyride'));
-const ToolbarItems = lazy(() => import("./ToolbarItems"));
-const FontAwesomeIcon = lazy(() => import('@fortawesome/react-fontawesome').then(module => ({ default: module.FontAwesomeIcon })));
-const US = lazy(() => import('country-flag-icons/react/3x2').then(module => ({ default: module.US })));
-const EG = lazy(() => import('country-flag-icons/react/3x2').then(module => ({ default: module.EG })));
-const ThemeModeToggle = lazy(() => import('./ThemeModeToggle'));
+import ToolbarItems from './ToolbarItems';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {US, EG} from 'country-flag-icons/react/3x2';
+import ThemeModeToggle from './ThemeModeToggle';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { NavLink } from "react-router-dom";
@@ -13,15 +12,16 @@ import './Header.scss';
 import * as variables from '../assets/Variables.module.scss';
 import { setFunctionalCookie, getFunctionalCookie } from '../assets/utils';
 import { useTranslation } from 'react-i18next';
-import { CallBackProps, STATUS, Step } from 'react-joyride';
+import type { CallBackProps, Step } from 'react-joyride';
+import {usePreferences} from '../rendering/preferences';
 import qamousLogo from '../assets/qamous-logo-transparent.png';
 
 const Header: React.FC = () => {
     const { i18n, t } = useTranslation();
-    const root = document.documentElement;
-    const [currentLang, setCurrentLang] = useState(getFunctionalCookie('language') || "en");
+    const {theme} = usePreferences();
+    const [currentLang, setCurrentLang] = useState(i18n.language);
     const [languageButtonStyle, setLanguageButtonStyle] = useState({ opacity: 1 });
-    const [themeMode, setThemeMode] = useState(getFunctionalCookie('themeMode') || 'dark');
+    const [themeMode, setThemeMode] = useState<string>(theme);
     const [change, setChange] = useState(false);
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
@@ -57,6 +57,7 @@ const Header: React.FC = () => {
     };
     
     const setTheme = (mode: string): void => {
+      const root = document.documentElement;
       const isDarkMode: boolean = mode === 'dark';
       const isGrainMode: boolean = mode === 'grain';
         
@@ -143,20 +144,21 @@ const Header: React.FC = () => {
         setCurrentLang(i18n.language);
     }, [i18n.language]);
     
-    const [isPhone, setIsPhone] = useState(window.innerWidth <= 1200);
+    const [isPhone, setIsPhone] = useState(false);
     
     useEffect(() => {
         const handleResize = () => {
             setIsPhone(window.innerWidth <= 1200);
         };
         
+        handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
     
     const handleJoyrideCallback = (data: CallBackProps) => {
         const { status, index, action } = data;
-        const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+        const finishedStatuses: string[] = ['finished', 'skipped'];
         
         if (finishedStatuses.includes(status)) {
             setFunctionalCookie('tourCompleted', 'true');
@@ -304,7 +306,7 @@ const Header: React.FC = () => {
     }, [lastScrollY]);
     
     useEffect(() => {
-      const storedMode = getFunctionalCookie('themeMode') || 'dark';
+      const storedMode = theme;
       setThemeMode(storedMode)
       setTheme(storedMode);
       

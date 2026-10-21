@@ -1,4 +1,4 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen} from './render';
 import {MemoryRouter} from 'react-router-dom';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {afterEach, describe, expect, it, vi} from 'vitest';
