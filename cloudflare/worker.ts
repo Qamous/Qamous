@@ -41,7 +41,7 @@ async function seoData(request:Request,env:Env,path:string) {
 async function cached(request:Request,ctx:ExecutionContext|undefined,produce:()=>Promise<Response>) {
   if(request.method!=='GET'||request.headers.has('Cookie')||request.headers.has('Authorization')||typeof caches==='undefined') return produce();
   const keyUrl=new URL(request.url);
-  keyUrl.searchParams.set('__qamous_render','ssr-1');
+  keyUrl.searchParams.set('__qamous_render','ssr-2');
   keyUrl.searchParams.set('__qamous_language',/^ar\b/i.test(request.headers.get('Accept-Language')||'')?'ar':'en');
   const key=new Request(keyUrl,request);
   const hit=await caches.default.match(key);

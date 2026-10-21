@@ -46,9 +46,13 @@ without JavaScript; account actions still require JavaScript.
 Language and theme are resolved per request and used for both renders. English and
 Arabic word/browse URLs take precedence over a saved language. Each request owns
 its i18next instance, query client and metadata context. Server timestamps make
-countdowns deterministic. CSS for the active route and its dependencies is linked
-before first paint, using the browser build manifest. The Worker bundle and browser
-assets must always be deployed together.
+countdowns deterministic. Compiled CSS for the active route and its dependencies is
+included directly in the initial head, using the browser build manifest. It does
+not wait for stylesheet downloads or font imports, so Firefox cannot briefly paint
+unconstrained SVGs or an unstyled layout on slow connections. Each normal stylesheet
+link remains immediately after its inline copy to preserve cascade order and Vite's
+client navigation behavior. The Worker bundle and browser assets must always be
+deployed together.
 
 Only fixed public data routes are requested while rendering. Public row reads may
 forward the visitor's session cookie to preserve reaction flags. Cookies, tokens,
@@ -86,6 +90,7 @@ writes production data. In a named Playwright CLI session open that URL and run:
 
 ```
 playwright-cli -s=qamous-ssr run-code --filename scripts/verify-hydration.js
+playwright-cli -s=qamous-ssr run-code --filename scripts/verify-first-paint.js
 ```
 
 The browser check delays startup scripts and verifies DOM reuse and absence of
@@ -93,3 +98,7 @@ hydration errors across 23 routes at desktop and mobile widths. Private pages ma
 redirect to login after hydration. Test live public routes, theme/language toggles,
 search, and Worker outcomes after release. The fixture preview is a verification
 helper, not a public deployment target. `npm start` remains the fast client dev server.
+The first-paint check withholds all local stylesheets and startup JavaScript, then
+checks the real layout and icon sizes before releasing them and checking hydration.
+Run it in both Firefox and Chromium; Chromium's paint suppression can conceal a
+Firefox flash of unstyled content.
