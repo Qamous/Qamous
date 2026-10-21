@@ -62,6 +62,13 @@ describe('dynamic search pages and sitemaps',()=>{
     expect(new URL(api.mock.calls[0][0].url).pathname).toBe('/seo/word/2');
     expect(api.mock.calls[0][0].headers.get('Cookie')).toBeNull();
     expect(api.mock.calls[0][0].headers.get('Authorization')).toBeNull();
+    expect(api.mock.calls[0][0].headers.get('X-Qamous-Seo-Internal')).toBeNull();
+  });
+  it('sends the private service token only to the SEO API binding',async()=>{
+    const {env,api}=bindings();
+    env.SEO_INTERNAL_SECRET='s'.repeat(64);
+    await worker.fetch(new Request('https://qamous.org/word/2'),env);
+    expect(api.mock.calls[0][0].headers.get('X-Qamous-Seo-Internal')).toBe(env.SEO_INTERNAL_SECRET);
   });
   it('redirects aliases, returns real 404s, and treats outages as temporary',async()=>{
     const {env}=bindings();
