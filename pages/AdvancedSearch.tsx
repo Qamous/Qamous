@@ -107,7 +107,7 @@ const AdvancedSearch: React.FC = () => {
       </Helmet>
       <header className="explore-hero">
         <h1>{guideTitle || t('explore.title')}<span className="explore-period">.</span></h1>
-        <span className="explore-watermark" aria-hidden="true"><span>كلمة</span></span>
+        <span className="explore-watermark" aria-hidden="true">كلمة</span>
         {guide && <p className="dialect-intro">{guideIntro}</p>}
         <form className="explore-search" role="search" onSubmit={submit}>
           <FontAwesomeIcon icon={faSearch} aria-hidden="true" />
