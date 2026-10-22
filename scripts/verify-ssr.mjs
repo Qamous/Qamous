@@ -5,7 +5,7 @@ const data=async path=>fixtureData(path);
 const paths=['/','/about','/blog','/advanced-search','/advanced-search/Egypt','/advanced-search?q=ma3lish','/login','/signup','/chatbot','/forgot-password','/reset-password/test','/profile','/add-definition','/search/ma3lish','/feeling-lucky','/advertise','/opportunities','/sources','/contributors/fixture','/word/2','/word/2/ar','/browse/en','/browse/ar','/missing'];
 let count=0;
 for(const path of paths) {
-  const seed=path.startsWith('/word/')?{word:true}:path.startsWith('/browse/')?{browse:fixtureData('/seo'+path),countries}:path==='/missing'?{notFound:true}:{};
+  const seed=path.startsWith('/word/')?{word:true,wordData:fixtureData('/seo/word/2')}:path.startsWith('/browse/')?{browse:fixtureData('/seo'+path),countries}:path==='/missing'?{notFound:true}:{};
   const page=await renderApplication(new Request('https://qamous.org'+path),data,seed);
   assert.match(page.html,/<div class="app">/);assert.match(page.html,/<footer/);
   assert.doesNotMatch(page.html,/seo-initial|initial-loader/);
@@ -42,4 +42,24 @@ for(const {page,ar,theme} of concurrent) {
   assert.equal(page.grain,theme==='grain');
 }
 assert.doesNotMatch(serializeState({text:'</script><script>evil()</script>&\u2028'}),/[<>&\u2028]/);
-console.log(JSON.stringify({serverRenderedRoutes:count,concurrentIsolatedRenders:concurrent.length,scriptEscaping:true,sharedLayout:true,inlineInitialStyles:true}));
+// Repeated cold word URLs must use the shared SEO payload for actual visible
+// meanings, provenance and related links, without any second database API call.
+let duplicateWordCalls=0;
+for(const path of ['/word/2','/word/2/ar','/word/2','/word/2/ar']) {
+  const wordData=fixtureData('/seo/word/2');
+  wordData.rows=[...wordData.rows,{...rows[0],id:103,definition:'A second visible meaning'}];
+  const page=await renderApplication(new Request('https://qamous.org'+path),async()=>{duplicateWordCalls++;throw new Error('Duplicate word API call');},{word:true,wordData});
+  assert.match(page.html,path.endsWith('/ar')?/يلا/:/yalla/);
+  assert.match(page.html,path.endsWith('/ar')?/ولا يهمك/:/A second visible meaning/);
+  const queries=JSON.parse(page.state).queries.queries;
+  assert.ok(queries.find(query=>query.queryKey[0]==='relatedWords'));
+}
+assert.equal(duplicateWordCalls,0);
+const personalPaths=[];
+const personal=await renderApplication(new Request('https://qamous.org/word/2',{headers:{Cookie:'qamous_session=private'}}),async path=>{
+  personalPaths.push(path);
+  return fixtureData(path).map(row=>({...row,isLiked:1}));
+},{word:true,wordData:fixtureData('/seo/word/2'),personalized:true});
+assert.deepEqual(personalPaths,['/definitions/word/2']);
+assert.equal(JSON.parse(personal.state).queries.queries.find(query=>query.queryKey[0]==='homeContent').state.data[0].isLiked,true);
+console.log(JSON.stringify({serverRenderedRoutes:count,concurrentIsolatedRenders:concurrent.length,scriptEscaping:true,sharedLayout:true,inlineInitialStyles:true,duplicateWordCalls,personalizedWordIsolated:true}));

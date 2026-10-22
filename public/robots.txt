@@ -26,9 +26,16 @@ Disallow: /api/
 # These read-only requests are needed to render the same public content as users.
 Allow: /api/definitions/word/
 Allow: /api/definitions/most-liked
+Allow: /api/definitions/feed
 Allow: /api/word/search/iso=
+Allow: /api/word/related
+Allow: /api/word/explore?*ids=
 Allow: /api/countries
 Allow: /api/posts
+# Indexable word pages, language browse pages and dialect guides remain allowed.
+# Filter combinations and alternate sort orders are unbounded duplicate URLs.
+Disallow: /advanced-search?
+Disallow: /advanced-search/*?
 Disallow: /login
 Disallow: /signup
 Disallow: /profile
