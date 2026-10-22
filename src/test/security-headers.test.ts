@@ -25,5 +25,10 @@ describe('browser and crawler security policy',()=>{
     expect(search).not.toContain('Disallow: /js/');
     expect(search).not.toContain('Disallow: /assets/');
     expect(search).toContain('Sitemap: https://qamous.org/sitemap.xml');
+    expect(search).toContain('Disallow: /advanced-search?');
+    expect(search).toContain('Disallow: /advanced-search/*?');
+    expect(search).not.toContain('Disallow: /word/');
+    expect(search).not.toContain('Disallow: /browse/');
+    expect(search).not.toMatch(/Disallow: \/advanced-search\s*(?:\n|$)/);
   });
 });

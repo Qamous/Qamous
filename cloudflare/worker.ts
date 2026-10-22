@@ -1,6 +1,7 @@
 /// <reference path="./worker-configuration.d.ts" />
 import {renderApplication, type RenderSeed} from 'qamous:ssr';
 import {wordPage,browsePage,dialectPage,sitemapIndex,sitemapStatic,sitemapWords} from './seo-content.mjs';
+import {requestPreferences} from '../src/rendering/preferences';
 
 // EEA (EU + Iceland/Liechtenstein/Norway), UK and Switzerland. Unknown/Tor
 // locations fail closed. Only Cloudflare's trusted request metadata is used.
@@ -10,7 +11,38 @@ export function requiresAnalyticsConsent(country: unknown): boolean {
 }
 class SeoNotFound extends Error {}
 function unavailable() {
-  return new Response('Qamous is temporarily unavailable. Please try again later.', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store','Retry-After':'60','X-Content-Type-Options':'nosniff','X-Robots-Tag':'noindex','Content-Security-Policy':"default-src 'none'; frame-ancestors 'none'"}});
+  // A temporary overload is not a removal from search. Google can retry this
+  // URL without mistaking a quota response for a permanent noindex directive.
+  return new Response('Qamous is temporarily unavailable. Please try again later.', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store','Retry-After':'60','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; frame-ancestors 'none'"}});
+}
+export function sessionCookie(request:Request):string|undefined {
+  return request.headers.get('Cookie')?.split(';').map(part=>part.trim()).find(part=>part.split('=',1)[0]==='qamous_session');
+}
+export function personalized(request:Request):boolean {
+  return sessionCookie(request)!==undefined||request.headers.has('Authorization');
+}
+function privatePage(request:Request):boolean {
+  const url=new URL(request.url);
+  // The API caches the home candidate pool; keep each visit's weighted shuffle
+  // fresh instead of sharing a previously randomized HTML page between visitors.
+  return url.pathname==='/'||personalized(request)||(/^\/advanced-search(?:\/|$)/.test(url.pathname)&&Boolean(url.search))
+    ||/^\/(?:login|signup|profile|add-definition|forgot-password|reset-password|search|chatbot|feeling-lucky)(?:\/|$)/.test(url.pathname);
+}
+export function publicCacheKey(request:Request):Request {
+  const url=new URL(request.url);
+  const preferences=requestPreferences(url,request.headers.get('Cookie')||'',request.headers.get('Accept-Language')||'');
+  // Only parameters that change rendered public content belong in its key.
+  // Tracking tags and arbitrary query strings must not create new cache entries.
+  const after=/^\/browse\/(en|ar)$/.test(url.pathname)?url.searchParams.get('after'):null;
+  const definition=url.pathname==='/sources'?url.searchParams.get('definition'):null;
+  url.search='';
+  if(after) url.searchParams.set('after',after);
+  if(definition) url.searchParams.set('definition',definition);
+  url.searchParams.set('__qamous_render','ssr-3');
+  url.searchParams.set('__qamous_language',preferences.language);
+  url.searchParams.set('__qamous_theme',preferences.theme);
+  // No cookies, credentials or visitor-specific headers enter Cache API keys.
+  return new Request(url,{method:'GET'});
 }
 async function boundedJson(response:Response):Promise<any> {
   const reader=response.body?.getReader();
@@ -32,23 +64,28 @@ async function seoData(request:Request,env:Env,path:string) {
   const ip=request.headers.get('CF-Connecting-IP');if(ip) headers.set('CF-Connecting-IP',ip);
   const internalSecret=(env as Env & {SEO_INTERNAL_SECRET?:string}).SEO_INTERNAL_SECRET;
   if(path.startsWith('/seo/')&&typeof internalSecret==='string'&&internalSecret.length>=32) headers.set('X-Qamous-Seo-Internal',internalSecret);
-  if(!path.startsWith('/seo/')&&request.headers.has('Cookie')) headers.set('Cookie',request.headers.get('Cookie')!);
+  const session=sessionCookie(request);
+  if(!path.startsWith('/seo/')&&session) headers.set('Cookie',session);
   const response=await env.API.fetch(new Request(new URL(path,request.url),{headers,signal:AbortSignal.timeout(10000)}));
   if(response.status===404) {await response.body?.cancel();throw new SeoNotFound();}
   if(!response.ok) {await response.body?.cancel();throw new Error('SEO data unavailable');}
   return boundedJson(response);
 }
-async function cached(request:Request,ctx:ExecutionContext|undefined,produce:()=>Promise<Response>) {
-  if(request.method!=='GET'||request.headers.has('Cookie')||request.headers.has('Authorization')||typeof caches==='undefined') return produce();
-  const keyUrl=new URL(request.url);
-  keyUrl.searchParams.set('__qamous_render','ssr-2');
-  keyUrl.searchParams.set('__qamous_language',/^ar\b/i.test(request.headers.get('Accept-Language')||'')?'ar':'en');
-  const key=new Request(keyUrl,request);
-  const hit=await caches.default.match(key);
-  if(hit) return hit;
-  const response=await produce();
-  if(response.ok&&response.headers.get('Cache-Control')?.includes('public')&&ctx) ctx.waitUntil(caches.default.put(key,response.clone()));
-  return response;
+async function cached(request:Request,ctx:ExecutionContext|undefined,produce:(request:Request)=>Promise<Response>) {
+  if(!['GET','HEAD'].includes(request.method)||privatePage(request)||typeof caches==='undefined') return produce(request);
+  const key=publicCacheKey(request);
+  let hit:Response|undefined;
+  try {hit=await caches.default.match(key);} catch { /* The API budget still protects an unavailable edge cache. */ }
+  const response=hit||await produce(request.method==='HEAD'?new Request(request,{method:'GET'}):request);
+  const headers=new Headers(response.headers);headers.set('X-Qamous-Cache',hit?'hit':'miss');
+  const result=new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+  if(!hit&&result.ok&&result.headers.get('Cache-Control')?.includes('public')&&!result.headers.has('Set-Cookie')&&ctx) {
+    // Keep HTML short-lived so moderation is not hidden by a long stale page.
+    // Invalidation-aware stale data and global coalescing live in the API cache.
+    ctx.waitUntil(caches.default.put(key,result.clone()).catch(()=>undefined));
+  }
+  if(request.method==='HEAD') {await result.body?.cancel();return new Response(null,{status:result.status,headers:result.headers});}
+  return result;
 }
 function xml(request:Request,body:string) {
   const headers={'Content-Type':'application/xml; charset=utf-8','Cache-Control':'public, max-age=300','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; frame-ancestors 'none'"};
@@ -68,9 +105,7 @@ async function applicationPage(request:Request,env:Env,meta?:{robots?:string},se
       .on('#root',{element(e){e.setAttribute('data-ssr','true');e.setInnerContent(rendered.html,{html:true});}});
     const response=rewrite.transform(asset);
     const headers=new Headers(response.headers);
-    const url=new URL(request.url);
-    const privatePage=request.headers.has('Cookie')||request.headers.has('Authorization')||(/^\/advanced-search(?:\/|$)/.test(url.pathname)&&Boolean(url.search))||/^\/(?:login|signup|profile|add-definition|forgot-password|reset-password|search|chatbot|feeling-lucky)(?:\/|$)/.test(url.pathname);
-    headers.set('Cache-Control',privatePage||status!==200?'private, no-store':'public, max-age=60');
+    headers.set('Cache-Control',privatePage(request)||status!==200?'private, no-store':'public, max-age=60');
     headers.set('Vary','Cookie, Accept-Language');
     headers.set('X-Qamous-Rendering','react-ssr');
     headers.set('X-Robots-Tag',status!==200?'noindex, follow':meta?.robots||rendered.robots);
@@ -86,8 +121,10 @@ async function applicationPage(request:Request,env:Env,meta?:{robots?:string},se
 async function missingPage(request:Request,env:Env):Promise<Response> {
   return applicationPage(request,env,{robots:'noindex, follow'},{notFound:true},404);
 }
-function redirectPath(request:Request,path:string) {
-  const url=new URL(request.url);url.pathname=path;return Response.redirect(url.toString(),308);
+function redirectPath(request:Request,path:string,keepSearch=true) {
+  const url=new URL(path,request.url);
+  if(keepSearch&&!path.includes('?')) url.search=new URL(request.url).search;
+  return Response.redirect(url.toString(),308);
 }
 async function dynamic(request:Request,env:Env,ctx:ExecutionContext|undefined):Promise<Response|null> {
   const url=new URL(request.url),path=url.pathname;
@@ -102,20 +139,21 @@ async function dynamic(request:Request,env:Env,ctx:ExecutionContext|undefined):P
     if(!Number.isSafeInteger(Number(word[1]))) return missingPage(request,env);
     const canonical='/word/'+word[1]+(word[2]==='ar'?'/ar':'');
     if(path!==canonical) return redirectPath(request,canonical);
-    try {return await cached(request,ctx,async()=>{
+    try {return await cached(request,ctx,async request=>{
       const data=await seoData(request,env,'/seo/word/'+word[1]);
       const meta=wordPage(data,word[2]==='ar'?'ar':'en',Number(word[1]));
       if(!meta) return missingPage(request,env);
       if(meta.robots==='index, follow'&&meta.canonicalPath!==canonical) return redirectPath(request,meta.canonicalPath);
-      return applicationPage(request,env,meta,{word:true});
+      return applicationPage(request,env,meta,{word:true,wordData:data,personalized:personalized(request)});
     });} catch(error) {return error instanceof SeoNotFound?missingPage(request,env):unavailable();}
   }
   if(browse) {
     const canonical='/browse/'+browse[1];
     if(path!==canonical) return redirectPath(request,canonical);
     const after=url.searchParams.get('after');
-    if([...url.searchParams.keys()].some(key=>key!=='after')) return redirectPath(request,canonical+(after?'?after='+encodeURIComponent(after):''));
-    try {return await cached(request,ctx,async()=>{
+    if(after!==null&&(!/^[1-9]\d*$/.test(after)||!Number.isSafeInteger(Number(after)))) return missingPage(request,env);
+    if([...url.searchParams.keys()].some(key=>key!=='after')||url.searchParams.getAll('after').length>1) return redirectPath(request,canonical+(after?'?after='+encodeURIComponent(after):''),false);
+    try {return await cached(request,ctx,async request=>{
       const data=await seoData(request,env,'/seo/browse/'+browse[1]+(after?'?after='+encodeURIComponent(after):''));
       const index=await seoData(request,env,'/seo/index');
       return applicationPage(request,env,browsePage(data,index,after),{browse:data,countries:index.countries});
@@ -127,18 +165,18 @@ async function dynamic(request:Request,env:Env,ctx:ExecutionContext|undefined):P
     catch {return missingPage(request,env);}
     const canonical='/advanced-search/'+encodeURIComponent(name);
     if(path!==canonical) return redirectPath(request,canonical);
-    try {return await cached(request,ctx,async()=>{
+    try {return await cached(request,ctx,async request=>{
       const data=await seoData(request,env,'/seo/dialect/'+encodeURIComponent(name));
       return applicationPage(request,env,dialectPage(data));
     });}
     catch(error) {return error instanceof SeoNotFound?missingPage(request,env):unavailable();}
   }
   try {
-    if(path==='/sitemap.xml') return await cached(request,ctx,async()=>xml(request,sitemapIndex(await seoData(request,env,'/seo/index'))));
-    if(path==='/sitemap-static.xml') return await cached(request,ctx,async()=>xml(request,sitemapStatic(await seoData(request,env,'/seo/index'))));
+    if(path==='/sitemap.xml') return await cached(request,ctx,async request=>xml(request,sitemapIndex(await seoData(request,env,'/seo/index'))));
+    if(path==='/sitemap-static.xml') return await cached(request,ctx,async request=>xml(request,sitemapStatic(await seoData(request,env,'/seo/index'))));
     const id=Number(shard![1]);
     if(!Number.isSafeInteger(id)) return missingPage(request,env);
-    return await cached(request,ctx,async()=>xml(request,sitemapWords(await seoData(request,env,'/seo/sitemap/'+id))));
+    return await cached(request,ctx,async request=>xml(request,sitemapWords(await seoData(request,env,'/seo/sitemap/'+id))));
   } catch(error) {return error instanceof SeoNotFound?missingPage(request,env):unavailable();}
 }
 export default {
@@ -154,13 +192,13 @@ export default {
     if(url.pathname==='/api'||url.pathname.startsWith('/api/')) {
       const target=new URL(request.url);target.pathname=url.pathname.slice(4)||'/';
       try {return await env.API.fetch(new Request(target,request));}
-      catch {return Response.json({message:'Qamous is temporarily unavailable. Please try again later. / قاموس غير متاح مؤقتاً، يرجى المحاولة لاحقاً.'},{status:503,headers:{'Cache-Control':'no-store'}});}
+      catch {return Response.json({message:'Qamous is temporarily unavailable. Please try again later. / قاموس غير متاح مؤقتاً، يرجى المحاولة لاحقاً.'},{status:503,headers:{'Cache-Control':'no-store','Retry-After':'60'}});}
     }
     const seo=await dynamic(request,env,ctx);if(seo) return seo;
     if(['GET','HEAD'].includes(request.method)&&(
       /^\/(?:|about|blog|advanced-search|login|signup|profile|add-definition|forgot-password|reset-password|search|chatbot|feeling-lucky|advertise|opportunities|sources)\/?$/.test(url.pathname)
       ||/^\/(?:search|reset-password|contributors)\/[^/]+\/?$/.test(url.pathname)
-    )) return cached(request,ctx,()=>applicationPage(request,env));
+    )) return cached(request,ctx,request=>applicationPage(request,env));
     const asset=await env.ASSETS.fetch(request);
     if(asset.status!==404) return asset;
     if(!['GET','HEAD'].includes(request.method)) {await asset.body?.cancel();return new Response(null,{status:405,headers:{Allow:'GET, HEAD'}});}

@@ -61,15 +61,27 @@ export async function renderApplication(request:Request, fetchData:FetchData, se
       set(['homeContent',script,'definition-language-v2',updatedAt],{pages:[page.results],pageParams:[null]});
     } else if(seed.word) {
       const id=Number(path.split('/')[2]);
-      const rows=await fetchData<Parameters<typeof mapWordDefinitions>[0]>('/definitions/word/'+id);
+      // The public SEO payload includes every visible meaning and its provenance.
+      // Reuse it for the actual page, including hydration, instead of repeating
+      // definitions and a country-wide Explore count for every crawled URL.
+      const rows=seed.wordData&&!seed.personalized?seed.wordData.rows
+        :await fetchData<Parameters<typeof mapWordDefinitions>[0]>('/definitions/word/'+id);
       const meanings=mapWordDefinitions(rows);
       set(['homeContent',id],meanings);
       const shown=meanings.find(row=>row.lang===lang)||meanings[0];
       if(shown?.countryCode) {
-        await Promise.all([
-          load('exploreCountries','/countries'),
-          load(['relatedWords',shown.countryCode,lang==='ar'],`/word/explore?country=${shown.countryCode}&script=${lang==='ar'?'ar':'franco'}&limit=6&sort=popular`),
-        ]);
+        const related=seed.wordData?.related;
+        if(seed.wordData) {
+          const matchingCountry=related?.country?.countryCode===shown.countryCode;
+          set(['relatedCountry',shown.countryCode],matchingCountry?related.country:null);
+          set(['relatedWords',shown.countryCode,lang==='ar'],matchingCountry?related.byLanguage?.[lang]||{results:[]}:{results:[]});
+        } else {
+          // This widget is optional: budget pressure must not hide the meaning.
+          await Promise.allSettled([
+            load(['relatedCountry',shown.countryCode],'/countries/'+shown.countryCode),
+            load(['relatedWords',shown.countryCode,lang==='ar'],`/word/related?country=${shown.countryCode}&script=${lang==='ar'?'ar':'franco'}`),
+          ]);
+        }
       }
     } else if(path.startsWith('/advanced-search')) {
       const countries=seed.countries||await fetchData<Country[]>('/countries');set('exploreCountries',countries);

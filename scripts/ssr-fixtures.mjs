@@ -13,8 +13,9 @@ export function fixtureData(path) {
     const results=rows.filter(row=>Boolean(row.isArabic)===(url.searchParams.get('script')==='ar')).map(row=>({...row,word:row.isArabic?row.arabicWord:row.francoArabicWord}));
     return {results,total:results.length,page:1,limit:12};
   }
+  if(url.pathname==='/word/related') return {results:[{wordId:3,word:url.searchParams.get('script')==='ar'?'يلا':'yalla',isArabic:url.searchParams.get('script')==='ar'?1:0}]};
   if(url.pathname==='/definitions/word/2') return rows;
-  if(url.pathname==='/seo/word/2') return {rows,related:{country:countries[0],words:[]}};
+  if(url.pathname==='/seo/word/2') return {rows,related:{country:countries[0],words:[],byLanguage:{en:{results:[{wordId:3,word:'yalla',isArabic:0}]},ar:{results:[{wordId:3,word:'يلا',isArabic:1}]}}}};
   if(url.pathname==='/seo/dialect/Egypt') return {country:countries[0],words:[{id:2,canonicalArabic:'معلش',francoArabicWord:'ma3lish'}]};
   if(url.pathname==='/seo/index') return {buckets:[0],countries};
   if(url.pathname==='/seo/sitemap/0') return [{id:2,en:1,ar:1}];
