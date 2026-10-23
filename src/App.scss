@@ -67,8 +67,69 @@ body {
   margin-bottom: variables.$content-footer-margin; // Add margin to the bottom of the content area to accommodate the footer
   margin-top: 90px; // Margin-top equal to header height
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1300px) {
     margin-top: 65px; // Adjust for smaller header on mobile
+  }
+}
+
+.read-only-notice {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: calc(50% - 50px);
+  margin: 25px auto 0;
+  padding: 16px 18px;
+  border: 1px solid variables.$header-border-color;
+  border-inline-start: 3px solid variables.$secondary-color;
+  border-radius: 8px;
+  background-color: variables.$quaternary-color;
+  text-align: start;
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: variables.$secondary-color-20;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      color: variables.$secondary-color;
+    }
+  }
+
+  &__copy {
+    min-width: 0;
+    line-height: 1.5;
+
+    strong {
+      display: block;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 3px 0 0;
+      font-family: inherit;
+      font-size: 13px;
+      color: variables.$primary-color-75;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  &[dir='rtl'] {
+    font-family: variables.$font-stack-arabic;
+  }
+
+  @media (max-width: 1200px) {
+    width: calc(100% - 32px);
+    margin-block: 24px;
+    padding: 14px 16px;
   }
 }
 

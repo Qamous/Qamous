@@ -14,6 +14,7 @@ import './App.scss';
 import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { faBug } from '@fortawesome/free-solid-svg-icons/faBug';
+import { faCirclePause } from '@fortawesome/free-solid-svg-icons/faCirclePause';
 // Import the ads loader utility
 import { initAds } from './utils/deferAdsLoader';
 // Adverts bar: Uncomment the following line to enable the adverts bar
@@ -213,9 +214,13 @@ const App: React.FC = () => {
         <div className="grain-texture"></div>
         <Header />
         <div className="content">
-          {import.meta.env.VITE_PUBLIC_READ_ONLY === 'true' && <p role="status" style={{padding:'12px 16px',margin:'0 auto 20px',maxWidth:960,border:'1px solid currentColor',borderRadius:12,fontSize:14,lineHeight:1.5,textAlign:'center'}}>
-            {i18n.language === 'ar' ? 'التصفح متاح. تسجيل الدخول والتصويت وإضافة التعريفات متوقفة مؤقتًا.' : 'Browsing is available. Sign-in, voting and contributions are temporarily paused.'}
-          </p>}
+          {import.meta.env.VITE_PUBLIC_READ_ONLY === 'true' && <aside className="read-only-notice" role="status" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+            <span className="read-only-notice__icon" aria-hidden="true"><FontAwesomeIcon icon={faCirclePause} /></span>
+            <div className="read-only-notice__copy">
+              <strong>{i18n.language === 'ar' ? 'التصفح متاح.' : 'Browsing is available.'}</strong>
+              <p>{i18n.language === 'ar' ? 'تسجيل الدخول والتصويت وإضافة التعريفات متوقفة مؤقتًا.' : 'Sign-in, voting and contributions are temporarily paused.'}</p>
+            </div>
+          </aside>}
           <Suspense fallback={<LoadingFallback />}>
             {notFoundPath===location.pathname ? <NotFound/> : <Routes>
               <Route path="/" element={<Home />} />
