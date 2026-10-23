@@ -14,7 +14,6 @@ export default function SourceCredits({ credits = [], language = 'en', expanded 
         <p>{credit.credit}</p>
         <p>{ar ? 'معرّف المدخل: ' : 'Original entry: '}{credit.sourceEntryId}</p>
         <a href={credit.licenseUrl} target="_blank" rel="noopener noreferrer">{credit.license}</a>
-        {credit.rightsStatus === 'unverified' && <p className="source-credits-unverified">{ar ? 'حقوق إعادة الاستخدام غير مؤكدة.' : 'Reuse rights are unverified.'}</p>}
         {credit.notice && <p className="source-credits-notice">{credit.notice}</p>}
         {credit.dialect && <p>{ar ? 'اللهجة: ' : 'Dialect: '}{credit.dialect}</p>}
         {credit.transliteration && <p>{ar ? 'النقل الصوتي: ' : 'Transliteration: '}{credit.transliteration}</p>}

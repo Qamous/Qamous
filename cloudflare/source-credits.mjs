@@ -14,7 +14,6 @@ export function renderSourceCredits(credits=[]) {
     '<section>'+link(c.sourceUrl,c.sourceName)+'<p>'+escape(c.credit)+'</p>' +
     link(c.licenseUrl,c.license) +
     (c.notice?'<p>'+escape(c.notice)+'</p>':'') +
-    (c.rightsStatus==='unverified'?'<p>Reuse rights are unverified.</p>':'') +
     (c.changes?'<p>Changes: '+escape(Array.isArray(c.changes)?c.changes.join(' '):c.changes)+'</p>':'') +
     '</section>').join('') + '</details>';
 }

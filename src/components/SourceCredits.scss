@@ -11,7 +11,6 @@
   &-panel a { color: #e0ba76; overflow-wrap: anywhere; }
   &-panel p { margin: 7px 0; font-size: 12px; overflow-wrap: anywhere; }
   &-notice { white-space: pre-wrap; }
-  &-unverified { color: #efc582; }
 }
 .source-credit-export { display: none; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; padding: 15px 25px; }
 .content-box[data-exporting="true"] .source-credit-export { display: block; }
