@@ -1,3 +1,5 @@
+import { sourceLicenseLabel } from '../utils/source-license.mjs';
+
 export interface SourceCredit {
   sourceId: string; sourceName: string; sourceUrl: string; sourceEntryId: string;
   license: string; licenseUrl: string; rightsStatus: string; attributionRequired: boolean;
@@ -27,6 +29,6 @@ export interface ProvenanceContent {
 }
 export function attributionText(credits: SourceCredit[] = []): string {
   return credits.filter(c => c.attributionRequired).map(c =>
-    c.credit + ' — ' + c.sourceUrl + ' — ' + c.license + ' ' + c.licenseUrl +
+    c.credit + ' — ' + c.sourceUrl + ' — ' + sourceLicenseLabel(c) + ' ' + c.licenseUrl +
     (c.notice ? '\n' + c.notice : '') + (c.changes.length ? '\nChanges: ' + c.changes.join(' ') : '')).join('\n\n');
 }

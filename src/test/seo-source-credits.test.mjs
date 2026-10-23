@@ -4,6 +4,14 @@ const credit={sourceName:'Original dictionary',sourceUrl:'https://example.org/en
   credit:'Original authors <preserved>',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0/',
   attributionRequired:1,notice:'Copyright notice',changes:'Extracted; text preserved.',rightsStatus:'licensed'};
 describe('rendered source attribution',()=>{
+  it.each(['Data license not verified','Dataset license not verified','Community contributions; bulk grant unverified'])(
+    'uses a neutral website label for metadata placeholder %s', license => {
+      const html=renderSourceCredits([{...credit,license,rightsStatus:'unverified'}]);
+      expect(html).not.toContain(license);
+      expect(html).toContain('Source website');
+      expect(html).toContain(credit.sourceUrl);
+      expect(html).toContain(credit.notice);
+    });
   it('retains required licenses and original credit in attribution fragments',()=>{
     const html=renderSourceCredits([credit]);
     expect(html).toContain('Original authors &lt;preserved&gt;');

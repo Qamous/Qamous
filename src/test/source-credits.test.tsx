@@ -17,6 +17,16 @@ const credit: SourceCredit = {
 const content = { item:{word:'كتاب',definition:'A book.'},lang:'en',example:'' };
 
 describe('source credits',()=>{
+  it('uses neutral website labels in the source panel and exported credits',()=>{
+    const source={...credit,rightsStatus:'unverified',license:'Data license not verified'};
+    render(<MemoryRouter><ContentBoxPreview {...content} sourceCredits={[source]} /></MemoryRouter>);
+    fireEvent.click(screen.getByText('Source'));
+    expect(screen.getByRole('link',{name:'Source website'})).toHaveAttribute('href',source.licenseUrl);
+    expect(screen.queryByText(source.license)).not.toBeInTheDocument();
+    expect(attributionText([source])).not.toContain(source.license);
+    expect(attributionText([source])).toContain('Source website');
+    expect(attributionText([source])).toContain(source.notice);
+  });
   it('keeps credits collapsed with readable access to original authorship and the import profile',()=>{
     render(<MemoryRouter><ContentBoxPreview {...content} sourceCredits={[credit]} /></MemoryRouter>);
     const details=screen.getByTestId('source-credits');

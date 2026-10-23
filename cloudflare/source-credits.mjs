@@ -1,3 +1,4 @@
+import { sourceLicenseLabel } from '../src/utils/source-license.mjs';
 const escape = value => String(value || '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const link = (url,label) => {
   try {
@@ -12,7 +13,7 @@ export function renderSourceCredits(credits=[]) {
   if(!required.length) return '';
   return '<details><summary>Source</summary>' + required.map(c =>
     '<section>'+link(c.sourceUrl,c.sourceName)+'<p>'+escape(c.credit)+'</p>' +
-    link(c.licenseUrl,c.license) +
+    link(c.licenseUrl,sourceLicenseLabel(c)) +
     (c.notice?'<p>'+escape(c.notice)+'</p>':'') +
     (c.changes?'<p>Changes: '+escape(Array.isArray(c.changes)?c.changes.join(' '):c.changes)+'</p>':'') +
     '</section>').join('') + '</details>';
