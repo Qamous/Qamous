@@ -8,6 +8,10 @@
 /login
   X-Robots-Tag: noindex, nofollow, noarchive
 
+/public-data/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: public, max-age=60
+
 /signup
   X-Robots-Tag: noindex, nofollow, noarchive
 

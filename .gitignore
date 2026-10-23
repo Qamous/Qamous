@@ -44,3 +44,6 @@ src/firebaseConfig.js
 /server-build/
 /output/
 /.playwright-cli/
+
+# Reviewed public snapshots are installed from private release artifacts.
+/public/public-data/

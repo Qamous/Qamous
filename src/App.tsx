@@ -213,6 +213,9 @@ const App: React.FC = () => {
         <div className="grain-texture"></div>
         <Header />
         <div className="content">
+          {import.meta.env.VITE_PUBLIC_READ_ONLY === 'true' && <p role="status" style={{padding:'12px 16px',margin:'0 auto 20px',maxWidth:960,border:'1px solid currentColor',borderRadius:12,fontSize:14,lineHeight:1.5,textAlign:'center'}}>
+            {i18n.language === 'ar' ? 'التصفح متاح. تسجيل الدخول والتصويت وإضافة التعريفات متوقفة مؤقتًا.' : 'Browsing is available. Sign-in, voting and contributions are temporarily paused.'}
+          </p>}
           <Suspense fallback={<LoadingFallback />}>
             {notFoundPath===location.pathname ? <NotFound/> : <Routes>
               <Route path="/" element={<Home />} />
