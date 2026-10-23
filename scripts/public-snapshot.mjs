@@ -42,17 +42,28 @@ export async function auditSnapshot(directory,{fresh=false}={}) {
   if(actual.length!==files.size||actual.some(entry=>!entry.isFile()||!files.has(entry.name)))fail('unexpected public asset');
   return {manifest,manifestSha256:sha(raw),bytes};
 }
-export async function verifyPublicSnapshot({built=false}={}) {
+export async function verifyPublicSnapshot({built=false,rootDirectory=root}={}) {
+  const projectRoot=resolve(rootDirectory);
   if(built) {
-    const codeOnly=await access(join(root,'build/.qamous-code-only')).then(()=>true,()=>false);
+    const codeOnly=await access(join(projectRoot,'build/.qamous-code-only')).then(()=>true,()=>false);
     if(codeOnly)fail('code-only CI build cannot be deployed');
   }
-  const config=await readJson(join(root,'wrangler.jsonc')),id=config.vars?.PUBLIC_SNAPSHOT_ID;
-  if(!id)return null;
-  const release=await readJson(join(root,'cloudflare/public-snapshot-release.json'));
+  const config=await readJson(join(projectRoot,'wrangler.jsonc')),id=config.vars?.PUBLIC_SNAPSHOT_ID;
+  if(!id) {
+    // Removing the binding does not remove directly served assets. Refuse the
+    // transition until both source and built copies are absent or empty, so a
+    // later writer unpause cannot leave withdrawn content publicly available.
+    for(const base of ['public','build']) {
+      const directory=join(projectRoot,base,'public-data');
+      const entries=await readdir(directory).catch(error=>{if(error.code==='ENOENT')return [];throw error;});
+      if(entries.length)fail(`snapshot authority is disabled but ${base}/public-data still contains assets; remove the generated snapshot before rebuilding`);
+    }
+    return null;
+  }
+  const release=await readJson(join(projectRoot,'cloudflare/public-snapshot-release.json'));
   if(release.snapshotId!==id||release.frozen!==(config.vars.PUBLIC_SNAPSHOT_FROZEN==='true'))fail('release does not match Worker configuration');
   if(!release.frozen&&Date.parse(config.vars.PUBLIC_SNAPSHOT_EXPIRES_AT)<=Date.now())fail('snapshot expired');
-  const directory=join(root,built?'build':'public','public-data');
+  const directory=join(projectRoot,built?'build':'public','public-data');
   const installed=await readdir(directory,{withFileTypes:true});
   if(installed.length!==1||!installed[0].isDirectory()||installed[0].name!==id)fail('older or unreviewed snapshot assets present');
   const audited=await auditSnapshot(join(directory,id));
