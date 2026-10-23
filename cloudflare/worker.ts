@@ -35,11 +35,9 @@ export function publicCacheKey(request:Request,snapshotId?:string):Request {
   // Only parameters that change rendered public content belong in its key.
   // Tracking tags and arbitrary query strings must not create new cache entries.
   const after=/^\/browse\/(en|ar)$/.test(url.pathname)?url.searchParams.get('after'):null;
-  const definition=url.pathname==='/sources'?url.searchParams.get('definition'):null;
   url.search='';
   if(after) url.searchParams.set('after',after);
-  if(definition) url.searchParams.set('definition',definition);
-  url.searchParams.set('__qamous_render','ssr-3');
+  url.searchParams.set('__qamous_render','ssr-4');
   if(snapshotId)url.searchParams.set('__qamous_snapshot',snapshotId);
   url.searchParams.set('__qamous_language',preferences.language);
   url.searchParams.set('__qamous_theme',preferences.theme);
@@ -207,7 +205,7 @@ export default {
     }
     const seo=await dynamic(request,env,ctx);if(seo) return seo;
     if(['GET','HEAD'].includes(request.method)&&(
-      /^\/(?:|about|blog|advanced-search|login|signup|profile|add-definition|forgot-password|reset-password|search|chatbot|feeling-lucky|advertise|opportunities|sources)\/?$/.test(url.pathname)
+      /^\/(?:|about|blog|advanced-search|login|signup|profile|add-definition|forgot-password|reset-password|search|chatbot|feeling-lucky|advertise|opportunities)\/?$/.test(url.pathname)
       ||/^\/(?:search|reset-password|contributors)\/[^/]+\/?$/.test(url.pathname)
     )) return cached(request,ctx,request=>applicationPage(request,env),env);
     const asset=await env.ASSETS.fetch(request);

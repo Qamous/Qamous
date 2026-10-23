@@ -33,7 +33,7 @@ export default function ImportPreview() {
     <Helmet><title>Import review — Qamous local preview</title><meta name="robots" content="noindex,nofollow" /></Helmet>
     <div className="import-preview-heading"><div><span className="import-preview-label">ISOLATED LOCAL PREVIEW</span>
       <h1>More words. Same Qamous.</h1><p>Review the complete collection, source credits, and import accounts. Live rollout progress is tracked separately.</p></div>
-      <Link className="import-preview-link" to="/sources">All source credits ↗</Link></div>
+      </div>
     {isError && <p role="alert">The isolated import API is unavailable. Start the local preview backend first.</p>}
     {totals && <>
       <div className="import-preview-stats">

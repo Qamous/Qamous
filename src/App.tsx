@@ -35,7 +35,7 @@ export const pageModules = {
   forgot: () => import('../pages/ForgotPassword'),
   reset: () => import('../pages/ResetPassword'),
   missing: () => import('../pages/NotFound'),
-  sources: () => import('../pages/SourceLibrary'),
+  contributor: () => import('../pages/Contributor'),
   construction: () => import('../pages/PageUnderConstruction'),
   browse: () => import('../pages/Browse'),
 };
@@ -45,8 +45,8 @@ export function routeModule(path: string): keyof typeof pageModules {
     '/word/':'word', '/browse/':'browse', '/advanced-search':'explore', '/search/':'search',
     '/feeling-lucky':'lucky', '/login':'login', '/signup':'signup', '/profile':'profile',
     '/add-definition':'contribute', '/blog':'blog', '/about':'about', '/chatbot':'chatbot',
-    '/forgot-password':'forgot', '/reset-password':'reset', '/sources':'sources',
-    '/contributors/':'sources', '/advertise':'construction', '/opportunities':'construction',
+    '/forgot-password':'forgot', '/reset-password':'reset',
+    '/contributors/':'contributor', '/advertise':'construction', '/opportunities':'construction',
   })) if (path === prefix || path.startsWith(prefix.endsWith('/') ? prefix : prefix + '/')) return name as keyof typeof pageModules;
   return 'missing';
 }
@@ -73,7 +73,7 @@ const Chatbot = lazy(pageModules.chatbot);
 const ForgotPassword = lazy(pageModules.forgot);
 const ResetPassword = lazy(pageModules.reset);
 const NotFound = lazy(pageModules.missing);
-const SourceLibrary = lazy(pageModules.sources);
+const Contributor = lazy(pageModules.contributor);
 const ImportPreview = import.meta.env.DEV ? lazy(() => import('../pages/ImportPreview')) : NotFound;
 const PronunciationPreview = import.meta.env.DEV ? lazy(() => import('../pages/PronunciationPreview')) : NotFound;
 const PageUnderConstruction = lazy(pageModules.construction);
@@ -259,8 +259,7 @@ const App: React.FC = () => {
               <Route path="/blog" element={<Blog />} />
               <Route path="/opportunities" element={<PageUnderConstruction />} />
               <Route path="/about" element={<About />} />
-              <Route path="/sources" element={<SourceLibrary />} />
-              <Route path="/contributors/:username" element={<SourceLibrary />} />
+              <Route path="/contributors/:username" element={<Contributor />} />
               {import.meta.env.DEV && <Route path="/import-preview" element={<ImportPreview />} />}
               {import.meta.env.DEV && <Route path="/pronunciation-preview" element={<PronunciationPreview />} />}
               {import.meta.env.DEV && <Route path="/contribution-preview" element={<AddWord />} />}
