@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "snapshotId": "0c98a1c842bfa1fa",
+  "exportStartedAt": "2026-10-23T13:30:07.554Z",
+  "exportCompletedAt": "2026-10-23T13:30:26.182Z",
+  "generatedAt": "2026-10-23T13:30:50.459Z",
+  "expiresAt": "2026-10-24T13:30:26.182Z",
+  "frozen": true,
+  "manifestSha256": "ccb6041f5657d88b28a60137777c3edd9334a866f4aa698713186aa41df440c6",
+  "resources": 4693,
+  "bytes": 38118555
+}

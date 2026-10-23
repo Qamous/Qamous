@@ -22,7 +22,9 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npx vitest run
-      - run: npm run build
+      # Public snapshot records are private release artifacts, not Git sources.
+      # Deployment rejects this marked build and requires a fully audited bundle.
+      - run: npm run build -- --code-only
       - run: npm run test:ssr
       - run: npx tsc -p cloudflare/tsconfig.json
       # Production release remains a local, authenticated Cloudflare deployment.

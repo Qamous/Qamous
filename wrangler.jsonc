@@ -24,6 +24,7 @@
       "/*",
       "!/js/*",
       "!/assets/*",
+      "!/public-data/*",
       "!/*.css",
       "!/*.js",
       "!/*.png",
@@ -49,5 +50,10 @@
   },
   "alias": {
     "qamous:ssr": "./server-build/entry.js"
+  },
+  "vars": {
+    "PUBLIC_SNAPSHOT_ID": "0c98a1c842bfa1fa",
+    "PUBLIC_SNAPSHOT_EXPIRES_AT": "2026-10-24T13:30:26.182Z",
+    "PUBLIC_SNAPSHOT_FROZEN": "true"
   }
 }

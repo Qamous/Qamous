@@ -21,6 +21,10 @@ User-agent: Ai2Bot-Dolma
 User-agent: img2dataset
 Disallow: /
 
+User-agent: AhrefsBot
+User-agent: AhrefsSiteAudit
+Disallow: /
+
 User-agent: *
 Disallow: /api/
 # These read-only requests are needed to render the same public content as users.
