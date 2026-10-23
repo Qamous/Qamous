@@ -30,7 +30,6 @@ export default function SourceLibrary() {
     {!username && !definition && Array.isArray(data) && data.map((source: any) => <section className="import-preview-source" id={source.id} key={source.id}>
       <h2><a href={source.sourceUrl}>{source.name}</a></h2><p>{source.credit}</p>
       <a href={source.licenseUrl}>{source.license}</a>
-      {source.rightsStatus === 'unverified' && <p>Reuse rights are unverified. Attribution does not establish permission.</p>}
       {source.notice && <p className="source-credits-notice">{source.notice}</p>}
       {['freedict_ar_en', 'aramorph'].includes(source.id) && <p><a href={API_URL + '/sources/' + source.id + '/export'}>Editable collection (JSONL)</a> · <a href={API_URL + '/sources/' + source.id + '/license'}>License copy</a></p>}
     </section>)}
