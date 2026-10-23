@@ -191,7 +191,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
   };
   
   const handleXShare = () => {
-    const promoText = sourceCredits?.some(c => c.attributionRequired) ? '\n\nSource & license: https://qamous.org/sources?definition=' + definitionId : '\n\nCheck out Qamous.org for more!';
+    const promoText = '\n\nCheck out Qamous.org for more!';
     const separator = ': ';
     const maxTweetLength = 280;
     

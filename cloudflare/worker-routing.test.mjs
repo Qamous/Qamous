@@ -60,7 +60,7 @@ describe('shared rendering and public discovery routing',()=>{
     expect(seo.headers.get('Cookie')).toBeNull();expect(seo.headers.get('Authorization')).toBeNull();expect(seo.headers.get('X-Qamous-Seo-Internal')).toBe(env.SEO_INTERNAL_SECRET);
     expect(personal.headers.get('Cookie')).toBe('qamous_session=private');expect(personal.headers.get('Authorization')).toBeNull();expect(personal.headers.get('X-Qamous-Seo-Internal')).toBeNull();
   });
-  it.each(['/','/about','/blog','/advanced-search','/login','/signup','/profile','/add-definition','/forgot-password','/reset-password/token','/search/hello','/chatbot','/feeling-lucky','/advertise','/opportunities','/sources','/contributors/test'])('uses the shared renderer for %s',async path=>{
+  it.each(['/','/about','/blog','/advanced-search','/login','/signup','/profile','/add-definition','/forgot-password','/reset-password/token','/search/hello','/chatbot','/feeling-lucky','/advertise','/opportunities','/contributors/test'])('uses the shared renderer for %s',async path=>{
     const {env}=bindings();const response=await worker.fetch(new Request('https://qamous.org'+path),env);
     expect(response.status).toBe(200);expect(renderApplication).toHaveBeenCalled();
     if(/^\/(login|signup|profile|search|reset-password|chatbot)/.test(path)) expect(response.headers.get('Cache-Control')).toContain('no-store');
@@ -68,7 +68,7 @@ describe('shared rendering and public discovery routing',()=>{
   it('keeps aliases, genuine 404s and temporary outages distinct',async()=>{
     const {env}=bindings();expect((await worker.fetch(new Request('https://qamous.org/word/2/en?keep=1'),env)).headers.get('Location')).toBe('https://qamous.org/word/2?keep=1');
     expect((await worker.fetch(new Request('https://qamous.org/word/2'),bindings({rows:[{...row,canonicalWordId:1}]}).env)).headers.get('Location')).toBe('https://qamous.org/word/1');
-    for(const path of ['/word/not-an-id','/word/999999','/advanced-search/%ZZ','/missing']){
+    for(const path of ['/word/not-an-id','/word/999999','/advanced-search/%ZZ','/missing','/sources','/sources?definition=1']){
       const response=await worker.fetch(new Request('https://qamous.org'+path),bindings({},404).env);
       expect(response.status).toBe(404);expect(response.headers.get('X-Robots-Tag')).toContain('noindex');
       expect(renderApplication.mock.calls.at(-1)[2].notFound).toBe(true);
@@ -147,7 +147,7 @@ describe('crawler-safe public page caching',()=>{
     expect(key('/word/2','themeMode=light')).not.toBe(key('/word/2','themeMode=dark'));
     expect(key('/word/2','language=ar')).toBe(key('/word/2','language=en'));
     expect(key('/word/2/ar')).not.toBe(key('/word/2'));
-    expect(key('/sources?definition=1')).not.toBe(key('/sources?definition=2'));
+    expect(key('/sources?definition=1')).toBe(key('/sources?definition=2'));
     expect(key('/browse/en?after=1')).not.toBe(key('/browse/en?after=2'));
     expect(personalized(new Request('https://qamous.org/',{headers:{Cookie:'unrelated=qamous_session'}}))).toBe(false);
     expect(personalized(new Request('https://qamous.org/',{headers:{Authorization:'Bearer value'}}))).toBe(true);

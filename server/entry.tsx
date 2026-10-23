@@ -15,7 +15,7 @@ import '../src/assets/Styles.scss';
 
 declare const __CLIENT_MANIFEST__: Record<string,{file:string;css?:string[];imports?:string[]}>;
 declare const __CLIENT_STYLES__: Record<string,string>;
-const files:Record<string,string>={home:'Home',lucky:'WordOfTheDay',login:'LogIn',signup:'SignUp',contribute:'ContributionForm',search:'SearchResults',word:'WordPage',profile:'UserProfile',explore:'AdvancedSearch',blog:'Blog',about:'About',chatbot:'Chatbot',forgot:'ForgotPassword',reset:'ResetPassword',missing:'NotFound',sources:'SourceLibrary',construction:'PageUnderConstruction',browse:'Browse'};
+const files:Record<string,string>={home:'Home',lucky:'WordOfTheDay',login:'LogIn',signup:'SignUp',contribute:'ContributionForm',search:'SearchResults',word:'WordPage',profile:'UserProfile',explore:'AdvancedSearch',blog:'Blog',about:'About',chatbot:'Chatbot',forgot:'ForgotPassword',reset:'ResetPassword',missing:'NotFound',contributor:'Contributor',construction:'PageUnderConstruction',browse:'Browse'};
 
 function routeAssets(path:string) {
   const manifest=typeof __CLIENT_MANIFEST__==='undefined'?{}:__CLIENT_MANIFEST__;
@@ -98,10 +98,9 @@ export async function renderApplication(request:Request, fetchData:FetchData, se
       codes.forEach(code=>query.append('country',code));
       if(!countryName||legacy) await load(['explore',query.toString(),false],'/word/explore?'+query);
     } else if(seed.browse) set(['browse',lang,params.get('after')],seed.browse);
-    else if(path==='/sources'||path.startsWith('/contributors/')) {
-      const username=path.startsWith('/contributors/')?decodeURIComponent(path.split('/')[2]):undefined;
-      const definition=params.get('definition');
-      await load(['source-library',username,definition],username?'/contributors/'+encodeURIComponent(username):definition?'/definitions/'+encodeURIComponent(definition)+'/provenance':'/sources');
+    else if(path.startsWith('/contributors/')) {
+      const username=decodeURIComponent(path.split('/')[2]);
+      await load(['contributor',username],'/contributors/'+encodeURIComponent(username));
     } else if(path==='/blog') await load('posts','/posts');
     else if(path==='/feeling-lucky') await load('wordOfTheDayContent','/definitions/random-matching');
     else if(/^\/search\/[^/]+$/.test(path)) {

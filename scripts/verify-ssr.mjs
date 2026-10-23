@@ -5,7 +5,7 @@ const data=async path=>fixtureData(path);
 const paths=['/','/about','/blog','/advanced-search','/advanced-search/Egypt','/advanced-search?q=ma3lish','/login','/signup','/chatbot','/forgot-password','/reset-password/test','/profile','/add-definition','/search/ma3lish','/feeling-lucky','/advertise','/opportunities','/sources','/contributors/fixture','/word/2','/word/2/ar','/browse/en','/browse/ar','/missing'];
 let count=0;
 for(const path of paths) {
-  const seed=path.startsWith('/word/')?{word:true,wordData:fixtureData('/seo/word/2')}:path.startsWith('/browse/')?{browse:fixtureData('/seo'+path),countries}:path==='/missing'?{notFound:true}:{};
+  const seed=path.startsWith('/word/')?{word:true,wordData:fixtureData('/seo/word/2')}:path.startsWith('/browse/')?{browse:fixtureData('/seo'+path),countries}:['/missing','/sources'].includes(path)?{notFound:true}:{};
   const page=await renderApplication(new Request('https://qamous.org'+path),data,seed);
   assert.match(page.html,/<div class="app">/);assert.match(page.html,/<footer/);
   assert.doesNotMatch(page.html,/seo-initial|initial-loader/);
@@ -28,7 +28,7 @@ for(const path of paths) {
   }
   if(path==='/word/2/ar') assert.match(page.html,/ولا يهمك/);
   if(path.startsWith('/browse/')) assert.match(page.html,/href="\/word\/2/);
-  if(path==='/missing') {assert.doesNotMatch(page.head,/rel="canonical"/);assert.match(page.head,/noindex/);}
+  if(['/missing','/sources'].includes(path)) {assert.doesNotMatch(page.head,/rel="canonical"/);assert.match(page.head,/noindex/);}
   count++;
 }
 const concurrent=await Promise.all(Array.from({length:12},(_,i)=>{
