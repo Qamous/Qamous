@@ -7,6 +7,7 @@ import { API_URL, apiJson } from '../src/api';
 import SourceCredits from '../src/components/SourceCredits';
 import type { SourceCredit } from '../src/types/provenance';
 import './ImportPreview.scss';
+import { sourceLicenseLabel } from '../src/utils/source-license.mjs';
 
 export default function SourceLibrary() {
   const { username } = useParams(), [params] = useSearchParams(), { i18n } = useTranslation();
@@ -29,7 +30,7 @@ export default function SourceLibrary() {
     {definition && data && <SourceCredits credits={data.sourceCredits as SourceCredit[]} language={i18n.language} expanded />}
     {!username && !definition && Array.isArray(data) && data.map((source: any) => <section className="import-preview-source" id={source.id} key={source.id}>
       <h2><a href={source.sourceUrl}>{source.name}</a></h2><p>{source.credit}</p>
-      <a href={source.licenseUrl}>{source.license}</a>
+      <a href={source.licenseUrl}>{sourceLicenseLabel(source, i18n.language)}</a>
       {source.notice && <p className="source-credits-notice">{source.notice}</p>}
       {['freedict_ar_en', 'aramorph'].includes(source.id) && <p><a href={API_URL + '/sources/' + source.id + '/export'}>Editable collection (JSONL)</a> · <a href={API_URL + '/sources/' + source.id + '/license'}>License copy</a></p>}
     </section>)}
