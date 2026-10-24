@@ -1,12 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotId": "3b316945cb11fa69",
-  "exportStartedAt": "2026-10-24T16:53:42.430Z",
-  "exportCompletedAt": "2026-10-24T16:53:46.164Z",
-  "generatedAt": "2026-10-24T16:54:07.993Z",
-  "expiresAt": "2026-10-25T16:53:46.164Z",
-  "frozen": true,
-  "manifestSha256": "adeac8079cdbeadca93461e0756f635e07de730ceac2fb4e2aee0fb8acdcd046",
-  "resources": 5050,
-  "bytes": 41267892
+  "mode": "mutable",
+  "retiredSnapshotId": "3b316945cb11fa69",
+  "retiredAt": "2026-10-24T17:39:09.589Z"
 }

@@ -42,6 +42,11 @@ describe('regional analytics policy',()=>{
   });
 });
 describe('shared rendering and public discovery routing',()=>{
+  it('returns 404 for withdrawn immutable JSON assets without reaching the API',async()=>{
+    const {env,api}=bindings();
+    const response=await worker.fetch(new Request('https://qamous.org/public-data/retired-snapshot/'+ 'a'.repeat(64)+'.json'),env);
+    expect(response.status).toBe(404);expect(api).not.toHaveBeenCalled();
+  });
   it('renders the application and bootstrap state with CSP intact',async()=>{
     const {env}=bindings();const response=await worker.fetch(new Request('https://qamous.org/word/2'),env);
     expect(response.status).toBe(200);expect(response.headers.get('X-Qamous-Rendering')).toBe('react-ssr');
