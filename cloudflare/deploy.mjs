@@ -4,7 +4,7 @@ import {join} from 'node:path';
 import {spawn} from 'node:child_process';
 import {verifyFreePlan,ACCOUNT_ID} from '../../qamous-backend/cloudflare/scripts/free-plan-guard.mjs';
 import {verifyPublicSnapshot} from '../scripts/public-snapshot.mjs';
-import {verifyFrozenWriters} from './snapshot-deploy-guard.mjs';
+import {verifyFrozenWriters,verifyMutableReadiness} from './snapshot-deploy-guard.mjs';
 await verifyFreePlan();
 if(process.argv.slice(2).some(arg=>arg!=='--dry-run')) throw new Error('Deployment refused: configuration/account overrides are not allowed');
 const root=fileURLToPath(new URL('..',import.meta.url));
@@ -17,6 +17,6 @@ const snapshot=await verifyPublicSnapshot({built:true});
 if(snapshot) {
   if(!snapshot.frozen||!config.assets.run_worker_first?.includes('!/public-data/*'))throw Error('Snapshot deployment refused: frozen public data must use direct static assets');
   await verifyFrozenWriters(root,ACCOUNT_ID);
-}
+} else await verifyMutableReadiness(root,ACCOUNT_ID);
 const child=spawn(process.execPath,[join(root,'node_modules/wrangler/bin/wrangler.js'),'deploy',...process.argv.slice(2)],{cwd:root,stdio:'inherit',windowsHide:true,env:{...process.env,CLOUDFLARE_ACCOUNT_ID:ACCOUNT_ID}});
 child.on('exit',code=>process.exit(code??1));

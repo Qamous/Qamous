@@ -1,5 +1,5 @@
-import {readFile,writeFile,mkdir,copyFile,readdir,rm,access} from 'node:fs/promises';
-import {createHash} from 'node:crypto';
+import {readFile,writeFile,mkdir,copyFile,readdir,rm,access,rename,lstat,realpath} from 'node:fs/promises';
+import {createHash,randomUUID} from 'node:crypto';
 import {resolve,join,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -96,9 +96,54 @@ export async function installPublicSnapshot(source,{frozen=false}={}) {
   await writeFile(join(root,'cloudflare/public-snapshot-release.json'),JSON.stringify(release,null,2)+'\n');
   return release;
 }
+export async function withdrawPublicSnapshot({rootDirectory=root,now=new Date().toISOString()}={}) {
+  const projectRoot=resolve(rootDirectory),configPath=join(projectRoot,'wrangler.jsonc'),releasePath=join(projectRoot,'cloudflare/public-snapshot-release.json');
+  const realRoot=await realpath(projectRoot);
+  const configBytes=await readFile(configPath),releaseBytes=await readFile(releasePath),config=JSON.parse(configBytes);
+  const current=await verifyPublicSnapshot({rootDirectory:projectRoot});
+  if(!current)fail('there is no active snapshot to withdraw');
+  const transfers=[];
+  for(const base of ['public','build']) {
+    const directory=resolve(projectRoot,base,'public-data');
+    const state=await lstat(directory).catch(error=>{if(error.code==='ENOENT')return null;throw error;});
+    if(!state)continue;
+    if(!state.isDirectory()||state.isSymbolicLink())fail('unexpected snapshot directory');
+    if(!(await realpath(directory)).startsWith(realRoot+sep))fail('snapshot directory resolves outside the project');
+    const entries=await readdir(directory,{withFileTypes:true});
+    for(const entry of entries) {
+      if(!entry.isDirectory()||!/^[a-zA-Z0-9][a-zA-Z0-9_-]{1,100}$/.test(entry.name))fail('unexpected generated snapshot');
+      const audited=await auditSnapshot(join(directory,entry.name));
+      if(audited.manifest.snapshotId!==entry.name)fail('unexpected generated snapshot identity');
+    }
+    transfers.push({base,directory});
+  }
+  const backup=resolve(projectRoot,'output','snapshot-retirement-'+randomUUID());
+  if(!backup.startsWith(resolve(projectRoot,'output')+sep))fail('invalid retirement backup');
+  const moved=[];
+  await mkdir(backup,{recursive:true});
+  if(!(await realpath(backup)).startsWith(realRoot+sep))fail('retirement backup resolves outside the project');
+  try {
+    for(const transfer of transfers) {
+      const destination=join(backup,transfer.base+'-public-data');
+      await rename(transfer.directory,destination);moved.push({...transfer,destination});
+    }
+    const vars={...config.vars};
+    for(const key of ['PUBLIC_SNAPSHOT_ID','PUBLIC_SNAPSHOT_EXPIRES_AT','PUBLIC_SNAPSHOT_FROZEN'])delete vars[key];
+    await writeFile(configPath,JSON.stringify({...config,vars},null,2)+'\n');
+    const release={schemaVersion:1,mode:'mutable',retiredSnapshotId:current.snapshotId,retiredAt:now};
+    await writeFile(releasePath,JSON.stringify(release,null,2)+'\n');
+    await verifyPublicSnapshot({rootDirectory:projectRoot,built:true});
+    return {...release,backupDirectory:backup,writersResumed:false};
+  } catch(error) {
+    await writeFile(configPath,configBytes);await writeFile(releasePath,releaseBytes);
+    for(const transfer of moved.reverse())await rename(transfer.destination,transfer.directory);
+    throw error;
+  }
+}
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   const [action,source,mode]=process.argv.slice(2);
   if(action==='install'&&source&&mode==='--frozen')console.log(JSON.stringify(await installPublicSnapshot(source,{frozen:true})));
+  else if(action==='withdraw'&&!source&&!mode)console.log(JSON.stringify(await withdrawPublicSnapshot()));
   else if(action==='verify'&&!mode)console.log(JSON.stringify(await verifyPublicSnapshot({built:source==='--built'})));
-  else throw Error('Use install <reviewed public-assets directory> --frozen, or verify [--built]');
+  else throw Error('Use install <reviewed public-assets directory> --frozen, withdraw, or verify [--built]');
 }
