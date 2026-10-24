@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "snapshotId": "3b316945cb11fa69",
-  "exportStartedAt": "2026-10-24T14:27:17.007Z",
-  "exportCompletedAt": "2026-10-24T14:27:20.724Z",
-  "generatedAt": "2026-10-24T14:27:55.647Z",
-  "expiresAt": "2026-10-25T14:27:20.724Z",
+  "exportStartedAt": "2026-10-24T16:53:42.430Z",
+  "exportCompletedAt": "2026-10-24T16:53:46.164Z",
+  "generatedAt": "2026-10-24T16:54:07.993Z",
+  "expiresAt": "2026-10-25T16:53:46.164Z",
   "frozen": true,
-  "manifestSha256": "6e4571f9e74043adef50cc0098640c797940af09862059a73a46f411347d77f1",
+  "manifestSha256": "adeac8079cdbeadca93461e0756f635e07de730ceac2fb4e2aee0fb8acdcd046",
   "resources": 5050,
   "bytes": 41267892
 }
