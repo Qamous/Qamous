@@ -72,7 +72,11 @@ async function seoData(request:Request,env:Env,path:string) {
   if(path.startsWith('/seo/')&&typeof internalSecret==='string'&&internalSecret.length>=32) headers.set('X-Qamous-Seo-Internal',internalSecret);
   const session=sessionCookie(request);
   if(!path.startsWith('/seo/')&&session) headers.set('Cookie',session);
-  const response=await env.API.fetch(new Request(new URL(path,request.url),{headers,signal:AbortSignal.timeout(10000)}));
+  const apiUrl=new URL(path,request.url);
+  // The first home page may warm several independent card buckets after an
+  // outage. Allow that bounded request to finish without retrying D1 work.
+  const timeoutMs=apiUrl.pathname==='/word/explore'&&apiUrl.searchParams.has('ids')?20000:10000;
+  const response=await env.API.fetch(new Request(apiUrl,{headers,signal:AbortSignal.timeout(timeoutMs)}));
   if(response.status===404) {await response.body?.cancel();throw new SeoNotFound();}
   if(!response.ok) {await response.body?.cancel();throw new Error('SEO data unavailable');}
   return boundedJson(response);
