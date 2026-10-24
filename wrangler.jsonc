@@ -52,6 +52,8 @@
     "qamous:ssr": "./server-build/entry.js"
   },
   "vars": {
-    "PUBLIC_SNAPSHOT_FROZEN": "false"
+    "PUBLIC_SNAPSHOT_FROZEN": "true",
+    "PUBLIC_SNAPSHOT_ID": "3b316945cb11fa69",
+    "PUBLIC_SNAPSHOT_EXPIRES_AT": "2026-10-25T14:27:20.724Z"
   }
 }
