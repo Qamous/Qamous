@@ -1,4 +1,4 @@
-# Search is allowed; bulk harvesting and model training are not authorized.
+# Only Google Search, Google advertising and Bing indexing may crawl.
 # This file is advisory. Cloudflare's AI-training block and API access controls
 # enforce separate protections; no public website can guarantee no scraping.
 User-agent: GPTBot
@@ -26,6 +26,20 @@ User-agent: AhrefsSiteAudit
 Disallow: /
 
 User-agent: *
+Disallow: /
+
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: Googlebot-Video
+User-agent: Googlebot-News
+User-agent: Google-InspectionTool
+User-agent: AdsBot-Google
+User-agent: AdsBot-Google-Mobile
+User-agent: Mediapartners-Google
+User-agent: Google-adstxt
+User-agent: bingbot
+User-agent: msnbot
+Allow: /
 Disallow: /api/
 # These read-only requests are needed to render the same public content as users.
 Allow: /api/definitions/word/

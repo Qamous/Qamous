@@ -14,13 +14,17 @@ describe('browser and crawler security policy',()=>{
     expect(headers).toContain('Referrer-Policy: no-referrer');
     expect(read('index.html')).not.toMatch(/<script\b(?![^>]*\bsrc=)[^>]*>/i);
   });
-  it('blocks named training crawlers without blocking Google rendering assets',()=>{
+  it('permits only Google Search, Google advertising and Bing indexing while keeping private paths blocked',()=>{
     const robots=read('public/robots.txt');
-    const [training,search]=robots.split('User-agent: *');
+    const [training,rest]=robots.split('User-agent: *');
     expect(training).toContain('User-agent: GPTBot');
     expect(training).toContain('User-agent: Google-Extended');
     expect(training).not.toMatch(/User-agent: Googlebot\s/);
     expect(training).toContain('Disallow: /');
+    expect(rest.trimStart()).toMatch(/^Disallow: \/\s*\n\s*\nUser-agent: Googlebot/);
+    const search=rest.slice(rest.indexOf('User-agent: Googlebot'));
+    expect([...search.matchAll(/^User-agent: (.+)$/gm)].map(match=>match[1].trim())).toEqual(['Googlebot','Googlebot-Image','Googlebot-Video','Googlebot-News','Google-InspectionTool','AdsBot-Google','AdsBot-Google-Mobile','Mediapartners-Google','Google-adstxt','bingbot','msnbot']);
+    expect(search).toMatch(/^Allow: \/\r?$/m);
     expect(search).toContain('Allow: /api/definitions/word/');
     expect(search).not.toContain('Disallow: /js/');
     expect(search).not.toContain('Disallow: /assets/');
@@ -30,5 +34,7 @@ describe('browser and crawler security policy',()=>{
     expect(search).not.toContain('Disallow: /word/');
     expect(search).not.toContain('Disallow: /browse/');
     expect(search).not.toMatch(/Disallow: \/advanced-search\s*(?:\n|$)/);
+    for(const path of ['/login','/signup','/profile','/add-definition','/forgot-password','/reset-password/','/chatbot','/search/','/feeling-lucky'])expect(search).toContain('Disallow: '+path);
+    expect(search).not.toMatch(/^User-agent: (?:GoogleOther|Google-Extended|GPTBot|OAI-SearchBot|ClaudeBot|AhrefsBot|Seltz)/m);
   });
 });
