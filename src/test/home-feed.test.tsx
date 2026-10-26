@@ -68,3 +68,18 @@ it('surfaces order failures instead of remaining stuck in loading', async () => 
   expect(hook.result.current.isLoading).toBe(false);
   hook.unmount();client.clear();
 });
+
+it('shows available public cards when random hydration is closed and stops unavailable random pagination',async()=>{
+  const {client,wrapper}=setup();
+  vi.stubGlobal('fetch',vi.fn(async(input:string,init:RequestInit)=>{
+    expect(init.credentials).toBe('include');
+    if(input.includes('/definitions/feed'))return Response.json({definitionIds:[900,901,902,903,904,905,906,907,908,909,910]});
+    if(input.includes('&ids='))return Response.json({code:'D1_READ_BUDGET'},{status:503});
+    expect(input).toContain('scope=all&sort=popular&page=1&limit=12');
+    return Response.json({results:[{definitionId:2,isArabic:0,isLiked:true}]});
+  }));
+  const hook=renderHook(()=>useHomeFeed<{definitionId:number;isLiked:boolean}>('en'),{wrapper});
+  await waitFor(()=>expect(hook.result.current.data?.pages[0]).toEqual([{definitionId:2,isArabic:0,isLiked:true}]));
+  await waitFor(()=>expect(hook.result.current.hasNextPage).toBe(false));expect(hook.result.current.isError).toBe(false);
+  hook.unmount();client.clear();
+});

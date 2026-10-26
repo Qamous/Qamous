@@ -55,6 +55,15 @@ for(const path of ['/word/2','/word/2/ar','/word/2','/word/2/ar']) {
   assert.ok(queries.find(query=>query.queryKey[0]==='relatedWords'));
 }
 assert.equal(duplicateWordCalls,0);
+for(const language of ['en','ar']) {
+  const rendered=await renderApplication(new Request('https://qamous.org/',{headers:{Cookie:'language='+language}}),async path=>{
+    if(path.includes('&ids='))throw Object.assign(new Error('Quota closed'),{status:503});
+    return fixtureData(path);
+  });
+  assert.match(rendered.html,language==='ar'?/ولا يهمك/:/Never mind/);
+  const order=JSON.parse(rendered.state).queries.queries.find(query=>query.queryKey[0]==='homeFeedOrder');
+  assert.deepEqual(order.state.data,[language==='ar'?102:101]);
+}
 const personalPaths=[];
 const personal=await renderApplication(new Request('https://qamous.org/word/2',{headers:{Cookie:'qamous_session=private'}}),async path=>{
   personalPaths.push(path);

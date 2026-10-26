@@ -1,28 +1,36 @@
 import { useInfiniteQuery, useQuery } from 'react-query';
 import { API_URL, apiJson } from '../api';
+import {useRef,useState} from 'react';
+import {homeAvailabilityError,popularHome,type HomeRead} from '../utils/home-page-data';
 
 const PAGE_SIZE = 10;
 
 export function useHomeFeed<T>(language: string) {
   const script = language === 'ar' ? 'ar' : 'franco';
+  const [fallbackScript,setFallbackScript]=useState<string|null>(null);
+  const initialFallback=useRef<{script:string;results:T[]}|null>(null);
+  const reader=(signal?:AbortSignal):HomeRead=>async<R>(path:string)=>apiJson<R>(await fetch(API_URL+path,{credentials:'include',signal}));
   const order = useQuery(['homeFeedOrder', script, 'definition-language-v2'], async ({ signal }) => {
-    const result = await apiJson<{ definitionIds: number[] }>(await fetch(`${API_URL}/definitions/feed?script=${script}`, {
-      credentials: 'include', signal,
-    }));
-    return result.definitionIds;
+    try {return (await reader(signal)<{definitionIds:number[]}>('/definitions/feed?script='+script)).definitionIds;}
+    catch(error) {
+      if(!homeAvailabilityError(error))throw error;
+      const page=await popularHome<T>(reader(signal),script);initialFallback.current={script,results:page.results};setFallbackScript(script);return page.definitionIds;
+    }
   }, { staleTime: Infinity, refetchOnWindowFocus: false, refetchOnReconnect: false });
 
   const content = useInfiniteQuery<T[]>(['homeContent', script, 'definition-language-v2', order.dataUpdatedAt], async ({ pageParam = 1, signal }) => {
     const ids = order.data!.slice((pageParam - 1) * PAGE_SIZE, pageParam * PAGE_SIZE);
     if (!ids.length) return [];
-    const result = await apiJson<{ results: T[] }>(await fetch(`${API_URL}/word/explore?script=${script}&ids=${ids.join(',')}`, {
-      credentials: 'include', signal,
-    }));
-    return result.results;
+    if(pageParam===1&&initialFallback.current?.script===script){const rows=initialFallback.current.results;initialFallback.current=null;return rows;}
+    try {return (await reader(signal)<{results:T[]}>(`/word/explore?script=${script}&ids=${ids.join(',')}`)).results;}
+    catch(error) {
+      if(pageParam!==1||!homeAvailabilityError(error))throw error;
+      const page=await popularHome<T>(reader(signal),script);setFallbackScript(script);return page.results;
+    }
   }, {
     enabled: !!order.data,
     // Missing/deleted cards must not terminate the remaining snapshot.
-    getNextPageParam: (_lastPage, pages) => pages.length * PAGE_SIZE < (order.data?.length ?? 0) ? pages.length + 1 : undefined,
+    getNextPageParam: (_lastPage, pages) => fallbackScript!==script&&pages.length * PAGE_SIZE < (order.data?.length ?? 0) ? pages.length + 1 : undefined,
     refetchOnWindowFocus: false,
   });
 

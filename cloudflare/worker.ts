@@ -63,7 +63,7 @@ async function seoData(request:Request,env:Env,path:string) {
   const restored=await publicSnapshotResponse(new Request(new URL(path,request.url)),env as Env&SnapshotEnvironment);
   if(restored) {
     if(restored.status===404) {await restored.body?.cancel();throw new SeoNotFound();}
-    if(!restored.ok) {await restored.body?.cancel();throw new Error('Public snapshot unavailable');}
+    if(!restored.ok) {await restored.body?.cancel();throw Object.assign(new Error('Public snapshot unavailable'),{status:restored.status});}
     return boundedJson(restored);
   }
   const headers=new Headers({'Accept':'application/json'});
@@ -78,7 +78,7 @@ async function seoData(request:Request,env:Env,path:string) {
   const timeoutMs=apiUrl.pathname==='/word/explore'&&apiUrl.searchParams.has('ids')?20000:10000;
   const response=await env.API.fetch(new Request(apiUrl,{headers,signal:AbortSignal.timeout(timeoutMs)}));
   if(response.status===404) {await response.body?.cancel();throw new SeoNotFound();}
-  if(!response.ok) {await response.body?.cancel();throw new Error('SEO data unavailable');}
+  if(!response.ok) {await response.body?.cancel();throw Object.assign(new Error('SEO data unavailable'),{status:response.status});}
   return boundedJson(response);
 }
 async function cached(request:Request,ctx:ExecutionContext|undefined,produce:(request:Request)=>Promise<Response>,env?:Env&SnapshotEnvironment) {
