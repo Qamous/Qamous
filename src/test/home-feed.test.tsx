@@ -83,3 +83,19 @@ it('shows available public cards when random hydration is closed and stops unava
   await waitFor(()=>expect(hook.result.current.hasNextPage).toBe(false));expect(hook.result.current.isError).toBe(false);
   hook.unmount();client.clear();
 });
+
+it('retains fallback pagination state when cached home content remounts without refetching',async()=>{
+  const {client,wrapper}=setup();client.setDefaultOptions({queries:{retry:false,cacheTime:Infinity,staleTime:Infinity}});
+  const fetcher=vi.fn(async(input:string)=>{
+    if(input.includes('/definitions/feed'))return Response.json({definitionIds:Array.from({length:24},(_,id)=>id+900)});
+    if(input.includes('&ids='))return Response.json({code:'D1_READ_BUDGET'},{status:503});
+    return Response.json({results:[{definitionId:2,isArabic:0}]});
+  });vi.stubGlobal('fetch',fetcher);
+  const first=renderHook(()=>useHomeFeed<{definitionId:number}>('en'),{wrapper});
+  await waitFor(()=>expect(first.result.current.data?.pages[0]).toEqual([{definitionId:2,isArabic:0}]));
+  expect(first.result.current.hasNextPage).toBe(false);first.unmount();const calls=fetcher.mock.calls.length;
+  const restored=renderHook(()=>useHomeFeed<{definitionId:number}>('en'),{wrapper});
+  await waitFor(()=>expect(restored.result.current.data?.pages[0]).toEqual([{definitionId:2,isArabic:0}]));
+  expect(restored.result.current.hasNextPage).toBe(false);expect(fetcher).toHaveBeenCalledTimes(calls);
+  restored.unmount();client.clear();
+});
