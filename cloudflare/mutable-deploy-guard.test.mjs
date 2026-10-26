@@ -24,4 +24,11 @@ describe('mutable public-read deployment readiness',()=>{
     expect(requests).toHaveLength(3);
     await expect(verifyMutableReadiness('unused','account',{inspect,fetcher:async()=>new Response('unavailable',{status:503})})).rejects.toThrow('probe failed');
   });
+  it('accepts only a quota-denied random card when the same home fallback is verified',async()=>{
+    const inspect=path=>path.startsWith('qamous-web')?settings({}):path==='qamous-api/settings'?api('false'):path.endsWith('/schedules')?{schedules:[]}:settings({PUBLIC_READ_ONLY:'false'});
+    const fetcher=(status=503,code='D1_READ_BUDGET',results=[{definitionId:2,isArabic:0}])=>async url=>url.endsWith('/countries')?Response.json([]):url.includes('/definitions/feed')?Response.json({definitionIds:[99]}):url.includes('ids=')?Response.json({code},{status}):Response.json({results});
+    await expect(verifyMutableReadiness('unused','account',{inspect,fetcher:fetcher()})).resolves.toEqual({transition:false,writesPaused:false});
+    for(const [status,code] of [[403,'D1_READ_BUDGET'],[503,'PUBLIC_READ_ONLY'],[500,'D1_READ_BUDGET']])await expect(verifyMutableReadiness('unused','account',{inspect,fetcher:fetcher(status,code)})).rejects.toThrow('probe failed');
+    for(const results of [[],[{definitionId:2,isArabic:1}],[{definitionId:0,isArabic:0}]])await expect(verifyMutableReadiness('unused','account',{inspect,fetcher:fetcher(503,'D1_READ_BUDGET',results)})).rejects.toThrow('fallback is unavailable');
+  });
 });

@@ -12,6 +12,7 @@ import {mapWordDefinitions} from '../pages/WordPage';
 import * as variables from '../src/assets/Variables.module.scss';
 import '../src/index.scss';
 import '../src/assets/Styles.scss';
+import {initialHome} from '../src/utils/home-page-data';
 
 declare const __CLIENT_MANIFEST__: Record<string,{file:string;css?:string[];imports?:string[]}>;
 declare const __CLIENT_STYLES__: Record<string,string>;
@@ -53,12 +54,10 @@ export async function renderApplication(request:Request, fetchData:FetchData, se
     else if(path==='/') {
       const script=lang==='ar'?'ar':'franco';
       const orderKey=['homeFeedOrder',script,'definition-language-v2'];
-      const order=await fetchData<{definitionIds:number[]}>('/definitions/feed?script='+script);
+      const order=await initialHome(fetchData,script);
       set(orderKey,order.definitionIds);
       const updatedAt=client.getQueryState(orderKey)!.dataUpdatedAt;
-      const ids=order.definitionIds.slice(0,10);
-      const page=ids.length?await fetchData<{results:unknown[]}>(`/word/explore?script=${script}&ids=${ids.join(',')}`):{results:[]};
-      set(['homeContent',script,'definition-language-v2',updatedAt],{pages:[page.results],pageParams:[null]});
+      set(['homeContent',script,'definition-language-v2',updatedAt],{pages:[order.results],pageParams:[null]});
     } else if(seed.word) {
       const id=Number(path.split('/')[2]);
       // The public SEO payload includes every visible meaning and its provenance.

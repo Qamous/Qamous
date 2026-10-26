@@ -51,15 +51,23 @@ export async function verifyMutableReadiness(root,accountId,{inspect=liveWorkerI
   const state=validateMutableReadiness(inspect('qamous-web/settings'),inspect('qamous-api/settings'),inspect('qamous-import/settings'),inspect('qamous-import/schedules'));
   const get=async path=>{
     const reply=await fetcher('https://api.qamous.org'+path,{signal:AbortSignal.timeout(20_000),cache:'no-store'});
-    if(reply.status!==200){await reply.body?.cancel();throw Error('Normal deployment refused: public API readiness probe failed');}
+    if(reply.status!==200){const detail=await reply.json().catch(()=>null);throw Object.assign(Error('Normal deployment refused: public API readiness probe failed'),{status:reply.status,code:detail?.code});}
     return reply.json();
   };
   const countries=await get('/countries'),feed=await get('/definitions/feed?script=franco');
   if(!Array.isArray(countries)||!Array.isArray(feed?.definitionIds)||!feed.definitionIds.length)throw Error('Normal deployment refused: public API readiness payload is invalid');
   const id=Number(feed.definitionIds[0]);
   if(!Number.isSafeInteger(id)||id<1)throw Error('Normal deployment refused: public feed identity is invalid');
-  const card=await get('/word/explore?ids='+id+'&script=both');
-  if(!Array.isArray(card?.results)||!card.results.some(row=>Number(row.definitionId??row.id)===id))throw Error('Normal deployment refused: a prepared public card is unavailable');
-  console.log(JSON.stringify({mutablePublicReadsVerifiedAt:new Date().toISOString(),...state,publicProbes:3}));
+  let fallback=false;
+  try {
+    const card=await get('/word/explore?ids='+id+'&script=both');
+    if(!Array.isArray(card?.results)||!card.results.some(row=>Number(row.definitionId??row.id)===id))throw Error('Normal deployment refused: a prepared public card is unavailable');
+  } catch(error) {
+    if(error.status!==503||error.code!=='D1_READ_BUDGET')throw error;
+    const page=await get('/word/explore?script=franco&scope=all&sort=popular&page=1&limit=12');
+    if(!Array.isArray(page?.results)||!page.results.length||page.results.length>12||!page.results.every(row=>row&&Number.isSafeInteger(Number(row.definitionId??row.id))&&Number(row.definitionId??row.id)>0&&(row.isArabic===false||row.isArabic===0)))throw Error('Normal deployment refused: the public home fallback is unavailable');
+    fallback=true;
+  }
+  console.log(JSON.stringify({mutablePublicReadsVerifiedAt:new Date().toISOString(),...state,publicProbes:fallback?4:3,homeFallbackVerified:fallback}));
   return state;
 }
