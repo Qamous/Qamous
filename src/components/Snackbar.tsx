@@ -19,6 +19,7 @@ const Snackbar: React.FC<SnackbarProps> = ({ open, message }) => {
     }
   }, [open]);
   
+  if (!isOpen) return null;
   return (
     <div className={`snackbar ${isOpen ? 'show' : ''}`}>
       {message}

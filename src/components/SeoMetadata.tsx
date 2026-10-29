@@ -8,7 +8,7 @@ export function canonicalPath(pathname:string) {
   return trimmed.replace(/^(\/word\/\d+)\/en$/,'$1');
 }
 export function isPrivateOrUtilityPath(pathname:string) {
-  return /^\/(?:login|signup|profile|add-definition|forgot-password|reset-password|chatbot|search|feeling-lucky|advertise|opportunities|404)(?:\/|$)/.test(pathname);
+  return /^\/(?:login|signup|profile|add-definition|forgot-password|reset-password|chatbot|search|feeling-lucky|advertise|opportunities|contributors|404)(?:\/|$)/.test(pathname);
 }
 export default function SeoMetadata() {
   const {pathname,search}=useLocation();

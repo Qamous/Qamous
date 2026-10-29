@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from './render';
 import { expect, it, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import {MemoryRouter} from 'react-router-dom';
 import Home from '../../pages/Home';
 
 vi.mock('i18next',()=>({default:{language:'en'}}));
@@ -17,9 +18,11 @@ it('Home automatically advances past a removed batch while its loading marker re
     return new Response(JSON.stringify({results:ids[0]===11?[]:ids.map(id=>({definitionId:id,wordId:id,word:'Word '+id,isArabic:0}))}));
   }));
   const client=new QueryClient({defaultOptions:{queries:{retry:false,cacheTime:0}}});
-  const view=render(<QueryClientProvider client={client}><Home/></QueryClientProvider>);
+  const view=render(<MemoryRouter><QueryClientProvider client={client}><Home/></QueryClientProvider></MemoryRouter>);
   await waitFor(()=>expect(screen.getByText('Word 21')).toBeInTheDocument());
   expect(batches.map(ids=>ids[0])).toEqual([1,11,21]);
-  expect(screen.getAllByRole('article')).toHaveLength(12);
+  expect(screen.getAllByRole('article')).toHaveLength(11);
+  expect(screen.getByRole('heading',{level:1,name:'Arabic words and everyday meanings'})).toBeInTheDocument();
+  expect(screen.getByRole('link',{name:'Egyptian Arabic'})).toHaveAttribute('href','/advanced-search/Egypt');
   view.unmount();client.clear();vi.unstubAllGlobals();
 });

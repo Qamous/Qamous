@@ -1,3 +1,3 @@
 declare module 'react-dom/server.browser' {
-  export {renderToReadableStream} from 'react-dom/server';
+  export {renderToReadableStream,renderToString} from 'react-dom/server';
 }

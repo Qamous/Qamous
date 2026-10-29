@@ -1,5 +1,5 @@
 import React from 'react';
-import {renderToReadableStream} from 'react-dom/server.browser';
+import {renderToString} from 'react-dom/server.browser';
 import type {HelmetServerState} from 'react-helmet-async';
 import type {Country,FetchData,RenderSeed} from './contracts';
 import {StaticRouter} from 'react-router-dom';
@@ -18,7 +18,11 @@ declare const __CLIENT_MANIFEST__: Record<string,{file:string;css?:string[];impo
 declare const __CLIENT_STYLES__: Record<string,string>;
 const files:Record<string,string>={home:'Home',lucky:'WordOfTheDay',login:'LogIn',signup:'SignUp',contribute:'ContributionForm',search:'SearchResults',word:'WordPage',profile:'UserProfile',explore:'AdvancedSearch',blog:'Blog',about:'About',chatbot:'Chatbot',forgot:'ForgotPassword',reset:'ResetPassword',missing:'NotFound',contributor:'Contributor',construction:'PageUnderConstruction',browse:'Browse'};
 
+const compiledAssets = new Map<string,string>();
 function routeAssets(path:string) {
+  const route = routeModule(path);
+  const existing = compiledAssets.get(route);
+  if(existing !== undefined) return existing;
   const manifest=typeof __CLIENT_MANIFEST__==='undefined'?{}:__CLIENT_MANIFEST__;
   const styles=new Set<string>(), scripts=new Set<string>(), seen=new Set<string>();
   function visit(key:string) {
@@ -28,8 +32,8 @@ function routeAssets(path:string) {
     item.css?.forEach(css=>styles.add('/'+css));
     if(item.file.endsWith('.js')) scripts.add('/'+item.file);
   }
-  visit('index.html');visit('pages/'+files[routeModule(path)]+'.tsx');
-  return [...styles].map(href=>{
+  visit('index.html');visit('pages/'+files[route]+'.tsx');
+  const result = [...styles].map(href=>{
     const css=__CLIENT_STYLES__[href];
     if(css===undefined) throw new Error('Missing initial stylesheet: '+href);
     // Firefox may paint before linked CSS arrives. Keep each inline/linked pair
@@ -38,6 +42,8 @@ function routeAssets(path:string) {
     return `<style data-qamous-stylesheet="${href}">${css}</style><link rel="stylesheet" href="${href}">`;
   }).join('')
     +[...scripts].map(href=>`<link rel="modulepreload" href="${href}">`).join('');
+  compiledAssets.set(route,result);
+  return result;
 }
 
 export const serializeState=(state:unknown)=>JSON.stringify(state).replace(/[<>&\u2028\u2029]/g,char=>({'<':'\\u003c','>':'\\u003e','&':'\\u0026','\u2028':'\\u2028','\u2029':'\\u2029'}[char]!));
@@ -112,13 +118,12 @@ export async function renderApplication(request:Request, fetchData:FetchData, se
     const bootstrap:Bootstrap={...preferences,now:Date.now(),...(seed.notFound?{notFoundPath:path}:{})};
     const helmetContext:{helmet?:HelmetServerState}={};
     const language=createLanguage(lang);
-    let renderError:unknown;
-    const stream=await renderToReadableStream(<StaticRouter location={url.pathname+url.search}>
+    const html=renderToString(<StaticRouter location={url.pathname+url.search}>
       <Application bootstrap={bootstrap} client={client} language={language} helmetContext={helmetContext}/>
-    </StaticRouter>,{signal:AbortSignal.timeout(15000),onError(error){renderError=error;}});
-    await stream.allReady;
-    const html=await new Response(stream).text();
-    if(renderError) throw renderError;
+    </StaticRouter>);
+    // Every route and query is loaded above. Never publish a successful page
+    // containing a loading fallback if a future component starts suspending.
+    if(html.includes('<!--$!-->')) throw new Error('Incomplete server render');
     bootstrap.queries=dehydrate(client);
     const helmet=helmetContext.helmet;
     if(!helmet) throw new Error('Missing page metadata');

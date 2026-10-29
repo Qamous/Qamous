@@ -6,7 +6,7 @@ import ContentBox from '../src/components/ContentBox';
 import { useHomeFeed } from '../src/hooks/useHomeFeed';
 import Snackbar from '../src/components/Snackbar';
 import CustomDialog from '../src/components/CustomDialog';
-import Helmet from '../src/components/PageMetadata';
+import HomeIntroduction from '../src/components/HomeIntroduction';
 import { useIntersectionObserver } from '../src/assets/utils';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 
@@ -31,16 +31,8 @@ interface HomeContent extends ProvenanceContent {
   francoSpellings?: string[];
 }
 
-interface JsonContent {
-  word: string,
-  definition: string
-}
-
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const sampleHome = t('sample_home', {
-    returnObjects: true,
-  }) as JsonContent[];
   const lang = i18n.language;
   
   const {
@@ -88,23 +80,8 @@ const Home: React.FC = () => {
   if (isLoading) {
     return (
       <div className={'feed'}>
-        <Helmet>
-          <title>Qamous - Arabic Slang Dictionary</title>
-          <meta name="description" content="Explore Qamous, your go-to platform for learning Arabic slang and colloquial phrases. Discover a comprehensive Arabic dictionary for various dialects." />
-          <meta name="keywords" content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
-        </Helmet>
         <div className="feed-posts">
-          <ContentBox
-            item={sampleHome[0]}
-            index={0}
-            lang={lang}
-            definitionId={0}
-            wordId={0}
-            isLiked={false}
-            isDisliked={false}
-            isReported={false}
-            example={""}
-          />
+          <HomeIntroduction language={lang}/>
           <LoadingSpinner />
         </div>
       </div>
@@ -114,23 +91,8 @@ const Home: React.FC = () => {
   if (isError) {
     return (
       <div className={'feed'}>
-        <Helmet>
-          <title>Qamous - Arabic Slang Dictionary</title>
-          <meta name="description" content="Explore Qamous, your go-to platform for learning Arabic slang and colloquial phrases. Discover a comprehensive Arabic dictionary for various dialects." />
-          <meta name="keywords" content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
-        </Helmet>
         <div className="feed-posts">
-          <ContentBox
-            item={sampleHome[0]}
-            index={0}
-            lang={lang}
-            definitionId={0}
-            wordId={0}
-            isLiked={false}
-            isDisliked={false}
-            isReported={false}
-            example={""}
-          />
+          <HomeIntroduction language={lang}/>
         </div>
         <Snackbar
           open={errorSnackbarOpen}
@@ -143,13 +105,6 @@ const Home: React.FC = () => {
   return (
     <>
       <div className={'feed'}>
-        <Helmet>
-          <title>Qamous - Arabic Slang Dictionary</title>
-          <meta name="description"
-                content="Explore Qamous, your go-to platform for learning Arabic slang and colloquial phrases. Discover a comprehensive Arabic dictionary for various dialects." />
-          <meta name="keywords"
-                content="arabic slang, arabic dictionary, colloquial arabic, arabic phrases, arabic dialects, dictionary" />
-        </Helmet>
         {/* TODO: Ads need to be fixed. Was working on a fix but it was not satisfactory */}
         <div className="feed-ad-space">
         {/*  <AdSenseWrapper*/}
@@ -171,17 +126,7 @@ const Home: React.FC = () => {
         {/*  />*/}
         </div>
         <div className="feed-posts">
-          <ContentBox
-            item={sampleHome[0]}
-            index={0}
-            lang={lang}
-            definitionId={0}
-            wordId={0}
-            isLiked={false}
-            isDisliked={false}
-            isReported={false}
-            example={""}
-          />
+          <HomeIntroduction language={lang}/>
           {/*<div className="feed-posts-ad-space">*/}
           {/*  <AdSenseWrapper*/}
           {/*    client="ca-pub-4293590491700199"*/}

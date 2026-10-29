@@ -110,7 +110,7 @@ async function applicationPage(request:Request,env:Env,meta?:{robots?:string},se
     const rewrite=new HTMLRewriter()
       .on('html',{element(e){e.setAttribute('lang',rendered.language);e.setAttribute('style',rendered.theme);}})
       .on('body',{element(e){if(rendered.grain)e.setAttribute('class','grain-mode');e.append(`<script id="qamous-state" type="application/json">${rendered.state}</script>`,{html:true});}})
-      .on('head title,head meta[name="description"],head meta[name="robots"],head meta[property^="og:"],head meta[name^="twitter:"],head link[rel="canonical"],head link[rel="alternate"]',{element(e){e.remove();}})
+      .on('head title,head meta[name="description"],head meta[name="robots"],head meta[property^="og:"],head meta[name^="twitter:"],head meta[property^="twitter:"],head link[rel="canonical"],head link[rel="alternate"]',{element(e){e.remove();}})
       .on('link[rel="stylesheet"],link[rel="modulepreload"]',{element(e){e.remove();}})
       .on('head',{element(e){e.append(rendered.head+rendered.assets,{html:true});}})
       .on('#root',{element(e){e.setAttribute('data-ssr','true');e.setInnerContent(rendered.html,{html:true});}});

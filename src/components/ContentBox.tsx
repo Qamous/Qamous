@@ -121,7 +121,7 @@ const ContentBox: React.FC<HomeContentProps> = ({ isLiked, isDisliked, isReporte
     const fontSizeWord = Math.floor(sideLength * 0.06); // Adjust multiplier as needed
     const fontSizeDefinition = Math.floor(sideLength * 0.04); // Adjust multiplier as needed
     
-    const wordElement = postRef.current.querySelector('.content-box-title h1') as HTMLElement;
+    const wordElement = postRef.current.querySelector('.content-box-title h1, .content-box-title h2') as HTMLElement;
     if (wordElement) wordElement.style.fontSize = `${fontSizeWord}px`;
     if (wordElement) wordElement.style.color = variables.secondaryColor;
     
