@@ -10,6 +10,7 @@ for(const path of paths) {
   assert.match(page.html,/<div class="app">/);assert.match(page.html,/<footer/);
   assert.doesNotMatch(page.html,/seo-initial|initial-loader/);
   assert.doesNotMatch(page.html,/<script[^>]*>\s*(?:function|\$RC|\$RS)/);
+  assert.doesNotMatch(page.html,/<!--\$!-->/,'Every preloaded route must render completely');
   assert.equal((page.head.match(/<title\b/g)||[]).length,1);
   const initialStyles=[...page.assets.matchAll(/<style data-qamous-stylesheet="([^"]+)">([\s\S]*?)<\/style><link rel="stylesheet" href="\1">/g)];
   assert.ok(initialStyles.length>0,'Every page needs its layout before CSS downloads');
@@ -27,6 +28,13 @@ for(const path of paths) {
     assert.match(page.html,/CC BY-SA 4.0/);assert.match(page.head,/DefinedTerm/);
   }
   if(path==='/word/2/ar') assert.match(page.html,/ولا يهمك/);
+  if(['/','/advanced-search/Egypt','/word/2','/word/2/ar'].includes(path)) assert.equal((page.html.match(/<h1\b/g)||[]).length,1,path+' has one main heading');
+  if(path==='/') {
+    assert.match(page.head,/"@type":"WebSite"/);
+    for(const link of ['/browse/en','/browse/ar','/advanced-search/Egypt','/advanced-search/Lebanon','/advanced-search/Morocco']) assert.ok(page.html.includes(`href="${link}"`),link);
+  }
+  if(path.startsWith('/contributors/')) assert.match(page.head,/noindex, follow/);
+  assert.doesNotMatch(page.html,/<div class="snackbar/,'Closed notifications do not belong in the initial HTML');
   if(path.startsWith('/browse/')) assert.match(page.html,/href="\/word\/2/);
   if(['/missing','/sources'].includes(path)) {assert.doesNotMatch(page.head,/rel="canonical"/);assert.match(page.head,/noindex/);}
   count++;

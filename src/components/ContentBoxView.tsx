@@ -40,7 +40,7 @@ interface ContentBoxViewProps extends ContentBoxContent {
 // Persistence, reactions and sharing belong to the interactive ContentBox.
 const ContentBoxView = forwardRef<HTMLDivElement, ContentBoxViewProps>(function ContentBoxView({
   item, lang, countryCode, countryName, definitionHuh, example, arabicExample, arabicSpellings, francoSpellings, alternateSpellings,
-  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,definitionLanguage,definitionLanguages,dialect,addMeaningHref,showMissingMeaningPrompt=true,headingLevel=1,
+  wordHref, highlighted = false, overlays, children, sourceCredits, sourceExamples, sourcePronunciations, pronunciation, sourceDetails,definitionLanguage,definitionLanguages,dialect,addMeaningHref,showMissingMeaningPrompt=true,headingLevel=2,
 }, ref) {
   const [resolvedCountry, setResolvedCountry] = useState({ code: '', name: '' });
   useEffect(() => {

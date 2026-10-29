@@ -8,7 +8,7 @@ describe('public SEO output',()=>{
   it('canonicalizes English aliases and excludes private utility pages',()=>{
     expect(canonicalPath('/word/2/en/')).toBe('/word/2');
     expect(canonicalPath('/word/2/ar')).toBe('/word/2/ar');
-    for(const path of ['/profile','/login','/reset-password/token','/search/query','/chatbot']) expect(isPrivateOrUtilityPath(path)).toBe(true);
+    for(const path of ['/profile','/login','/reset-password/token','/search/query','/chatbot','/contributors/importer']) expect(isPrivateOrUtilityPath(path)).toBe(true);
   });
   it('puts safe, semantic bilingual word content in the initial HTML',()=>{
     const page=wordPage({rows:[{...row,definition:'Never mind </script><script>evil()</script>'},{...row,isArabic:1,definition:'لا بأس'}],related:{country:{countryCode:'EG',countryName:'Egypt'},words:[{id:3,canonicalArabic:'يلا',francoArabicWord:'yalla'}]}},'en',2)!;

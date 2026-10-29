@@ -50,33 +50,48 @@ export function routeModule(path: string): keyof typeof pageModules {
   })) if (path === prefix || path.startsWith(prefix.endsWith('/') ? prefix : prefix + '/')) return name as keyof typeof pageModules;
   return 'missing';
 }
-export const preloadRoute = (path: string) => pageModules[routeModule(path)]();
-const Browse = lazy(pageModules.browse);
+// Only component code is shared between requests. Language, queries and user
+// state still belong to each Application. Preloaded routes can render without
+// suspending, avoiding the streaming renderer's extra work on a small CPU budget.
+const loadedPages: Partial<Record<keyof typeof pageModules, React.ComponentType>> = {};
+export const preloadRoute = async (path: string) => {
+  const key = routeModule(path);
+  const module = await pageModules[key]();
+  loadedPages[key] = module.default;
+};
+function routePage(key: keyof typeof pageModules) {
+  const LazyPage = lazy<React.ComponentType>(pageModules[key]);
+  return function RoutePage() {
+    const LoadedPage = loadedPages[key];
+    return LoadedPage ? <LoadedPage /> : <LazyPage />;
+  };
+}
+const Browse = routePage('browse');
 
 // Lazy load all page components with dynamic imports
-const Home = lazy(pageModules.home);
-const WordOfTheDay = lazy(pageModules.lucky);
-const LogIn = lazy(pageModules.login);
-const SignUp = lazy(pageModules.signup);
+const Home = routePage('home');
+const WordOfTheDay = routePage('lucky');
+const LogIn = routePage('login');
+const SignUp = routePage('signup');
 
 // Secondary routes with dynamic imports
-const AddWord = lazy(pageModules.contribute);
-const SearchResults = lazy(pageModules.search);
-const WordPage = lazy(pageModules.word);
-const UserProfile = lazy(pageModules.profile);
+const AddWord = routePage('contribute');
+const SearchResults = routePage('search');
+const WordPage = routePage('word');
+const UserProfile = routePage('profile');
 
 // Less frequently accessed routes with dynamic imports
-const AdvancedSearch = lazy(pageModules.explore);
-const Blog = lazy(pageModules.blog);
-const About = lazy(pageModules.about);
-const Chatbot = lazy(pageModules.chatbot);
-const ForgotPassword = lazy(pageModules.forgot);
-const ResetPassword = lazy(pageModules.reset);
-const NotFound = lazy(pageModules.missing);
-const Contributor = lazy(pageModules.contributor);
+const AdvancedSearch = routePage('explore');
+const Blog = routePage('blog');
+const About = routePage('about');
+const Chatbot = routePage('chatbot');
+const ForgotPassword = routePage('forgot');
+const ResetPassword = routePage('reset');
+const NotFound = routePage('missing');
+const Contributor = routePage('contributor');
 const ImportPreview = import.meta.env.DEV ? lazy(() => import('../pages/ImportPreview')) : NotFound;
 const PronunciationPreview = import.meta.env.DEV ? lazy(() => import('../pages/PronunciationPreview')) : NotFound;
-const PageUnderConstruction = lazy(pageModules.construction);
+const PageUnderConstruction = routePage('construction');
 
 interface CheckUserStatusProps {
   children: ReactNode;

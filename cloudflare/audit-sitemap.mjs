@@ -36,7 +36,11 @@ for(const sitemap of sitemaps) {
   await pause(150);
 }
 assert.ok(allUrls.size>0);
-const boundedSample=[...new Map(sample.map(url=>[url.href,url])).values()].slice(0,20);
+// Cover the whole index, including newly imported ranges. Taking the first 20
+// candidates only exercises the oldest words and misses later broken shards.
+const candidates=[...new Map(sample.map(url=>[url.href,url])).values()];
+const sampleSize=Math.min(20,candidates.length);
+const boundedSample=Array.from({length:sampleSize},(_,i)=>candidates[sampleSize===1?0:Math.round(i*(candidates.length-1)/(sampleSize-1))]);
 for(const url of boundedSample) {
   const response=await fetch(new URL(url.pathname,origin),{redirect:'manual',signal:AbortSignal.timeout(20000)});
   const html=await response.text();

@@ -1,0 +1,22 @@
+.home-introduction {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  text-align: start;
+  margin-bottom: 24px;
+  padding: 24px;
+  border: 1px solid var(--header-border-color);
+  border-radius: 12px;
+  background: var(--tertiary-color);
+  color: var(--primary-color);
+
+  .home-brand { margin: 0 0 8px; color: var(--secondary-color); font-weight: 700; }
+  .home-brand span { margin-inline-start: 8px; }
+  h1 { margin: 0 0 12px; font-size: clamp(1.5rem, 4vw, 2rem); line-height: 1.2; }
+  p { max-width: 65ch; line-height: 1.6; }
+  nav { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+  a { color: var(--secondary-color); text-underline-offset: 3px; }
+  a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  .home-browse-links { margin: 18px 0 14px; font-weight: 600; }
+  .home-dialect-links { font-size: 0.9rem; }
+}
