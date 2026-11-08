@@ -1,4 +1,7 @@
 {
+  "search_load_more": "عرض المزيد",
+  "search_loading_more": "جارٍ التحميل…",
+  "search_more_error": "تعذّر تحميل المزيد من النتائج. حاول مرة أخرى.",
   "toolbar_items": {
     "home": "الرئيسية",
     "advanced_search": "البحث المتقدم",

@@ -11,10 +11,23 @@ export function requiresAnalyticsConsent(country: unknown): boolean {
   return typeof country !== 'string' || !/^[A-Z]{2}$/.test(country) || country === 'XX' || consentCountries.has(country);
 }
 class SeoNotFound extends Error {}
-function unavailable() {
+function retryDelay(value:unknown):number {
+  const delay=typeof value==='number'?value:typeof value==='string'&&/^\d+$/.test(value)?Number(value):0;
+  return Number.isInteger(delay)&&delay>=1&&delay<=86400?delay:60;
+}
+function unavailable(retryAfter=60) {
   // A temporary overload is not a removal from search. Google can retry this
   // URL without mistaking a quota response for a permanent noindex directive.
-  return new Response('Qamous is temporarily unavailable. Please try again later.', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store','Retry-After':'60','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; frame-ancestors 'none'"}});
+  return new Response('Qamous is temporarily unavailable. Please try again later.', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store','Retry-After':String(retryAfter),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; frame-ancestors 'none'"}});
+}
+function pageUnavailable(request:Request,error:unknown):Response {
+  const details=error&&typeof error==='object'?error as {status?:number;retryAfter?:unknown;code?:string}:{};
+  const route=new URL(request.url).pathname.replace(/^\/(search|reset-password|contributors)\/.*$/,'/$1/:value')
+    .replace(/\/\d+(?=\/|$)/g,'/:id').replace(/sitemap-words-\d+\.xml$/,'sitemap-words-:bucket.xml').slice(0,96);
+  const retryAfter=retryDelay(details.retryAfter);
+  console.error(JSON.stringify({event:'public_page_unavailable',route,upstreamStatus:details.status||null,
+    kind:details.code==='UPSTREAM_BODY_TOO_LARGE'?'payload_limit':details.status?'upstream':'render',retryAfter}));
+  return unavailable(retryAfter);
 }
 export function sessionCookie(request:Request):string|undefined {
   return request.headers.get('Cookie')?.split(';').map(part=>part.trim()).find(part=>part.split('=',1)[0]==='qamous_session');
@@ -51,7 +64,7 @@ async function boundedJson(response:Response):Promise<any> {
   try {
     for(;;) {
       const {done,value}=await reader.read();if(done) break;
-      size+=value.byteLength;if(size>262144) {await reader.cancel();throw new Error('Oversized response');}
+      size+=value.byteLength;if(size>262144) {await reader.cancel();throw Object.assign(new Error('Oversized response'),{code:'UPSTREAM_BODY_TOO_LARGE'});}
       chunks.push(value);
     }
   } finally {reader.releaseLock();}
@@ -63,7 +76,7 @@ async function seoData(request:Request,env:Env,path:string) {
   const restored=await publicSnapshotResponse(new Request(new URL(path,request.url)),env as Env&SnapshotEnvironment);
   if(restored) {
     if(restored.status===404) {await restored.body?.cancel();throw new SeoNotFound();}
-    if(!restored.ok) {await restored.body?.cancel();throw Object.assign(new Error('Public snapshot unavailable'),{status:restored.status});}
+    if(!restored.ok) {await restored.body?.cancel();throw Object.assign(new Error('Public snapshot unavailable'),{status:restored.status,retryAfter:restored.headers.get('Retry-After')});}
     return boundedJson(restored);
   }
   const headers=new Headers({'Accept':'application/json'});
@@ -78,7 +91,7 @@ async function seoData(request:Request,env:Env,path:string) {
   const timeoutMs=apiUrl.pathname==='/word/explore'&&apiUrl.searchParams.has('ids')?20000:10000;
   const response=await env.API.fetch(new Request(apiUrl,{headers,signal:AbortSignal.timeout(timeoutMs)}));
   if(response.status===404) {await response.body?.cancel();throw new SeoNotFound();}
-  if(!response.ok) {await response.body?.cancel();throw Object.assign(new Error('SEO data unavailable'),{status:response.status});}
+  if(!response.ok) {await response.body?.cancel();throw Object.assign(new Error('SEO data unavailable'),{status:response.status,retryAfter:response.headers.get('Retry-After')});}
   return boundedJson(response);
 }
 async function cached(request:Request,ctx:ExecutionContext|undefined,produce:(request:Request)=>Promise<Response>,env?:Env&SnapshotEnvironment) {
@@ -104,7 +117,7 @@ function xml(request:Request,body:string) {
 }
 async function applicationPage(request:Request,env:Env,meta?:{robots?:string},seed:RenderSeed={},status=200) {
   const asset=await env.ASSETS.fetch(new Request(new URL('/',request.url)));
-  if(!asset.ok) return unavailable();
+  if(!asset.ok) {await asset.body?.cancel();return pageUnavailable(request,{status:asset.status});}
   try {
     const rendered=await renderApplication(request,path=>seoData(request,env,path),seed);
     const rewrite=new HTMLRewriter()
@@ -125,8 +138,7 @@ async function applicationPage(request:Request,env:Env,meta?:{robots?:string},se
     return new Response(request.method==='HEAD'?null:response.body,{status,headers});
   } catch(error) {
     await asset.body?.cancel();
-    console.error('Qamous server rendering failed',error instanceof Error?error.message:'Unknown render error');
-    return unavailable();
+    return pageUnavailable(request,error);
   }
 }
 async function missingPage(request:Request,env:Env):Promise<Response> {
@@ -156,7 +168,7 @@ async function dynamic(request:Request,env:Env,ctx:ExecutionContext|undefined):P
       if(!meta) return missingPage(request,env);
       if(meta.robots==='index, follow'&&meta.canonicalPath!==canonical) return redirectPath(request,meta.canonicalPath);
       return applicationPage(request,env,meta,{word:true,wordData:data,personalized:personalized(request)&&!snapshotEnabled(env as Env&SnapshotEnvironment)});
-    },env);} catch(error) {return error instanceof SeoNotFound?missingPage(request,env):unavailable();}
+    },env);} catch(error) {return error instanceof SeoNotFound?missingPage(request,env):pageUnavailable(request,error);}
   }
   if(browse) {
     const canonical='/browse/'+browse[1];
@@ -168,7 +180,7 @@ async function dynamic(request:Request,env:Env,ctx:ExecutionContext|undefined):P
       const data=await seoData(request,env,'/seo/browse/'+browse[1]+(after?'?after='+encodeURIComponent(after):''));
       const index=await seoData(request,env,'/seo/index');
       return applicationPage(request,env,browsePage(data,index,after),{browse:data,countries:index.countries});
-    },env);} catch(error) {return error instanceof SeoNotFound?missingPage(request,env):unavailable();}
+    },env);} catch(error) {return error instanceof SeoNotFound?missingPage(request,env):pageUnavailable(request,error);}
   }
   if(dialect) {
     let name:string;
@@ -180,7 +192,7 @@ async function dynamic(request:Request,env:Env,ctx:ExecutionContext|undefined):P
       const data=await seoData(request,env,'/seo/dialect/'+encodeURIComponent(name));
       return applicationPage(request,env,dialectPage(data));
     },env);}
-    catch(error) {return error instanceof SeoNotFound?missingPage(request,env):unavailable();}
+    catch(error) {return error instanceof SeoNotFound?missingPage(request,env):pageUnavailable(request,error);}
   }
   try {
     if(path==='/sitemap.xml') return await cached(request,ctx,async request=>xml(request,sitemapIndex(await seoData(request,env,'/seo/index'))),env);
@@ -188,7 +200,7 @@ async function dynamic(request:Request,env:Env,ctx:ExecutionContext|undefined):P
     const id=Number(shard![1]);
     if(!Number.isSafeInteger(id)) return missingPage(request,env);
     return await cached(request,ctx,async request=>xml(request,sitemapWords(await seoData(request,env,'/seo/sitemap/'+id))),env);
-  } catch(error) {return error instanceof SeoNotFound?missingPage(request,env):unavailable();}
+  } catch(error) {return error instanceof SeoNotFound?missingPage(request,env):pageUnavailable(request,error);}
 }
 export default {
   async fetch(request:Request,env:Env,ctx?:ExecutionContext):Promise<Response> {

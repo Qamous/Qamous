@@ -143,7 +143,13 @@ class Snapshot {
       const row=(await this.cards([positive(match[1])]))[0];if(!row)throw missing();
       return match[2]==='country'?(await this.value<Row[]>('countries')).find(country=>country.countryCode===row.countryCode)||null:row;
     }
-    if((match=/^\/word\/search\/kwd=(.+)$/.exec(path)))return (await this.explore(new URLSearchParams({q:decodeURIComponent(match[1]),script:'both',limit:'50'}))).results;
+    if((match=/^\/word\/search\/kwd=(.+)$/.exec(path))) {
+      const paged=params.has('page')||params.has('limit');
+      if(paged&&['page','limit'].some(name=>params.getAll(name).length>1||(params.has(name)&&!/^\d+$/.test(params.get(name)!))))throw invalid();
+      const language=params.get('language');if(paged&&(params.getAll('language').length>1||(language!==null&&!['en','ar'].includes(language))))throw invalid();
+      const data=await this.explore(new URLSearchParams({q:decodeURIComponent(match[1]),script:paged&&language?(language==='ar'?'ar':'franco'):'both',page:params.get('page')??'1',limit:paged?(params.get('limit')??'20'):'50'}));
+      return paged?{results:data.results,page:data.page,limit:data.limit,hasMore:data.page*data.limit<data.total}:data.results;
+    }
     if((match=/^\/word\/search\/iso=([A-Za-z]{2})$/.exec(path)))return (await this.explore(new URLSearchParams({country:match[1],script:'both',limit:'50'}))).results;
     if(path==='/word/suggestions') {
       const results=(await this.explore(new URLSearchParams({q:params.get('q')||'',scope:'words',script:'both',limit:'20'}))).results;

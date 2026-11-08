@@ -106,6 +106,18 @@ describe('shared rendering and public discovery routing',()=>{
   });
 });
 describe('crawler-safe public page caching',()=>{
+  it('preserves the upstream retry time and records a sanitized failure for crawlers',async()=>{
+    const log=vi.spyOn(console,'error').mockImplementation(()=>undefined);
+    try {
+      const {env,api}=bindings();api.mockImplementation(async()=>new Response('busy',{status:503,headers:{'Retry-After':'12'}}));
+      const response=await worker.fetch(new Request('https://qamous.org/word/1234?private=value'),env);
+      expect(response.status).toBe(503);expect(response.headers.get('Retry-After')).toBe('12');
+      expect(response.headers.get('Cache-Control')).toBe('no-store');expect(response.headers.has('X-Robots-Tag')).toBe(false);
+      expect(api).toHaveBeenCalledTimes(1);
+      expect(JSON.parse(log.mock.calls[0][0])).toEqual({event:'public_page_unavailable',route:'/word/:id',upstreamStatus:503,kind:'upstream',retryAfter:12});
+      expect(JSON.stringify(log.mock.calls)).not.toContain('private');
+    }finally{log.mockRestore();}
+  });
   it('keeps each home visit randomized while candidate data is cached by the API',async()=>{
     const {env}=bindings(),{cache,ctx}=edgeCache();
     for(let visit=0;visit<2;visit++) {

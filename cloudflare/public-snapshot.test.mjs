@@ -54,6 +54,8 @@ describe('zero-Durable-Object public recovery',()=>{
   it('supports search, cross-language fallback, dialect filters and pagination without database queries',async()=>{
     const f=fixture();
     const search=await(await f.call('/word/search/kwd=kalima')).json();expect(search.map(row=>row.definitionId)).toEqual([1,2]);
+    const page=await(await f.call('/word/search/kwd=kalima?page=1&limit=1')).json();expect(page).toMatchObject({page:1,limit:1,hasMore:true});expect(page.results.map(row=>row.definitionId)).toEqual([1]);
+    const last=await(await f.call('/word/search/kwd=kalima?page=2&limit=1')).json();expect(last.hasMore).toBe(false);expect(last.results.map(row=>row.definitionId)).toEqual([2]);
     const explore=await(await f.call('/word/explore?script=ar&country=EG&limit=1')).json();
     expect(explore.total).toBe(1);expect(explore.results[0].definitionId).toBe(2);
     const fallback=await(await f.call('/word/explore?script=ar&q=yalla')).json();expect(fallback.results[0].definitionId).toBe(101);

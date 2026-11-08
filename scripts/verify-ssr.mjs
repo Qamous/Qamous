@@ -73,6 +73,17 @@ for(const language of ['en','ar']) {
   assert.deepEqual(order.state.data,[language==='ar'?102:101]);
 }
 const personalPaths=[];
+const manyResults=Array.from({length:134},(_,index)=>({...rows[0],wordId:index+1000,definitionId:index+2000,canonicalWordId:index+1000,word:'term-'+index,francoArabicWord:'term-'+index,definition:'A meaning '+ 'x'.repeat(2500)}));
+assert.ok(Buffer.byteLength(JSON.stringify(manyResults))>262144);
+const searchCalls=[];
+const largeSearch=await renderApplication(new Request('https://qamous.org/search/term'),async path=>{
+  searchCalls.push(path);assert.equal(path,'/word/search/kwd=term?page=1&limit=20&language=en');
+  return {results:manyResults.slice(0,20),page:1,limit:20,hasMore:true};
+});
+assert.equal(searchCalls.length,1);assert.match(largeSearch.html,/Load more/);
+const searchState=JSON.parse(largeSearch.state).queries.queries.find(query=>query.queryKey[0]==='searchResults');
+assert.equal(searchState.state.data.pages[0].results.length,20);assert.equal(searchState.state.data.pages[0].hasMore,true);
+assert.ok(Buffer.byteLength(largeSearch.state)<262144,'search hydration includes only the first bounded page');
 const personal=await renderApplication(new Request('https://qamous.org/word/2',{headers:{Cookie:'qamous_session=private'}}),async path=>{
   personalPaths.push(path);
   return fixtureData(path).map(row=>({...row,isLiked:1}));
