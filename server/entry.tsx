@@ -13,6 +13,7 @@ import * as variables from '../src/assets/Variables.module.scss';
 import '../src/index.scss';
 import '../src/assets/Styles.scss';
 import {initialHome} from '../src/utils/home-page-data';
+import {keywordSearchKey,keywordSearchPath,type KeywordSearchPage} from '../src/utils/keyword-search';
 
 declare const __CLIENT_MANIFEST__: Record<string,{file:string;css?:string[];imports?:string[]}>;
 declare const __CLIENT_STYLES__: Record<string,string>;
@@ -110,7 +111,8 @@ export async function renderApplication(request:Request, fetchData:FetchData, se
     else if(path==='/feeling-lucky') await load('wordOfTheDayContent','/definitions/random-matching');
     else if(/^\/search\/[^/]+$/.test(path)) {
       const query=decodeURIComponent(path.slice('/search/'.length));
-      await load(['searchResults',query],'/word/search/kwd='+encodeURIComponent(query));
+      const page=await fetchData<KeywordSearchPage>(keywordSearchPath(query,1,lang));
+      set(keywordSearchKey(query,lang),{pages:[page],pageParams:[1]});
     }
     // Authenticated routes use their own real loading states.
     // Session/account queries run in the browser. Public rows may contain the

@@ -21,7 +21,12 @@ export function fixtureData(path) {
   if(url.pathname==='/seo/sitemap/0') return [{id:2,en:1,ar:1}];
   if(/^\/seo\/browse\/(en|ar)$/.test(url.pathname)) return {language:url.pathname.endsWith('/ar')?'ar':'en',words:[{wordId:2,canonicalId:2,canonicalArabic:'معلش',francoArabicWord:'ma3lish',sortWord:'ma3lish'}],next:url.searchParams.has('after')?null:2};
   if(url.pathname==='/definitions/random-matching') return rows.map(row=>({...row,word:row.arabicWord}));
-  if(url.pathname.startsWith('/word/search/')) return rows.map(row=>({...row,word:row.isArabic?row.arabicWord:row.francoArabicWord}));
+  if(url.pathname.startsWith('/word/search/')) {
+    const results=rows.map(row=>({...row,word:row.isArabic?row.arabicWord:row.francoArabicWord}));
+    if(!url.searchParams.has('page')&&!url.searchParams.has('limit'))return results;
+    const page=Number(url.searchParams.get('page')||1),limit=Number(url.searchParams.get('limit')||20);
+    return {results:results.slice((page-1)*limit,page*limit),page,limit,hasMore:page*limit<results.length};
+  }
   if(url.pathname==='/posts'||url.pathname==='/sources') return [];
   if(url.pathname.startsWith('/contributors/')) return {definitions:1,sources:[]};
   if(url.pathname==='/auth/session') return {session:null};

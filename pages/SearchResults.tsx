@@ -5,7 +5,9 @@ import { useParams } from 'react-router-dom';
 import ContentBox from '../src/components/ContentBox';
 import { useTranslation } from 'react-i18next';
 import AdSense from 'react-adsense';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
+import {keywordSearchKey,keywordSearchPath,type KeywordSearchPage} from '../src/utils/keyword-search';
+import './SearchResults.scss';
 import Helmet from '../src/components/PageMetadata';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 import AdSenseWrapper from '../src/components/AdSenseWrapper';
@@ -31,8 +33,8 @@ interface JsonContent {
   definition: string
 }
 
-const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
-  const apiUrl = `${API_URL}/word/search/kwd=${encodeURIComponent(query)}`;
+const fetchSearchResults = async (query: string,page=1,language='en'): Promise<KeywordSearchPage<SearchResult>> => {
+  const apiUrl = `${API_URL}${keywordSearchPath(query,page,language)}`;
   
   try {
     
@@ -47,7 +49,7 @@ const fetchSearchResults = async (query: string): Promise<SearchResult[]> => {
       throw new Error('API returned non-JSON response');
     }
     
-    return apiJson<SearchResult[]>(response);
+    return apiJson<KeywordSearchPage<SearchResult>>(response);
   } catch (err) {
     console.error('Search request failed:', err);
     throw err;
@@ -63,7 +65,10 @@ const SearchResults: React.FC = () => {
   }) as JsonContent;
   const noResults = "No results found for \"" + query + "\"";
   
-  const { data: allResults, isLoading, error } = useQuery(['searchResults', query], () => fetchSearchResults(query || ''));
+  const {data,isLoading,error,hasNextPage,fetchNextPage,isFetchingNextPage}=useInfiniteQuery<KeywordSearchPage<SearchResult>,Error>(
+    keywordSearchKey(query||'',i18n.language),({pageParam=1})=>fetchSearchResults(query||'',pageParam,i18n.language),
+    {getNextPageParam:last=>last.hasMore?last.page+1:undefined});
+  const allResults=data?.pages.flatMap(page=>page.results)||[];
   
   const preferred=i18n.language==='ar'?1:0;
   const covered=new Set((allResults||[]).filter(item=>item.isArabic===preferred).map(item=>item.canonicalWordId||item.wordId));
@@ -93,7 +98,7 @@ const SearchResults: React.FC = () => {
     return <LoadingSpinner />;
   }
   
-  if (error) {
+  if (error&&!allResults.length) {
     const typedError = error as Error;
     return (
       <div className={'container'} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
@@ -199,7 +204,7 @@ const SearchResults: React.FC = () => {
         {
           filteredResults.map((result, index) => (
             <ContentBox
-              key={index}
+              key={result.definitionId}
               item={{
                 word: result.word,
                 definition: result.definition
@@ -220,6 +225,12 @@ const SearchResults: React.FC = () => {
             />
           ))
         }
+        {hasNextPage&&<div className="search-pagination">
+          {error&&<p role="alert">{t('search_more_error')}</p>}
+          <button type="button" className="search-load-more" disabled={isFetchingNextPage} onClick={()=>fetchNextPage()}>
+            {t(isFetchingNextPage?'search_loading_more':'search_load_more')}
+          </button>
+        </div>}
       </div>
       <div className="feed-ad-space">
         <AdSenseWrapper

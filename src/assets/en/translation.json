@@ -1,4 +1,7 @@
 {
+  "search_load_more": "Load more",
+  "search_loading_more": "Loading…",
+  "search_more_error": "Could not load more results. Please try again.",
   "toolbar_items": {
     "home": "Home",
     "advanced_search": "Advanced Search",
