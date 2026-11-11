@@ -164,7 +164,7 @@ export default function ContributionForm() {
   }
   const optional = <span className="contribute-optional">{text('Optional', 'اختياري')}</span>;
   const required = <span className="contribute-required">{text('Required', 'مطلوب')}</span>;
-  return <main className="contribute" dir={ar ? 'rtl' : 'ltr'}>
+  return <div className="contribute" dir={ar ? 'rtl' : 'ltr'}>
     <header className="contribute-heading"><div><h1 ref={headingRef} tabIndex={review ? -1 : undefined}>{review ? text('Review your word', 'راجع الكلمة') : text('Share a word', 'شارك بكلمة')}<span>.</span></h1><p>{review ? text('This is how your contribution will appear in the feed.', 'دي طريقة ظهور مساهمتك في الصفحة الرئيسية.') : text('Add an Arabic word or phrase and explain what it means.', 'أضف كلمة عربية واشرح معناها.')}</p></div><span className="contribute-watermark" aria-hidden="true">ق</span></header>
     {review ? <section className="contribute-review" aria-label={text('Review contribution', 'مراجعة المساهمة')}>
       <div className="contribute-review-cards">{(draft.arabicDefinition.trim() ? ['ar'] : []).concat(draft.englishDefinition.trim() ? ['en'] : []).map(language => <div key={language}>
@@ -235,5 +235,5 @@ export default function ContributionForm() {
         <div className="contribute-actions"><p className="contribute-requirements"><span data-complete={wordValid}>{wordValid ? <FontAwesomeIcon icon={faCheck} /> : <span className="contribute-unchecked" aria-hidden="true" />}{text('Arabic word', 'الكلمة بالعربية')}</span><span data-complete={meaningValid}>{meaningValid ? <FontAwesomeIcon icon={faCheck} /> : <span className="contribute-unchecked" aria-hidden="true" />}{text('One definition', 'تعريف واحد')}</span></p><button type="submit" className="contribute-primary">{mode === 'word' ? text('Review word', 'راجع الكلمة') : text('Review meaning', 'راجع المعنى')}<FontAwesomeIcon icon={faArrowRight} /></button></div>
       </form>
     </>}
-  </main>;
+  </div>;
 }

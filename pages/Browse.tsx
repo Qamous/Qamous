@@ -16,7 +16,7 @@ export default function Browse() {
   const heading = ar ? 'تصفح كلمات ومعاني العربية' : 'Browse Arabic words and meanings';
   const first=data?.words[0]?.sortWord, last=data?.words.at(-1)?.sortWord;
   const canonical=`https://qamous.org/browse/${language}${after?'?after='+encodeURIComponent(after):''}`;
-  return <main className="browse" dir={ar?'rtl':'ltr'}>
+  return <div className="browse" dir={ar?'rtl':'ltr'}>
     <Helmet>
       <title>{`${first&&last?`${first}–${last} | `:''}${heading} | Qamous`}</title>
       <meta name="description" content={ar?'تصفح الكلمات العربية ومعانيها حسب الترتيب الأبجدي في قاموس Qamous.':'Browse Arabic and Franco-Arabic words alphabetically with community meanings on Qamous.'}/>
@@ -36,5 +36,5 @@ export default function Browse() {
       </Link>
     </li>)}</ol></nav>
     {data?.next&&<Link className="browse-next" rel="next" to={`/browse/${language}?after=${data.next}`}>{ar?'الصفحة التالية':'Next page'} <span aria-hidden="true">{ar?'←':'→'}</span></Link>}
-  </main>;
+  </div>;
 }

@@ -11,7 +11,7 @@ export default function Contributor() {
   const ar = i18n.language === 'ar';
   const { data, isError } = useQuery(['contributor', username], async () =>
     apiJson<any>(await fetch(API_URL + '/contributors/' + encodeURIComponent(username!))));
-  return <main className="import-preview">
+  return <div className="import-preview">
     <Helmet><title>@{username} — Qamous</title></Helmet>
     <h1>@{username}</h1>
     {isError && <p role="alert">Unable to load these details.</p>}
@@ -22,5 +22,5 @@ export default function Contributor() {
       <ul>{data.sources.map((source: any) => <li key={source.id}>{source.name}</li>)}</ul>
     </>}
     <p><Link to="/">{ar ? 'العودة إلى قاموس' : 'Back to Qamous'}</Link></p>
-  </main>;
+  </div>;
 }

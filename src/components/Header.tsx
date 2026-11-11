@@ -376,7 +376,7 @@ const Header: React.FC = () => {
                       </div>
                       
                       <div className="nav-overlay-content-bottom-user">
-                          <NavLink to="/login" onClick={handleBurgerClick}>
+                          <NavLink to="/login" onClick={handleBurgerClick} aria-label={t('login.login')}>
                               <i className="fa-solid fa-user"></i>
                               <FontAwesomeIcon icon={faUser} size="sm"/>
                               {/*<img src={userImage} alt={t('common_terms.user')} />*/}
@@ -391,6 +391,8 @@ const Header: React.FC = () => {
                     <img
                         src={qamousLogo}
                         alt={t('common_terms.qamous')}
+                        width={2000}
+                        height={707}
                         loading="lazy"
                     /> {/* TODO: do more research on lazy loading for a faster experience */}
                 </NavLink>
@@ -405,7 +407,7 @@ const Header: React.FC = () => {
                       <SearchBar />
                   </Suspense>
                   <div className="header-right-side-add">
-                      <NavLink to="/add-definition">
+                      <NavLink to="/add-definition" aria-label={t('add_word.add_word')}>
                           <FontAwesomeIcon icon={faPlus} size="2x" />
                       </NavLink>
                   </div>
@@ -439,7 +441,7 @@ const Header: React.FC = () => {
                   />
                   
                   <div className="header-right-side-user">
-                      <NavLink to="/login">
+                      <NavLink to="/login" aria-label={t('login.login')}>
                           <i className="fa-solid fa-user"></i>
                           <FontAwesomeIcon icon={faUser} size="xl" />
                           {/*<img src={userImage} alt={t('common_terms.user')} />*/}
