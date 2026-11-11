@@ -29,7 +29,7 @@ export default function ImportPreview() {
   const ledgerParams = new URLSearchParams({ source, q: query, page: String(page), status });
   const { data: ledger } = useQuery<any>(['import-ledger', source, query, page, status], () => get('/imports/preview/ledger?' + ledgerParams), { enabled: tab !== 'cards', keepPreviousData: true });
   const totals = report?.totals;
-  return <main className="import-preview">
+  return <div className="import-preview">
     <Helmet><title>Import review — Qamous local preview</title><meta name="robots" content="noindex,nofollow" /></Helmet>
     <div className="import-preview-heading"><div><span className="import-preview-label">ISOLATED LOCAL PREVIEW</span>
       <h1>More words. Same Qamous.</h1><p>Review the complete collection, source credits, and import accounts. Live rollout progress is tracked separately.</p></div>
@@ -90,5 +90,5 @@ export default function ImportPreview() {
       <ul>{report?.production_blockers.map((text: string) => <li key={text}>{text}</li>)}</ul>
       <p>Review manifest: <code>{report?.manifest_sha256}</code></p>
     </details>
-  </main>;
+  </div>;
 }

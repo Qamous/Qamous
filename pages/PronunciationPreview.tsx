@@ -12,7 +12,7 @@ export default function PronunciationPreview() {
   const [expanded,setExpanded]=useState(false);
   const ar=language==='ar';
   const samples=data.samples.flatMap(sample=>sample.definitions.filter(d=>Boolean(d.isArabic)===ar).map(definition=>({sample,definition})));
-  return <main className="pronunciation-preview">
+  return <div className="pronunciation-preview">
     <Helmet><title>Pronunciation proposal — Qamous</title><meta name="robots" content="noindex,nofollow" /></Helmet>
     <header className="pronunciation-preview-heading"><span className="pronunciation-preview-eyebrow">QAMOUS / LOCAL DESIGN PREVIEW</span>
       <h1>A little help saying it.</h1><p>A quiet line beneath the word. Original source notation, with the details one tap away.</p>
@@ -28,5 +28,5 @@ export default function PronunciationPreview() {
         sourceCredits={sample.credits as SourceCredit[]} pronunciation={<Pronunciation key={language+':'+readable+':'+expanded+':'+index} entries={sample.pronunciations as SourcePronunciation[]} language={language} preferTransliteration={readable} expanded={expanded} />} />
     </article>)}</div>
     <footer className="pronunciation-preview-notes"><span>Real entries from the local collection</span><span>Franco stays separate</span><span>Text only · no audio controls</span><span>Awaiting your approval</span></footer>
-  </main>;
+  </div>;
 }

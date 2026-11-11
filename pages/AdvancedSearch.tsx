@@ -99,7 +99,7 @@ const AdvancedSearch: React.FC = () => {
   const featured = results.filter((word, index, list) => list.findIndex(other => other.wordId === word.wordId) === index).slice(0, 6);
 
   return (
-    <main className="explore" dir={isArabic ? 'rtl' : 'ltr'}>
+    <div className="explore" dir={isArabic ? 'rtl' : 'ltr'}>
       <Helmet>
         <title>{`${guideTitle || `${query ? `${query} · ` : ''}${t('explore.title')}`} | Qamous`}</title>
         <meta name="description" content={guideIntro || t('explore.subtitle')} />
@@ -221,7 +221,7 @@ const AdvancedSearch: React.FC = () => {
             {dialectTitle(country.countryCode, country.countryName, isArabic)}
           </Link>)}</div>
       </nav>}
-    </main>
+    </div>
   );
 };
 export default AdvancedSearch;

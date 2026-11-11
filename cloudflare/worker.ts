@@ -50,7 +50,7 @@ export function publicCacheKey(request:Request,snapshotId?:string):Request {
   const after=/^\/browse\/(en|ar)$/.test(url.pathname)?url.searchParams.get('after'):null;
   url.search='';
   if(after) url.searchParams.set('after',after);
-  url.searchParams.set('__qamous_render','ssr-5');
+  url.searchParams.set('__qamous_render','ssr-6');
   if(snapshotId)url.searchParams.set('__qamous_snapshot',snapshotId);
   url.searchParams.set('__qamous_language',preferences.language);
   url.searchParams.set('__qamous_theme',preferences.theme);

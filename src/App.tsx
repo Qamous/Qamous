@@ -227,7 +227,7 @@ const App: React.FC = () => {
         <SeoMetadata />
         <div className="grain-texture"></div>
         <Header />
-        <div className="content">
+        <main className="content">
           {import.meta.env.VITE_PUBLIC_READ_ONLY === 'true' && <aside className="read-only-notice" role="status" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
             <p>{i18n.language === 'ar' ? 'يمكنك تصفح قاموس كالمعتاد. تسجيل الدخول والتصويت وإضافة التعريفات متوقفة مؤقتًا.' : 'You can browse Qamous as usual. Sign-in, voting and contributions are temporarily paused.'}</p>
           </aside>}
@@ -282,7 +282,7 @@ const App: React.FC = () => {
               <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
             </Routes>}
           </Suspense>
-        </div>
+        </main>
         <div
           className={'report'}
           onClick={handleReportClick}
